@@ -1,0 +1,55 @@
+<resources>
+    <!--
+        Home activity
+    -->
+    <string name="app_name">D&amp;D Manager</string>
+    <string name="no_campaigns">No campaigns found. Ready to start a new one? Hit the button above
+        so we can get started!</string>
+
+    <!--
+        New campaign activity
+    -->
+    <string name="new_campaign">New Campaign</string>
+
+    <!-- Buttons -->
+    <string name="btn_save_campaign">Save Campaign</string>
+
+    <!-- Headings -->
+    <string name="section_heading_player">About You</string>
+    <string name="section_heading_character">About Your Character</string>
+
+    <!-- Player section -->
+    <string name="player_name">Player Name</string>
+
+    <!-- Character section -->
+    <string name="character_fname">First Name</string>
+    <string name="character_lname">Last Name</string>
+    <string name="character_gender">Select Gender</string>
+    <string-array name="gender_options">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string name="character_alignment">Select Alignment</string>
+    <string-array name="alignment_options">
+        <item>Select Alignment</item>
+        <item>Lawful Good</item>
+        <item>Neutral Good</item>
+        <item>Chaotic Good</item>
+        <item>Lawful Neutral</item>
+        <item>True Neutral</item>
+        <item>Chaotic Neutral</item>
+        <item>Lawful Evil</item>
+        <item>Neutral Evil</item>
+        <item>Chaotic Evil</item>
+    </string-array>
+    <string name="character_age">Age</string>
+    <string name="character_exp">Exp Points</string>
+    <string name="character_height">Height</string>
+    <string name="character_weight">Weight</string>
+
+    <!-- Error messages -->
+    <string name="error_gender">Gender required</string>
+    <string name="error_alignment">Alignment required</string>
+</resources>
