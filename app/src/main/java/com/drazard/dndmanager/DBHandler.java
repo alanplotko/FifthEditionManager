@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +14,8 @@ public class DBHandler extends SQLiteOpenHelper {
     /**
      * Static variables
      */
+    private static DBHandler sInstance;
+
 
     // Database version
     private static final int DATABASE_VERSION = 1;
@@ -32,7 +34,16 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_LNAME = "last_name";
     private static final String KEY_CLASS = "class";
 
-    public DBHandler(Context context) {
+    public static synchronized DBHandler getInstance(Context context) {
+        // Use  application context to avoid leaking an Activity's context.
+        // More info in article: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new DBHandler(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

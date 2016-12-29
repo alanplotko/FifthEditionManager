@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 public class Character {
     String _fname;

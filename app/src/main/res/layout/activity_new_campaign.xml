@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
-        tools:context="com.drazard.ddmanager.NewCampaignActivity">
+        tools:context="com.drazard.dndmanager.NewCampaignActivity">
 
         <!-- New campaign toolbar -->
         <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"

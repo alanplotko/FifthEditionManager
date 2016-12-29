@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -56,11 +56,26 @@ public class NewCampaignActivity extends AppCompatActivity {
         return errors;
     }
 
-    public boolean saveCampaign() {
+    public void saveCampaign() {
+        // Create empty campaign
         Campaign campaign = new Campaign();
+
+        // Set up character
+        EditText fname = (EditText) findViewById(R.id.character_fname);
+        EditText lname = (EditText) findViewById(R.id.character_lname);
+        Character character = new Character(fname.getText().toString().trim(),
+                lname.getText().toString().trim());
+        campaign.setCharacter(character);
+
+        // Set time for campaign creation and update
         long time = System.currentTimeMillis();
         campaign.setRawStartDate(time);
         campaign.setRawUpdateTime(time);
+
+        // Save campaign and return to home activity
+        DBHandler db = DBHandler.getInstance(this);
+        db.addCampaign(campaign);
+        this.finish();
     }
 
     public boolean validateCampaign() {

@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.content.Context;
 import android.view.View;

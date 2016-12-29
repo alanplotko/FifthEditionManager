@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.database.Cursor;
 import android.text.format.DateUtils;

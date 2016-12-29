@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
-    private RecyclerView.Adapter adapter;
+    private CampaignsAdapter adapter;
     private RecyclerView.LayoutManager llm;
     private TextView placeholder;
-    List<Campaign> campaigns; // The list of campaigns to manage in the activity
 
     public void updatePlaceholder(Boolean empty) {
         if (empty) {
@@ -40,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Use this setting to improve performance if you know that changes
-         * in content do not change the layout size of the RecyclerView
+         * in content do not change the layout size of the RecyclerView.
          */
         // rv.setHasFixedSize(true);
 
@@ -49,18 +46,24 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
 
         /**
-         * Set up database call to get existing campaigns
+         * Set up database call to get existing campaigns.
          */
-        DBHandler db = new DBHandler(this);
-        campaigns = db.getAllCampaigns();
-        updatePlaceholder(campaigns.isEmpty());
+        DBHandler db = DBHandler.getInstance(this);
 
-        adapter = new CampaignsAdapter(campaigns);
+        adapter = new CampaignsAdapter(db.getAllCampaigns());
+        updatePlaceholder(adapter.isEmpty());
         rv.setAdapter(adapter);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        DBHandler db = DBHandler.getInstance(this);
+        adapter.swapItems(db.getAllCampaigns());
+    }
+
     /**
-     * Set up home toolbar on activity
+     * Set up home toolbar on activity.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,20 +93,5 @@ public class MainActivity extends AppCompatActivity {
     public void createCampaign() {
         Intent intent = new Intent(this, NewCampaignActivity.class);
         startActivity(intent);
-        /*Campaign campaign = new Campaign();
-        Character character = new Character("Rael", "Holimion");
-        character.setCharacterClass("rogue");
-        campaign.setCharacter(character);
-
-        long now = System.currentTimeMillis();
-        campaign.setRawStartDate(now);
-        campaign.setRawUpdateTime(now);
-
-        DBHandler db = new DBHandler(this);
-        db.addCampaign(campaign);
-        campaigns.add(0, campaign);
-        updatePlaceholder(campaigns.isEmpty());
-
-        adapter.notifyDataSetChanged();*/
     }
 }

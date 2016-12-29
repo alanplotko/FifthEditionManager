@@ -1,4 +1,4 @@
-package com.drazard.ddmanager;
+package com.drazard.dndmanager;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +14,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     private List<Campaign> _campaigns;
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
-        CardView view;
+        CardView _card;
 
         /**
          * Card details
@@ -26,11 +26,22 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
 
         public CampaignViewHolder(View view) {
             super(view);
-            view = (CardView) itemView.findViewById(R.id.campaign_card);
+            _card = (CardView) itemView.findViewById(R.id.campaign_card);
             name = (TextView) itemView.findViewById(R.id.campaign_name);
             last_updated = (TextView) itemView.findViewById(R.id.campaign_timestamp);
             class_thumbnail = (ImageView) itemView.findViewById(R.id.campaign_thumbnail);
         }
+    }
+
+    // Check if campaign list is populated
+    public Boolean isEmpty() {
+        return this.getItemCount() == 0;
+    }
+
+    // Update campaigns in adapter
+    public void swapItems(List<Campaign> campaigns) {
+        this._campaigns = campaigns;
+        notifyDataSetChanged();
     }
 
     // Pass list of campaigns to adapter
