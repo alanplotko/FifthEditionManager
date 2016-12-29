@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         DBHandler db = DBHandler.getInstance(this);
         adapter.swapItems(db.getAllCampaigns());
+        updatePlaceholder(adapter.isEmpty());
     }
 
     /**
