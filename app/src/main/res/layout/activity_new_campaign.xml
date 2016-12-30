@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/new_campaign"
+            app:title="@string/activity_title_new_campaign"
             app:titleTextColor="@color/primaryText" />
 
         <!-- Player section -->
@@ -125,8 +125,8 @@
             android:layout_marginBottom="7dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingRight="50dp"
-            android:paddingEnd="50dp" />
+            android:paddingRight="40dp"
+            android:paddingEnd="40dp" />
 
         <Spinner
             android:id="@+id/character_alignment"
@@ -140,8 +140,8 @@
             android:layout_marginTop="7dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingRight="50dp"
-            android:paddingEnd="50dp" />
+            android:paddingRight="40dp"
+            android:paddingEnd="40dp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -172,7 +172,7 @@
                 android:layout_weight=".5"
                 android:ems="10"
                 android:hint="@string/character_exp"
-                android:inputType="text"
+                android:inputType="number"
                 android:padding="12dp" />
 
         </LinearLayout>

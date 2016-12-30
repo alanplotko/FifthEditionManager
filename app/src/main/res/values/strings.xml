@@ -9,7 +9,7 @@
     <!--
         New campaign activity
     -->
-    <string name="new_campaign">New Campaign</string>
+    <string name="activity_title_new_campaign">New Campaign</string>
 
     <!-- Buttons -->
     <string name="btn_save_campaign">Save Campaign</string>
@@ -52,4 +52,12 @@
     <!-- Error messages -->
     <string name="error_gender">Gender required</string>
     <string name="error_alignment">Alignment required</string>
+
+
+    <!--
+        Character race selection activity
+    -->
+    <string name="activity_title_character_race">Character Race Selection</string>
+    <string name="no_character_race_title">No title available.</string>
+    <string name="no_character_race_description">No description available.</string>
 </resources>

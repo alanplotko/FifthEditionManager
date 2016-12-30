@@ -1,5 +1,6 @@
 package com.drazard.dndmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,23 +60,37 @@ public class NewCampaignActivity extends AppCompatActivity {
     public void saveCampaign() {
         // Create empty campaign
         Campaign campaign = new Campaign();
+        EditText player_name = (EditText) findViewById(R.id.player_name);
+        campaign.setPlayerName(player_name.getText().toString().trim());
 
         // Set up character
         EditText fname = (EditText) findViewById(R.id.character_fname);
         EditText lname = (EditText) findViewById(R.id.character_lname);
+        Spinner gender = (Spinner) findViewById(R.id.character_gender);
+        Spinner alignment = (Spinner) findViewById(R.id.character_alignment);
+        EditText height = (EditText) findViewById(R.id.character_height);
+        EditText weight = (EditText) findViewById(R.id.character_weight);
+        EditText age = (EditText) findViewById(R.id.character_age);
+        EditText exp = (EditText) findViewById(R.id.character_exp);
+
         Character character = new Character(fname.getText().toString().trim(),
                 lname.getText().toString().trim());
+        character.setGender(gender.getSelectedItem().toString().trim());
+        character.setAlignment(alignment.getSelectedItem().toString().trim());
+        character.setHeight(height.getText().toString().trim());
+        character.setWeight(weight.getText().toString().trim());
+        character.setAge(age.getText().toString().trim());
+        character.setExp(Integer.parseInt(exp.getText().toString().trim()));
         campaign.setCharacter(character);
-
-        // Set time for campaign creation and update
-        long time = System.currentTimeMillis();
-        campaign.setRawStartDate(time);
-        campaign.setRawUpdateTime(time);
 
         // Save campaign and return to home activity
         DBHandler db = DBHandler.getInstance(this);
-        db.addCampaign(campaign);
+        long campaign_id = db.addCampaign(campaign);
+        Intent nextStep = new Intent(NewCampaignActivity.this,
+                CharacterRaceSelectionActivity.class);
+        nextStep.putExtra("campaign_id", campaign_id);
         this.finish();
+        startActivity(nextStep);
     }
 
     public boolean validateCampaign() {
