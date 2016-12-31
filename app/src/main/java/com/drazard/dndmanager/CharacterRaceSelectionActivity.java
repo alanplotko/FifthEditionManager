@@ -65,8 +65,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView tv = (TextView) findViewById(R.id.character_race);
-                selectCharacterRace(tv.getText().toString().trim());
+                selectCharacterRace(character_races[mViewPager.getCurrentItem()]);
             }
         });
 
@@ -136,6 +135,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_character_race_selection, container,
                     false);
             TextView textView = (TextView) rootView.findViewById(R.id.character_race);
+            String test = getArguments().getString(ARG_SECTION_TITLE);
             textView.setText(getArguments().getString(ARG_SECTION_TITLE));
             return rootView;
         }

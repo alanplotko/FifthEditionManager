@@ -53,14 +53,14 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@id/player_section"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="@string/player_name"
             android:inputType="textPersonName"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:nextFocusDown="@+id/character_fname" />
 
         <!-- Character section -->
         <TextView
@@ -80,57 +80,103 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/character_section"
-            android:layout_marginBottom="10dp"
             android:background="?android:attr/listDivider" />
 
-        <EditText
-            android:id="@+id/character_fname"
-            android:layout_width="match_parent"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/character_name_section"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_below="@id/form_divider_2"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="@string/character_fname"
-            android:inputType="textPersonName"
-            android:padding="12dp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-        <EditText
-            android:id="@+id/character_lname"
-            android:layout_width="match_parent"
+            <EditText
+                android:id="@id/character_fname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:ems="10"
+                android:hint="@string/character_fname"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_lname" />
+
+            <EditText
+                android:id="@id/character_lname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:ems="10"
+                android:hint="@string/character_lname"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_level" />
+
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/character_level_exp_section"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/character_fname"
-            android:layout_marginBottom="10dp"
+            android:layout_below="@id/character_name_section"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="@string/character_lname"
-            android:inputType="textPersonName"
-            android:padding="12dp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@id/character_level"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:ems="10"
+                android:hint="@string/character_level"
+                android:inputType="number"
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_exp" />
+
+            <EditText
+                android:id="@id/character_exp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:ems="10"
+                android:hint="@string/character_exp"
+                android:inputType="number"
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_age" />
+
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/character_gender"
             style="@android:style/Widget.Holo.TextView.SpinnerItem"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/character_lname"
+            android:layout_below="@id/character_level_exp_section"
             android:prompt="@string/character_gender"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dialog"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="7dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingRight="40dp"
-            android:paddingEnd="40dp" />
+            android:paddingRight="30dp"
+            android:paddingEnd="30dp" />
 
         <Spinner
             android:id="@+id/character_alignment"
             style="@android:style/Widget.Holo.TextView.SpinnerItem"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/character_gender"
@@ -140,12 +186,12 @@
             android:layout_marginTop="7dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingRight="40dp"
-            android:paddingEnd="40dp" />
+            android:paddingRight="30dp"
+            android:paddingEnd="30dp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/character_age_exp_section"
+            android:id="@+id/character_measurements_section"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/character_alignment"
@@ -153,54 +199,32 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="1.5">
 
             <EditText
-                android:id="@+id/character_age"
+                android:id="@id/character_age"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:ems="10"
                 android:hint="@string/character_age"
                 android:inputType="text"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_height" />
 
             <EditText
-                android:id="@+id/character_exp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:ems="10"
-                android:hint="@string/character_exp"
-                android:inputType="number"
-                android:padding="12dp" />
-
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/character_measurements_section"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/character_age_exp_section"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/character_height"
+                android:id="@id/character_height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:ems="10"
                 android:hint="@string/character_height"
                 android:inputType="text"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:nextFocusDown="@+id/character_weight"/>
 
             <EditText
-                android:id="@+id/character_weight"
+                android:id="@id/character_weight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
@@ -218,8 +242,8 @@
             android:layout_below="@id/character_measurements_section"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
             android:text="@string/btn_save_campaign"/>
 

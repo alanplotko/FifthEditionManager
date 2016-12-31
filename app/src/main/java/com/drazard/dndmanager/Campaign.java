@@ -31,12 +31,13 @@ public class Campaign {
         this.character.setLastName(cursor.getString(5));
         this.character.setCharacterRace(cursor.getString(6));
         this.character.setCharacterClass(cursor.getString(7));
-        this.character.setGender(cursor.getString(8));
-        this.character.setAlignment(cursor.getString(9));
-        this.character.setHeight(cursor.getString(10));
-        this.character.setWeight(cursor.getString(11));
-        this.character.setAge(cursor.getString(12));
-        this.character.setExp(Integer.parseInt(cursor.getString(13)));
+        this.character.setCharacterLevel(Integer.parseInt(cursor.getString(8)));
+        this.character.setGender(cursor.getString(9));
+        this.character.setAlignment(cursor.getString(10));
+        this.character.setHeight(cursor.getString(11));
+        this.character.setWeight(cursor.getString(12));
+        this.character.setAge(cursor.getString(13));
+        this.character.setExp(Integer.parseInt(cursor.getString(14)));
     }
 
     /**

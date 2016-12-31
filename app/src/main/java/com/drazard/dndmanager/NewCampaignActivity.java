@@ -68,6 +68,7 @@ public class NewCampaignActivity extends AppCompatActivity {
         EditText lname = (EditText) findViewById(R.id.character_lname);
         Spinner gender = (Spinner) findViewById(R.id.character_gender);
         Spinner alignment = (Spinner) findViewById(R.id.character_alignment);
+        EditText level = (EditText) findViewById(R.id.character_level);
         EditText height = (EditText) findViewById(R.id.character_height);
         EditText weight = (EditText) findViewById(R.id.character_weight);
         EditText age = (EditText) findViewById(R.id.character_age);
@@ -75,6 +76,7 @@ public class NewCampaignActivity extends AppCompatActivity {
 
         Character character = new Character(fname.getText().toString().trim(),
                 lname.getText().toString().trim());
+        character.setCharacterLevel(Integer.parseInt(level.getText().toString().trim()));
         character.setGender(gender.getSelectedItem().toString().trim());
         character.setAlignment(alignment.getSelectedItem().toString().trim());
         character.setHeight(height.getText().toString().trim());
@@ -117,9 +119,22 @@ public class NewCampaignActivity extends AppCompatActivity {
                     NewCampaignActivity.this.getString(R.string.error_alignment));
         }
 
+        /**
+         * If level entered, check for valid range [1, 20]
+         */
+        EditText level = (EditText) findViewById(R.id.character_level);
+        if (!level.getText().toString().isEmpty()) {
+            int levelInt = Integer.parseInt(level.getText().toString());
+            if (levelInt < 1 || levelInt > 20) {
+                errors = true;
+                level.setError("Invalid " + level.getHint().toString().toLowerCase());
+            }
+        }
+
         // Force validation on right hand side even if errors is already true
         errors |= validateViewGroup((ViewGroup) findViewById(R.id.activity_new_campaign));
-        errors |= validateViewGroup((ViewGroup) findViewById(R.id.character_age_exp_section));
+        errors |= validateViewGroup((ViewGroup) findViewById(R.id.character_name_section));
+        errors |= validateViewGroup((ViewGroup) findViewById(R.id.character_level_exp_section));
         errors |= validateViewGroup((ViewGroup) findViewById(R.id.character_measurements_section));
 
         return errors;

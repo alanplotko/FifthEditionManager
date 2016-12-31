@@ -1,10 +1,13 @@
 package com.drazard.dndmanager;
 
+import java.util.Locale;
+
 public class Character {
     private String fname;
     private String lname;
     private String race;
     private String _class;
+    private int charLevel;
     private String gender;
     private String alignment;
     private String height;
@@ -58,6 +61,9 @@ public class Character {
         this._class = classIn;
     }
 
+    public int getCharacterLevel() { return this.charLevel; }
+    public void setCharacterLevel(int charLevelIn) { this.charLevel = charLevelIn; }
+
     public String getGender() {
         return gender;
     }
@@ -105,6 +111,12 @@ public class Character {
      */
     @Override
     public String toString() {
-        return "Character Description Here";
+        String characterRace = this.getCharacterRace();
+        String characterClass = this.getCharacterClass();
+        if (characterRace == null) characterRace = "";
+        if (characterClass == null) characterClass = "";
+        String description = String.format(Locale.US, "Level %1$d %2$s %3$s",
+                this.getCharacterLevel(), characterRace, characterClass);
+        return description.replaceAll("\\s+", " ").trim();
     }
 }

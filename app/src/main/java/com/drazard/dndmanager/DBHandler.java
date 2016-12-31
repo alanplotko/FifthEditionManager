@@ -18,7 +18,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // Database version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database name
     private static final String DATABASE_NAME = "campaignsManager";
@@ -35,6 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_CHAR_LNAME = "last_name";
     private static final String KEY_CHAR_RACE = "race";
     private static final String KEY_CHAR_CLASS = "class";
+    private static final String KEY_CHAR_LEVEL = "level";
     private static final String KEY_CHAR_GENDER = "gender";
     private static final String KEY_CHAR_ALIGNMENT = "alignment";
     private static final String KEY_CHAR_HEIGHT = "height";
@@ -68,6 +69,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + KEY_CHAR_LNAME     + " TEXT, "
                 + KEY_CHAR_RACE      + " TEXT, "
                 + KEY_CHAR_CLASS     + " TEXT, "
+                + KEY_CHAR_LEVEL     + " INTEGER DEFAULT 1, "
                 + KEY_CHAR_GENDER    + " TEXT, "
                 + KEY_CHAR_ALIGNMENT + " TEXT, "
                 + KEY_CHAR_HEIGHT    + " TEXT, "
@@ -108,6 +110,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_CHAR_LNAME, character.getLastName());
         values.put(KEY_CHAR_RACE, character.getCharacterRace());
         values.put(KEY_CHAR_CLASS, character.getCharacterClass());
+        values.put(KEY_CHAR_LEVEL, character.getCharacterLevel());
         values.put(KEY_CHAR_GENDER, character.getGender());
         values.put(KEY_CHAR_ALIGNMENT, character.getAlignment());
         values.put(KEY_CHAR_HEIGHT, character.getHeight());
@@ -138,6 +141,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 KEY_CHAR_LNAME,
                 KEY_CHAR_RACE,
                 KEY_CHAR_CLASS,
+                KEY_CHAR_LEVEL,
                 KEY_CHAR_GENDER,
                 KEY_CHAR_ALIGNMENT,
                 KEY_CHAR_HEIGHT,
@@ -194,6 +198,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_CHAR_LNAME, character.getLastName());
         values.put(KEY_CHAR_RACE, character.getCharacterRace());
         values.put(KEY_CHAR_CLASS, character.getCharacterClass());
+        values.put(KEY_CHAR_LEVEL, character.getCharacterLevel());
         values.put(KEY_CHAR_GENDER, character.getGender());
         values.put(KEY_CHAR_ALIGNMENT, character.getAlignment());
         values.put(KEY_CHAR_HEIGHT, character.getHeight());

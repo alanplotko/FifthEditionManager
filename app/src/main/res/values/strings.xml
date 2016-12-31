@@ -5,6 +5,8 @@
     <string name="app_name">D&amp;D Manager</string>
     <string name="no_campaigns">No campaigns found. Ready to start a new one? Hit the button above
         so we can get started!</string>
+    <string name="edit_campaign">Edit</string>
+    <string name="more_info">View Campaign</string>
 
     <!--
         New campaign activity
@@ -44,6 +46,7 @@
         <item>Neutral Evil</item>
         <item>Chaotic Evil</item>
     </string-array>
+    <string name="character_level">Level</string>
     <string name="character_age">Age</string>
     <string name="character_exp">Exp Points</string>
     <string name="character_height">Height</string>

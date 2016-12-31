@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/home_toolbar"
-        android:paddingTop="10dp"
+        android:paddingTop="16dp"
         android:scrollbars="vertical" />
 
     <!-- Display message if no existing campaigns found -->
@@ -37,6 +37,6 @@
         android:text=""
         android:layout_below="@id/home_toolbar"
         android:textSize="18sp"
-        android:padding="20sp"
+        android:padding="20dp"
         android:layout_marginTop="10dp" />
 </RelativeLayout>
