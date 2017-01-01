@@ -90,7 +90,7 @@ public class NewCampaignActivity extends AppCompatActivity {
         long campaign_id = db.addCampaign(campaign);
         Intent nextStep = new Intent(NewCampaignActivity.this,
                 CharacterRaceSelectionActivity.class);
-        nextStep.putExtra("campaign_id", campaign_id);
+        nextStep.putExtra("campaign_id", (int)(campaign_id + 0));
         this.finish();
         startActivity(nextStep);
     }
