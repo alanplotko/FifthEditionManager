@@ -44,7 +44,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
 
         // Get campaign ID
         Intent mIntent = getIntent();
-        campaign_id = mIntent.getLongExtra("campaign_id", 0);
+        campaign_id = mIntent.getIntExtra("campaign_id", 0);
 
         // Set up character race options
         if (character_races == null) {

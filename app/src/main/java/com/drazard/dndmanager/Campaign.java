@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class Campaign {
     int _id;
+    boolean complete; // Whether the campaign creation process was completed entirely
     long created_at, updated_at;
     String player_name;
     Character character;
@@ -23,21 +24,22 @@ public class Campaign {
      */
     public Campaign(Cursor cursor) {
         this._id = Integer.parseInt(cursor.getString(0));
-        this.created_at = Timestamp.valueOf(cursor.getString(1)).getTime();
-        this.updated_at = Timestamp.valueOf(cursor.getString(2)).getTime();
-        this.player_name = cursor.getString(3);
+        this.complete = Integer.parseInt(cursor.getString(1)) != 0 ? true : false;
+        this.created_at = Timestamp.valueOf(cursor.getString(2)).getTime();
+        this.updated_at = Timestamp.valueOf(cursor.getString(3)).getTime();
+        this.player_name = cursor.getString(4);
         this.character = new Character();
-        this.character.setFirstName(cursor.getString(4));
-        this.character.setLastName(cursor.getString(5));
-        this.character.setCharacterRace(cursor.getString(6));
-        this.character.setCharacterClass(cursor.getString(7));
-        this.character.setCharacterLevel(Integer.parseInt(cursor.getString(8)));
-        this.character.setGender(cursor.getString(9));
-        this.character.setAlignment(cursor.getString(10));
-        this.character.setHeight(cursor.getString(11));
-        this.character.setWeight(cursor.getString(12));
-        this.character.setAge(cursor.getString(13));
-        this.character.setExp(Integer.parseInt(cursor.getString(14)));
+        this.character.setFirstName(cursor.getString(5));
+        this.character.setLastName(cursor.getString(6));
+        this.character.setCharacterRace(cursor.getString(7));
+        this.character.setCharacterClass(cursor.getString(8));
+        this.character.setCharacterLevel(Integer.parseInt(cursor.getString(9)));
+        this.character.setGender(cursor.getString(10));
+        this.character.setAlignment(cursor.getString(11));
+        this.character.setHeight(cursor.getString(12));
+        this.character.setWeight(cursor.getString(13));
+        this.character.setAge(cursor.getString(14));
+        this.character.setExp(Integer.parseInt(cursor.getString(15)));
     }
 
     /**
@@ -49,6 +51,16 @@ public class Campaign {
     }
     public void setID(int id) {
         this._id = id;
+    }
+
+    public boolean getStatus() {
+        return this.complete;
+    }
+    public int getStatusInt() {
+        return this.complete ? 1 : 0;
+    }
+    public void setStatus(Boolean completeIn) {
+        this.complete = completeIn;
     }
 
     public String getPlayerName() {

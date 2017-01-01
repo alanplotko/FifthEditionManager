@@ -111,13 +111,13 @@
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:id="@+id/btn_edit_campaign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="?android:attr/borderlessButtonStyle"
                     android:padding="8dp"
                     android:textColor="@android:color/black"
                     android:textColorHighlight="@color/colorPrimary"
-                    android:text="@string/edit_campaign"
                     android:textSize="16dp"
                     android:fontFamily="sans-serif-light"
                     android:textStyle="bold"

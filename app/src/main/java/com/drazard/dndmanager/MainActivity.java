@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Listen to clicks on action buttons
+     * Listen to clicks on action buttons in toolbar
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

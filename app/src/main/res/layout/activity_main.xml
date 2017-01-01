@@ -34,7 +34,6 @@
         android:id="@+id/no_campaigns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:layout_below="@id/home_toolbar"
         android:textSize="18sp"
         android:padding="20dp"

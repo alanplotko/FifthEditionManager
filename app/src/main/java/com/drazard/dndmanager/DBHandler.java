@@ -28,6 +28,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Campaigns table column names
     private static final String KEY_ID = "id";
+    private static final String KEY_COMPLETE = "complete";
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_UPDATED_AT = "updated_at";
     private static final String KEY_PLAYER_NAME = "player_name";
@@ -62,6 +63,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String createTableCommand = "CREATE TABLE "
                 + TABLE_CAMPAIGNS    + "("
                 + KEY_ID             + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_COMPLETE       + " BOOLEAN DEFAULT 0, "
                 + KEY_CREATED_AT     + " TIMESTAMP, "
                 + KEY_UPDATED_AT     + " TIMESTAMP, "
                 + KEY_PLAYER_NAME    + " TEXT, "
@@ -101,6 +103,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         long time = System.currentTimeMillis();
         Timestamp now = new Timestamp(time);
+        values.put(KEY_COMPLETE, 0);
         values.put(KEY_CREATED_AT, now.toString());
         values.put(KEY_UPDATED_AT, now.toString());
         values.put(KEY_PLAYER_NAME, campaign.getPlayerName());
@@ -134,6 +137,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(TABLE_CAMPAIGNS, new String[] {
                 KEY_ID,
+                KEY_COMPLETE,
                 KEY_CREATED_AT,
                 KEY_UPDATED_AT,
                 KEY_PLAYER_NAME,
@@ -190,6 +194,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         Timestamp now = new Timestamp(System.currentTimeMillis());
+        values.put(KEY_COMPLETE, campaign.getStatusInt());
         values.put(KEY_UPDATED_AT, now.toString());
         values.put(KEY_PLAYER_NAME, campaign.getPlayerName());
 

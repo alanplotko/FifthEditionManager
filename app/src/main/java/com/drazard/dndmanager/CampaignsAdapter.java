@@ -1,10 +1,13 @@
 package com.drazard.dndmanager;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,20 +22,24 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         /**
          * Card details
          */
-        TextView name;
-        TextView description;
-        TextView last_updated;
-        ImageView portrait;
-        ImageView class_icon;
+        private final Context context;
+        private TextView name;
+        private TextView description;
+        private TextView last_updated;
+        private ImageView portrait;
+        private ImageView class_icon;
+        private Button edit_btn;
 
         public CampaignViewHolder(View view) {
             super(view);
+            context = view.getContext();
             card = (CardView) itemView.findViewById(R.id.campaign_card);
             name = (TextView) itemView.findViewById(R.id.campaign_name);
             last_updated = (TextView) itemView.findViewById(R.id.campaign_timestamp);
             description = (TextView) itemView.findViewById(R.id.campaign_description);
             portrait = (ImageView) itemView.findViewById(R.id.character_portrait);
             class_icon = (ImageView) itemView.findViewById(R.id.character_class);
+            edit_btn = (Button) itemView.findViewById(R.id.btn_edit_campaign);
         }
     }
 
@@ -63,14 +70,22 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(CampaignViewHolder campaignViewHolder, int pos) {
-        campaignViewHolder.name.setText(this.campaigns.get(pos).getCharacter().getFullName());
-        campaignViewHolder.last_updated.setText(this.campaigns.get(pos).getRelativeTime());
+    public void onBindViewHolder(final CampaignViewHolder campaignViewHolder, int pos) {
+        Campaign current = this.campaigns.get(pos);
+        campaignViewHolder.name.setText(current.getCharacter().getFullName());
+        campaignViewHolder.last_updated.setText(current.getRelativeTime());
 
         // Make background slightly transparent for campaign timestamp
         campaignViewHolder.last_updated.getBackground().setAlpha(120);
 
-        campaignViewHolder.description.setText(this.campaigns.get(pos).getCharacter().toString());
+        campaignViewHolder.description.setText(current.getCharacter().toString());
+
+        // Set text of edit button based on whether user completed new campaign process entirely
+        if (current.complete) {
+            campaignViewHolder.edit_btn.setText(R.string.edit_campaign);
+        } else {
+            campaignViewHolder.edit_btn.setText(R.string.resume_create_campaign);
+        }
 
         // Set character portrait
         try {
@@ -93,6 +108,43 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         } catch (Exception e) {
             campaignViewHolder.class_icon.setVisibility(View.INVISIBLE);
         }
+
+        // Set tags for current card
+        campaignViewHolder.edit_btn.setTag(R.id.campaign_id, current.getID());
+        campaignViewHolder.edit_btn.setTag(R.id.campaign_portrait_visibility,
+                campaignViewHolder.portrait.getVisibility());
+        campaignViewHolder.edit_btn.setTag(R.id.campaign_class_icon_visibility,
+                campaignViewHolder.class_icon.getVisibility());
+
+
+        /**
+         * Listen to action button clicks in card view
+         */
+
+        // Set up edit/resume button
+        campaignViewHolder.edit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView tv = (TextView) view;
+                String btn_text = tv.getText().toString();
+                int campaign_id = (Integer) view.getTag(R.id.campaign_id);
+                int portrait = (Integer) view.getTag(R.id.campaign_portrait_visibility);
+                int class_icon = (Integer) view.getTag(R.id.campaign_class_icon_visibility);
+                if (btn_text.equals(tv.getResources().getString(R.string.edit_campaign))) {
+                    // TODO: Launch "edit campaign activity" here
+                } else {
+                    // Find what was not finalized
+                    if (portrait == View.INVISIBLE) {
+                        Intent resumeStep = new Intent(view.getContext(),
+                                CharacterRaceSelectionActivity.class);
+                        resumeStep.putExtra("campaign_id", campaign_id);
+                        view.getContext().startActivity(resumeStep);
+                    } else if (class_icon == View.INVISIBLE) {
+                        // TODO: Launch "class selection activity" here
+                    }
+                }
+            }
+        });
     }
 
     // Override recycler view method

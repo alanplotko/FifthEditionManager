@@ -6,7 +6,16 @@
     <string name="no_campaigns">No campaigns found. Ready to start a new one? Hit the button above
         so we can get started!</string>
     <string name="edit_campaign">Edit</string>
+    <string name="resume_create_campaign">Resume</string>
     <string name="more_info">View Campaign</string>
+
+    <!--
+        Campaign adapter
+    -->
+
+    <item type="id" name="campaign_id" />
+    <item type="id" name="campaign_portrait_visibility" />
+    <item type="id" name="campaign_class_icon_visibility" />
 
     <!--
         New campaign activity
