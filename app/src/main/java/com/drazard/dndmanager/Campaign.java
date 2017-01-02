@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class Campaign {
     int _id;
-    boolean complete; // Whether the campaign creation process was completed entirely
+    int current_step; // Current rogress in the campaign creation process, -1 = done
     long created_at, updated_at;
     String player_name;
     Character character;
@@ -24,7 +24,7 @@ public class Campaign {
      */
     public Campaign(Cursor cursor) {
         this._id = Integer.parseInt(cursor.getString(0));
-        this.complete = Integer.parseInt(cursor.getString(1)) != 0 ? true : false;
+        this.current_step = Integer.parseInt(cursor.getString(1));
         this.created_at = Timestamp.valueOf(cursor.getString(2)).getTime();
         this.updated_at = Timestamp.valueOf(cursor.getString(3)).getTime();
         this.player_name = cursor.getString(4);
@@ -53,14 +53,11 @@ public class Campaign {
         this._id = id;
     }
 
-    public boolean getStatus() {
-        return this.complete;
+    public int getStatus() {
+        return this.current_step;
     }
-    public int getStatusInt() {
-        return this.complete ? 1 : 0;
-    }
-    public void setStatus(Boolean completeIn) {
-        this.complete = completeIn;
+    public void setStatus(int currentStepIn) {
+        this.current_step = currentStepIn;
     }
 
     public String getPlayerName() {

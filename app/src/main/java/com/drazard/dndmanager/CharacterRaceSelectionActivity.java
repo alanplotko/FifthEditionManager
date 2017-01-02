@@ -77,6 +77,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         Character character = campaign.getCharacter();
         character.setCharacterRace(selected);
         campaign.setCharacter(character);
+        campaign.setStatus(2);
         db.updateCampaign(campaign);
         this.finish();
     }

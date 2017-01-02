@@ -19,3 +19,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+In addition, do note that the media resources in this Android application
+are potentially subject to their own licensing and copyrights, which can be
+found in the file `COPYRIGHT.md`. These resources may require giving credit
+where due and as such may require you to retain all notices in `COPYRIGHT.md`
+if you wish to use them.

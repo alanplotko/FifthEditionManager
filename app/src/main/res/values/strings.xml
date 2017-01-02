@@ -14,8 +14,7 @@
     -->
 
     <item type="id" name="campaign_id" />
-    <item type="id" name="campaign_portrait_visibility" />
-    <item type="id" name="campaign_class_icon_visibility" />
+    <item type="id" name="campaign_progress" />
 
     <!--
         New campaign activity

@@ -81,7 +81,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         campaignViewHolder.description.setText(current.getCharacter().toString());
 
         // Set text of edit button based on whether user completed new campaign process entirely
-        if (current.complete) {
+        if (current.getStatus() == -1) {
             campaignViewHolder.edit_btn.setText(R.string.edit_campaign);
         } else {
             campaignViewHolder.edit_btn.setText(R.string.resume_create_campaign);
@@ -111,11 +111,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
 
         // Set tags for current card
         campaignViewHolder.edit_btn.setTag(R.id.campaign_id, current.getID());
-        campaignViewHolder.edit_btn.setTag(R.id.campaign_portrait_visibility,
-                campaignViewHolder.portrait.getVisibility());
-        campaignViewHolder.edit_btn.setTag(R.id.campaign_class_icon_visibility,
-                campaignViewHolder.class_icon.getVisibility());
-
+        campaignViewHolder.edit_btn.setTag(R.id.campaign_progress, current.getStatus());
 
         /**
          * Listen to action button clicks in card view
@@ -125,24 +121,26 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         campaignViewHolder.edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView tv = (TextView) view;
-                String btn_text = tv.getText().toString();
-                int campaign_id = (Integer) view.getTag(R.id.campaign_id);
-                int portrait = (Integer) view.getTag(R.id.campaign_portrait_visibility);
-                int class_icon = (Integer) view.getTag(R.id.campaign_class_icon_visibility);
-                if (btn_text.equals(tv.getResources().getString(R.string.edit_campaign))) {
+            TextView tv = (TextView) view;
+            String btn_text = tv.getText().toString();
+            int campaign_id = (Integer) view.getTag(R.id.campaign_id);
+            int progress = (Integer) view.getTag(R.id.campaign_progress);
+            Intent next = null;
+            switch (progress) {
+                case -1:
                     // TODO: Launch "edit campaign activity" here
-                } else {
-                    // Find what was not finalized
-                    if (portrait == View.INVISIBLE) {
-                        Intent resumeStep = new Intent(view.getContext(),
-                                CharacterRaceSelectionActivity.class);
-                        resumeStep.putExtra("campaign_id", campaign_id);
-                        view.getContext().startActivity(resumeStep);
-                    } else if (class_icon == View.INVISIBLE) {
-                        // TODO: Launch "class selection activity" here
-                    }
-                }
+                    break;
+                case 1:
+                    next = new Intent(view.getContext(), CharacterRaceSelectionActivity.class);
+                    break;
+                case 2:
+                    // TODO: Launch "class selection activity" here
+                    break;
+            }
+            if (next != null) {
+                next.putExtra("campaign_id", campaign_id);
+                view.getContext().startActivity(next);
+            }
             }
         });
     }
