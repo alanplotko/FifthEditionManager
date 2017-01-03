@@ -1,7 +1,5 @@
 <resources>
-    <!--
-        Home activity
-    -->
+    <!-- Home activity -->
     <string name="app_name">D&amp;D Manager</string>
     <string name="no_campaigns">No campaigns found. Ready to start a new one? Hit the button above
         so we can get started!</string>
@@ -9,17 +7,18 @@
     <string name="resume_create_campaign">Resume</string>
     <string name="more_info">View Campaign</string>
 
-    <!--
-        Campaign adapter
-    -->
+    <!-- Campaign adapter ids -->
+    <item name="campaign_id" type="id" />
+    <item name="campaign_progress" type="id" />
 
-    <item type="id" name="campaign_id" />
-    <item type="id" name="campaign_progress" />
+    <!-- Class card adapter ids -->
+    <item name="class_card_position" type="id" />
 
-    <!--
-        New campaign activity
-    -->
+    <!-- New/edit campaign activity -->
     <string name="activity_title_new_campaign">New Campaign</string>
+    <string name="error_missing_campaign_id">Cannot edit campaign. Please try again in a few
+        minutes.</string>
+    <string name="finish_edit_campaign">Campaign changes saved successfully.</string>
 
     <!-- Buttons -->
     <string name="btn_save_campaign">Save Campaign</string>
@@ -60,15 +59,22 @@
     <string name="character_height">Height</string>
     <string name="character_weight">Weight</string>
 
-    <!-- Error messages -->
+    <!-- Character section error messages -->
     <string name="error_gender">Gender required</string>
     <string name="error_alignment">Alignment required</string>
 
 
-    <!--
-        Character race selection activity
-    -->
+    <!-- Character race selection activity -->
     <string name="activity_title_character_race">Character Race Selection</string>
     <string name="no_character_race_title">No title available.</string>
     <string name="no_character_race_description">No description available.</string>
+    <string name="finish_select_race">Race changes saved successfully.</string>
+
+    <!-- Character class selection activity -->
+    <string name="activity_title_character_class">Character Class Selection</string>
+    <string name="btn_select_class">Select</string>
+    <string name="no_character_class_title">No title available.</string>
+    <string name="no_character_class_description">No description available.</string>
+    <string name="finish_select_class">Class changes saved successfully.</string>
+
 </resources>

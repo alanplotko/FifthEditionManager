@@ -19,7 +19,8 @@
         <activity
             android:name=".CharacterRaceSelectionActivity"
             android:label="@string/activity_title_character_race"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CharacterClassSelectionActivity"></activity>
     </application>
 
 </manifest>

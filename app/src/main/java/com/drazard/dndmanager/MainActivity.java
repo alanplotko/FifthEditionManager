@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
      * Create a new campaign to keep track of.
      */
     public void createCampaign() {
-        Intent intent = new Intent(this, NewCampaignActivity.class);
-        startActivity(intent);
+        Intent next = new Intent(this, NewCampaignActivity.class);
+        next.putExtra("first_time", true);
+        startActivity(next);
     }
 }

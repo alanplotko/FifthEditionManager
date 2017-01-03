@@ -121,26 +121,41 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         campaignViewHolder.edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            TextView tv = (TextView) view;
-            String btn_text = tv.getText().toString();
-            int campaign_id = (Integer) view.getTag(R.id.campaign_id);
-            int progress = (Integer) view.getTag(R.id.campaign_progress);
-            Intent next = null;
-            switch (progress) {
-                case -1:
-                    // TODO: Launch "edit campaign activity" here
-                    break;
-                case 1:
-                    next = new Intent(view.getContext(), CharacterRaceSelectionActivity.class);
-                    break;
-                case 2:
-                    // TODO: Launch "class selection activity" here
-                    break;
-            }
-            if (next != null) {
-                next.putExtra("campaign_id", campaign_id);
-                view.getContext().startActivity(next);
-            }
+                Context context = view.getContext();
+                TextView tv = (TextView) view;
+
+                // Get campaign id and progress from card
+                int campaign_id = (Integer) view.getTag(R.id.campaign_id);
+                int progress = (Integer) view.getTag(R.id.campaign_progress);
+
+                // Determine intent for campaign by user's progress in campaign creation process
+                Intent next = null;
+
+                switch (progress) {
+                    // User has completed the process and would like to make modifications
+                    case -1:
+                        next = new Intent(context, NewCampaignActivity.class);
+                        break;
+                    // User has not yet selected a character race
+                    case 1:
+                        next = new Intent(context, CharacterRaceSelectionActivity.class);
+                        // TODO: Account for any character build -breaking changes and warn user
+                        break;
+                    // User has not yet selected a character class
+                    case 2:
+                        next = new Intent(context, CharacterClassSelectionActivity.class);
+                        // TODO: Account for any character build -breaking changes and warn user
+                        break;
+                    // User has not yet worked on stats or what not (next step)
+                    case 3:
+                        // TODO: Account for any character build -breaking changes and warn user
+                        break;
+                }
+                if (next != null) {
+                    next.putExtra("first_time", (progress != -1));
+                    next.putExtra("campaign_id", campaign_id);
+                    context.startActivity(next);
+                }
             }
         });
     }

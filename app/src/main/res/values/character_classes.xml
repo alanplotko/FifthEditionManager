@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="character_class_options">
+        <item>Barbarian</item>
+        <item>Bard</item>
+        <item>Cleric</item>
+        <item>Druid</item>
+        <item>Fighter</item>
+        <item>Monk</item>
+        <item>Paladin</item>
+        <item>Ranger</item>
+        <item>Rogue</item>
+        <item>Sorcerer</item>
+        <item>Warlock</item>
+        <item>Wizard</item>
+    </string-array>
+    <string name="class_barbarian">A fierce warrior of primitive background who can enter a battle
+        rage.</string>
+    <string name="class_bard">An inspiring magician whose power echoes the music of
+        creation.</string>
+    <string name="class_cleric"> A priestly champion who wields divine magic in service of a higher
+        power.</string>
+    <string name="class_druid">A priest of the Old Faith, wielding the powers of nature - moonlight
+        and plant growth, fire and lightning - and adopting animal forms.</string>
+    <string name="class_fighter">A master of martial combat, skilled with a variety of weapons and
+        armor.</string>
+    <string name="class_monk">An master of martial arts, harnessing the power of the body in
+        pursuit of physical and spiritual perfection.</string>
+    <string name="class_paladin">A holy warrior bound to a sacred oath.</string>
+    <string name="class_ranger">A warrior who uses martial prowess and nature magic to combat
+        threats on the edges of civilization.</string>
+    <string name="class_rogue">A scoundrel who uses stealth and trickery to overcome obstacles and
+        enemies.</string>
+    <string name="class_sorcerer"> A spellcaster who draws on inherent magic from a gift or
+        bloodline.</string>
+    <string name="class_warlock">A wielder of magic that is derived from a bargain with an
+        extraplanar entity.</string>
+    <string name="class_wizard">A scholarly magic-user capable of manipulating the structures of
+        reality.</string>
+</resources>

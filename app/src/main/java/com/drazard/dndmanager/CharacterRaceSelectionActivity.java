@@ -3,6 +3,7 @@ package com.drazard.dndmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,20 +32,19 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    /**
-     * The list of character races.
-     */
     public String[] character_races;
     public long campaign_id;
+    public boolean first_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_character_race_selection);
+        setContentView(R.layout.activity_race_selection);
 
         // Get campaign ID
         Intent mIntent = getIntent();
         campaign_id = mIntent.getIntExtra("campaign_id", 0);
+        first_time = mIntent.getBooleanExtra("first_time", false);
 
         // Set up character race options
         if (character_races == null) {
@@ -68,7 +68,6 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
                 selectCharacterRace(character_races[mViewPager.getCurrentItem()]);
             }
         });
-
     }
 
     public void selectCharacterRace(String selected) {
@@ -77,9 +76,23 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         Character character = campaign.getCharacter();
         character.setCharacterRace(selected);
         campaign.setCharacter(character);
-        campaign.setStatus(2);
-        db.updateCampaign(campaign);
-        this.finish();
+
+        // Save campaign and proceed to next activity
+        if (!first_time) {
+            db.updateCampaign(campaign);
+            this.finish();
+            Snackbar.make(findViewById(R.id.campaign_list),
+                    getResources().getString(R.string.finish_select_race),
+                    Snackbar.LENGTH_LONG).show();
+        } else {
+            campaign.setStatus(2);
+            db.updateCampaign(campaign);
+            Intent next = new Intent(this, CharacterClassSelectionActivity.class);
+            next.putExtra("campaign_id", (int) (campaign_id + 0));
+            next.putExtra("first_time", true);
+            this.finish();
+            startActivity(next);
+        }
     }
 
     public String getCharacterRaceTitle(int position) {
@@ -133,7 +146,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_character_race_selection, container,
+            View rootView = inflater.inflate(R.layout.fragment_race_selection, container,
                     false);
             TextView textView = (TextView) rootView.findViewById(R.id.character_race);
             String test = getArguments().getString(ARG_SECTION_TITLE);
