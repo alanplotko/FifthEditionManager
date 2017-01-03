@@ -6,10 +6,17 @@
     <string name="edit_campaign">Edit</string>
     <string name="resume_create_campaign">Resume</string>
     <string name="more_info">View Campaign</string>
+    <string name="btn_delete_campaign">Delete</string>
+    <string name="alert_del_campaign_title">Confirm Deletion</string>
+    <string name="alert_del_campaign_message">Please type in your character\'s full name to
+        confirm deletion.</string>
+    <string name="error_mismatch_character_name">Character name does not match</string>
 
     <!-- Campaign adapter ids -->
     <item name="campaign_id" type="id" />
     <item name="campaign_progress" type="id" />
+    <item name="campaign_character_name" type="id"></item>
+    <item name="campaign_position" type="id"></item>
 
     <!-- Class card adapter ids -->
     <item name="class_card_position" type="id" />
@@ -62,7 +69,6 @@
     <!-- Character section error messages -->
     <string name="error_gender">Gender required</string>
     <string name="error_alignment">Alignment required</string>
-
 
     <!-- Character race selection activity -->
     <string name="activity_title_character_race">Character Race Selection</string>

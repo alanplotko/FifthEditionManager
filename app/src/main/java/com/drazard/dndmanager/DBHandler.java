@@ -217,10 +217,10 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // Delete single campaign
-    public void deleteCampaign(Campaign campaign) {
+    public void deleteCampaign(long campaign_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CAMPAIGNS, KEY_ID + " = ?",
-                new String[] { String.valueOf(campaign.getID()) });
+                new String[] { String.valueOf(campaign_id) });
         db.close();
     }
 }

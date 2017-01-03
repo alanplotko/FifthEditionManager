@@ -1,13 +1,16 @@
 package com.drazard.dndmanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +20,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     private List<Campaign> campaigns;
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
-        CardView card;
+        private CardView card;
 
         /**
          * Card details
@@ -29,6 +32,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         private ImageView portrait;
         private ImageView class_icon;
         private Button edit_btn;
+        private Button del_btn;
 
         public CampaignViewHolder(View view) {
             super(view);
@@ -40,6 +44,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
             portrait = (ImageView) itemView.findViewById(R.id.character_portrait);
             class_icon = (ImageView) itemView.findViewById(R.id.character_class);
             edit_btn = (Button) itemView.findViewById(R.id.btn_edit_campaign);
+            del_btn = (Button) itemView.findViewById(R.id.btn_delete_campaign);
         }
     }
 
@@ -70,7 +75,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final CampaignViewHolder campaignViewHolder, int pos) {
+    public void onBindViewHolder(final CampaignViewHolder campaignViewHolder, final int pos) {
         Campaign current = this.campaigns.get(pos);
         campaignViewHolder.name.setText(current.getCharacter().getFullName());
         campaignViewHolder.last_updated.setText(current.getRelativeTime());
@@ -93,10 +98,16 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                     .getCharacterRace().toLowerCase().replace("-", "_");
             int drawableId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
             campaignViewHolder.portrait.setImageResource(drawableId);
-            campaignViewHolder.portrait.setVisibility(View.VISIBLE);
+            campaignViewHolder.portrait.setBackgroundColor(0);
+            campaignViewHolder.portrait.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            campaignViewHolder.portrait.setAdjustViewBounds(false);
         } catch (Exception e) {
-            campaignViewHolder.portrait.setVisibility(View.INVISIBLE);
+            campaignViewHolder.portrait.setImageResource(R.drawable.ic_character_portrait_unknown);
+            campaignViewHolder.portrait.setBackgroundResource(R.color.colorPrimary);
+            campaignViewHolder.portrait.setScaleType(ImageView.ScaleType.FIT_XY);
+            campaignViewHolder.portrait.setAdjustViewBounds(true);
         }
+        campaignViewHolder.portrait.setVisibility(View.VISIBLE);
 
         // Set character class
         try {
@@ -112,6 +123,10 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         // Set tags for current card
         campaignViewHolder.edit_btn.setTag(R.id.campaign_id, current.getID());
         campaignViewHolder.edit_btn.setTag(R.id.campaign_progress, current.getStatus());
+        campaignViewHolder.del_btn.setTag(R.id.campaign_id, current.getID());
+        campaignViewHolder.del_btn.setTag(R.id.campaign_character_name,
+                current.getCharacter().getFullName());
+        campaignViewHolder.del_btn.setTag(R.id.campaign_position, pos);
 
         /**
          * Listen to action button clicks in card view
@@ -156,6 +171,68 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                     next.putExtra("campaign_id", campaign_id);
                     context.startActivity(next);
                 }
+            }
+        });
+
+        // Set up delete button
+        campaignViewHolder.del_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Context context = view.getContext();
+                TextView tv = (TextView) view;
+
+                // Get campaign id and character name from card
+                final int campaign_id = (Integer) view.getTag(R.id.campaign_id);
+                final String character_name = (String) view.getTag(R.id.campaign_character_name);
+                final int position = (Integer) view.getTag(R.id.campaign_position);
+
+                // Set up alert dialog layout
+                View dialog_view = LayoutInflater.from(context).inflate(R.layout.delete_dialog,
+                        null);
+                final EditText input = (EditText) dialog_view.findViewById(R.id.character_name);
+
+                // Set up alert dialog window
+                final AlertDialog alert = new AlertDialog.Builder(context)
+                        .setView(dialog_view)
+                        .setTitle(R.string.alert_del_campaign_title)
+                        .setMessage(R.string.alert_del_campaign_message)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
+                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                        positive.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String inputText = input.getText().toString();
+                                if (inputText.equals(character_name)) {
+                                    DBHandler db = DBHandler.getInstance(context);
+                                    db.deleteCampaign(campaign_id);
+                                    campaigns.remove(position);
+                                    notifyDataSetChanged();
+                                    alert.dismiss();
+                                } else {
+                                    input.setError(context.getResources()
+                                            .getString(R.string.error_mismatch_character_name));
+                                }
+                            }
+                        });
+
+                        Button negative = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+                        negative.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                alert.dismiss();
+                            }
+                        });
+                    }
+                });
+
+                alert.show();
             }
         });
     }

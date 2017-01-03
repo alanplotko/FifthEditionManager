@@ -109,6 +109,20 @@
                     android:textStyle="bold"
                     android:textAllCaps="true" />
 
+                <Button
+                    android:id="@+id/btn_delete_campaign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHighlight="@color/colorPrimary"
+                    android:textSize="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:text="@string/btn_delete_campaign" />
+
             </LinearLayout>
 
         </RelativeLayout>
