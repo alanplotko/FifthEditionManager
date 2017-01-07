@@ -37,4 +37,88 @@
         extraplanar entity.</string>
     <string name="class_wizard">A scholarly magic-user capable of manipulating the structures of
         reality.</string>
+
+    <string name="class_barbarian_details"><![CDATA[
+        <strong>Hit Die:</strong> d12<br />
+        <strong>Primary Ability:</strong> Strength<br />
+        <strong>Saving Throw Proficiencies:</strong> Strength &amp; Constitution<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light and medium armor, shields, simple
+        and martial weapons
+    ]]></string>
+    <string name="class_bard_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Charisma<br />
+        <strong>Saving Throw Proficiencies:</strong> Dexterity &amp; Charisma<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light armor, simple weapons, hand
+        crossbows, longswords, rapiers, shortswords
+    ]]></string>
+    <string name="class_cleric_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Wisdom<br />
+        <strong>Saving Throw Proficiencies:</strong> Wisdom &amp; Charisma<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light and medium armor, shields, simple
+        weapons
+    ]]></string>
+    <string name="class_druid_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Wisdom<br />
+        <strong>Saving Throw Proficiencies:</strong> Intelligence &amp; Wisdom<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light and medium armor (nonmetal),
+        shields (nonmetal), clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars,
+        sickles, slings, spears
+    ]]></string>
+    <string name="class_fighter_details"><![CDATA[
+        <strong>Hit Die:</strong> d10<br />
+        <strong>Primary Ability:</strong> Strength or Dexterity<br />
+        <strong>Saving Throw Proficiencies:</strong> Strength &amp; Constitution<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> All armor, shields, simple and martial
+        weapons
+    ]]></string>
+    <string name="class_monk_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Dexterity &amp; Wisdom<br />
+        <strong>Saving Throw Proficiencies:</strong> Strength &amp; Dexterity<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Simple weapons, shortswords
+    ]]></string>
+    <string name="class_paladin_details"><![CDATA[
+        <strong>Hit Die:</strong> d10<br />
+        <strong>Primary Ability:</strong> Strength &amp; Charisma<br />
+        <strong>Saving Throw Proficiencies:</strong> Wisdom &amp; Charisma<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> All armor, shields, simple and martial
+        weapons
+    ]]></string>
+    <string name="class_ranger_details"><![CDATA[
+        <strong>Hit Die:</strong> d10<br />
+        <strong>Primary Ability:</strong> Dexterity &amp; Wisdom<br />
+        <strong>Saving Throw Proficiencies:</strong> Strength &amp; Dexterity<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light and medium armor, shields, simple
+        and martial weapons
+    ]]></string>
+    <string name="class_rogue_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Dexterity<br />
+        <strong>Saving Throw Proficiencies:</strong> Dexterity &amp; Intelligence<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light armor, simple weapons, hand
+        crossbows, longswords, rapiers, shortswords
+    ]]></string>
+    <string name="class_sorcerer_details"><![CDATA[
+        <strong>Hit Die:</strong> d6<br />
+        <strong>Primary Ability:</strong> Charisma<br />
+        <strong>Saving Throw Proficiencies:</strong> Constitution &amp; Charisma<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Daggers, darts, slings, quarterstaffs,
+        light crossbows
+    ]]></string>
+    <string name="class_warlock_details"><![CDATA[
+        <strong>Hit Die:</strong> d8<br />
+        <strong>Primary Ability:</strong> Charisma<br />
+        <strong>Saving Throw Proficiencies:</strong> Wisdom &amp; Charisma<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Light armor, simple weapons
+    ]]></string>
+    <string name="class_wizard_details"><![CDATA[
+        <strong>Hit Die:</strong> d6<br />
+        <strong>Primary Ability:</strong> Intelligence<br />
+        <strong>Saving Throw Proficiencies:</strong> Intelligence &amp; Wisdom<br />
+        <strong>Armor &amp; Weapon Proficiencies:</strong> Daggers, darts, slings, quarterstaffs,
+        light crossbows
+    ]]></string>
 </resources>

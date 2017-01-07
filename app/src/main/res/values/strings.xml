@@ -78,9 +78,11 @@
 
     <!-- Character class selection activity -->
     <string name="activity_title_character_class">Character Class Selection</string>
-    <string name="btn_select_class">Select</string>
+    <string name="btn_select_class">Select Class</string>
     <string name="no_character_class_title">No title available.</string>
     <string name="no_character_class_description">No description available.</string>
+    <string name="no_character_class_details">No additional details available.</string>
+    <string name="expand_icon_accessibility">Toggle Additional Details</string>
     <string name="finish_select_class">Class changes saved successfully.</string>
 
 </resources>
