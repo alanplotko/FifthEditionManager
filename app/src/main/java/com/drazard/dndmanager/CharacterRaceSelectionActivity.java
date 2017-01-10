@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +59,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.race_selection_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -149,8 +150,17 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_race_selection, container,
                     false);
             TextView textView = (TextView) rootView.findViewById(R.id.character_race);
-            String test = getArguments().getString(ARG_SECTION_TITLE);
-            textView.setText(getArguments().getString(ARG_SECTION_TITLE));
+            String characterRace = getArguments().getString(ARG_SECTION_TITLE);
+            textView.setText(characterRace);
+
+            // Set background for current fragment's character race
+            try {
+                int drawableId = R.drawable.class.getField("full_background_" +
+                        characterRace.toLowerCase().replace("-", "_")).getInt(null);
+                rootView.setBackground(ContextCompat.getDrawable(inflater.getContext(),
+                        drawableId));
+            } catch (Exception e) {} // Do not set custom background if image not found
+
             return rootView;
         }
     }
