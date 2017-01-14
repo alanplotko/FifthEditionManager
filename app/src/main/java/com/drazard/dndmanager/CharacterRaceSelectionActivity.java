@@ -11,6 +11,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,11 +108,12 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         return title;
     }
 
-    public String getCharacterRaceDescription(int position) {
+    public String getCharacterRaceDetails(int position) {
         int stringId;
         // Attempt to fetch description for given character race
         try {
-            String fieldName = "race_" + character_races[position].toLowerCase().replace("-", "_");
+            String fieldName = "race_" + character_races[position].toLowerCase().replace("-", "_")
+                    + "_details";
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
             stringId = R.string.no_character_race_description;
@@ -126,8 +129,9 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final String ARG_SECTION_TITLE = "section_title";
+        private static final String ARG_POSITION = "position";
+        private static final String ARG_RACE_NAME = "race_name";
+        private static final String ARG_RACE_DETAILS = "race_details";
 
         public PlaceholderFragment() {}
 
@@ -135,13 +139,25 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String sectionTitle, int sectionNumber) {
+        public static PlaceholderFragment newInstance(String race, String details, int position) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putString(ARG_SECTION_TITLE, sectionTitle);
+            args.putInt(ARG_POSITION, position);
+            args.putString(ARG_RACE_NAME, race);
+            args.putString(ARG_RACE_DETAILS, details);
             fragment.setArguments(args);
             return fragment;
+        }
+
+        @SuppressWarnings("deprecation")
+        public static Spanned fromHtml(String html){
+            Spanned result;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+            } else {
+                result = Html.fromHtml(html);
+            }
+            return result;
         }
 
         @Override
@@ -149,14 +165,20 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_race_selection, container,
                     false);
-            TextView textView = (TextView) rootView.findViewById(R.id.character_race);
-            String characterRace = getArguments().getString(ARG_SECTION_TITLE);
-            textView.setText(characterRace);
+            TextView name_view = (TextView) rootView.findViewById(R.id.character_race_name);
+            TextView details_view = (TextView) rootView.findViewById(R.id.character_race_details);
+
+            String character_race = getArguments().getString(ARG_RACE_NAME);
+            String race_details = getArguments().getString(ARG_RACE_DETAILS);
+
+            name_view.setText(character_race);
+            details_view.setText(this.fromHtml(race_details));
+
 
             // Set background for current fragment's character race
             try {
                 int drawableId = R.drawable.class.getField("full_background_" +
-                        characterRace.toLowerCase().replace("-", "_")).getInt(null);
+                        character_race.toLowerCase().replace("-", "_")).getInt(null);
                 rootView.setBackground(ContextCompat.getDrawable(inflater.getContext(),
                         drawableId));
             } catch (Exception e) {} // Do not set custom background if image not found
@@ -179,7 +201,10 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(getCharacterRaceTitle(position), position);
+            return PlaceholderFragment.newInstance(
+                    getCharacterRaceTitle(position),
+                    getCharacterRaceDetails(position),
+                    position);
         }
 
         @Override

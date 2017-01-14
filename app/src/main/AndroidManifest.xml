@@ -19,7 +19,8 @@
         <activity
             android:name=".CharacterRaceSelectionActivity"
             android:label="@string/activity_title_character_race"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
         <activity android:name=".CharacterClassSelectionActivity"></activity>
     </application>
 

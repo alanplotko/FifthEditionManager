@@ -7,6 +7,7 @@
     tools:context="com.drazard.dndmanager.CharacterRaceSelectionActivity$PlaceholderFragment">
 
     <RelativeLayout
+        android:id="@+id/character_race_name_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -16,7 +17,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/character_race"
+            android:id="@+id/character_race_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -24,6 +25,29 @@
             android:textSize="36sp"
             android:textColor="@color/primaryText"
             android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/character_race_details_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/title_semi_transparent_background"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="64dp">
+
+        <TextView
+            android:id="@+id/character_race_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="72dp"
+            android:textSize="18sp"
+            android:textColor="@color/primaryText" />
 
     </RelativeLayout>
 

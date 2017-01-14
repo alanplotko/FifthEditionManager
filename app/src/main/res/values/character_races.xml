@@ -11,13 +11,19 @@
         <item>Half-Orc</item>
         <item>Tiefling</item>
     </string-array>
-    <string name="race_dwarf"></string>
-    <string name="race_elf"></string>
-    <string name="race_halfling"></string>
-    <string name="race_human"></string>
-    <string name="race_dragonborn"></string>
-    <string name="race_gnome"></string>
-    <string name="race_half_elf"></string>
-    <string name="race_half_orc"></string>
-    <string name="race_tiefling"></string>
+    <string name="race_dwarf_details"><![CDATA[
+        <strong>+2</strong> CON, <strong>Darkvision</strong>, <strong>25 ft.</strong> base
+        spd.<br />
+        <strong>Advantages:</strong> St/RES poison<br />
+        <strong>Proficiencies:</strong> Battleaxe, handaxe, throwing hammer, warhammer<br />
+        <strong>Languages:</strong> Common, Dwarvish
+    ]]></string>
+    <string name="race_elf_details"></string>
+    <string name="race_halfling_details"></string>
+    <string name="race_human_details"></string>
+    <string name="race_dragonborn_details"></string>
+    <string name="race_gnome_details"></string>
+    <string name="race_half_elf_details"></string>
+    <string name="race_half_orc_details"></string>
+    <string name="race_tiefling_details"></string>
 </resources>

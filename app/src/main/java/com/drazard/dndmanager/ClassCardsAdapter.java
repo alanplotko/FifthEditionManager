@@ -3,19 +3,17 @@ package com.drazard.dndmanager;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import static android.text.Html.FROM_HTML_MODE_LEGACY;
 
 public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.ClassCardViewHolder> {
     private String[] classes;
@@ -131,19 +129,24 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
+        }
+        return result;
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    @SuppressWarnings("deprecation")
     public void onBindViewHolder(final ClassCardViewHolder vh, int pos) {
         final int position = vh.getAdapterPosition();
         vh.name.setText(this.classes[position]);
         vh.description.setText(this.getCharacterClassDescription(vh.context, position));
-        if (Build.VERSION.SDK_INT >= 24) {
-            vh.details.setText(Html.fromHtml(this.getCharacterClassDetails(vh.context, position),
-                    FROM_HTML_MODE_LEGACY));
-        } else {
-            vh.details.setText(Html.fromHtml(this.getCharacterClassDetails(vh.context, position)));
-        }
+        vh.details.setText(this.fromHtml(this.getCharacterClassDetails(vh.context, position)));
 
         // Set character class
         try {
