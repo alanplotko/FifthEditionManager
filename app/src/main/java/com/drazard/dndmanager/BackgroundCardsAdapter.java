@@ -84,7 +84,8 @@ public class BackgroundCardsAdapter extends RecyclerView.Adapter<BackgroundCards
         int stringId;
         // Attempt to fetch description for given character background
         try {
-            String fieldName = "background_" + this.backgrounds[pos].toLowerCase();
+            String fieldName = "background_" + this.backgrounds[pos].toLowerCase()
+                    .replace(" ", "_");
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
             stringId = R.string.no_character_background_description;
@@ -96,7 +97,8 @@ public class BackgroundCardsAdapter extends RecyclerView.Adapter<BackgroundCards
         int stringId;
         // Attempt to fetch additional details for given character background
         try {
-            String fieldName = "background_" + this.backgrounds[pos].toLowerCase() + "_details";
+            String fieldName = "background_" + this.backgrounds[pos].toLowerCase()
+                    .replace(" ", "_") + "_details";
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
             stringId = R.string.no_character_class_details;

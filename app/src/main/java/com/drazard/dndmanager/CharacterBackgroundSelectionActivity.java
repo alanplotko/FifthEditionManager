@@ -60,7 +60,7 @@ public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
             // Restore layout scroll position
             rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
             // Restore expand list
-            ((ClassCardsAdapter) rv.getAdapter()).setExpandList(savedInstanceState
+            ((BackgroundCardsAdapter) rv.getAdapter()).setExpandList(savedInstanceState
                     .getBooleanArray(BUNDLE_RECYCLER_EXPAND_LIST));
         }
     }
@@ -72,6 +72,6 @@ public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, rv.getLayoutManager().onSaveInstanceState());
         // Save restore list
         outState.putBooleanArray(BUNDLE_RECYCLER_EXPAND_LIST,
-                ((ClassCardsAdapter) rv.getAdapter()).getExpandList());
+                ((BackgroundCardsAdapter) rv.getAdapter()).getExpandList());
     }
 }
