@@ -18,6 +18,7 @@ import java.util.List;
 
 public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.CampaignViewHolder> {
     private List<Campaign> campaigns;
+    private Context mainActivityContext;
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
@@ -28,23 +29,23 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         private final Context context;
         private TextView name;
         private TextView description;
-        private TextView last_updated;
+        private TextView lastUpdated;
         private ImageView portrait;
-        private ImageView class_icon;
-        private Button edit_btn;
-        private Button del_btn;
+        private ImageView classIcon;
+        private Button editBtn;
+        private Button delBtn;
 
         public CampaignViewHolder(View view) {
             super(view);
             context = view.getContext();
             card = (CardView) itemView.findViewById(R.id.campaign_card);
             name = (TextView) itemView.findViewById(R.id.campaign_name);
-            last_updated = (TextView) itemView.findViewById(R.id.campaign_timestamp);
+            lastUpdated = (TextView) itemView.findViewById(R.id.campaign_timestamp);
             description = (TextView) itemView.findViewById(R.id.campaign_description);
             portrait = (ImageView) itemView.findViewById(R.id.character_portrait);
-            class_icon = (ImageView) itemView.findViewById(R.id.character_class);
-            edit_btn = (Button) itemView.findViewById(R.id.btn_edit_campaign);
-            del_btn = (Button) itemView.findViewById(R.id.btn_delete_campaign);
+            classIcon = (ImageView) itemView.findViewById(R.id.character_class);
+            editBtn = (Button) itemView.findViewById(R.id.btn_edit_campaign);
+            delBtn = (Button) itemView.findViewById(R.id.btn_delete_campaign);
         }
     }
 
@@ -60,8 +61,9 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     }
 
     // Pass list of campaigns to adapter
-    public CampaignsAdapter(List<Campaign> campaigns) {
+    public CampaignsAdapter(List<Campaign> campaigns, Context activity) {
         this.campaigns = campaigns;
+        this.mainActivityContext = activity;
     }
 
     // Create new views (invoked by the layout manager)
@@ -77,25 +79,26 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     @Override
     public void onBindViewHolder(final CampaignViewHolder campaignViewHolder, final int pos) {
         Campaign current = this.campaigns.get(pos);
-        campaignViewHolder.name.setText(current.getCharacter().getFullName());
-        campaignViewHolder.last_updated.setText(current.getRelativeTime());
+        String fullName = current.character.firstName + " " + current.character.lastName;
+        campaignViewHolder.name.setText(fullName);
+        campaignViewHolder.lastUpdated.setText(current.getRelativeTime());
 
         // Make background slightly transparent for campaign timestamp
-        campaignViewHolder.last_updated.getBackground().setAlpha(120);
+        campaignViewHolder.lastUpdated.getBackground().setAlpha(120);
 
-        campaignViewHolder.description.setText(current.getCharacter().toString());
+        campaignViewHolder.description.setText(current.character.toString());
 
         // Set text of edit button based on whether user completed new campaign process entirely
-        if (current.getStatus() == -1) {
-            campaignViewHolder.edit_btn.setText(R.string.edit_campaign);
+        if (current.status == 4) {
+            campaignViewHolder.editBtn.setText(R.string.edit_campaign);
         } else {
-            campaignViewHolder.edit_btn.setText(R.string.resume_create_campaign);
+            campaignViewHolder.editBtn.setText(R.string.resume_create_campaign);
         }
 
         // Set character portrait
         try {
-            String characterRace = this.campaigns.get(pos).getCharacter()
-                    .getCharacterRace().toLowerCase().replace("-", "_");
+            String characterRace = this.campaigns.get(pos).character.race.toLowerCase()
+                    .replace("-", "_");
             int drawableId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
             campaignViewHolder.portrait.setImageResource(drawableId);
             campaignViewHolder.portrait.setBackgroundColor(0);
@@ -111,36 +114,34 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
 
         // Set character class
         try {
-            String characterClass = this.campaigns.get(pos).getCharacter()
-                    .getCharacterClass().toLowerCase();
+            String characterClass = this.campaigns.get(pos).character.class_.toLowerCase();
             int drawableId = R.drawable.class.getField("class_" + characterClass).getInt(null);
-            campaignViewHolder.class_icon.setImageResource(drawableId);
-            campaignViewHolder.class_icon.setVisibility(View.VISIBLE);
+            campaignViewHolder.classIcon.setImageResource(drawableId);
+            campaignViewHolder.classIcon.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            campaignViewHolder.class_icon.setVisibility(View.INVISIBLE);
+            campaignViewHolder.classIcon.setVisibility(View.INVISIBLE);
         }
 
         // Set tags for current card
-        campaignViewHolder.edit_btn.setTag(R.id.campaign_id, current.getID());
-        campaignViewHolder.edit_btn.setTag(R.id.campaign_progress, current.getStatus());
-        campaignViewHolder.del_btn.setTag(R.id.campaign_id, current.getID());
-        campaignViewHolder.del_btn.setTag(R.id.campaign_character_name,
-                current.getCharacter().getFullName());
-        campaignViewHolder.del_btn.setTag(R.id.campaign_position, pos);
+        campaignViewHolder.editBtn.setTag(R.id.campaign_id, current._id);
+        campaignViewHolder.editBtn.setTag(R.id.campaign_progress, current.status);
+        campaignViewHolder.delBtn.setTag(R.id.campaign_id, current._id);
+        campaignViewHolder.delBtn.setTag(R.id.campaign_character_name, fullName);
+        campaignViewHolder.delBtn.setTag(R.id.campaign_position, pos);
 
         /**
          * Listen to action button clicks in card view
          */
 
         // Set up edit/resume button
-        campaignViewHolder.edit_btn.setOnClickListener(new View.OnClickListener() {
+        campaignViewHolder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
                 TextView tv = (TextView) view;
 
                 // Get campaign id and progress from card
-                int campaign_id = (Integer) view.getTag(R.id.campaign_id);
+                long campaignId = (Long) view.getTag(R.id.campaign_id);
                 int progress = (Integer) view.getTag(R.id.campaign_progress);
 
                 // Determine intent for campaign by user's progress in campaign creation process
@@ -154,36 +155,37 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                     // User has not yet selected a character race
                     case 1:
                         next = new Intent(context, CharacterRaceSelectionActivity.class);
-                        // TODO: Account for any character build -breaking changes and warn user
                         break;
                     // User has not yet selected a character class
                     case 2:
                         next = new Intent(context, CharacterClassSelectionActivity.class);
-                        // TODO: Account for any character build -breaking changes and warn user
+                        break;
+                    // User has not yet selected a character background
+                    case 3:
+                        next = new Intent(context, CharacterBackgroundSelectionActivity.class);
                         break;
                     // User has not yet worked on stats or what not (next step)
-                    case 3:
-                        // TODO: Account for any character build -breaking changes and warn user
+                    case 4:
                         break;
                 }
                 if (next != null) {
-                    next.putExtra("first_time", (progress != -1));
-                    next.putExtra("campaign_id", campaign_id);
+                    next.putExtra("firstTime", (progress != 4));
+                    next.putExtra("campaignId", campaignId);
                     context.startActivity(next);
                 }
             }
         });
 
         // Set up delete button
-        campaignViewHolder.del_btn.setOnClickListener(new View.OnClickListener() {
+        campaignViewHolder.delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Context context = view.getContext();
                 TextView tv = (TextView) view;
 
                 // Get campaign id and character name from card
-                final int campaign_id = (Integer) view.getTag(R.id.campaign_id);
-                final String character_name = (String) view.getTag(R.id.campaign_character_name);
+                final long campaignId = (Long) view.getTag(R.id.campaign_id);
+                final String characterName = (String) view.getTag(R.id.campaign_character_name);
                 final int position = (Integer) view.getTag(R.id.campaign_position);
 
                 // Set up alert dialog layout
@@ -209,11 +211,15 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                             @Override
                             public void onClick(View view) {
                                 String inputText = input.getText().toString();
-                                if (inputText.equals(character_name)) {
+                                if (inputText.equals(characterName)) {
                                     DBHandler db = DBHandler.getInstance(context);
-                                    db.deleteCampaign(campaign_id);
+                                    db.deleteCampaign(campaignId);
                                     campaigns.remove(position);
                                     notifyDataSetChanged();
+                                    if (mainActivityContext instanceof MainActivity) {
+                                        ((MainActivity)mainActivityContext)
+                                                .updatePlaceholder(isEmpty());
+                                    }
                                     alert.dismiss();
                                 } else {
                                     input.setError(context.getResources()

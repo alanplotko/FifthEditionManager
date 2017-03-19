@@ -11,3 +11,8 @@ This application is not affiliated with, endorsed, sponsored, or specifically ap
 - Gnome: [I-GUYJIN-I](http://i-guyjin-i.deviantart.com/)
 - Halfling: Wizards of the Coast (see main copyright notice above)
 - Half-Orc: Wizards of the Coast (see main copyright notice above)
+
+## Miscellaneous
+
+- Character race and background descriptions: [D&D Wiki](http://dandwiki.com/wiki/) and [Paizo](http://paizo.com/pathfinderRPG/prd/advancedRaceGuide/coreRaces.html).
+

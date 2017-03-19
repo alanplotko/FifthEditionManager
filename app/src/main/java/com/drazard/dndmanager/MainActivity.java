@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
          */
         DBHandler db = DBHandler.getInstance(this);
 
-        adapter = new CampaignsAdapter(db.getAllCampaigns());
+        adapter = new CampaignsAdapter(db.getAllCampaigns(), MainActivity.this);
         updatePlaceholder(adapter.isEmpty());
         rv.setAdapter(adapter);
     }
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void createCampaign() {
         Intent next = new Intent(this, NewCampaignActivity.class);
-        next.putExtra("first_time", true);
+        next.putExtra("firstTime", true);
         startActivity(next);
     }
 }

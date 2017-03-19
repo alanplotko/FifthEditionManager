@@ -21,6 +21,9 @@
     <!-- Class card adapter ids -->
     <item name="class_card_position" type="id" />
 
+    <!-- Background card adapter ids -->
+    <item name="background_card_position" type="id" />
+
     <!-- New/edit campaign activity -->
     <string name="activity_title_new_campaign">New Campaign</string>
     <string name="error_missing_campaign_id">Cannot edit campaign. Please try again in a few
@@ -84,5 +87,13 @@
     <string name="no_character_class_details">No additional details available.</string>
     <string name="expand_icon_accessibility">Toggle Additional Details</string>
     <string name="finish_select_class">Class changes saved successfully.</string>
+
+    <!-- Character background selection activity -->
+    <string name="activity_title_character_background">Character Background Selection</string>
+    <string name="btn_select_background">Select Background</string>
+    <string name="no_character_background_title">No title available.</string>
+    <string name="no_character_background_description">No description available.</string>
+    <string name="no_character_background_details">No additional details available.</string>
+    <string name="finish_select_background">Background changes saved successfully.</string>
 
 </resources>

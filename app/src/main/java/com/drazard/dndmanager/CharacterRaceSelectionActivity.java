@@ -35,9 +35,9 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    public String[] character_races;
-    public long campaign_id;
-    public boolean first_time;
+    public String[] characterRaces;
+    public long campaignId;
+    public boolean firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,12 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
 
         // Get campaign ID
         Intent mIntent = getIntent();
-        campaign_id = mIntent.getIntExtra("campaign_id", 0);
-        first_time = mIntent.getBooleanExtra("first_time", false);
+        campaignId = mIntent.getLongExtra("campaignId", 0);
+        firstTime = mIntent.getBooleanExtra("firstTime", false);
 
         // Set up character race options
-        if (character_races == null) {
-            character_races = getResources().getStringArray(R.array.character_race_options);
+        if (characterRaces == null) {
+            characterRaces = getResources().getStringArray(R.array.character_race_options);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.character_race_selection_toolbar);
@@ -68,31 +68,29 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectCharacterRace(character_races[mViewPager.getCurrentItem()]);
+                selectCharacterRace(characterRaces[mViewPager.getCurrentItem()]);
             }
         });
     }
 
     public void selectCharacterRace(String selected) {
         DBHandler db = DBHandler.getInstance(this);
-        Campaign campaign = db.getCampaign(campaign_id);
-        Character character = campaign.getCharacter();
-        character.setCharacterRace(selected);
-        campaign.setCharacter(character);
+        Campaign campaign = db.getCampaign(campaignId);
+        campaign.character.race = selected;
 
         // Save campaign and proceed to next activity
-        if (!first_time) {
+        if (!firstTime) {
             db.updateCampaign(campaign);
             this.finish();
             Snackbar.make(findViewById(R.id.campaign_list),
                     getResources().getString(R.string.finish_select_race),
                     Snackbar.LENGTH_LONG).show();
         } else {
-            campaign.setStatus(2);
+            campaign.status = 2;
             db.updateCampaign(campaign);
             Intent next = new Intent(this, CharacterClassSelectionActivity.class);
-            next.putExtra("campaign_id", (int) (campaign_id + 0));
-            next.putExtra("first_time", true);
+            next.putExtra("campaignId", campaignId);
+            next.putExtra("firstTime", true);
             this.finish();
             startActivity(next);
         }
@@ -101,7 +99,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
     public String getCharacterRaceTitle(int position) {
         String title;
         try {
-            title = character_races[position];
+            title = characterRaces[position];
         } catch (Exception e) {
             title = getResources().getString(R.string.no_character_race_title);
         }
@@ -112,7 +110,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         int stringId;
         // Attempt to fetch description for given character race
         try {
-            String fieldName = "race_" + character_races[position].toLowerCase().replace("-", "_")
+            String fieldName = "race_" + characterRaces[position].toLowerCase().replace("-", "_")
                     + "_details";
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
@@ -209,7 +207,7 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return character_races.length;
+            return characterRaces.length;
         }
 
         @Override

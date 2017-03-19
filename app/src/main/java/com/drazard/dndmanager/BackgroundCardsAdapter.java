@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.ClassCardViewHolder> {
-    private String[] classes;
+public class BackgroundCardsAdapter extends RecyclerView.Adapter<BackgroundCardsAdapter.BackgroundCardViewHolder> {
+    private String[] backgrounds;
     private boolean[] expandList;
     private long campaignId;
     private boolean firstTime;
@@ -32,7 +32,7 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         this.expandList = expandListIn;
     }
 
-    public static class ClassCardViewHolder extends RecyclerView.ViewHolder {
+    public static class BackgroundCardViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
 
         /**
@@ -41,29 +41,29 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         private final Context context;
         private TextView name;
         private TextView description;
-        private ImageView class_icon;
+        private ImageView background_icon;
         private TextView details;
         private ImageView expand_icon;
         private Button select_btn;
 
-        public ClassCardViewHolder(View view) {
+        public BackgroundCardViewHolder(View view) {
             super(view);
             context = view.getContext();
-            card = (CardView) view.findViewById(R.id.class_card);
-            name = (TextView) view.findViewById(R.id.class_name);
-            description = (TextView) view.findViewById(R.id.class_description);
-            class_icon = (ImageView) view.findViewById(R.id.class_icon);
-            details = (TextView) view.findViewById(R.id.class_details);
-            expand_icon = (ImageView) view.findViewById(R.id.class_details_expand_icon);
-            select_btn = (Button) view.findViewById(R.id.btn_select_class);
+            card = (CardView) view.findViewById(R.id.background_card);
+            name = (TextView) view.findViewById(R.id.background_name);
+            description = (TextView) view.findViewById(R.id.background_description);
+            background_icon = (ImageView) view.findViewById(R.id.background_icon);
+            details = (TextView) view.findViewById(R.id.background_details);
+            expand_icon = (ImageView) view.findViewById(R.id.background_details_expand_icon);
+            select_btn = (Button) view.findViewById(R.id.btn_select_background);
         }
     }
 
     // Pass list of campaigns to adapter
-    public ClassCardsAdapter(View v, long campaignId, boolean firstTime) {
-        this.classes = v.getResources().getStringArray(R.array.character_class_options);
+    public BackgroundCardsAdapter(View v, long campaignId, boolean firstTime) {
+        this.backgrounds = v.getResources().getStringArray(R.array.character_background_options);
         if (this.expandList == null) {
-            this.expandList = new boolean[this.classes.length];
+            this.expandList = new boolean[this.backgrounds.length];
         }
         this.campaignId = campaignId;
         this.firstTime = firstTime;
@@ -73,30 +73,30 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ClassCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public BackgroundCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_class_card, viewGroup, false);
-        ClassCardViewHolder vh = new ClassCardViewHolder(v);
+                .inflate(R.layout.item_background_card, viewGroup, false);
+        BackgroundCardViewHolder vh = new BackgroundCardViewHolder(v);
         return vh;
     }
 
-    public String getCharacterClassDescription(Context c, int pos) {
+    public String getCharacterBackgroundDescription(Context c, int pos) {
         int stringId;
-        // Attempt to fetch description for given character class
+        // Attempt to fetch description for given character background
         try {
-            String fieldName = "class_" + this.classes[pos].toLowerCase();
+            String fieldName = "background_" + this.backgrounds[pos].toLowerCase();
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
-            stringId = R.string.no_character_class_description;
+            stringId = R.string.no_character_background_description;
         }
         return c.getResources().getString(stringId);
     }
 
-    public String getCharacterClassDetails(Context c, int pos) {
+    public String getCharacterBackgroundDetails(Context c, int pos) {
         int stringId;
-        // Attempt to fetch additional details for given character class
+        // Attempt to fetch additional details for given character background
         try {
-            String fieldName = "class_" + this.classes[pos].toLowerCase() + "_details";
+            String fieldName = "background_" + this.backgrounds[pos].toLowerCase() + "_details";
             stringId = R.string.class.getField(fieldName).getInt(null);
         } catch (Exception e) {
             stringId = R.string.no_character_class_details;
@@ -104,7 +104,7 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         return c.getResources().getString(stringId);
     }
 
-    public void updateVisibilityState(ClassCardViewHolder vh, int position) {
+    public void updateVisibilityState(BackgroundCardViewHolder vh, int position) {
         if (expandList[position]) {
             vh.details.setVisibility(View.VISIBLE);
             vh.select_btn.setVisibility(View.VISIBLE);
@@ -116,7 +116,7 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         }
     }
 
-    public void toggleVisibilityState(ClassCardViewHolder vh, int position) {
+    public void toggleVisibilityState(BackgroundCardViewHolder vh, int position) {
         // Toggle state
         expandList[position] = !expandList[position];
 
@@ -141,34 +141,27 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         return result;
     }
 
-    public void proceedToBackgroundSelection(Context context) {
-        Intent next = new Intent(context, CharacterBackgroundSelectionActivity.class);
-        next.putExtra("campaignId", campaignId);
-        next.putExtra("firstTime", true);
-        context.startActivity(next);
-    }
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ClassCardViewHolder vh, int pos) {
+    public void onBindViewHolder(final BackgroundCardViewHolder vh, int pos) {
         final int position = vh.getAdapterPosition();
-        vh.name.setText(this.classes[position]);
-        vh.description.setText(this.getCharacterClassDescription(vh.context, position));
-        vh.details.setText(this.fromHtml(this.getCharacterClassDetails(vh.context, position)));
+        vh.name.setText(this.backgrounds[position]);
+        vh.description.setText(this.getCharacterBackgroundDescription(vh.context, position));
+        vh.details.setText(this.fromHtml(this.getCharacterBackgroundDetails(vh.context, position)));
 
-        // Set character class
+        // Set character background
         try {
-            String characterClass = this.classes[position].toLowerCase();
-            int drawableId = R.drawable.class.getField("class_" + characterClass).getInt(null);
-            vh.class_icon.setImageResource(drawableId);
-            vh.class_icon.setVisibility(View.VISIBLE);
+            String characterBackground = this.backgrounds[position].toLowerCase();
+            int drawableId = R.drawable.class.getField("background_" + characterBackground).getInt(null);
+            vh.background_icon.setImageResource(drawableId);
+            vh.background_icon.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            vh.class_icon.setVisibility(View.INVISIBLE);
+            vh.background_icon.setVisibility(View.INVISIBLE);
         }
 
         // Set tags for current card
-        vh.expand_icon.setTag(R.id.class_card_position, position);
-        vh.select_btn.setTag(R.id.class_card_position, position);
+        vh.expand_icon.setTag(R.id.background_card_position, position);
+        vh.select_btn.setTag(R.id.background_card_position, position);
 
         // Set up current expansion state
         updateVisibilityState(vh, position);
@@ -196,22 +189,25 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
                 Context context = view.getContext();
                 Activity calling_activity = (Activity) context;
 
-                // Get class card position from card
-                int pos = (Integer) view.getTag(R.id.class_card_position);
+                // Get background card position from card
+                int pos = (Integer) view.getTag(R.id.background_card_position);
 
-                current.character.class_ = classes[pos];
+                current.character.background = backgrounds[pos];
 
                 // Save campaign and proceed to next activity
                 if (!firstTime) {
                     db.updateCampaign(current);
                     calling_activity.finish();
-                    Snackbar.make(view.findViewById(R.id.class_list),
-                            context.getResources().getString(R.string.finish_select_class),
+                    Snackbar.make(view.findViewById(R.id.background_list),
+                            context.getResources().getString(R.string.finish_select_background),
                             Snackbar.LENGTH_LONG).show();
                 } else {
-                    current.status = 3;
+                    current.status = 4;
                     db.updateCampaign(current);
-                    proceedToBackgroundSelection(context);
+                    Intent next = new Intent(context, MainActivity.class);
+                    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(next);
+                    calling_activity.finish();
                 }
             }
         });
@@ -223,9 +219,9 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    // Return the number of classes (invoked by the layout manager)
+    // Return the number of backgrounds (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return this.classes.length;
+        return this.backgrounds.length;
     }
 }

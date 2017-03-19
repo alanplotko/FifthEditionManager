@@ -19,11 +19,11 @@ public class NewCampaignActivity extends AppCompatActivity {
 
         // Get campaign ID (if editing)
         Intent mIntent = getIntent();
-        final int campaign_id = mIntent.getIntExtra("campaign_id", 0);
-        final boolean first_time = mIntent.getBooleanExtra("first_time", true);
+        final long campaignId = mIntent.getLongExtra("campaignId", 0);
+        final boolean firstTime = mIntent.getBooleanExtra("firstTime", true);
 
         // End activity if campaign id was not passed for editing
-        if (!first_time && campaign_id != 0) {
+        if (!firstTime && campaignId != 0) {
             this.finish();
             Snackbar.make(findViewById(R.id.player_name),
                     getResources().getString(R.string.error_missing_campaign_id),
@@ -49,7 +49,7 @@ public class NewCampaignActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean errors = validateCampaign();
                 if (errors) return;
-                saveCampaign(campaign_id, first_time);
+                saveCampaign(campaignId, firstTime);
             }
         });
     }
@@ -71,7 +71,7 @@ public class NewCampaignActivity extends AppCompatActivity {
         return errors;
     }
 
-    public void saveCampaign(int existing_id, boolean first_time) {
+    public void saveCampaign(long existing_id, boolean firstTime) {
         DBHandler db = DBHandler.getInstance(this);
         Campaign campaign;
         Character character;
@@ -88,46 +88,44 @@ public class NewCampaignActivity extends AppCompatActivity {
         EditText exp = (EditText) findViewById(R.id.character_exp);
 
         // Initial set up for "campaign and character" set
-        if (!first_time) {
+        if (!firstTime) {
             // Fetch existing set
             campaign = db.getCampaign(existing_id);
-            character = campaign.getCharacter();
             db.updateCampaign(campaign);
             this.finish();
         } else {
             // Create empty set
             campaign = new Campaign();
-            character = new Character(fname.getText().toString().trim(),
+            campaign.character = new Character(fname.getText().toString().trim(),
                     lname.getText().toString().trim());
         }
 
         // Update player name
         EditText player_name = (EditText) findViewById(R.id.player_name);
-        campaign.setPlayerName(player_name.getText().toString().trim());
+        campaign.playerName = player_name.getText().toString().trim();
 
         // Update character information
-        character.setCharacterLevel(Integer.parseInt(level.getText().toString().trim()));
-        character.setGender(gender.getSelectedItem().toString().trim());
-        character.setAlignment(alignment.getSelectedItem().toString().trim());
-        character.setHeight(height.getText().toString().trim());
-        character.setWeight(weight.getText().toString().trim());
-        character.setAge(age.getText().toString().trim());
-        character.setExp(Integer.parseInt(exp.getText().toString().trim()));
-        campaign.setCharacter(character);
+        campaign.character.level = Integer.parseInt(level.getText().toString().trim());
+        campaign.character.gender = gender.getSelectedItem().toString().trim();
+        campaign.character.alignment = alignment.getSelectedItem().toString().trim();
+        campaign.character.height = height.getText().toString().trim();
+        campaign.character.weight = weight.getText().toString().trim();
+        campaign.character.age = age.getText().toString().trim();
+        campaign.character.exp = Integer.parseInt(exp.getText().toString().trim());
 
         // Save campaign and proceed to next activity
-        if (!first_time) {
+        if (!firstTime) {
             db.updateCampaign(campaign);
             this.finish();
             Snackbar.make(findViewById(R.id.campaign_list),
                     getResources().getString(R.string.finish_edit_campaign),
                     Snackbar.LENGTH_LONG).show();
         } else {
-            long campaign_id = db.addCampaign(campaign);
+            long campaignId = db.addCampaign(campaign);
             Intent next = new Intent(NewCampaignActivity.this,
                     CharacterRaceSelectionActivity.class);
-            next.putExtra("campaign_id", (int) (campaign_id + 0));
-            next.putExtra("first_time", true);
+            next.putExtra("campaignId", campaignId);
+            next.putExtra("firstTime", true);
             this.finish();
             startActivity(next);
         }

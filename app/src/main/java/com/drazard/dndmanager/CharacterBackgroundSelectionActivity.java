@@ -9,26 +9,26 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-public class CharacterClassSelectionActivity extends AppCompatActivity {
+public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager llm;
     private Parcelable state;
     private static final String BUNDLE_RECYCLER_LAYOUT =
-            "CharacterClassSelectionActivity.recycler.layout";
+            "CharacterBackgroundSelectionActivity.recycler.layout";
     private static final String BUNDLE_RECYCLER_EXPAND_LIST =
-            "CharacterClassSelectionActivity.recycler.expandList";
+            "CharacterBackgroundSelectionActivity.recycler.expandList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_selection);
+        setContentView(R.layout.activity_background_selection);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.character_class_selection_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.character_background_selection_toolbar);
         setSupportActionBar(toolbar);
 
-        rv = (RecyclerView) findViewById(R.id.class_list);
+        rv = (RecyclerView) findViewById(R.id.background_list);
 
         /**
          * Use this setting to improve performance if you know that changes
@@ -45,7 +45,7 @@ public class CharacterClassSelectionActivity extends AppCompatActivity {
         long campaignId = mIntent.getLongExtra("campaignId", 0);
         boolean firstTime = mIntent.getBooleanExtra("firstTime", false);
 
-        adapter = new ClassCardsAdapter(findViewById(R.id.class_list), campaignId, firstTime);
+        adapter = new BackgroundCardsAdapter(findViewById(R.id.background_list), campaignId, firstTime);
         rv.setAdapter(adapter);
     }
 

@@ -18,7 +18,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // Database version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 8;
 
     // Database name
     private static final String DATABASE_NAME = "campaignsManager";
@@ -27,7 +27,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_CAMPAIGNS = "campaigns";
 
     // Campaigns table column names
-    private static final String KEY_ID = "id";
+    private static final String KEY_ID = "_id";
     private static final String KEY_PROGRESS = "progress";
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_UPDATED_AT = "updated_at";
@@ -43,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_CHAR_WEIGHT = "weight";
     private static final String KEY_CHAR_AGE = "age";
     private static final String KEY_CHAR_EXP = "exp";
+    private static final String KEY_CHAR_BACKGROUND = "background";
 
     public static synchronized DBHandler getInstance(Context context) {
         // Use  application context to avoid leaking an Activity's context.
@@ -61,23 +62,24 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableCommand = "CREATE TABLE "
-                + TABLE_CAMPAIGNS    + "("
-                + KEY_ID             + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + KEY_PROGRESS       + " INTEGER DEFAULT 1, "
-                + KEY_CREATED_AT     + " TIMESTAMP, "
-                + KEY_UPDATED_AT     + " TIMESTAMP, "
-                + KEY_PLAYER_NAME    + " TEXT, "
-                + KEY_CHAR_FNAME     + " TEXT, "
-                + KEY_CHAR_LNAME     + " TEXT, "
-                + KEY_CHAR_RACE      + " TEXT, "
-                + KEY_CHAR_CLASS     + " TEXT, "
-                + KEY_CHAR_LEVEL     + " INTEGER DEFAULT 1, "
-                + KEY_CHAR_GENDER    + " TEXT, "
-                + KEY_CHAR_ALIGNMENT + " TEXT, "
-                + KEY_CHAR_HEIGHT    + " TEXT, "
-                + KEY_CHAR_WEIGHT    + " TEXT, "
-                + KEY_CHAR_AGE       + " TEXT, "
-                + KEY_CHAR_EXP       + " INTEGER " + ")";
+                + TABLE_CAMPAIGNS     + "("
+                + KEY_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_PROGRESS        + " INTEGER DEFAULT 1, "
+                + KEY_CREATED_AT      + " TIMESTAMP, "
+                + KEY_UPDATED_AT      + " TIMESTAMP, "
+                + KEY_PLAYER_NAME     + " TEXT, "
+                + KEY_CHAR_FNAME      + " TEXT, "
+                + KEY_CHAR_LNAME      + " TEXT, "
+                + KEY_CHAR_RACE       + " TEXT, "
+                + KEY_CHAR_CLASS      + " TEXT, "
+                + KEY_CHAR_LEVEL      + " INTEGER DEFAULT 1, "
+                + KEY_CHAR_GENDER     + " TEXT, "
+                + KEY_CHAR_ALIGNMENT  + " TEXT, "
+                + KEY_CHAR_HEIGHT     + " TEXT, "
+                + KEY_CHAR_WEIGHT     + " TEXT, "
+                + KEY_CHAR_AGE        + " TEXT, "
+                + KEY_CHAR_EXP        + " INTEGER, "
+                + KEY_CHAR_BACKGROUND + " TEXT "+ ")";
         db.execSQL(createTableCommand);
     }
 
@@ -106,20 +108,20 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_PROGRESS, 1);
         values.put(KEY_CREATED_AT, now.toString());
         values.put(KEY_UPDATED_AT, now.toString());
-        values.put(KEY_PLAYER_NAME, campaign.getPlayerName());
+        values.put(KEY_PLAYER_NAME, campaign.playerName);
 
-        Character character = campaign.getCharacter();
-        values.put(KEY_CHAR_FNAME, character.getFirstName());
-        values.put(KEY_CHAR_LNAME, character.getLastName());
-        values.put(KEY_CHAR_RACE, character.getCharacterRace());
-        values.put(KEY_CHAR_CLASS, character.getCharacterClass());
-        values.put(KEY_CHAR_LEVEL, character.getCharacterLevel());
-        values.put(KEY_CHAR_GENDER, character.getGender());
-        values.put(KEY_CHAR_ALIGNMENT, character.getAlignment());
-        values.put(KEY_CHAR_HEIGHT, character.getHeight());
-        values.put(KEY_CHAR_WEIGHT, character.getWeight());
-        values.put(KEY_CHAR_AGE, character.getAge());
-        values.put(KEY_CHAR_EXP, character.getExp());
+        values.put(KEY_CHAR_FNAME, campaign.character.firstName);
+        values.put(KEY_CHAR_LNAME, campaign.character.lastName);
+        values.put(KEY_CHAR_RACE, campaign.character.race);
+        values.put(KEY_CHAR_CLASS, campaign.character.class_);
+        values.put(KEY_CHAR_LEVEL, campaign.character.level);
+        values.put(KEY_CHAR_GENDER, campaign.character.gender);
+        values.put(KEY_CHAR_ALIGNMENT, campaign.character.alignment);
+        values.put(KEY_CHAR_HEIGHT, campaign.character.height);
+        values.put(KEY_CHAR_WEIGHT, campaign.character.weight);
+        values.put(KEY_CHAR_AGE, campaign.character.age);
+        values.put(KEY_CHAR_EXP, campaign.character.exp);
+        values.put(KEY_CHAR_BACKGROUND, campaign.character.background);
 
         // Insert row
         long id = db.insert(TABLE_CAMPAIGNS, null, values);
@@ -151,7 +153,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 KEY_CHAR_HEIGHT,
                 KEY_CHAR_WEIGHT,
                 KEY_CHAR_AGE,
-                KEY_CHAR_EXP
+                KEY_CHAR_EXP,
+                KEY_CHAR_BACKGROUND
         }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 
         if (cursor != null) cursor.moveToFirst();
@@ -194,33 +197,33 @@ public class DBHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        values.put(KEY_PROGRESS, campaign.getStatus());
+        values.put(KEY_PROGRESS, campaign.status);
         values.put(KEY_UPDATED_AT, now.toString());
-        values.put(KEY_PLAYER_NAME, campaign.getPlayerName());
+        values.put(KEY_PLAYER_NAME, campaign.playerName);
 
-        Character character = campaign.getCharacter();
-        values.put(KEY_CHAR_FNAME, character.getFirstName());
-        values.put(KEY_CHAR_LNAME, character.getLastName());
-        values.put(KEY_CHAR_RACE, character.getCharacterRace());
-        values.put(KEY_CHAR_CLASS, character.getCharacterClass());
-        values.put(KEY_CHAR_LEVEL, character.getCharacterLevel());
-        values.put(KEY_CHAR_GENDER, character.getGender());
-        values.put(KEY_CHAR_ALIGNMENT, character.getAlignment());
-        values.put(KEY_CHAR_HEIGHT, character.getHeight());
-        values.put(KEY_CHAR_WEIGHT, character.getWeight());
-        values.put(KEY_CHAR_AGE, character.getAge());
-        values.put(KEY_CHAR_EXP, character.getExp());
+        values.put(KEY_CHAR_FNAME, campaign.character.firstName);
+        values.put(KEY_CHAR_LNAME, campaign.character.lastName);
+        values.put(KEY_CHAR_RACE, campaign.character.race);
+        values.put(KEY_CHAR_CLASS, campaign.character.class_);
+        values.put(KEY_CHAR_LEVEL, campaign.character.level);
+        values.put(KEY_CHAR_GENDER, campaign.character.gender);
+        values.put(KEY_CHAR_ALIGNMENT, campaign.character.alignment);
+        values.put(KEY_CHAR_HEIGHT, campaign.character.height);
+        values.put(KEY_CHAR_WEIGHT, campaign.character.weight);
+        values.put(KEY_CHAR_AGE, campaign.character.age);
+        values.put(KEY_CHAR_EXP, campaign.character.exp);
+        values.put(KEY_CHAR_BACKGROUND, campaign.character.background);
 
         // updating row
         return db.update(TABLE_CAMPAIGNS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(campaign.getID()) });
+                new String[] { String.valueOf(campaign._id) });
     }
 
     // Delete single campaign
-    public void deleteCampaign(long campaign_id) {
+    public void deleteCampaign(long campaignId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CAMPAIGNS, KEY_ID + " = ?",
-                new String[] { String.valueOf(campaign_id) });
+                new String[] { String.valueOf(campaignId) });
         db.close();
     }
 }
