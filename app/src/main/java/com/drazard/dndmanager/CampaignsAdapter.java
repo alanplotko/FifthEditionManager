@@ -19,6 +19,7 @@ import java.util.List;
 public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.CampaignViewHolder> {
     private List<Campaign> campaigns;
     private Context mainActivityContext;
+    public final int FINAL_STEP = 4;
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
@@ -169,7 +170,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                         break;
                 }
                 if (next != null) {
-                    next.putExtra("firstTime", (progress != 4));
+                    next.putExtra("firstTime", (progress != FINAL_STEP));
                     next.putExtra("campaignId", campaignId);
                     context.startActivity(next);
                 }

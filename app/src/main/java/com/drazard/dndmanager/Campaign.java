@@ -54,6 +54,6 @@ public class Campaign {
     public String getRelativeTime() {
         long now = System.currentTimeMillis();
         return "Last updated " + DateUtils.getRelativeTimeSpanString(this.updatedAt, now,
-                DateUtils.SECOND_IN_MILLIS).toString().toLowerCase();
+                DateUtils.SECOND_IN_MILLIS).toString();
     }
 }
