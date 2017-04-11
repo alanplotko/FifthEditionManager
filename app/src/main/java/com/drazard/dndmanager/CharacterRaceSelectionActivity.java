@@ -3,7 +3,6 @@ package com.drazard.dndmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -39,6 +38,11 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
     public long campaignId;
     public boolean firstTime;
 
+    public static final int EDIT_FAIL = 5;
+    public static final int EDIT_SUCCESS = 6;
+    public Campaign mCampaign = null;
+    public DBHandler db = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +58,21 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
             characterRaces = getResources().getStringArray(R.array.character_race_options);
         }
 
+        // End activity if campaign id was not passed when editing
+        if (!firstTime) {
+            if (campaignId == 0) {
+                setResult(EDIT_FAIL);
+                this.finish();
+                return;
+            }
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.character_race_selection_toolbar);
         setSupportActionBar(toolbar);
+        if (!firstTime) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.edit_race));
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -63,6 +80,18 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.race_selection_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        db = DBHandler.getInstance(this);
+        mCampaign = db.getCampaign(campaignId);
+        int currentPos = 0;
+        String currentRace = mCampaign.character.race;
+        for (int i = 0; i < characterRaces.length; i++) {
+            if (characterRaces[i].equals(currentRace)) {
+                currentPos = i;
+                break;
+            }
+        }
+        mViewPager.setCurrentItem(currentPos);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,20 +103,21 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
     }
 
     public void selectCharacterRace(String selected) {
-        DBHandler db = DBHandler.getInstance(this);
-        Campaign campaign = db.getCampaign(campaignId);
-        campaign.character.race = selected;
+        mCampaign = db.getCampaign(campaignId);
+        mCampaign.character.race = selected;
 
         // Save campaign and proceed to next activity
         if (!firstTime) {
-            db.updateCampaign(campaign);
+            db.updateCampaign(mCampaign);
+            if (getParent() == null) {
+                setResult(EDIT_SUCCESS);
+            } else {
+                getParent().setResult(EDIT_SUCCESS);
+            }
             this.finish();
-            Snackbar.make(findViewById(R.id.campaign_list),
-                    getResources().getString(R.string.finish_select_race),
-                    Snackbar.LENGTH_LONG).show();
         } else {
-            campaign.status = 2;
-            db.updateCampaign(campaign);
+            mCampaign.status = 2;
+            db.updateCampaign(mCampaign);
             Intent next = new Intent(this, CharacterClassSelectionActivity.class);
             next.putExtra("campaignId", campaignId);
             next.putExtra("firstTime", true);

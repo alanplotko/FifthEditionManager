@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_edit_campaign"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Edit campaign toolbar -->
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/edit_campaign_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:fitsSystemWindows="true"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/activity_title_edit_campaign"
+            app:titleTextColor="@color/primaryText" />
+
+        <Button
+            android:id="@+id/edit_general_info_btn"
+            android:layout_marginTop="86dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/edit_general_info"
+            android:textAllCaps="false"
+            android:textSize="24dp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/edit_general_info"
+            android:background="#40cccccc" />
+
+        <Button
+            android:id="@+id/edit_race_btn"
+            android:layout_marginTop="156dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/edit_race"
+            android:textAllCaps="false"
+            android:textSize="24dp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/edit_general_info"
+            android:background="#40cccccc" />
+
+        <Button
+            android:id="@+id/edit_class_btn"
+            android:layout_marginTop="226dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/edit_class"
+            android:textAllCaps="false"
+            android:textSize="24dp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/edit_general_info"
+            android:background="#40cccccc" />
+
+        <Button
+            android:id="@+id/edit_background_btn"
+            android:layout_marginTop="296dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/edit_background"
+            android:textAllCaps="false"
+            android:textSize="24dp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/edit_general_info"
+            android:background="#40cccccc" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

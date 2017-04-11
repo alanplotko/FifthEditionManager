@@ -47,7 +47,7 @@
     ]]></string>
     <string name="background_guild_artisan">You are a member of an artisan’s guild, skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth from the constraints of a feudal social order.</string>
     <string name="background_guild_artisan_details"><![CDATA[
-        <strong>Skill Proficiencies:</strong>Insight, Persuasion<br />
+        <strong>Skill Proficiencies:</strong> Insight, Persuasion<br />
         <strong>Tool Proficiencies:</strong> One type of artisan\'s tools<br />
         <strong>Languages:</strong> One of your choice<br />
         <strong>Equipment:</strong> A set of artisan\'s tools of your choice, a letter of introduction from your guild, a set of traveler\'s clothes, and a belt pouch containing 15gp

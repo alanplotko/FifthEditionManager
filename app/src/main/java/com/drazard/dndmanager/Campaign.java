@@ -40,6 +40,7 @@ public class Campaign {
         this.character.weight = cursor.getString(13);
         this.character.age = cursor.getString(14);
         this.character.exp = Integer.parseInt(cursor.getString(15));
+        this.character.background = cursor.getString(16);
     }
 
     /**

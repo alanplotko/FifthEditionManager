@@ -19,7 +19,11 @@ import java.util.List;
 public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.CampaignViewHolder> {
     private List<Campaign> campaigns;
     private Context mainActivityContext;
-    public final int FINAL_STEP = 4;
+    public final int START = -1;
+    public final int SELECT_RACE = 1;
+    public final int SELECT_CLASS = 2;
+    public final int SELECT_BACKGROUND = 3;
+    public final int EDITING = 4;
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
@@ -149,28 +153,30 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                 Intent next = null;
 
                 switch (progress) {
-                    // User has completed the process and would like to make modifications
-                    case -1:
+                    // User has not started yet
+                    case START:
                         next = new Intent(context, NewCampaignActivity.class);
                         break;
                     // User has not yet selected a character race
-                    case 1:
+                    case SELECT_RACE:
                         next = new Intent(context, CharacterRaceSelectionActivity.class);
                         break;
                     // User has not yet selected a character class
-                    case 2:
+                    case SELECT_CLASS:
                         next = new Intent(context, CharacterClassSelectionActivity.class);
                         break;
                     // User has not yet selected a character background
-                    case 3:
+                    case SELECT_BACKGROUND:
                         next = new Intent(context, CharacterBackgroundSelectionActivity.class);
                         break;
-                    // User has not yet worked on stats or what not (next step)
-                    case 4:
+                    case EDITING:
+                        next = new Intent(context, EditCampaignActivity.class);
+                        break;
+                    default:
                         break;
                 }
                 if (next != null) {
-                    next.putExtra("firstTime", (progress != FINAL_STEP));
+                    next.putExtra("firstTime", (progress != EDITING));
                     next.putExtra("campaignId", campaignId);
                     context.startActivity(next);
                 }

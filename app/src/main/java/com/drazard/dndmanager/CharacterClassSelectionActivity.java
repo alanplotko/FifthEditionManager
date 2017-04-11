@@ -20,6 +20,11 @@ public class CharacterClassSelectionActivity extends AppCompatActivity {
     private static final String BUNDLE_RECYCLER_EXPAND_LIST =
             "CharacterClassSelectionActivity.recycler.expandList";
 
+    public static final int EDIT_FAIL = 7;
+    public static final int EDIT_SUCCESS = 8;
+    private DBHandler db = null;
+    private Campaign mCampaign = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +50,34 @@ public class CharacterClassSelectionActivity extends AppCompatActivity {
         long campaignId = mIntent.getLongExtra("campaignId", 0);
         boolean firstTime = mIntent.getBooleanExtra("firstTime", false);
 
-        adapter = new ClassCardsAdapter(findViewById(R.id.class_list), campaignId, firstTime);
+        // Ensure campaign id is valid if editing
+        if (!firstTime) {
+            if (campaignId == 0) {
+                setResult(EDIT_FAIL);
+                this.finish();
+                return;
+            } else {
+                int position = -1;
+                db = DBHandler.getInstance(this);
+                mCampaign = db.getCampaign(campaignId);
+                String currentClass = mCampaign.character.class_;
+                String classes[] = getResources().getStringArray(R.array.character_class_options);
+                for (int i = 0; i < classes.length; i++) {
+                    if (classes[i].equals(currentClass)) {
+                        position = i;
+                        break;
+                    }
+                }
+                if (position != -1) {
+                    rv.getLayoutManager().scrollToPosition(position);
+                }
+            }
+        } else {
+            db = DBHandler.getInstance(this);
+            mCampaign = db.getCampaign(campaignId);
+        }
+
+        adapter = new ClassCardsAdapter(findViewById(R.id.class_list), mCampaign, db, firstTime);
         rv.setAdapter(adapter);
     }
 
@@ -53,8 +85,7 @@ public class CharacterClassSelectionActivity extends AppCompatActivity {
     public void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if(savedInstanceState != null)
-        {
+        if(savedInstanceState != null)  {
             Parcelable savedRecyclerLayoutState =
                     savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
             // Restore layout scroll position

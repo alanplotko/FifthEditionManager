@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -60,15 +59,15 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
     }
 
     // Pass list of campaigns to adapter
-    public ClassCardsAdapter(View v, long campaignId, boolean firstTime) {
+    public ClassCardsAdapter(View v, Campaign campaign, DBHandler db, boolean firstTime) {
         this.classes = v.getResources().getStringArray(R.array.character_class_options);
         if (this.expandList == null) {
             this.expandList = new boolean[this.classes.length];
         }
-        this.campaignId = campaignId;
+        this.campaignId = campaign._id;
         this.firstTime = firstTime;
-        this.db = DBHandler.getInstance(v.getContext());
-        this.current = db.getCampaign(this.campaignId);
+        this.current = campaign;
+        this.db = db;
     }
 
     // Create new views (invoked by the layout manager)
@@ -204,10 +203,8 @@ public class ClassCardsAdapter extends RecyclerView.Adapter<ClassCardsAdapter.Cl
                 // Save campaign and proceed to next activity
                 if (!firstTime) {
                     db.updateCampaign(current);
+                    calling_activity.setResult(CharacterClassSelectionActivity.EDIT_SUCCESS);
                     calling_activity.finish();
-                    Snackbar.make(view.findViewById(R.id.class_list),
-                            context.getResources().getString(R.string.finish_select_class),
-                            Snackbar.LENGTH_LONG).show();
                 } else {
                     current.status = 3;
                     db.updateCampaign(current);

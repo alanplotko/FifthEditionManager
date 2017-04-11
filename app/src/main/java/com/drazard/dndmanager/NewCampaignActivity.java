@@ -2,8 +2,8 @@ package com.drazard.dndmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,36 +11,49 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class NewCampaignActivity extends AppCompatActivity {
+    public static final int EDIT_FAIL = 3;
+    public static final int EDIT_SUCCESS = 4;
+    public Campaign mCampaign = null;
+    public RequiredSpinnerAdapter gender_adapter = null, alignment_adapter = null;
+    DBHandler db = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_campaign);
 
-        // Get campaign ID (if editing)
+        // Get campaign ID and check if user is editing or creating a new campaign activity
         Intent mIntent = getIntent();
         final long campaignId = mIntent.getLongExtra("campaignId", 0);
         final boolean firstTime = mIntent.getBooleanExtra("firstTime", true);
 
-        // End activity if campaign id was not passed for editing
-        if (!firstTime && campaignId != 0) {
-            this.finish();
-            Snackbar.make(findViewById(R.id.player_name),
-                    getResources().getString(R.string.error_missing_campaign_id),
-                    Snackbar.LENGTH_LONG).show();
-        }
-
+        // Set up spinners in advance in case we are editing
         // Bind spinners in activity
         Spinner gender_dropdown = (Spinner) findViewById(R.id.character_gender);
         Spinner alignment_dropdown = (Spinner) findViewById(R.id.character_alignment);
 
         // Associate options with corresponding spinner
-        RequiredSpinnerAdapter gender_adapter = new RequiredSpinnerAdapter(this,
+        gender_adapter = new RequiredSpinnerAdapter(this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.gender_options));
         gender_dropdown.setAdapter(gender_adapter);
-        RequiredSpinnerAdapter alignment_adapter = new RequiredSpinnerAdapter(this,
+        alignment_adapter = new RequiredSpinnerAdapter(this,
                 R.layout.item_spinner, getResources().getStringArray(R.array.alignment_options));
         alignment_dropdown.setAdapter(alignment_adapter);
+
+        // End activity if campaign id was not passed when editing
+        if (!firstTime) {
+            if (campaignId == 0) {
+                setResult(EDIT_FAIL);
+                this.finish();
+                return;
+            } else {
+                Toolbar mToolbar = (Toolbar) findViewById(R.id.new_campaign_toolbar);
+                mToolbar.setTitle(R.string.edit_general_info);
+                db = DBHandler.getInstance(this);
+                mCampaign = db.getCampaign(campaignId);
+                setUpEditScreen();
+            }
+        }
 
         // Set up save button
         Button saveButton = (Button) findViewById(R.id.btn_save_campaign);
@@ -52,6 +65,29 @@ public class NewCampaignActivity extends AppCompatActivity {
                 saveCampaign(campaignId, firstTime);
             }
         });
+    }
+
+    public void setUpEditScreen() {
+        EditText player_name = (EditText) findViewById(R.id.player_name);
+        EditText fname = (EditText) findViewById(R.id.character_fname);
+        EditText lname = (EditText) findViewById(R.id.character_lname);
+        Spinner gender = (Spinner) findViewById(R.id.character_gender);
+        Spinner alignment = (Spinner) findViewById(R.id.character_alignment);
+        EditText level = (EditText) findViewById(R.id.character_level);
+        EditText height = (EditText) findViewById(R.id.character_height);
+        EditText weight = (EditText) findViewById(R.id.character_weight);
+        EditText age = (EditText) findViewById(R.id.character_age);
+        EditText exp = (EditText) findViewById(R.id.character_exp);
+        player_name.setText(mCampaign.playerName);
+        fname.setText(mCampaign.character.firstName);
+        lname.setText(mCampaign.character.lastName);
+        gender.setSelection(gender_adapter.getPosition(mCampaign.character.gender));
+        alignment.setSelection(alignment_adapter.getPosition(mCampaign.character.alignment));
+        level.setText(Integer.toString(mCampaign.character.level));
+        height.setText(mCampaign.character.height);
+        weight.setText(mCampaign.character.weight);
+        age.setText(mCampaign.character.age);
+        exp.setText(Integer.toString(mCampaign.character.exp));
     }
 
     public boolean validateViewGroup(ViewGroup group) {
@@ -72,8 +108,9 @@ public class NewCampaignActivity extends AppCompatActivity {
     }
 
     public void saveCampaign(long existing_id, boolean firstTime) {
-        DBHandler db = DBHandler.getInstance(this);
-        Campaign campaign;
+        if (db == null) {
+            db = DBHandler.getInstance(this);
+        }
         Character character;
 
         // Set up fields to extract information from
@@ -89,46 +126,43 @@ public class NewCampaignActivity extends AppCompatActivity {
 
         // Initial set up for "campaign and character" set
         if (!firstTime) {
-            // Fetch existing set
-            campaign = db.getCampaign(existing_id);
-            db.updateCampaign(campaign);
+            // Update existing set
+            db.updateCampaign(mCampaign);
+            if (getParent() == null) {
+                setResult(EDIT_SUCCESS);
+            } else {
+                getParent().setResult(EDIT_SUCCESS);
+            }
             this.finish();
+            return;
         } else {
             // Create empty set
-            campaign = new Campaign();
-            campaign.character = new Character(fname.getText().toString().trim(),
+            mCampaign = new Campaign();
+            mCampaign.character = new Character(fname.getText().toString().trim(),
                     lname.getText().toString().trim());
         }
 
         // Update player name
         EditText player_name = (EditText) findViewById(R.id.player_name);
-        campaign.playerName = player_name.getText().toString().trim();
+        mCampaign.playerName = player_name.getText().toString().trim();
 
         // Update character information
-        campaign.character.level = Integer.parseInt(level.getText().toString().trim());
-        campaign.character.gender = gender.getSelectedItem().toString().trim();
-        campaign.character.alignment = alignment.getSelectedItem().toString().trim();
-        campaign.character.height = height.getText().toString().trim();
-        campaign.character.weight = weight.getText().toString().trim();
-        campaign.character.age = age.getText().toString().trim();
-        campaign.character.exp = Integer.parseInt(exp.getText().toString().trim());
+        mCampaign.character.level = Integer.parseInt(level.getText().toString().trim());
+        mCampaign.character.gender = gender.getSelectedItem().toString().trim();
+        mCampaign.character.alignment = alignment.getSelectedItem().toString().trim();
+        mCampaign.character.height = height.getText().toString().trim();
+        mCampaign.character.weight = weight.getText().toString().trim();
+        mCampaign.character.age = age.getText().toString().trim();
+        mCampaign.character.exp = Integer.parseInt(exp.getText().toString().trim());
 
-        // Save campaign and proceed to next activity
-        if (!firstTime) {
-            db.updateCampaign(campaign);
-            this.finish();
-            Snackbar.make(findViewById(R.id.campaign_list),
-                    getResources().getString(R.string.finish_edit_campaign),
-                    Snackbar.LENGTH_LONG).show();
-        } else {
-            long campaignId = db.addCampaign(campaign);
-            Intent next = new Intent(NewCampaignActivity.this,
-                    CharacterRaceSelectionActivity.class);
-            next.putExtra("campaignId", campaignId);
-            next.putExtra("firstTime", true);
-            this.finish();
-            startActivity(next);
-        }
+        // Save campaign and proceed to the next step
+        long campaignId = db.addCampaign(mCampaign);
+        Intent next = new Intent(NewCampaignActivity.this,
+                CharacterRaceSelectionActivity.class);
+        next.putExtra("campaignId", campaignId);
+        next.putExtra("firstTime", true);
+        this.finish();
+        startActivity(next);
     }
 
     public boolean validateCampaign() {

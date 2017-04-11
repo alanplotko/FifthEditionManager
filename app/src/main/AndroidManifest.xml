@@ -13,18 +13,20 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".NewCampaignActivity" />
+        <activity android:name=".EditCampaignActivity" />
         <activity
             android:name=".CharacterRaceSelectionActivity"
             android:label="@string/activity_title_character_race"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-        <activity android:name=".CharacterClassSelectionActivity"></activity>
-        <activity android:name=".CharacterBackgroundSelectionActivity"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CharacterClassSelectionActivity" />
+        <activity android:name=".CharacterBackgroundSelectionActivity" />
     </application>
 
 </manifest>

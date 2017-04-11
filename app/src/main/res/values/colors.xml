@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#1A237E</color>
     <color name="colorAccent">#536DFE</color>
     <color name="primaryText">#FFFFFF</color>
+    <color name="snackbarText">#DAA520</color>
     <color name="divider">#E6E6E6</color>
     <color name="title_semi_transparent_background">#BF171a1d</color>
     <color name="comment_background">#FFFFFF</color>
