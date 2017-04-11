@@ -109,10 +109,20 @@ public class CharacterRaceSelectionActivity extends AppCompatActivity {
         // Save campaign and proceed to next activity
         if (!firstTime) {
             db.updateCampaign(mCampaign);
+            // Send back updated character portrait for edit screen
+            Intent data = new Intent();
+            int drawableId = -1;
+            try {
+                String characterRace = mCampaign.character.race.toLowerCase().replace("-", "_");
+                drawableId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
+            } catch (Exception e) {
+                drawableId = R.drawable.ic_character_portrait_unknown;
+            }
+            data.putExtra("characterImageId", drawableId);
             if (getParent() == null) {
-                setResult(EDIT_SUCCESS);
+                setResult(EDIT_SUCCESS, data);
             } else {
-                getParent().setResult(EDIT_SUCCESS);
+                getParent().setResult(EDIT_SUCCESS, data);
             }
             this.finish();
         } else {

@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class EditCampaignActivity extends AppCompatActivity {
@@ -15,6 +16,8 @@ public class EditCampaignActivity extends AppCompatActivity {
     public Intent mIntent = null;
     public Intent next = null;
     public final int GET_EDIT_RESULT = 2;
+    public ImageView mPortrait;
+    public TextView mCharacterName;
 
     public void moveToActivity(View view, Class cls) {
         Context context = view.getContext();
@@ -35,9 +38,12 @@ public class EditCampaignActivity extends AppCompatActivity {
                     message = R.string.error_missing_campaign_id;
                     break;
                 case NewCampaignActivity.EDIT_SUCCESS:
+                    mCharacterName.setText("Editing: " + data.getStringExtra("characterName"));
                     message = R.string.finish_edit_campaign;
                     break;
                 case CharacterRaceSelectionActivity.EDIT_SUCCESS:
+                    updatePortrait(data.getIntExtra("characterImageId",
+                            R.drawable.ic_character_portrait_unknown));
                     message = R.string.finish_select_race;
                     break;
                 case CharacterClassSelectionActivity.EDIT_SUCCESS:
@@ -67,6 +73,19 @@ public class EditCampaignActivity extends AppCompatActivity {
         }
     }
 
+    public void updatePortrait(int characterImageId) {
+        mPortrait.setImageResource(characterImageId);
+        if (characterImageId != R.drawable.ic_character_portrait_unknown) {
+            mPortrait.setBackgroundColor(0);
+            mPortrait.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            mPortrait.setAdjustViewBounds(false);
+        } else {
+            mPortrait.setBackgroundResource(R.color.colorPrimary);
+            mPortrait.setScaleType(ImageView.ScaleType.FIT_XY);
+            mPortrait.setAdjustViewBounds(true);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +94,13 @@ public class EditCampaignActivity extends AppCompatActivity {
         // Set up intent and view
         mIntent = getIntent();
         mView = findViewById(R.id.edit_general_info_btn);
-
+        int characterImageId = mIntent.getIntExtra("characterImageId",
+                R.drawable.ic_character_portrait_unknown);
+        String characterName = mIntent.getStringExtra("characterName");
+        mPortrait = (ImageView) findViewById(R.id.character_preview);
+        updatePortrait(characterImageId);
+        mCharacterName = (TextView) findViewById(R.id.character_name_edit_status);
+        mCharacterName.setText("Editing: " + characterName);
 
         // Set up edit buttons
         Button infoButton = (Button) findViewById(R.id.edit_general_info_btn);

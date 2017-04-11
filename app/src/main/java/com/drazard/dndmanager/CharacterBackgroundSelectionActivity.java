@@ -30,8 +30,10 @@ public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_background_selection);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.character_background_selection_toolbar);
-        setSupportActionBar(toolbar);
+        // Get campaign ID
+        Intent mIntent = getIntent();
+        long campaignId = mIntent.getLongExtra("campaignId", 0);
+        boolean firstTime = mIntent.getBooleanExtra("firstTime", false);
 
         rv = (RecyclerView) findViewById(R.id.background_list);
 
@@ -45,10 +47,8 @@ public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
         llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
-        // Get campaign ID
-        Intent mIntent = getIntent();
-        long campaignId = mIntent.getLongExtra("campaignId", 0);
-        boolean firstTime = mIntent.getBooleanExtra("firstTime", false);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.character_background_selection_toolbar);
+        setSupportActionBar(toolbar);
 
         // Ensure campaign id is valid if editing
         if (!firstTime) {
@@ -57,6 +57,7 @@ public class CharacterBackgroundSelectionActivity extends AppCompatActivity {
                 this.finish();
                 return;
             } else {
+                getSupportActionBar().setTitle(getResources().getString(R.string.edit_background));
                 int position = -1;
                 db = DBHandler.getInstance(this);
                 mCampaign = db.getCampaign(campaignId);

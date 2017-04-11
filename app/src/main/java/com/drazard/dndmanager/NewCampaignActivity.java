@@ -114,6 +114,7 @@ public class NewCampaignActivity extends AppCompatActivity {
         Character character;
 
         // Set up fields to extract information from
+        EditText player_name = (EditText) findViewById(R.id.player_name);
         EditText fname = (EditText) findViewById(R.id.character_fname);
         EditText lname = (EditText) findViewById(R.id.character_lname);
         Spinner gender = (Spinner) findViewById(R.id.character_gender);
@@ -125,17 +126,7 @@ public class NewCampaignActivity extends AppCompatActivity {
         EditText exp = (EditText) findViewById(R.id.character_exp);
 
         // Initial set up for "campaign and character" set
-        if (!firstTime) {
-            // Update existing set
-            db.updateCampaign(mCampaign);
-            if (getParent() == null) {
-                setResult(EDIT_SUCCESS);
-            } else {
-                getParent().setResult(EDIT_SUCCESS);
-            }
-            this.finish();
-            return;
-        } else {
+        if (firstTime) {
             // Create empty set
             mCampaign = new Campaign();
             mCampaign.character = new Character(fname.getText().toString().trim(),
@@ -143,17 +134,33 @@ public class NewCampaignActivity extends AppCompatActivity {
         }
 
         // Update player name
-        EditText player_name = (EditText) findViewById(R.id.player_name);
         mCampaign.playerName = player_name.getText().toString().trim();
 
         // Update character information
-        mCampaign.character.level = Integer.parseInt(level.getText().toString().trim());
+        mCampaign.character.firstName = fname.getText().toString().trim();
+        mCampaign.character.lastName = lname.getText().toString().trim();
         mCampaign.character.gender = gender.getSelectedItem().toString().trim();
         mCampaign.character.alignment = alignment.getSelectedItem().toString().trim();
+        mCampaign.character.level = Integer.parseInt(level.getText().toString().trim());
         mCampaign.character.height = height.getText().toString().trim();
         mCampaign.character.weight = weight.getText().toString().trim();
         mCampaign.character.age = age.getText().toString().trim();
         mCampaign.character.exp = Integer.parseInt(exp.getText().toString().trim());
+
+        if (!firstTime) {
+            // Update existing set
+            db.updateCampaign(mCampaign);
+            Intent data = new Intent();
+            data.putExtra("characterName", mCampaign.character.firstName + " "
+                    + mCampaign.character.lastName);
+            if (getParent() == null) {
+                setResult(EDIT_SUCCESS, data);
+            } else {
+                getParent().setResult(EDIT_SUCCESS, data);
+            }
+            this.finish();
+            return;
+        }
 
         // Save campaign and proceed to the next step
         long campaignId = db.addCampaign(mCampaign);

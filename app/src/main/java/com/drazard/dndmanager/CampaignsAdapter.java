@@ -24,6 +24,8 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     public final int SELECT_CLASS = 2;
     public final int SELECT_BACKGROUND = 3;
     public final int EDITING = 4;
+    public int characterImageId = -1;
+    public String characterNameEditStatus = "";
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
@@ -86,6 +88,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         Campaign current = this.campaigns.get(pos);
         String fullName = current.character.firstName + " " + current.character.lastName;
         campaignViewHolder.name.setText(fullName);
+        characterNameEditStatus = fullName;
         campaignViewHolder.lastUpdated.setText(current.getRelativeTime());
 
         // Make background slightly transparent for campaign timestamp
@@ -105,12 +108,14 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
             String characterRace = this.campaigns.get(pos).character.race.toLowerCase()
                     .replace("-", "_");
             int drawableId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
+            characterImageId = drawableId;
             campaignViewHolder.portrait.setImageResource(drawableId);
             campaignViewHolder.portrait.setBackgroundColor(0);
             campaignViewHolder.portrait.setScaleType(ImageView.ScaleType.CENTER_CROP);
             campaignViewHolder.portrait.setAdjustViewBounds(false);
         } catch (Exception e) {
             campaignViewHolder.portrait.setImageResource(R.drawable.ic_character_portrait_unknown);
+            characterImageId = R.drawable.ic_character_portrait_unknown;
             campaignViewHolder.portrait.setBackgroundResource(R.color.colorPrimary);
             campaignViewHolder.portrait.setScaleType(ImageView.ScaleType.FIT_XY);
             campaignViewHolder.portrait.setAdjustViewBounds(true);
@@ -178,6 +183,10 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                 if (next != null) {
                     next.putExtra("firstTime", (progress != EDITING));
                     next.putExtra("campaignId", campaignId);
+                    if (progress == EDITING) {
+                        next.putExtra("characterImageId", characterImageId);
+                        next.putExtra("characterName", characterNameEditStatus);
+                    }
                     context.startActivity(next);
                 }
             }
