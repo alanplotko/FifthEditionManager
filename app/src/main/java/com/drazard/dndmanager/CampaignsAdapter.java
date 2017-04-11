@@ -24,8 +24,6 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
     public final int SELECT_CLASS = 2;
     public final int SELECT_BACKGROUND = 3;
     public final int EDITING = 4;
-    public int characterImageId = -1;
-    public String characterNameEditStatus = "";
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder {
         private CardView card;
@@ -88,7 +86,6 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         Campaign current = this.campaigns.get(pos);
         String fullName = current.character.firstName + " " + current.character.lastName;
         campaignViewHolder.name.setText(fullName);
-        characterNameEditStatus = fullName;
         campaignViewHolder.lastUpdated.setText(current.getRelativeTime());
 
         // Make background slightly transparent for campaign timestamp
@@ -103,13 +100,14 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
             campaignViewHolder.editBtn.setText(R.string.resume_create_campaign);
         }
 
+        int characterImageId;
+
         // Set character portrait
         try {
             String characterRace = this.campaigns.get(pos).character.race.toLowerCase()
                     .replace("-", "_");
-            int drawableId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
-            characterImageId = drawableId;
-            campaignViewHolder.portrait.setImageResource(drawableId);
+            characterImageId = R.drawable.class.getField("portrait_" + characterRace).getInt(null);
+            campaignViewHolder.portrait.setImageResource(characterImageId);
             campaignViewHolder.portrait.setBackgroundColor(0);
             campaignViewHolder.portrait.setScaleType(ImageView.ScaleType.CENTER_CROP);
             campaignViewHolder.portrait.setAdjustViewBounds(false);
@@ -135,6 +133,8 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
         // Set tags for current card
         campaignViewHolder.editBtn.setTag(R.id.campaign_id, current._id);
         campaignViewHolder.editBtn.setTag(R.id.campaign_progress, current.status);
+        campaignViewHolder.editBtn.setTag(R.id.campaign_character_name, fullName);
+        campaignViewHolder.editBtn.setTag(R.id.character_portrait, characterImageId);
         campaignViewHolder.delBtn.setTag(R.id.campaign_id, current._id);
         campaignViewHolder.delBtn.setTag(R.id.campaign_character_name, fullName);
         campaignViewHolder.delBtn.setTag(R.id.campaign_position, pos);
@@ -153,6 +153,8 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                 // Get campaign id and progress from card
                 long campaignId = (Long) view.getTag(R.id.campaign_id);
                 int progress = (Integer) view.getTag(R.id.campaign_progress);
+                String characterFullName = view.getTag(R.id.campaign_character_name).toString();
+                int characterImageId = (Integer) view.getTag(R.id.character_portrait);
 
                 // Determine intent for campaign by user's progress in campaign creation process
                 Intent next = null;
@@ -185,7 +187,7 @@ public class CampaignsAdapter extends RecyclerView.Adapter<CampaignsAdapter.Camp
                     next.putExtra("campaignId", campaignId);
                     if (progress == EDITING) {
                         next.putExtra("characterImageId", characterImageId);
-                        next.putExtra("characterName", characterNameEditStatus);
+                        next.putExtra("characterName", characterFullName);
                     }
                     context.startActivity(next);
                 }
