@@ -19,7 +19,9 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".NewCampaignActivity" />
-        <activity android:name=".EditCampaignActivity" />
+        <activity
+            android:name=".EditCampaignActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CharacterRaceSelectionActivity"
             android:label="@string/activity_title_character_race"
