@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  AsyncStorage,
+  KeyboardAvoidingView,
   Image,
   StyleSheet,
   Text,
@@ -8,25 +8,24 @@ import {
   View
 } from 'react-native';
 import Loader from './components/Loader';
+import Navigation from './components/Navigation';
+import store from 'react-native-simple-store';
 
 const PROFILE_KEY = "@DNDManager:profile";
 
-export default class App extends React.Component {
+export default class App extends Component {
   async componentDidMount() {
-    let stateCopy = Object.assign({}, this.state);
     try {
-      const profile = await AsyncStorage.getItem(PROFILE_KEY);
-      await AsyncStorage.removeItem(PROFILE_KEY);
+      const profile = await store.get(PROFILE_KEY);
       if (profile !== null) {
-        stateCopy.profile = JSON.parse(profile);
+        this.setState({profile});
       }
     } catch (error) {
-      console.error('AsyncStorage error (fetch profile): ' + error.message);
+      console.error('Store error (fetch profile): ' + error.message);
     } finally {
-      stateCopy.isLoading = false;
-      this.setState(stateCopy);
+      this.setState({isLoading: false});;
     }
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -34,17 +33,18 @@ export default class App extends React.Component {
       isLoading: true,
       nameInput: ''
     };
-  };
+  }
 
-  async setUpProfile() {
+  setUpProfile() {
+    let profile = { name: this.state.nameInput };
     try {
-      await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify({
-        name: this.state.nameInput
-      }));
+      store.save(PROFILE_KEY, profile);
     } catch (error) {
-      console.error('AsyncStorage error (profile setup): ' + error.message);
+      console.error('Store error (profile setup): ' + error.message);
+    } finally {
+      this.setState({profile});
     }
-  };
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -58,25 +58,32 @@ export default class App extends React.Component {
     if (this.state.profile) {
       return (
         <View style={styles.container}>
+          <Navigation />
           <Text>Welcome back, {this.state.profile.name}!</Text>
         </View>
       );
     }
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.baseText}>You must be new here.</Text>
-        <Text style={styles.baseText}>What do you go by?</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder='Name'
-          onChangeText={(nameInput) => this.setState({nameInput})}
-          value={this.state.nameInput}
-          onSubmitEditing={() => this.setUpProfile()}
-        />
-      </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior='padding'
+      >
+        <View style={[styles.container, styles.centerScreen]}>
+          <Text style={styles.baseText}>You must be new here.</Text>
+          <Text style={styles.baseText}>What do you go by?</Text>
+          <TextInput
+            label={'Name'}
+            style={styles.textInput}
+            value={this.state.nameInput}
+            placeholder='Name'
+            onChangeText={(nameInput) => this.setState({nameInput})}
+            onSubmitEditing={() => this.setUpProfile()}
+          />
+        </View>
+      </KeyboardAvoidingView>
     );
-  };
+  }
 }
 
 const styles = StyleSheet.create({
@@ -84,13 +91,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 18
   },
-  nameInput: {
-    height: 50
+  textInput: {
+    paddingLeft: 10,
+    fontSize: 18,
+    width: '75%',
+    height: 60,
+    marginTop: 20
   },
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: '#eee'
+  },
+  centerScreen: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 });

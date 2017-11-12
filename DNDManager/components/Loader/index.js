@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { Image, View } from 'react-native';
 
 export default class Loader extends Component {
   render() {
