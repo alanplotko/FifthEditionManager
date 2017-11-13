@@ -10,21 +10,23 @@ import ReactCard from './components/ReactCard';
 import store from 'react-native-simple-store';
 import Toolbar from './components/Toolbar';
 
-const PROFILE_KEY = "@DNDManager:profile";
+const ACTIVITY_KEY = '@DNDManager:activity';
+const CAMPAIGN_KEY = '@DNDManager:campaign';
+const CHARACTER_KEY = '@DNDManager:character';
 
 export default class App extends Component {
-  async componentDidMount() {
-    try {
-      const profile = await store.get(PROFILE_KEY);
-      store.delete(PROFILE_KEY);
-      if (profile !== null) {
-        this.setState({profile});
-      }
-    } catch (error) {
+  componentDidMount() {
+    store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
+      this.setState({
+        activity: data[0],
+        campaigns: data[1],
+        characters: data[2]
+      });
+    }).catch(error => {
       console.error('Store error (fetch profile): ' + error.message);
-    } finally {
-      this.setState({isLoading: false});;
-    }
+    }).then(() => {
+      this.setState({isLoading: false});
+    })
   }
 
   constructor(props) {
@@ -35,6 +37,8 @@ export default class App extends Component {
   }
 
   render() {
+    console.log(this.state);
+    store.save([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY], [{}, {}, {}]);
     if (this.state.isLoading) {
       return (
         <Container style={[styles.parentContainer, styles.centerScreen]}>
@@ -49,7 +53,7 @@ export default class App extends Component {
           <Tab heading={<TabHeading><Icon name="home" /></TabHeading>}>
             <Container style={styles.container}>
               {
-                !this.state.profile &&
+                !this.state.activity &&
                   <ReactCard
                     header="First time here?"
                     body="You can create a new campaign or build a character.
@@ -61,7 +65,7 @@ export default class App extends Component {
           <Tab heading={<TabHeading><Text>Campaigns</Text></TabHeading>}>
             <Container style={styles.container}>
               {
-                !this.state.profile &&
+                !this.state.campaigns &&
                   <ReactCard
                     header="No Campaigns Found"
                     body="Let's get started!"
@@ -72,7 +76,7 @@ export default class App extends Component {
           <Tab heading={<TabHeading><Text>Characters</Text></TabHeading>}>
             <Container style={styles.container}>
               {
-                !this.state.profile &&
+                !this.state.characters &&
                   <ReactCard
                     header="No Characters Found"
                     body="Let's get started!"
