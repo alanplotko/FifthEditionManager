@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 
-export default class Navigation extends Component {
+export default class Toolbar extends Component {
   render() {
     return (
       <View>
@@ -17,7 +17,7 @@ export default class Navigation extends Component {
           backgroundColor='#1A237E'
         />
         <ToolbarAndroid
-          title='DnD Manager'
+          title='D&D Manager'
           titleColor='#fff'
           style={styles.toolbar}
         />
