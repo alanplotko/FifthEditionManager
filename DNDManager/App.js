@@ -37,8 +37,6 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state);
-    store.save([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY], [{}, {}, {}]);
     if (this.state.isLoading) {
       return (
         <Container style={[styles.parentContainer, styles.centerScreen]}>
@@ -49,15 +47,16 @@ export default class App extends Component {
     return (
       <Container style={styles.parentContainer}>
         <Toolbar />
-        <Tabs initialPage={0}>
+        <Tabs initialPage={0} locked={true}>
           <Tab heading={<TabHeading><Icon name="home" /></TabHeading>}>
             <Container style={styles.container}>
               {
                 !this.state.activity &&
                   <ReactCard
-                    header="First time here?"
-                    body="You can create a new campaign or build a character.
-                          Navigate to your tab of choice to get started!"
+                    header="Welcome to D&D Manager!"
+                    body="First time here? You can create a new campaign or
+                          build a character. Navigate to your tab of choice
+                          to get started!"
                   />
               }
             </Container>
