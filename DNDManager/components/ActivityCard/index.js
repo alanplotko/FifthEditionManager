@@ -9,7 +9,7 @@ import {
 } from 'native-base';
 import { StyleSheet } from 'react-native';
 
-export default class ReactCard extends Component {
+export default class ActivityCard extends Component {
   render() {
     return (
       <Container>
