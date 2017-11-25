@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { Container, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
+import { Container, Text, View }
   from 'native-base';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-
-import Loader from 'DNDManager/components/Loader';
-import ActivityCard from 'DNDManager/components/ActivityCard';
-import store from 'react-native-simple-store';
 
 export default class CreateScreen extends Component {
   static navigationOptions = {
@@ -15,8 +11,40 @@ export default class CreateScreen extends Component {
 
   render() {
     return (
-      <Container style={ContainerStyle.parentContainer}>
+      <Container
+        style={[ ContainerStyle.parentContainer, { backgroundColor: '#fff' } ]}
+      >
+        <Image
+          style={styles.backdrop}
+          source={require('./create_character.png')}
+        >
+          <Text style={styles.headline}>Build a New Character</Text>
+        </Image>
+        <Image
+          style={styles.backdrop}
+          source={require('./create_campaign.png')}
+        >
+          <Text style={styles.headline}>Record a New Campaign</Text>
+        </Image>
       </Container>
     );
   }
 }
+
+var styles = StyleSheet.create({
+  backdrop: {
+    flex: 0.5,
+    resizeMode: 'cover',
+    width: undefined,
+    height: undefined
+  },
+  headline: {
+    fontSize: 24,
+    textAlign: 'left',
+    top: 50,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 5,
+    color: '#fff',
+    width: '75%'
+  }
+});
