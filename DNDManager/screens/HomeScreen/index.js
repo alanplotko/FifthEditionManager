@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
   from 'native-base';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 
-import Loader from 'DNDManager/components/Loader';
+import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
 import store from 'react-native-simple-store';
 
@@ -27,7 +26,7 @@ export default class HomeScreen extends Component {
     }).catch(error => {
       console.error('Store error (fetch profile): ' + error.message);
     }).then(() => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     })
   }
 
@@ -44,7 +43,7 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <Container style={ContainerStyle.parentContainer}>
-          <Loader />
+          <ActivityIndicator color="#3F51B5" size="large" />
         </Container>
       );
     }
