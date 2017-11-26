@@ -42,9 +42,7 @@ export default class HomeScreen extends Component {
     store.save([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY], [{}, {}, {}]);
     if (this.state.isLoading) {
       return (
-        <Container
-          style={[ContainerStyle.parentContainer, ContainerStyle.centerScreen]}
-        >
+        <Container style={ContainerStyle.parentContainer}>
           <Loader />
         </Container>
       );
@@ -53,36 +51,36 @@ export default class HomeScreen extends Component {
       <Container style={ContainerStyle.parentContainer}>
         <Tabs initialPage={0}>
           <Tab heading={<TabHeading><Icon name="home" /></TabHeading>}>
-            <Container style={ContainerStyle.container}>
+            <Container style={ContainerStyle.paddedContainer}>
               {
                 !this.state.activity &&
-                  <ActivityCard
-                    header="First time here?"
-                    body="Your activity feed will populate here over time.
-                          To get started, create a character or campaign!"
-                  />
+                <ActivityCard
+                  header="First time here?"
+                  body="Your activity feed will populate here over time.
+                        To get started, create a character or campaign!"
+                />
               }
             </Container>
           </Tab>
           <Tab heading={<TabHeading><Text>Campaigns</Text></TabHeading>}>
-            <Container style={ContainerStyle.container}>
+            <Container style={ContainerStyle.paddedContainer}>
               {
                 !this.state.campaigns &&
-                  <ActivityCard
-                    header="No Campaigns Found"
-                    body="Let's get started!"
-                  />
+                <ActivityCard
+                  header="No Campaigns Found"
+                  body="Let's get started!"
+                />
               }
             </Container>
           </Tab>
           <Tab heading={<TabHeading><Text>Characters</Text></TabHeading>}>
-            <Container style={ContainerStyle.container}>
+            <Container style={ContainerStyle.paddedContainer}>
               {
                 !this.state.characters &&
-                  <ActivityCard
-                    header="No Characters Found"
-                    body="Let's get started!"
-                  />
+                <ActivityCard
+                  header="No Characters Found"
+                  body="Let's get started!"
+                />
               }
             </Container>
           </Tab>

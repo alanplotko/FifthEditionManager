@@ -42,7 +42,6 @@ export default class ActivityCard extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   header: {
     fontWeight: 'bold',
