@@ -8,8 +8,6 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   paddedContainer: {
-    flex: 1,
-    backgroundColor: '#eee',
     paddingTop: 20,
     paddingLeft: 10,
     paddingRight: 10,

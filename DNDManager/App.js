@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from './screens/HomeScreen';
-import CreateScreen from './screens/CreateScreen';
+import CreateCampaignScreen from './screens/CreateCampaignScreen';
+import CreateCharacterScreen from './screens/CreateCharacterScreen';
 
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
-  Create: { screen: CreateScreen }
+  CreateCampaign: { screen: CreateCampaignScreen },
+  CreateCharacter: { screen: CreateCharacterScreen }
 }, {
   navigationOptions: {
     headerTintColor :'#fff',

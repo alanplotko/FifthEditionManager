@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { Container, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
+import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
   from 'native-base';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 
@@ -34,7 +34,8 @@ export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      fabActive: false
     };
   }
 
@@ -50,49 +51,76 @@ export default class HomeScreen extends Component {
     return (
       <Container style={ContainerStyle.parentContainer}>
         <Tabs initialPage={0}>
-          <Tab heading={<TabHeading><Icon name="home" /></TabHeading>}>
-            <Container style={ContainerStyle.paddedContainer}>
-              {
-                !this.state.activity &&
-                <ActivityCard
-                  header="First time here?"
-                  body="Your activity feed will populate here over time.
-                        To get started, create a character or campaign!"
-                />
-              }
+          <Tab
+            heading={<TabHeading><Icon name="home" /></TabHeading>}
+            style={[styles.tab, ContainerStyle.paddedContainer]}
+          >
+            <Container>
+              <Content>
+                {
+                  !this.state.activity &&
+                  <ActivityCard
+                    header="First time here?"
+                    body="Your activity feed will populate here over time.
+                          To get started, create a character or campaign!"
+                  />
+                }
+              </Content>
             </Container>
           </Tab>
-          <Tab heading={<TabHeading><Text>Campaigns</Text></TabHeading>}>
-            <Container style={ContainerStyle.paddedContainer}>
-              {
-                !this.state.campaigns &&
-                <ActivityCard
-                  header="No Campaigns Found"
-                  body="Let's get started!"
-                />
-              }
+          <Tab
+            heading={<TabHeading><Text>Campaigns</Text></TabHeading>}
+            style={[styles.tab, ContainerStyle.paddedContainer]}
+          >
+            <Container>
+              <Content>
+                {
+                  !this.state.campaigns &&
+                  <ActivityCard
+                    header="No Campaigns Found"
+                    body="Let's get started!"
+                  />
+                }
+              </Content>
             </Container>
           </Tab>
-          <Tab heading={<TabHeading><Text>Characters</Text></TabHeading>}>
-            <Container style={ContainerStyle.paddedContainer}>
-              {
-                !this.state.characters &&
-                <ActivityCard
-                  header="No Characters Found"
-                  body="Let's get started!"
-                />
-              }
+          <Tab
+            heading={<TabHeading><Text>Characters</Text></TabHeading>}
+            style={[styles.tab, ContainerStyle.paddedContainer]}
+          >
+            <Container>
+              <Content>
+                {
+                  !this.state.characters &&
+                  <ActivityCard
+                    header="No Characters Found"
+                    body="Let's get started!"
+                  />
+                }
+              </Content>
             </Container>
           </Tab>
         </Tabs>
         <Fab
-          active={this.state.canCreate}
+          active={this.state.fabActive}
           direction="up"
           style={styles.fab}
           position="bottomRight"
-          onPress={() => this.props.navigation.navigate('Create')}
+          onPress={() => this.setState({ fabActive: !this.state.fabActive })}
         >
           <Icon name="add" />
+          <Button
+            style={{ backgroundColor: '#999' }}
+            onPress={() => this.props.navigation.navigate('CreateCharacter')}
+          >
+            <Icon name="person" />
+          </Button>
+          <Button
+            style={{ backgroundColor: '#999' }}
+            onPress={() => this.props.navigation.navigate('CreateCampaign')}
+          >
+            <Icon name="book" />
+          </Button>
         </Fab>
       </Container>
     );
@@ -102,5 +130,8 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#3F51B5'
+  },
+  tab: {
+    backgroundColor: '#eee'
   }
 });
