@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet }
-  from 'react-native';
-import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import { Container, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
   from 'native-base';
 
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
@@ -31,23 +30,27 @@ export default class HomeScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.getData();
+  }
+
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
       this.setState({
         activity: data[0] || [{
-          key: "defaultCard",
-          header: "First time here?",
-          body: "Your activity feed will populate here over time. To get started, create a character or campaign!",
+          key: 'defaultCard',
+          header: 'First time here?',
+          body: 'Your activity feed will populate here over time. To get started, create a character or campaign!',
         }],
         campaigns: data[1] || [{
-          key: "defaultCard",
-          header: "No campaigns found!",
-          body: "Let's get started!",
+          key: 'defaultCard',
+          header: 'No campaigns found!',
+          body: 'Let\'s get started!',
         }],
         characters: data[2] || [{
-          key: "defaultCard",
-          header: "No campaigns found!",
-          body: "Let's get started!",
+          key: 'defaultCard',
+          header: 'No campaigns found!',
+          body: 'Let\'s get started!',
         }],
       });
     }).catch((error) => {
@@ -56,10 +59,6 @@ export default class HomeScreen extends React.Component {
       this.setState({ isLoading: false, isRefreshing: false });
     });
   };
-
-  componentDidMount() {
-    this.getData();
-  }
 
   handleRefresh = () => {
     this.setState({ isRefreshing: true });
@@ -86,7 +85,7 @@ export default class HomeScreen extends React.Component {
           >
             <FlatList
               data={this.state.activity}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <ActivityCard header={item.header} body={item.body} />
               )}
               refreshing={this.state.isRefreshing}
@@ -99,7 +98,7 @@ export default class HomeScreen extends React.Component {
           >
             <FlatList
               data={this.state.campaigns}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <ActivityCard header={item.header} body={item.body} />
               )}
               refreshing={this.state.isRefreshing}
@@ -112,7 +111,7 @@ export default class HomeScreen extends React.Component {
           >
             <FlatList
               data={this.state.characters}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <ActivityCard header={item.header} body={item.body} />
               )}
               refreshing={this.state.isRefreshing}
