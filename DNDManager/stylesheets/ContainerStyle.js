@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#eee',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   paddedContainer: {
     paddingTop: 20,
@@ -16,6 +16,6 @@ export default StyleSheet.create({
   baseText: {
     fontFamily: 'Roboto',
     fontSize: 18,
-    color: '#666'
-  }
+    color: '#666',
+  },
 });

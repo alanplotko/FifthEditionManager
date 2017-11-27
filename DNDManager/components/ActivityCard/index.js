@@ -1,51 +1,55 @@
-import React, { Component } from 'react';
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  Text,
-  Body
-} from 'native-base';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Card, CardItem, Text, Body } from 'native-base';
 import { StyleSheet } from 'react-native';
 
-export default class ActivityCard extends Component {
-  render() {
-    return (
-      <Card>
-        <CardItem header>
-          {
-            this.props.header &&
-            <Text style={styles.header}>{this.props.header}</Text>
-          }
-        </CardItem>
-        <CardItem>
-          {
-            this.props.body &&
-            <Body>
-              <Text style={styles.body}>{this.props.body}</Text>
-            </Body>
-          }
-        </CardItem>
-        <CardItem footer>
-          {
-            this.props.footer &&
-            <Text>{this.props.footer}</Text>
-          }
-        </CardItem>
-     </Card>
-    );
-  }
-}
+const ActivityCard = props => (
+  <Card>
+    <CardItem header>
+      {
+        props.header &&
+        <Text style={styles.header}>{props.header}</Text>
+      }
+    </CardItem>
+    <CardItem>
+      {
+        props.body &&
+        <Body>
+          <Text style={styles.body}>{props.body}</Text>
+        </Body>
+      }
+    </CardItem>
+    <CardItem footer>
+      {
+        props.footer &&
+        <Text>{props.footer}</Text>
+      }
+    </CardItem>
+  </Card>
+);
 
 const styles = StyleSheet.create({
   header: {
     fontWeight: 'bold',
     fontFamily: 'Roboto',
-    fontSize: 18
+    fontSize: 18,
   },
   body: {
     fontFamily: 'Roboto',
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });
+
+ActivityCard.propTypes = {
+  header: PropTypes.string,
+  body: PropTypes.string,
+  footer: PropTypes.string,
+};
+
+ActivityCard.defaultProps = {
+  header: undefined,
+  body: undefined,
+  footer: undefined,
+};
+
+export default ActivityCard;

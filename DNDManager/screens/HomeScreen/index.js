@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
   from 'native-base';
@@ -11,9 +12,21 @@ const ACTIVITY_KEY = '@DNDManager:activity';
 const CAMPAIGN_KEY = '@DNDManager:campaign';
 const CHARACTER_KEY = '@DNDManager:character';
 
-export default class HomeScreen extends Component {
+export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'D&D Manager'
+    title: 'D&D Manager',
+  }
+
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      fabActive: false,
+    };
   }
 
   componentDidMount() {
@@ -21,25 +34,19 @@ export default class HomeScreen extends Component {
       this.setState({
         activity: data[0],
         campaigns: data[1],
-        characters: data[2]
+        characters: data[2],
       });
-    }).catch(error => {
-      console.error('Store error (fetch profile): ' + error.message);
+    }).catch((error) => {
+      console.error(`Store error (fetch profile): ${error.message}`);
     }).then(() => {
       this.setState({ isLoading: false });
-    })
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      fabActive: false
-    };
+    });
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     store.save([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY], [{}, {}, {}]);
+
     if (this.state.isLoading) {
       return (
         <Container style={ContainerStyle.parentContainer}>
@@ -47,6 +54,7 @@ export default class HomeScreen extends Component {
         </Container>
       );
     }
+
     return (
       <Container style={ContainerStyle.parentContainer}>
         <Tabs initialPage={0}>
@@ -110,13 +118,13 @@ export default class HomeScreen extends Component {
           <Icon name="add" />
           <Button
             style={{ backgroundColor: '#999' }}
-            onPress={() => this.props.navigation.navigate('CreateCharacter')}
+            onPress={() => navigate('CreateCharacter')}
           >
             <Icon name="person" />
           </Button>
           <Button
             style={{ backgroundColor: '#999' }}
-            onPress={() => this.props.navigation.navigate('CreateCampaign')}
+            onPress={() => navigate('CreateCampaign')}
           >
             <Icon name="book" />
           </Button>
@@ -128,9 +136,9 @@ export default class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
   fab: {
-    backgroundColor: '#3F51B5'
+    backgroundColor: '#3F51B5',
   },
   tab: {
-    backgroundColor: '#eee'
-  }
+    backgroundColor: '#eee',
+  },
 });

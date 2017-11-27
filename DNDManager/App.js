@@ -1,20 +1,25 @@
 import Expo from 'expo';
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { StackNavigator } from 'react-navigation';
+
+// Screens
 import HomeScreen from './screens/HomeScreen';
 import CreateCampaignScreen from './screens/CreateCampaignScreen';
 import CreateCharacterScreen from './screens/CreateCharacterScreen';
 
+// Font assets
+const Roboto = require('native-base/Fonts/Roboto.ttf');
+
+// Navigation config
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
-  CreateCharacter: { screen: CreateCharacterScreen }
+  CreateCharacter: { screen: CreateCharacterScreen },
 }, {
   navigationOptions: {
-    headerTintColor :'#fff',
+    headerTintColor: '#fff',
     headerTitleStyle: {
-      color: '#fff'
+      color: '#fff',
     },
     headerStyle: {
       width: '100%',
@@ -25,25 +30,21 @@ const RootNavigator = StackNavigator({
         height: 0,
       },
       shadowRadius: 0,
-      elevation: 0
-    }
-  }
+      elevation: 0,
+    },
+  },
 });
 
-export default class App extends Component {
+export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      isReady: false
+      isReady: false,
     };
   }
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      Ionicons: require('@expo/vector-icons/fonts/Ionicons.ttf')
-    });
+    await Expo.Font.loadAsync({ Roboto });
     this.setState({ isReady: true });
   }
 
