@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet }
+  from 'react-native';
 import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
   from 'native-base';
 
@@ -25,27 +26,48 @@ export default class HomeScreen extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
+      isRefreshing: false,
       fabActive: false,
     };
   }
 
-  componentDidMount() {
+  getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
       this.setState({
-        activity: data[0],
-        campaigns: data[1],
-        characters: data[2],
+        activity: data[0] || [{
+          key: "defaultCard",
+          header: "First time here?",
+          body: "Your activity feed will populate here over time. To get started, create a character or campaign!",
+        }],
+        campaigns: data[1] || [{
+          key: "defaultCard",
+          header: "No campaigns found!",
+          body: "Let's get started!",
+        }],
+        characters: data[2] || [{
+          key: "defaultCard",
+          header: "No campaigns found!",
+          body: "Let's get started!",
+        }],
       });
     }).catch((error) => {
       console.error(`Store error (fetch profile): ${error.message}`);
     }).then(() => {
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false, isRefreshing: false });
     });
+  };
+
+  componentDidMount() {
+    this.getData();
   }
+
+  handleRefresh = () => {
+    this.setState({ isRefreshing: true });
+    this.getData();
+  };
 
   render() {
     const { navigate } = this.props.navigation;
-    store.save([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY], [{}, {}, {}]);
 
     if (this.state.isLoading) {
       return (
@@ -57,55 +79,45 @@ export default class HomeScreen extends React.Component {
 
     return (
       <Container style={ContainerStyle.parentContainer}>
-        <Tabs initialPage={0}>
+        <Tabs initialPage={0} locked>
           <Tab
             heading={<TabHeading><Icon name="home" /></TabHeading>}
             style={[styles.tab, ContainerStyle.paddedContainer]}
           >
-            <Container>
-              <Content>
-                {
-                  !this.state.activity &&
-                  <ActivityCard
-                    header="First time here?"
-                    body="Your activity feed will populate here over time.
-                          To get started, create a character or campaign!"
-                  />
-                }
-              </Content>
-            </Container>
+            <FlatList
+              data={this.state.activity}
+              renderItem={({item}) => (
+                <ActivityCard header={item.header} body={item.body} />
+              )}
+              refreshing={this.state.isRefreshing}
+              onRefresh={this.handleRefresh}
+            />
           </Tab>
           <Tab
             heading={<TabHeading><Text>Campaigns</Text></TabHeading>}
             style={[styles.tab, ContainerStyle.paddedContainer]}
           >
-            <Container>
-              <Content>
-                {
-                  !this.state.campaigns &&
-                  <ActivityCard
-                    header="No Campaigns Found"
-                    body="Let's get started!"
-                  />
-                }
-              </Content>
-            </Container>
+            <FlatList
+              data={this.state.campaigns}
+              renderItem={({item}) => (
+                <ActivityCard header={item.header} body={item.body} />
+              )}
+              refreshing={this.state.isRefreshing}
+              onRefresh={this.handleRefresh}
+            />
           </Tab>
           <Tab
             heading={<TabHeading><Text>Characters</Text></TabHeading>}
             style={[styles.tab, ContainerStyle.paddedContainer]}
           >
-            <Container>
-              <Content>
-                {
-                  !this.state.characters &&
-                  <ActivityCard
-                    header="No Characters Found"
-                    body="Let's get started!"
-                  />
-                }
-              </Content>
-            </Container>
+            <FlatList
+              data={this.state.characters}
+              renderItem={({item}) => (
+                <ActivityCard header={item.header} body={item.body} />
+              )}
+              refreshing={this.state.isRefreshing}
+              onRefresh={this.handleRefresh}
+            />
           </Tab>
         </Tabs>
         <Fab
