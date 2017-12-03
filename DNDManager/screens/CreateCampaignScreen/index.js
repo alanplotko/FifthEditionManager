@@ -10,7 +10,7 @@ export default class CreateCampaignScreen extends React.Component {
 
   render() {
     return (
-      <Container style={ContainerStyle.paddedContainer}>
+      <Container style={[ContainerStyle.parent, ContainerStyle.padded]}>
         <Content>
           <Form>
             <Item stackedLabel>

@@ -70,18 +70,18 @@ export default class HomeScreen extends React.Component {
 
     if (this.state.isLoading) {
       return (
-        <Container style={ContainerStyle.parentContainer}>
+        <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
           <ActivityIndicator color="#3F51B5" size="large" />
         </Container>
       );
     }
 
     return (
-      <Container style={ContainerStyle.parentContainer}>
+      <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
         <Tabs initialPage={0} locked>
           <Tab
             heading={<TabHeading><Icon name="home" /></TabHeading>}
-            style={[styles.tab, ContainerStyle.paddedContainer]}
+            style={[styles.tab, ContainerStyle.padded]}
           >
             <FlatList
               data={this.state.activity}
@@ -94,7 +94,7 @@ export default class HomeScreen extends React.Component {
           </Tab>
           <Tab
             heading={<TabHeading><Text>Campaigns</Text></TabHeading>}
-            style={[styles.tab, ContainerStyle.paddedContainer]}
+            style={[styles.tab, ContainerStyle.padded]}
           >
             <FlatList
               data={this.state.campaigns}
@@ -107,7 +107,7 @@ export default class HomeScreen extends React.Component {
           </Tab>
           <Tab
             heading={<TabHeading><Text>Characters</Text></TabHeading>}
-            style={[styles.tab, ContainerStyle.paddedContainer]}
+            style={[styles.tab, ContainerStyle.padded]}
           >
             <FlatList
               data={this.state.characters}

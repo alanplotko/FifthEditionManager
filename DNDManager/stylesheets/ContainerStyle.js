@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  parentContainer: {
+  parent: {
     flex: 1,
     backgroundColor: '#eee',
+  },
+  centered: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  paddedContainer: {
+  padded: {
     paddingTop: 20,
     paddingLeft: 10,
     paddingRight: 10,
