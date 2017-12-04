@@ -54,6 +54,7 @@ export default class HomeScreen extends React.Component {
         }],
       });
     }).catch((error) => {
+      // TODO: Show error message on screen that encourages user to refresh again
       console.error(`Store error (fetch profile): ${error.message}`);
     }).then(() => {
       this.setState({ isLoading: false, isRefreshing: false });

@@ -1,27 +1,56 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
-import { Container, Content, Item, Input, Label, Separator }
+import { Container, Content }
   from 'native-base';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import t from 'tcomb-form-native';
 
-const t = require('tcomb-form-native');
-const Form = t.form.Form;
+/**
+ * Form valdiation setup
+ */
+
+// Integer in range [1, 20]
+const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
+Level.getValidationErrorMessage = (value) => {
+  if (!value) return 'Required field';
+  return (value % 1 !== 0) ?
+    'Level must be a valid integer' :
+    'Level must be in range [1, 20]';
+};
+
+// Integer >= 0
+const Experience = t.refinement(t.Number, n => n % 1 === 0 && n >= 0);
+Experience.getValidationErrorMessage = (value) => {
+  if (!value) return 'Required field';
+  return (value % 1 !== 0) ?
+    'Experience points must be a valid integer' :
+    'Experience points must be 0 or greater';
+};
+
+const defaultError = () => 'Required field';
+t.Number.getValidationErrorMessage = defaultError;
+t.String.getValidationErrorMessage = defaultError;
+
+/**
+ * Define character and form options
+ */
+
 const Character = t.struct({
   firstName: t.String,
   lastName: t.String,
-  level: t.Number,
-  experiencePoints: t.Number,
+  level: Level,
+  experience: Experience,
   gender: t.enums({
-    'Male': 'Male',
-    'Female': 'Female',
-    'Other': 'Other',
+    Male: 'Male',
+    Female: 'Female',
+    Other: 'Other',
   }),
   alignment: t.enums({
     'Lawful Good': 'Lawful Good',
     'Neutral Good': 'Neutral Good',
     'Chaotic Good': 'Chaotic Good',
     'Lawful Neutral': 'Lawful Neutral',
-    'Neutral Neutral': 'Neutral Neutral',
+    'True Neutral': 'True Neutral',
     'Chaotic Neutral': 'Chaotic Neutral',
     'Lawful Evil': 'Lawful Evil',
     'Neutral Evil': 'Neutral Evil',
@@ -31,44 +60,53 @@ const Character = t.struct({
   height: t.String,
   weight: t.String,
 });
+
 const options = {
   fields: {
-    firstName: { label: 'First Name' },
-    lastName: { label: 'Last Name' },
-    experiencePoints: { label: 'Experience Points' },
+    firstName: {
+      label: 'First Name',
+    },
+    lastName: {
+      label: 'Last Name',
+    },
+    experience: {
+      label: 'Experience Points',
+    },
     gender: {
       nullOption: { value: '', text: 'Select Gender' },
     },
     alignment: {
       nullOption: { value: '', text: 'Select Alignment' },
     },
-  }
+  },
 };
-
 
 export default class CreateCharacterScreen extends React.Component {
   static navigationOptions = {
     title: 'New Character',
   }
 
-  onPress() {
-    // call getValue() to get the values of the form
-    var value = this.refs.form.getValue();
-    if (value) { // if validation fails, value will be null
-      console.log(value); // value here is an instance of Charcater
+  onPress = () => {
+    const data = this.form.getValue();
+    if (data) {
+      console.log(data);
     }
   }
 
   render() {
     return (
       <Container style={ContainerStyle.parent}>
-        <Content keyboardShouldPersistTaps='always'>
+        <Content keyboardShouldPersistTaps="always">
           <View style={{ margin: 20 }}>
-            <Form ref='form' type={Character} options={options} />
+            <t.form.Form
+              ref={(c) => { this.form = c; }}
+              type={Character}
+              options={options}
+            />
             <TouchableHighlight
               style={styles.button}
-              onPress={this.onPress.bind(this)}
-              underlayColor='#99d9f4'
+              onPress={this.onPress}
+              underlayColor="#99d9f4"
             >
               <Text style={styles.buttonText}>Save</Text>
             </TouchableHighlight>
@@ -94,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   input: {
     flex: 0.5,
