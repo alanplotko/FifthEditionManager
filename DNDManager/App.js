@@ -3,12 +3,15 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 
 // Screens
-import HomeScreen from './screens/HomeScreen';
-import CreateCampaignScreen from './screens/CreateCampaignScreen';
-import CreateCharacterScreen from './screens/CreateCharacterScreen';
+import HomeScreen from 'DNDManager/screens/HomeScreen';
+import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
+import CreateCharacterScreen from 'DNDManager/screens/CreateCharacterScreen';
 
 // Font assets
-const Roboto = require('native-base/Fonts/Roboto.ttf');
+const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf'),
+  RobotoLight = require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf')
+  Roboto = require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf'),
+  RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
@@ -44,7 +47,7 @@ export default class App extends React.Component {
   }
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({ Roboto });
+    await Expo.Font.loadAsync({ RobotoThin, RobotoLight, Roboto, RobotoBold });
     this.setState({ isReady: true });
   }
 
