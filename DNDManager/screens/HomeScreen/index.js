@@ -7,10 +7,8 @@ import { Container, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
 import store from 'react-native-simple-store';
-
-const ACTIVITY_KEY = '@DNDManager:activity';
-const CAMPAIGN_KEY = '@DNDManager:campaign';
-const CHARACTER_KEY = '@DNDManager:character';
+import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
+  from 'DNDManager/config/StoreKeys';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -36,6 +34,7 @@ export default class HomeScreen extends React.Component {
 
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
+      console.log(data);
       this.setState({
         activity: data[0] || [{
           key: 'defaultCard',
@@ -112,9 +111,21 @@ export default class HomeScreen extends React.Component {
           >
             <FlatList
               data={this.state.characters}
-              renderItem={({ item }) => (
-                <ActivityCard header={item.header} body={item.body} />
-              )}
+              renderItem={({ item }) => {
+                if (item.key === 'defaultCard') {
+                  return (
+                    <ActivityCard header={item.header} body={item.body} />
+                  );
+                }
+                return (
+                  <ActivityCard
+                    header={
+                      `${item.profile.firstName} ${item.profile.lastName}`
+                    }
+                    body={`Level ${item.profile.level}`}
+                  />
+                );
+              }}
               refreshing={this.state.isRefreshing}
               onRefresh={this.handleRefresh}
             />
@@ -123,7 +134,7 @@ export default class HomeScreen extends React.Component {
         <Fab
           active={this.state.fabActive}
           direction="up"
-          style={styles.fab}
+          style={{ backgroundColor: '#3F51B5' }}
           position="bottomRight"
           onPress={() => this.setState({ fabActive: !this.state.fabActive })}
         >
@@ -147,9 +158,6 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    backgroundColor: '#3F51B5',
-  },
   tab: {
     backgroundColor: '#eee',
   },

@@ -1,9 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
-import { Container, Content }
-  from 'native-base';
+import { Container, Content } from 'native-base';
+import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import t from 'tcomb-form-native';
+import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
+
+const t = require('tcomb-form-native');
+const _ = require('lodash');
+const uuidv4 = require('uuid/v4');
 
 /**
  * Form valdiation setup
@@ -12,22 +16,31 @@ import t from 'tcomb-form-native';
 // Integer in range [1, 20]
 const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
 Level.getValidationErrorMessage = (value) => {
-  if (!value) return 'Required field';
+  if (value === null || value === undefined) return 'Required';
   return (value % 1 !== 0) ?
-    'Level must be a valid integer' :
-    'Level must be in range [1, 20]';
+    'Integer only' :
+    'Range [1, 20]';
 };
 
 // Integer >= 0
 const Experience = t.refinement(t.Number, n => n % 1 === 0 && n >= 0);
 Experience.getValidationErrorMessage = (value) => {
-  if (!value) return 'Required field';
+  if (value === null || value === undefined) return 'Required';
   return (value % 1 !== 0) ?
-    'Experience points must be a valid integer' :
-    'Experience points must be 0 or greater';
+    'Integer only' :
+    'Minimum of 0';
 };
 
-const defaultError = () => 'Required field';
+// Integer >= 1
+const Age = t.refinement(t.Number, n => n % 1 === 0 && n >= 1);
+Age.getValidationErrorMessage = (value) => {
+  if (value === null || value === undefined) return 'Required';
+  return (value % 1 !== 0) ?
+    'Integer only' :
+    'Minimum of 1';
+};
+
+const defaultError = () => 'Required';
 t.Number.getValidationErrorMessage = defaultError;
 t.String.getValidationErrorMessage = defaultError;
 
@@ -35,11 +48,17 @@ t.String.getValidationErrorMessage = defaultError;
  * Define character and form options
  */
 
-const Character = t.struct({
-  firstName: t.String,
-  lastName: t.String,
+const Name = t.struct({
+ firstName: t.String,
+ lastName: t.String,
+});
+
+const Skill = t.struct({
   level: Level,
   experience: Experience,
+});
+
+const Selects = t.struct({
   gender: t.enums({
     Male: 'Male',
     Female: 'Female',
@@ -56,27 +75,89 @@ const Character = t.struct({
     'Neutral Evil': 'Neutral Evil',
     'Chaotic Evil': 'Chaotic Evil',
   }),
-  age: t.Number,
+});
+
+const Body = t.struct({
+  age: Age,
   height: t.String,
   weight: t.String,
 });
 
+const Character = t.struct({
+  name: Name,
+  skill: Skill,
+  selects: Selects,
+  body: Body,
+});
+
+const fieldsetStyle = _.cloneDeep(t.form.Form.stylesheet);
+fieldsetStyle.fieldset.flexDirection = 'row';
+fieldsetStyle.fieldset.justifyContent = 'space-around';
+fieldsetStyle.fieldset.alignItems = 'center';
+fieldsetStyle.formGroup.normal.flex = 1;
+fieldsetStyle.formGroup.error.flex = 1;
+fieldsetStyle.formGroup.normal.marginBottom = 25;
+fieldsetStyle.formGroup.error.marginBottom = 25;
+fieldsetStyle.textbox.normal.marginRight = 5;
+fieldsetStyle.textbox.error.marginRight = 5;
+fieldsetStyle.controlLabel.normal.marginRight = 5;
+fieldsetStyle.controlLabel.error.marginRight = 5;
+
 const options = {
   fields: {
-    firstName: {
-      label: 'First Name',
+    name: {
+      auto: 'none',
+      stylesheet: fieldsetStyle,
+      fields: {
+        firstName: {
+          label: 'First Name',
+        },
+        lastName: {
+          label: 'Last Name',
+        },
+      },
     },
-    lastName: {
-      label: 'Last Name',
+    skill: {
+      auto: 'none',
+      stylesheet: fieldsetStyle,
+      fields: {
+        level: {
+          label: 'Level',
+        },
+        experience: {
+          label: 'Experience Points',
+        },
+      },
     },
-    experience: {
-      label: 'Experience Points',
+    selects: {
+      auto: 'none',
+      stylesheet: fieldsetStyle,
+      fields: {
+        gender: {
+          label: 'Gender',
+          nullOption: { value: '', text: 'Select Gender' },
+        },
+        alignment: {
+          label: 'Alignment',
+          nullOption: { value: '', text: 'Select Alignment' },
+        },
+      },
     },
-    gender: {
-      nullOption: { value: '', text: 'Select Gender' },
-    },
-    alignment: {
-      nullOption: { value: '', text: 'Select Alignment' },
+    body: {
+      auto: 'none',
+      stylesheet: fieldsetStyle,
+      fields: {
+        age: {
+          label: 'Age',
+          placeholder: 'In years',
+        },
+        height: {
+          label: 'Height',
+        },
+        weight: {
+          label: 'Weight',
+        },
+      },
     },
   },
 };
@@ -89,7 +170,23 @@ export default class CreateCharacterScreen extends React.Component {
   onPress = () => {
     const data = this.form.getValue();
     if (data) {
-      console.log(data);
+      store.push(CHARACTER_KEY, {
+        key: uuidv4(),
+        profile: {
+          firstName: data.name.firstName,
+          lastName: data.name.lastName,
+          alignment: data.selects.alignment,
+          gender: data.selects.gender,
+          experience: data.skill.experience,
+          level: data.skill.level,
+          age: data.body.age,
+          height: data.body.height,
+          weight: data.body.weight,
+        },
+      }).catch(error => {
+        // TODO: Show error message on screen and allow resubmit
+    		console.error(error);
+    	});
     }
   }
 
@@ -118,35 +215,15 @@ export default class CreateCharacterScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  separator: {
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  twoColLayout: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  input: {
-    flex: 0.5,
-    backgroundColor: '#fff',
-  },
   buttonText: {
     fontSize: 18,
     color: 'white',
     alignSelf: 'center',
   },
   button: {
-    height: 36,
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
+    height: 48,
+    backgroundColor: '#3F51B5',
+    borderColor: '#3F51B5',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
