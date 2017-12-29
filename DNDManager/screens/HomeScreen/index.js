@@ -32,28 +32,22 @@ export default class HomeScreen extends React.Component {
     this.getData();
   }
 
+  compareDates = (a, b) => {
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    } else if (a.timestamp < b.timestamp) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
-      console.log(data);
       this.setState({
-          activity: data[0] || [],
-          campaigns: data[1] || [],
-          characters: data[2] || [],
-        // activity: data[0] || [{
-        //   key: 'defaultCard',
-        //   header: 'First time here?',
-        //   body: 'Your activity feed will populate here over time. To get started, create a character or campaign!',
-        // }],
-        // campaigns: data[1] || [{
-        //   key: 'defaultCard',
-        //   header: 'No campaigns found!',
-        //   body: 'Let\'s get started!',
-        // }],
-        // characters: data[2] || [{
-        //   key: 'defaultCard',
-        //   header: 'No campaigns found!',
-        //   body: 'Let\'s get started!',
-        // }],
+          activity: data[0] ? data[0].sort(compareDates) : [],
+          campaigns: data[1] ? data[1].sort(compareDates) : [],
+          characters: data[2] ? data[2].sort(compareDates) : [],
       });
     }).catch((error) => {
       // TODO: Show error message on screen that encourages user to refresh again

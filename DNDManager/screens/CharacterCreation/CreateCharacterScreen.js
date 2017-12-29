@@ -1,9 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
 import { Container, Content } from 'native-base';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
+import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
 const _ = require('lodash');
@@ -77,8 +79,8 @@ const Character = t.struct({
 const template = (locals) => {
   return (
     <View>
-      <Text style={styles.heading}>Character Name</Text>
-      <View style={styles.horizontalLayout}>
+      <Text style={FormStyle.heading}>Character Name</Text>
+      <View style={FormStyle.horizontalLayout}>
         <View style={{ flex: 1, marginRight: 5 }}>
           {locals.inputs.firstName}
         </View>
@@ -87,8 +89,8 @@ const template = (locals) => {
         </View>
       </View>
 
-      <Text style={styles.heading}>Power</Text>
-      <View style={styles.horizontalLayout}>
+      <Text style={FormStyle.heading}>Power</Text>
+      <View style={FormStyle.horizontalLayout}>
         <View style={{ flex: 1, marginRight: 5 }}>
           {locals.inputs.level}
         </View>
@@ -97,8 +99,8 @@ const template = (locals) => {
         </View>
       </View>
 
-      <Text style={styles.heading}>About</Text>
-      <View style={styles.horizontalLayout}>
+      <Text style={FormStyle.heading}>About</Text>
+      <View style={FormStyle.horizontalLayout}>
         <View style={{ flex: 1 }}>
           {locals.inputs.gender}
         </View>
@@ -107,8 +109,8 @@ const template = (locals) => {
         </View>
       </View>
 
-      <Text style={styles.heading}>Measurements</Text>
-      <View style={styles.horizontalLayout}>
+      <Text style={FormStyle.heading}>Measurements</Text>
+      <View style={FormStyle.horizontalLayout}>
         <View style={{ flex: 1, marginRight: 5 }}>
           {locals.inputs.age}
         </View>
@@ -172,12 +174,19 @@ export default class CreateCharacterScreen extends React.Component {
     title: 'New Character',
   }
 
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+  }
+
   onPress = () => {
     const data = this.form.getValue();
     if (data) {
-      store.push(CHARACTER_KEY, {
+      const newCharacter = {
         key: uuidv4(),
         profile: data,
+      };
+      store.push(CHARACTER_KEY, newCharacter).then(() => {
+        navigate('SetCharacterBackground', { key: newCharacter.key });
       }).catch(error => {
         // TODO: Show error message on screen and allow resubmit
     		console.error(error);
@@ -186,6 +195,18 @@ export default class CreateCharacterScreen extends React.Component {
   }
 
   render() {
+    // Update form options for focus on next field
+    const fieldOrder = ['firstName', 'lastName', 'level', 'experience', 'age',
+      'height', 'weight'];
+
+    fieldOrder.forEach((fieldName, index) => {
+      if (index + 1 < fieldOrder.length) {
+        options.fields[fieldName].onSubmitEditing = () => {
+          this.form.getComponent(fieldOrder[index + 1]).refs.input.focus();
+        };
+      }
+    });
+
     return (
       <Container style={ContainerStyle.parent}>
         <Content keyboardShouldPersistTaps="always">
@@ -196,11 +217,11 @@ export default class CreateCharacterScreen extends React.Component {
               options={options}
             />
             <TouchableHighlight
-              style={styles.submitBtn}
+              style={FormStyle.submitBtn}
               onPress={this.onPress}
               underlayColor="#99d9f4"
             >
-              <Text style={styles.submitBtnText}>Save Character</Text>
+              <Text style={FormStyle.submitBtnText}>Save Character</Text>
             </TouchableHighlight>
           </View>
         </Content>
@@ -208,35 +229,3 @@ export default class CreateCharacterScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  heading: {
-    fontSize: 24,
-    fontFamily: 'Roboto',
-    color: '#000',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#999',
-    marginBottom: 20,
-  },
-  horizontalLayout: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  submitBtnText: {
-    fontSize: 18,
-    color: 'white',
-    alignSelf: 'center',
-  },
-  submitBtn: {
-    height: 48,
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginTop: 20,
-    marginBottom: 20,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-  },
-});
