@@ -4,7 +4,7 @@ import { Card, CardItem, Text, Body } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 const ActivityCard = props => (
-  <Card>
+  <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
     <CardItem header>
       {
         props.header &&

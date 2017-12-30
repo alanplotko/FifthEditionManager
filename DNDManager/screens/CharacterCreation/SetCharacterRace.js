@@ -11,17 +11,18 @@ import {
   List,
   ListHeader,
   ListItem,
-  Thumbnail,
   Body,
   Text as NBText
 } from 'native-base';
+
 import store from 'react-native-simple-store';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { RACES } from 'DNDManager/config/Info';
+import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
+
 
 /**
  * Character race selection
@@ -70,9 +71,9 @@ const options = {
   },
 };
 
-export default class SetCharacterBackgroundScreen extends React.Component {
+export default class SetCharacterRace extends React.Component {
   static navigationOptions = {
-    title: 'Character Background',
+    title: 'Character Race',
   }
 
   static propTypes = {
@@ -82,7 +83,7 @@ export default class SetCharacterBackgroundScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedRace: null,
+      selection: null,
       form: null,
       isSelectionLoading: false,
     };
@@ -93,83 +94,65 @@ export default class SetCharacterBackgroundScreen extends React.Component {
   }
 
   onPress = () => {
+    const { navigate, state } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
-      // TO DO: Update for adding character background and not new character
-      store.push(CHARACTER_KEY, {
-        key: uuidv4(),
-        profile: data,
-      }).then(() => {
-        // navigate('CreateCampaign');
-      }).catch(error => {
-        // TODO: Show error message on screen and allow resubmit
-    		console.error(error);
-    	});
+      let newCharacter = Object.assign({}, state.params.character);
+      newCharacter.lastUpdated = Date.now();
+      newCharacter.profile = Object.assign({}, newCharacter.profile, data);
+      navigate('SetCharacterClass', { character: newCharacter });
     }
   }
 
   onChange = (value, path) => {
-    this.setState({ isSelectionLoading: true });
-    this.updateCard = setTimeout(() => {
-      this.setState({
-        selectedRace: value ?
-          RACES.find(race => race.name === value.race) :
-          null,
-        form: value,
-        isSelectionLoading: false,
-      });
-    }, 500);
+    this.setState({ isSelectionLoading: true, form: value }, () => {
+      this.updateCard = setTimeout(() => {
+        this.setState({
+          selection: value ?
+            RACES.find(option => option.name === value.race) :
+            null,
+          isSelectionLoading: false,
+        });
+      }, 500);
+    });
   }
 
   render() {
-    const list = RACES.map((race) => {
-      if (this.state.selectedRace &&
-          this.state.selectedRace.name === race.name) {
-        return (
-          <View key={race.name}>
-            <View style={styles.absoluteCentered}>
-              <Text style={styles.selected}>Selected</Text>
-            </View>
-            <ListItem
-              style={{
-                marginLeft: 0,
-                paddingLeft: 20,
-                opacity: 0.2,
-                backgroundColor: '#b2f0b2'
-              }}
-            >
-              <Thumbnail
-                square
-                style={{ width: 48, height: 48 }}
-                source={race.portrait}
-              />
-              <Body>
-                <NBText>{race.name}</NBText>
-                <NBText note>{race.description}</NBText>
-              </Body>
-            </ListItem>
-          </View>
-        );
-      }
-
+    const list = RACES.map((option) => {
       return (
-        <ListItem key={race.name} style={{ marginLeft: 0, paddingLeft: 20 }}>
-          <Thumbnail
-            square
-            style={{ width: 48, height: 48 }}
-            source={race.portrait}
-          />
-          <Body>
-            <NBText>{race.name}</NBText>
-            <NBText note>{race.description}</NBText>
-          </Body>
-        </ListItem>
+        <View key={option.name}>
+          {
+            this.state.selection &&
+            this.state.selection.name === option.name &&
+            <View style={styles.absoluteCentered}>
+              <Text style={styles.selectedText}>Selected</Text>
+            </View>
+          }
+          <ListItem
+            style={[
+              { marginLeft: 0, paddingLeft: 20 },
+              this.state.selection &&
+              this.state.selection.name === option.name ?
+              styles.selectedListItem :
+              null
+            ]}
+          >
+            <Image
+              style={{ width: 48, height: 48 }}
+              source={option.image}
+            />
+            <Body>
+              <NBText>{option.name}</NBText>
+              <NBText note>{option.description}</NBText>
+            </Body>
+          </ListItem>
+        </View>
       );
     });
 
-    // Set up card for displaying currently selected race
+    // Set up card for displaying currently selected option
     let displayCard = null;
-    if (this.state.selectedRace) {
+    if (this.state.selection) {
       displayCard = (
         <Card>
           {
@@ -179,16 +162,16 @@ export default class SetCharacterBackgroundScreen extends React.Component {
             </View>
           }
           <View style={this.state.isSelectionLoading ? styles.loading : ''}>
-            <CardItem cardBody >
+            <CardItem cardBody>
               <Image
-                source={this.state.selectedRace.portrait}
-                style={{height: 150, width: null, flex: 1}}
+                source={this.state.selection.image}
+                style={{ height: 150, flex: 1 }}
               />
             </CardItem>
             <CardItem>
               <Body>
-                <NBText>{this.state.selectedRace.name}</NBText>
-                <NBText note>{this.state.selectedRace.description}</NBText>
+                <NBText>{this.state.selection.name}</NBText>
+                <NBText note>{this.state.selection.description}</NBText>
               </Body>
             </CardItem>
           </View>
@@ -229,11 +212,19 @@ export default class SetCharacterBackgroundScreen extends React.Component {
             />
             {displayCard}
             <TouchableHighlight
-              style={FormStyle.submitBtn}
+              style={[
+                FormStyle.submitBtn,
+                this.state.isSelectionLoading ?
+                  { opacity: 0.5 } :
+                  { opacity: 1 }
+              ]}
               onPress={this.onPress}
-              underlayColor="#99d9f4"
+              underlayColor="#1A237E"
+              disabled={this.state.isSelectionLoading}
             >
-              <Text style={FormStyle.submitBtnText}>Set Race</Text>
+              <Text style={FormStyle.submitBtnText}>
+                Set Race
+              </Text>
             </TouchableHighlight>
           </View>
           <List>
@@ -281,7 +272,11 @@ const styles = StyleSheet.create({
   loading: {
     opacity: 0.1,
   },
-  selected: {
+  selectedListItem: {
+    opacity: 0.2,
+    backgroundColor: '#b2f0b2',
+  },
+  selectedText: {
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,

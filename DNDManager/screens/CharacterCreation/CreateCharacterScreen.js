@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableHighlight,
+  Text,
+  ScrollView,
+  View
+} from 'react-native';
 import { Container, Content } from 'native-base';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
@@ -179,18 +186,18 @@ export default class CreateCharacterScreen extends React.Component {
   }
 
   onPress = () => {
+    const { navigate } = this.props.navigation;
     const data = this.form.getValue();
+
     if (data) {
+      const timestamp = Date.now();
       const newCharacter = {
         key: uuidv4(),
         profile: data,
+        created: timestamp,
+        lastUpdated: timestamp,
       };
-      store.push(CHARACTER_KEY, newCharacter).then(() => {
-        navigate('SetCharacterBackground', { key: newCharacter.key });
-      }).catch(error => {
-        // TODO: Show error message on screen and allow resubmit
-    		console.error(error);
-    	});
+      navigate('SetCharacterRace', { character: newCharacter });
     }
   }
 
@@ -209,8 +216,8 @@ export default class CreateCharacterScreen extends React.Component {
 
     return (
       <Container style={ContainerStyle.parent}>
-        <Content keyboardShouldPersistTaps="always">
-          <View style={{ margin: 20 }}>
+        <Content>
+          <ScrollView style={{ margin: 20 }} keyboardShouldPersistTaps="always">
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={Character}
@@ -219,11 +226,11 @@ export default class CreateCharacterScreen extends React.Component {
             <TouchableHighlight
               style={FormStyle.submitBtn}
               onPress={this.onPress}
-              underlayColor="#99d9f4"
+              underlayColor="#1A237E"
             >
               <Text style={FormStyle.submitBtnText}>Save Character</Text>
             </TouchableHighlight>
-          </View>
+          </ScrollView>
         </Content>
       </Container>
     );

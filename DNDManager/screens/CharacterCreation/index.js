@@ -1,2 +1,3 @@
 export CreateCharacterScreen from './CreateCharacterScreen';
-export SetCharacterBackgroundScreen from './SetCharacterBackgroundScreen';
+export SetCharacterRace from './SetCharacterRace';
+export SetCharacterClass from './SetCharacterClass';

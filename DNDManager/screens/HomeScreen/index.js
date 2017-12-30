@@ -33,10 +33,11 @@ export default class HomeScreen extends React.Component {
   }
 
   compareDates = (a, b) => {
-    if (a.timestamp > b.timestamp) {
-      return 1;
-    } else if (a.timestamp < b.timestamp) {
+    // Order by most recent to least recent update
+    if (a.lastUpdated > b.lastUpdated) {
       return -1;
+    } else if (a.lastUpdated < b.lastUpdated) {
+      return 1;
     } else {
       return 0;
     }
@@ -45,9 +46,9 @@ export default class HomeScreen extends React.Component {
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
       this.setState({
-          activity: data[0] ? data[0].sort(compareDates) : [],
-          campaigns: data[1] ? data[1].sort(compareDates) : [],
-          characters: data[2] ? data[2].sort(compareDates) : [],
+          activity: data[0] ? data[0].sort(this.compareDates) : [],
+          campaigns: data[1] ? data[1].sort(this.compareDates) : [],
+          characters: data[2] ? data[2].sort(this.compareDates) : [],
       });
     }).catch((error) => {
       // TODO: Show error message on screen that encourages user to refresh again
@@ -78,7 +79,7 @@ export default class HomeScreen extends React.Component {
         <Tabs initialPage={0} locked>
           <Tab
             heading={<TabHeading><Icon name="home" /></TabHeading>}
-            style={[styles.tab, ContainerStyle.padded]}
+            style={styles.tab}
           >
             {
               this.state.activity.length > 0 &&
@@ -109,7 +110,7 @@ export default class HomeScreen extends React.Component {
           </Tab>
           <Tab
             heading={<TabHeading><Text>Campaigns</Text></TabHeading>}
-            style={[styles.tab, ContainerStyle.padded]}
+            style={styles.tab}
           >
             {
               this.state.campaigns.length > 0 &&
@@ -140,27 +141,20 @@ export default class HomeScreen extends React.Component {
           </Tab>
           <Tab
             heading={<TabHeading><Text>Characters</Text></TabHeading>}
-            style={[styles.tab, ContainerStyle.padded]}
+            style={styles.tab}
           >
             {
               this.state.characters.length > 0 &&
               <FlatList
                 data={this.state.characters}
-                renderItem={({ item }) => {
-                  if (item.key === 'defaultCard') {
-                    return (
-                      <ActivityCard header={item.header} body={item.body} />
-                    );
-                  }
-                  return (
-                    <ActivityCard
-                      header={
-                        `${item.profile.firstName} ${item.profile.lastName}`
-                      }
-                      body={`Level ${item.profile.level}`}
-                    />
-                  );
-                }}
+                renderItem={({ item }) => (
+                  <ActivityCard
+                    header={
+                      `${item.profile.firstName} ${item.profile.lastName} ${item.profile.race}`
+                    }
+                    body={`Level ${item.profile.level}`}
+                  />
+                )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
               />
@@ -222,7 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 60,
   },
   heading: {
     fontFamily: 'RobotoLight',
