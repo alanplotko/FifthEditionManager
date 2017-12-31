@@ -23,6 +23,7 @@ import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
+const uuidv4 = require('uuid/v4');
 
 /**
  * Character background selection
@@ -105,6 +106,7 @@ export default class SetCharacterBackground extends React.Component {
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
       let newActivity = {
+        key: uuidv4(),
         timestamp: newCharacter.lastUpdated,
         action: 'Created New Character',
         // Format character's full name for extra text

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
+  Keyboard,
   StyleSheet,
   TouchableHighlight,
   Text,
@@ -31,7 +32,7 @@ const validateInteger = (value, altErrorMessage) => {
 // Integer in range [1, 20]
 const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
 Level.getValidationErrorMessage = (value) => {
-  return validateInteger(value, 'Range [1, 20]');
+  return validateInteger(value, 'Integer in range [1, 20]');
 };
 
 // Integer >= 0
@@ -46,6 +47,41 @@ Age.getValidationErrorMessage = (value) => {
   return validateInteger(value, 'Minimum of 1');
 };
 
+const getExperienceRange = (level) => {
+  let range = {
+    min: null,
+    max: null,
+  };
+  if (level === 20) {
+    range.min = EXPERIENCE[level - 1];
+  } else if (level >= 1 && level < 20) {
+    range.min = EXPERIENCE[level - 1];
+    range.max = EXPERIENCE[level] - 1;
+  }
+  return range;
+};
+
+const isInExperienceRange = (experience, range) => {
+  return (range.max === null) ?
+    experience >= range.min :
+    experience >= range.min && experience <= range.max;
+}
+
+const Power = t.refinement(t.struct({
+  level: Level,
+  experience: Experience,
+}), power => {
+  return isInExperienceRange(power.experience, getExperienceRange(power.level));
+});
+Power.getValidationErrorMessage = (value) => {
+  const range = getExperienceRange(value.level);
+  if (range.max === null) {
+    return `Level ${value.level} has a minimum of ${range.min} experience`;
+  } else {
+    return `Level ${value.level} experience range [${range.min}, ${range.max}]`;
+  }
+};
+
 const defaultError = () => 'Required';
 t.Number.getValidationErrorMessage = defaultError;
 t.String.getValidationErrorMessage = defaultError;
@@ -55,8 +91,7 @@ t.String.getValidationErrorMessage = defaultError;
  */
 
 const Character = t.struct({
-  level: Level,
-  experience: Experience,
+  power: Power,
   firstName: t.String,
   lastName: t.String,
   gender: t.enums({
@@ -98,8 +133,7 @@ const template = (locals) => {
       </View>
 
       <Text style={FormStyle.heading}>Power</Text>
-      {locals.inputs.level}
-      {locals.inputs.experience}
+      {locals.inputs.power}
 
       <Text style={FormStyle.heading}>About</Text>
       <View style={FormStyle.horizontalLayout}>
@@ -140,14 +174,18 @@ const options = {
     lastName: {
       label: 'Last Name',
     },
-    level: {
-      label: 'Level',
-      placeholder: 'Integer in [1, 20]',
-    },
-    experience: {
-      label: 'Experience Points',
-      placeholder: 'Integer >= 0',
-      help: 'Select level to view range',
+    power: {
+      auto: 'none',
+      fields: {
+        level: {
+          label: 'Level',
+          help: 'Integer in range [1, 20]',
+        },
+        experience: {
+          label: 'Experience Points',
+          help: 'Select valid level to view range',
+        },
+      },
     },
     gender: {
       label: 'Gender',
@@ -159,15 +197,15 @@ const options = {
     },
     age: {
       label: 'Age',
-      placeholder: 'In years',
+      help: 'In years',
     },
     height: {
       label: 'Height',
-      placeholder: 'e.g. 5\'5\"',
+      help: 'e.g. 5\'5\"',
     },
     weight: {
       label: 'Weight',
-      placeholder: 'e.g. 130 lbs.',
+      help: 'e.g. 130 lbs.',
     },
   },
 };
@@ -190,54 +228,82 @@ export default class CreateCharacterScreen extends React.Component {
   }
 
   onPress = () => {
+    Keyboard.dismiss();
     const { navigate } = this.props.navigation;
     const data = this.form.getValue();
 
     if (data) {
       const timestamp = Date.now();
+      let profile = Object.assign({}, data);
+
+      // Flatten nested power object
+      profile.level = profile.power.level;
+      profile.experience = profile.power.experience;
+      delete profile.power;
+
+      // Set up new character object
       const newCharacter = {
         key: uuidv4(),
-        profile: data,
+        profile: profile,
         created: timestamp,
         lastUpdated: timestamp,
       };
+      console.log(newCharacter);
       navigate('SetCharacterRace', { character: newCharacter });
     }
   }
 
   onChange = (value) => {
-    let helpText = 'Select level to view range';
-    if (value && value.hasOwnProperty('level') && value.level.length > 0) {
-      const level = parseInt(value.level);
-      if (level === 20) {
-        const min = EXPERIENCE[parseInt(level) - 1];
-        helpText = `Integer >= ${min}`;
-      } else if (level >= 1 && level < 20) {
-        const min = EXPERIENCE[parseInt(level) - 1];
-        const max = EXPERIENCE[parseInt(level)] - 1;
-        helpText = `Range in [${min}, ${max}]`;
+    let helpText = 'Select valid level to view range';
+    if (value && value.hasOwnProperty('power') &&
+        value.power.hasOwnProperty('level') && value.power.level.length > 0) {
+      const level = parseInt(value.power.level);
+      const range = getExperienceRange(level);
+      if (range.min !== null) {
+        if (range.max === null) {
+          helpText = `Minimum of ${range.min}`;
+        } else {
+          helpText = `Range [${range.min}, ${range.max}]`;
+        }
       }
     }
     let options = t.update(this.state.options, {
       fields: {
-        experience: {
-          help: { '$set': helpText }
-        }
-      }
+        power: {
+          fields: {
+            experience: {
+              help: { '$set': helpText },
+            },
+          },
+        },
+      },
     });
     this.setState({ options: options, form: value });
   }
 
   render() {
     // Update form options for focus on next field
-    const fieldOrder = ['firstName', 'lastName', 'level', 'experience', 'age',
-      'height', 'weight'];
-
-    fieldOrder.forEach((fieldName, index) => {
+    const fieldOrder = [
+      ['firstName'],
+      ['lastName'],
+      ['power', 'level'],
+      ['power', 'experience'],
+      ['age'],
+      ['height'],
+      ['weight']
+    ];
+    fieldOrder.forEach((name, index) => {
       if (index + 1 < fieldOrder.length) {
-        options.fields[fieldName].onSubmitEditing = () => {
-          this.form.getComponent(fieldOrder[index + 1]).refs.input.focus();
-        };
+        if (name.length === 1) {
+          options.fields[name[0]].onSubmitEditing = () => {
+            this.form.getComponent(fieldOrder[index + 1]).refs.input.focus();
+          };
+        } else {
+          // Traverse to nensted field
+          options.fields[name[0]].fields[name[1]].onSubmitEditing = () => {
+            this.form.getComponent(fieldOrder[index + 1]).refs.input.focus();
+          };
+        }
       }
     });
 
