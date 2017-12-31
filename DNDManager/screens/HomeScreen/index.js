@@ -180,24 +180,30 @@ export default class HomeScreen extends React.Component {
           onPress={() => this.setState({ fabActive: !this.state.fabActive })}
         >
           <Icon name="add" />
-          <Button
-            style={{ backgroundColor: '#999' }}
-            onPress={() => {
-              this.setState({ fabActive: false });
-              navigate('CreateCharacter');
-            }}
-          >
-            <Icon name="person" />
-          </Button>
-          <Button
-            style={{ backgroundColor: '#999' }}
-            onPress={() => {
-              this.setState({ fabActive: false });
-              navigate('CreateCampaign');
-            }}
-          >
-            <Icon name="book" />
-          </Button>
+          {
+            this.state.fabActive && [
+              <Button
+                key="CreateCharacter"
+                style={{ backgroundColor: '#999' }}
+                onPress={() => {
+                  this.setState({ fabActive: false });
+                  navigate('CreateCharacter');
+                }}
+              >
+                <Icon name="person" />
+              </Button>,
+              <Button
+                key="CreateCampaign"
+                style={{ backgroundColor: '#999' }}
+                onPress={() => {
+                  this.setState({ fabActive: false });
+                  navigate('CreateCampaign');
+                }}
+              >
+                <Icon name="book" />
+              </Button>
+            ]
+          }
         </Fab>
       </Container>
     );
