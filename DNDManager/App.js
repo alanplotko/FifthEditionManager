@@ -5,8 +5,7 @@ import { StackNavigator } from 'react-navigation';
 // Screens
 import HomeScreen from 'DNDManager/screens/HomeScreen';
 import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
-import { CreateCharacterScreen, SetCharacterRace, SetCharacterClass }
-  from 'DNDManager/screens/CharacterCreation';
+import * as CharacterCreation from 'DNDManager/screens/CharacterCreation';
 
 // Font assets
 const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf'),
@@ -18,9 +17,10 @@ const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf'),
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
-  CreateCharacter: { screen: CreateCharacterScreen },
-  SetCharacterRace: { screen: SetCharacterRace },
-  SetCharacterClass: { screen: SetCharacterClass },
+  CreateCharacter: { screen: CharacterCreation.CreateCharacterScreen },
+  SetCharacterRace: { screen: CharacterCreation.SetCharacterRace },
+  SetCharacterClass: { screen: CharacterCreation.SetCharacterClass },
+  SetCharacterBackground: { screen: CharacterCreation.SetCharacterBackground },
 }, {
   navigationOptions: {
     headerTintColor: '#fff',

@@ -1,3 +1,8 @@
+export const EXPERIENCE = [
+  0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
+  120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000
+];
+
 export const RACES = [
   {
     name: 'Dwarf',
@@ -179,5 +184,138 @@ export const CLASSES = [
       armorAndWeapon: 'Daggers, darts, slings, quarterstaffs, light crossbows',
     },
     image: require('DNDManager/assets/images/classes/class_wizard.png'),
+  },
+];
+
+export const BACKGROUNDS = [
+  {
+    name: 'Acolyte',
+    description: 'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, perform ing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.',
+    equipment: 'A holy symbol, a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a beth pouch containing 15gp',
+    languages: 'Two of your choice',
+    proficiencies: {
+      skills: 'Insight, Religion',
+      tools: 'None',
+    },
+  },
+  {
+    name: 'Charlatan',
+    description: 'You have always had a way with people. You know what makes them tick, you can tease out their hearts\' desires after a few minutes of conversation, and with a few leading questions you can read them like they were children\'s books. It’s a useful talent, and one that you’re perfectly willing to use for your advantage.',
+    equipment: 'A set of fine clothes, a disguise kit, tools of the con of your choice (ten stoppered bottles filled with colored liquid, a set of weighted dice, a deck of marked cards, or a signet ring of an imaginary duke), and a belt pouch containing 15gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Deception, Sleight of Hand',
+      tools: 'Disguise kit, Forgery Kit',
+    },
+  },
+  {
+    name: 'Criminal',
+    description: 'You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld.',
+    equipment: 'A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Deception, Stealth',
+      tools: 'One type of gaming set, thieves\' tools',
+    },
+  },
+  {
+    name: 'Entertainer',
+    description: 'You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them. Your poetics can stir the hearts of those who hear you, awakening grief or joy, laughter or anger.',
+    equipment: 'A musical instrument of your choice, the favor of an admirer (love letter, lock of hair, or trinket), a costume, and a belt pouch containing 15gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Acrobatics, Performance',
+      tools: 'Disguise kit, one type of musical instrument',
+    },
+  },
+  {
+    name: 'Folk Hero',
+    description: 'You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the com m on folk everywhere.',
+    equipment: 'A set of artisan\'s tools of your choice, a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Animal Handling, Survival',
+      tools: 'One type of artisan\'s tools, vehicles (land)',
+    },
+  },
+  {
+    name: 'Guild Artisan',
+    description: 'You are a member of an artisan’s guild, skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth from the constraints of a feudal social order.',
+    equipment: 'A set of artisan\'s tools of your choice, a letter of introduction from your guild, a set of traveler\'s clothes, and a belt pouch containing 15gp',
+    languages: 'One of your choice',
+    proficiencies: {
+      skills: 'Insight, Persuasion',
+      tools: 'One type of artisan\'s tools',
+    },
+  },
+  {
+    name: 'Hermit',
+    description: 'You lived in seclusion - either in a sheltered community such as a monastery, or entirely alone - for a formative part of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for.',
+    equipment: 'A scroll case stuffed full of notes from your studies or prayers, a winter blanket, a set of common clothes, an herbalism kit, and 5 gp',
+    languages: 'One of your choice',
+    proficiencies: {
+      skills: 'Medicine, Religion',
+      tools: 'Herbalism kit',
+    },
+  },
+  {
+    name: 'Noble',
+    description: 'You understand wealth, power, and privilege. You carry a noble title, and your family owns land, collects taxes, and wields significant political influence. You might be a pampered aristocrat unfamiliar with work or discomfort, a former merchant just elevated to the nobility, or a disinherited scoundrel with a disproportionate sense of entitlement.',
+    equipment: 'A set of fine clothes, a signet ring, a scroll of pedigree, and a purse containing 25gp',
+    languages: 'One of your choice',
+    proficiencies: {
+      skills: 'History, Persuasion',
+      tools: 'One type of gaming set',
+    },
+  },
+  {
+    name: 'Outlander',
+    description: 'You grew up in the wilds, far from civilization and the comforts of town and technology. You\'ve witnessed the migration of herds larger than forests, survived weather more extreme than any city-dweller could comprehend, and enjoyed the solitude of being the only thinking creature for miles in any direction.',
+    equipment: 'A staff, a hunting trap, a trophy from an animal you killed, a set of traveler\'s clothes, and a belt pouch containing 10 gp.',
+    languages: 'One of your choice',
+    proficiencies: {
+      skills: ' Athletics, Survival',
+      tools: 'One type of musical instrument',
+    },
+  },
+  {
+    name: 'Sage',
+    description: 'You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you. Your efforts have made you a master in your fields of study.',
+    equipment: 'A bottle of black ink, a quill, a small knife, a letter from a dead colleague posing a question you have not been able to answer, a set of common clothes, and a belt pouch containing 10gp',
+    languages: 'Two of your choice',
+    proficiencies: {
+      skills: ' Arcana, History',
+      tools: 'None',
+    },
+  },
+  {
+    name: 'Sailor',
+    description: 'You sailed on a seagoing vessel for years. In that time, you faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottom less depths. Your first love is the distant line of the horizon, but the time has com e to try your hand at something new.',
+    equipment: 'A belaying pin (club), 50 feet of silk rope, a lucky charm such as a rabbit foot or a small stone with a hole in the center (or may roll for a trinket), a set of common clothes, and a belt pouch containing 10gp',
+    languages: 'None',
+    proficiencies: {
+      skills: ' Athletics, Perception',
+      tools: 'Navigator\'s tools, vehicles (water)',
+    },
+  },
+  {
+    name: 'Soldier',
+    description: 'War has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, learned basic survival techniques, including how to stay alive on the battlefield.',
+    equipment: 'An insignia of rank, a trophy taken from a fallen enemy, a set of bone dice or deck of cards, a set of common clothes, and a belt pouch containing 10gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Athletics, Intimidation',
+      tools: 'One type of gaming set, vehicles (land)',
+    },
+  },
+  {
+    name: 'Urchin',
+    description: 'You grew up on the streets alone, orphaned, and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself.',
+    equipment: 'A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10gp',
+    languages: 'None',
+    proficiencies: {
+      skills: 'Sleight of Hand, Stealth',
+      tools: 'Disguise kit, thieves\' tools',
+    },
   },
 ];

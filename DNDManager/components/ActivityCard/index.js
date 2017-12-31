@@ -1,55 +1,57 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Card, CardItem, Text, Body } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { Button, Card, CardItem, Text, Icon, Body }
+  from 'native-base';
+import { StyleSheet, Image, View } from 'react-native';
 
 const ActivityCard = props => (
   <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-    <CardItem header>
-      {
-        props.header &&
-        <Text style={styles.header}>{props.header}</Text>
-      }
+    <CardItem cardBody>
+      <Image
+        source={props.activity.thumbnail}
+        resizeMode='cover'
+        style={{ height: 120, width: 120, flex: 1 }}
+      />
+      <View style={{ position: 'absolute', top: 0, right: 0 }}>
+        <Button transparent>
+          <Icon name='more' style={{ color: '#fff' }} />
+        </Button>
+      </View>
     </CardItem>
     <CardItem>
-      {
-        props.body &&
-        <Body>
-          <Text style={styles.body}>{props.body}</Text>
-        </Body>
-      }
-    </CardItem>
-    <CardItem footer>
-      {
-        props.footer &&
-        <Text>{props.footer}</Text>
-      }
+      <Body>
+        <Text style={styles.heading}>
+          {props.activity.action} {moment(props.activity.timestamp).fromNow()}
+        </Text>
+        <Text style={styles.subheading}>
+          {props.activity.extra}
+        </Text>
+      </Body>
     </CardItem>
   </Card>
 );
 
 const styles = StyleSheet.create({
-  header: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
+  heading: {
+    fontFamily: 'RobotoLight',
     fontSize: 18,
+    color: '#000',
+    width: 175,
   },
-  body: {
+  subheading: {
     fontFamily: 'Roboto',
-    fontSize: 16,
+    fontSize: 14,
+    color: '#999',
   },
 });
 
 ActivityCard.propTypes = {
-  header: PropTypes.string,
-  body: PropTypes.string,
-  footer: PropTypes.string,
+  character: PropTypes.object,
 };
 
 ActivityCard.defaultProps = {
-  header: undefined,
-  body: undefined,
-  footer: undefined,
+  character: undefined,
 };
 
 export default ActivityCard;

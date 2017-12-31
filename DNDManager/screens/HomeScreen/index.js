@@ -6,6 +6,7 @@ import { Container, Tab, Tabs, TabHeading, Text, Icon, Button, Fab }
 
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
+import CharacterProfileCard from 'DNDManager/components/CharacterProfileCard';
 import store from 'react-native-simple-store';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
   from 'DNDManager/config/StoreKeys';
@@ -86,7 +87,7 @@ export default class HomeScreen extends React.Component {
               <FlatList
                 data={this.state.activity}
                 renderItem={({ item }) => (
-                  <ActivityCard header={item.header} body={item.body} />
+                  <ActivityCard activity={item} />
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
@@ -117,7 +118,7 @@ export default class HomeScreen extends React.Component {
               <FlatList
                 data={this.state.campaigns}
                 renderItem={({ item }) => (
-                  <ActivityCard header={item.header} body={item.body} />
+                  <CharacterProfileCard />
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
@@ -148,12 +149,7 @@ export default class HomeScreen extends React.Component {
               <FlatList
                 data={this.state.characters}
                 renderItem={({ item }) => (
-                  <ActivityCard
-                    header={
-                      `${item.profile.firstName} ${item.profile.lastName} ${item.profile.race}`
-                    }
-                    body={`Level ${item.profile.level}`}
-                  />
+                  <CharacterProfileCard character={item} />
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}

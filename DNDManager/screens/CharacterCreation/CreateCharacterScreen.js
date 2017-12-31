@@ -12,6 +12,7 @@ import { Container, Content } from 'native-base';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
+import { EXPERIENCE } from 'DNDManager/config/Info';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
@@ -35,7 +36,7 @@ Level.getValidationErrorMessage = (value) => {
 
 // Integer >= 0
 const Experience = t.refinement(t.Number, n => n % 1 === 0 && n >= 0);
-Experience.getValidationErrorMessage = (value) => {
+Experience.getValidationErrorMessage = (value, path, context) => {
   return validateInteger(value, 'Minimum of 0');
 };
 
@@ -97,14 +98,8 @@ const template = (locals) => {
       </View>
 
       <Text style={FormStyle.heading}>Power</Text>
-      <View style={FormStyle.horizontalLayout}>
-        <View style={{ flex: 1, marginRight: 5 }}>
-          {locals.inputs.level}
-        </View>
-        <View style={{ flex: 1, marginLeft: 5 }}>
-          {locals.inputs.experience}
-        </View>
-      </View>
+      {locals.inputs.level}
+      {locals.inputs.experience}
 
       <Text style={FormStyle.heading}>About</Text>
       <View style={FormStyle.horizontalLayout}>
@@ -151,7 +146,8 @@ const options = {
     },
     experience: {
       label: 'Experience Points',
-      placeholder: 'Integer, 0 or up',
+      placeholder: 'Integer >= 0',
+      help: 'Select level to view range',
     },
     gender: {
       label: 'Gender',
@@ -185,6 +181,14 @@ export default class CreateCharacterScreen extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      options: options,
+      form: null,
+    };
+  }
+
   onPress = () => {
     const { navigate } = this.props.navigation;
     const data = this.form.getValue();
@@ -199,6 +203,29 @@ export default class CreateCharacterScreen extends React.Component {
       };
       navigate('SetCharacterRace', { character: newCharacter });
     }
+  }
+
+  onChange = (value) => {
+    let helpText = 'Select level to view range';
+    if (value && value.hasOwnProperty('level') && value.level.length > 0) {
+      const level = parseInt(value.level);
+      if (level === 20) {
+        const min = EXPERIENCE[parseInt(level) - 1];
+        helpText = `Integer >= ${min}`;
+      } else if (level >= 1 && level < 20) {
+        const min = EXPERIENCE[parseInt(level) - 1];
+        const max = EXPERIENCE[parseInt(level)] - 1;
+        helpText = `Range in [${min}, ${max}]`;
+      }
+    }
+    let options = t.update(this.state.options, {
+      fields: {
+        experience: {
+          help: { '$set': helpText }
+        }
+      }
+    });
+    this.setState({ options: options, form: value });
   }
 
   render() {
@@ -221,7 +248,9 @@ export default class CreateCharacterScreen extends React.Component {
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={Character}
-              options={options}
+              value={this.state.form}
+              options={this.state.options}
+              onChange={this.onChange}
             />
             <TouchableHighlight
               style={FormStyle.submitBtn}

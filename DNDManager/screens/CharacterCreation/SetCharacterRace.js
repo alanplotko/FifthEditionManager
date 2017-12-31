@@ -23,7 +23,6 @@ import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
 
-
 /**
  * Character race selection
  */
@@ -98,8 +97,12 @@ export default class SetCharacterRace extends React.Component {
     const data = this.form.getValue();
     if (data) {
       let newCharacter = Object.assign({}, state.params.character);
-      newCharacter.lastUpdated = Date.now();
+      newCharacter.lastUpdated = Date.now
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
+      newCharacter.profile.images = Object.assign({},
+        newCharacter.profile.images,
+        { race: this.state.selection.image }
+      );
       navigate('SetCharacterClass', { character: newCharacter });
     }
   }
