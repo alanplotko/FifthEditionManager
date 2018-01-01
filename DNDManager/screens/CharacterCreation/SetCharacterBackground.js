@@ -13,7 +13,6 @@ import {
   ListItem,
   Body,
 } from 'native-base';
-
 import store from 'react-native-simple-store';
 import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
@@ -51,7 +50,6 @@ const CharacterBackground = t.struct({
 
 const template = locals => (
   <View>
-    <Text style={FormStyle.heading}>Character Background</Text>
     <View style={{ flex: 1 }}>
       {locals.inputs.background}
     </View>
@@ -87,6 +85,7 @@ export default class SetCharacterBackground extends React.Component {
       selection: null,
       form: null,
       isSelectionLoading: false,
+      error: null,
     };
   }
 
@@ -111,24 +110,30 @@ export default class SetCharacterBackground extends React.Component {
       };
       store
         .push(CHARACTER_KEY, newCharacter)
-        .then(() => {
+        .catch((error) => {
+          // Show error message on screen and allow resubmit
+          this.setState({ error: 'Please try again in a few minutes.' });
+          return error;
+        })
+        .then((error) => {
+          if (error) return;
           store
             .push(ACTIVITY_KEY, newActivity)
             .then(() => {
               const resetAction = NavigationActions.reset({
                 index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                actions: [NavigationActions.navigate({
+                  routeName: 'Home',
+                  params: {
+                    snackbarAction: {
+                      message: 'Successfully created a new character!',
+                      duration: 5000,
+                    },
+                  },
+                })],
               });
               dispatch(resetAction);
-            })
-            .catch((error) => {
-              // TODO: Retry activity creation
-              console.error(error);
             });
-        })
-        .catch((error) => {
-          // TODO: Show error message on screen and allow resubmit
-          console.error(error);
         });
     }
   }
@@ -273,6 +278,18 @@ export default class SetCharacterBackground extends React.Component {
       <Container style={ContainerStyle.parent}>
         <Content>
           <View style={{ margin: 20 }}>
+            <Text style={FormStyle.heading}>Character Background</Text>
+            {
+              this.state.error &&
+              <View style={styles.errorDialog}>
+                <Text style={styles.errorHeading}>
+                  An error occurred!
+                </Text>
+                <Text style={styles.errorText}>
+                  {this.state.error.message}&nbsp;
+                </Text>
+              </View>
+            }
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={CharacterBackground}
@@ -280,13 +297,13 @@ export default class SetCharacterBackground extends React.Component {
               options={options}
               onChange={this.onChange}
             />
-            {displayCard}
             <TouchableHighlight
               style={[
                 FormStyle.submitBtn,
                 this.state.isSelectionLoading ?
                   { opacity: 0.5 } :
                   { opacity: 1 },
+                { marginTop: 0, marginBottom: 10 },
               ]}
               onPress={this.onPress}
               underlayColor="#1A237E"
@@ -296,6 +313,7 @@ export default class SetCharacterBackground extends React.Component {
                 Set Background
               </Text>
             </TouchableHighlight>
+            {displayCard}
           </View>
           <List>
             <ListItem itemHeader first style={{ paddingBottom: 0 }}>
@@ -367,5 +385,21 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
+  },
+  errorDialog: {
+    backgroundColor: '#F44336',
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 3,
+  },
+  errorHeading: {
+    fontFamily: 'RobotoBold',
+    color: '#fff',
+    fontSize: 18,
+  },
+  errorText: {
+    fontFamily: 'Roboto',
+    color: '#fff',
+    fontSize: 14,
   },
 });

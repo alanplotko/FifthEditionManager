@@ -242,7 +242,7 @@ export default class CreateCharacterScreen extends React.Component {
         created: timestamp,
         lastUpdated: timestamp,
       };
-      console.log(newCharacter);
+
       navigate('SetCharacterRace', { character: newCharacter });
     }
   }

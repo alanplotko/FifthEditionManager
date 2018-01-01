@@ -207,13 +207,13 @@ export default class SetCharacterRace extends React.Component {
               options={options}
               onChange={this.onChange}
             />
-            {displayCard}
             <TouchableHighlight
               style={[
                 FormStyle.submitBtn,
                 this.state.isSelectionLoading ?
                   { opacity: 0.5 } :
                   { opacity: 1 },
+                { marginTop: 0, marginBottom: 10 },
               ]}
               onPress={this.onPress}
               underlayColor="#1A237E"
@@ -223,6 +223,7 @@ export default class SetCharacterRace extends React.Component {
                 Set Race
               </Text>
             </TouchableHighlight>
+            {displayCard}
           </View>
           <List>
             <ListItem itemHeader first style={{ paddingBottom: 0 }}>

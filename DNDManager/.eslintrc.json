@@ -21,7 +21,11 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/forbid-prop-types": 0,
-    "no-use-before-define": [1, { "variables": false }]
+    "no-use-before-define": [1, { "variables": false }],
+    "no-warning-comments": [1, {
+        "terms": ["todo", "fixme", "xxx"],
+        "location": "start"
+    }]
   },
   "settings": {
     "import/resolver": "reactnative"

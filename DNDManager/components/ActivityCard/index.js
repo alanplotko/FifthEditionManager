@@ -7,14 +7,14 @@ import { StyleSheet, Image } from 'react-native';
 
 const ActivityCard = props => (
   <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-    <CardItem>
+    <CardItem cardBody>
       <Left>
         <Image
           style={styles.thumbnail}
           resizeMode="cover"
           source={props.activity.thumbnail}
         />
-        <Body>
+        <Body style={{ paddingLeft: 10 }}>
           <Text style={styles.heading}>
             {props.activity.action}
           </Text>
@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
   thumbnail: {
     height: 72,
     width: 72,
+    borderTopLeftRadius: 2,
+    borderBottomLeftRadius: 2,
   },
 });
 
