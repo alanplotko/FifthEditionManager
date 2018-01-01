@@ -21,6 +21,12 @@ const compareDates = key => (a, b) => {
   return 0;
 };
 
+const fillerCard = {
+  key: 'spacing',
+  timestamp: 0,
+  lastUpdated: 0,
+};
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'D&D Manager',
@@ -47,13 +53,7 @@ export default class HomeScreen extends React.Component {
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
       data.forEach((set) => {
-        if (set && set.length > 2) {
-          set.push({
-            key: 'spacing',
-            timestamp: 0,
-            lastUpdated: 0,
-          });
-        }
+        if (set) set.push(fillerCard);
       });
       this.setState({
         activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
