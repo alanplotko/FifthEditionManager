@@ -8,10 +8,10 @@ import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
 import * as CharacterCreation from 'DNDManager/screens/CharacterCreation';
 
 // Font assets
-const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf'),
-  RobotoLight = require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf')
-  Roboto = require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf'),
-  RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
+const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf');
+const RobotoLight = require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf');
+const Roboto = require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf');
+const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
@@ -50,8 +50,15 @@ export default class App extends React.Component {
   }
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({ RobotoThin, RobotoLight, Roboto, RobotoBold });
-    this.setState({ isReady: true });
+    await Expo.Font.loadAsync({
+      RobotoThin,
+      RobotoLight,
+      Roboto,
+      RobotoBold,
+    });
+    this.setState({
+      isReady: true,
+    });
   }
 
   render() {

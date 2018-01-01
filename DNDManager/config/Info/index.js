@@ -1,53 +1,84 @@
+// Character race image assets
+const dwarf = require('DNDManager/assets/images/races/portrait_dwarf.png');
+const elf = require('DNDManager/assets/images/races/portrait_elf.png');
+const halfling =
+  require('DNDManager/assets/images/races/portrait_halfling.png');
+const human = require('DNDManager/assets/images/races/portrait_human.png');
+const dragonborn =
+  require('DNDManager/assets/images/races/portrait_dragonborn.png');
+const gnome = require('DNDManager/assets/images/races/portrait_gnome.png');
+const halfElf =
+  require('DNDManager/assets/images/races/portrait_half_elf.png');
+const halfOrc =
+  require('DNDManager/assets/images/races/portrait_half_orc.png');
+const tiefling =
+  require('DNDManager/assets/images/races/portrait_tiefling.png');
+
+// Character class image assets
+const barbarian =
+  require('DNDManager/assets/images/classes/class_barbarian.png');
+const bard = require('DNDManager/assets/images/classes/class_bard.png');
+const cleric = require('DNDManager/assets/images/classes/class_cleric.png');
+const druid = require('DNDManager/assets/images/classes/class_druid.png');
+const fighter = require('DNDManager/assets/images/classes/class_fighter.png');
+const monk = require('DNDManager/assets/images/classes/class_monk.png');
+const paladin = require('DNDManager/assets/images/classes/class_paladin.png');
+const ranger = require('DNDManager/assets/images/classes/class_ranger.png');
+const rogue = require('DNDManager/assets/images/classes/class_rogue.png');
+const sorcerer = require('DNDManager/assets/images/classes/class_sorcerer.png');
+const warlock = require('DNDManager/assets/images/classes/class_warlock.png');
+const wizard = require('DNDManager/assets/images/classes/class_wizard.png');
+
 export const EXPERIENCE = [
   0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
-  120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000
+  120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
 ];
 
 export const RACES = [
   {
     name: 'Dwarf',
     description: 'These short and stocky defenders of mountain fortresses are often seen as stern and humorless; they\'re known for mining the earth\'s treasures and crafting magnificent items from ore and gemstones.',
-    image: require('DNDManager/assets/images/races/portrait_dwarf.png'),
+    image: dwarf,
   },
   {
     name: 'Elf',
     description: 'Tall, noble, and often haughty, elves are long-lived and subtle masters of the wilderness, and excel in the arcane arts.',
-    image: require('DNDManager/assets/images/races/portrait_elf.png'),
+    image: elf,
   },
   {
     name: 'Halfling',
     description: 'Members of this diminutive race find strength in family, community, and their own innate and seemingly inexhaustible luck.',
-    image: require('DNDManager/assets/images/races/portrait_halfling.png'),
+    image: halfling,
   },
   {
     name: 'Human',
     description: 'Ambitious, sometimes heroic, and always confident, humans have an ability to work together toward common goals that makes them a force to be reckoned with.',
-    image: require('DNDManager/assets/images/races/portrait_human.png'),
+    image: human,
   },
   {
     name: 'Dragonborn',
     description: 'Born to fight, dragonborn are a race of wandering mercenaries, soldiers, and adventurers.',
-    image: require('DNDManager/assets/images/races/portrait_dragonborn.png'),
+    image: dragonborn,
   },
   {
     name: 'Gnome',
     description: 'Gnomes are whimsical artisans and tinkers, creating strange devices powered by magic, alchemy, and their quirky imagination; they have an insatiable need for new experiences that often gets them in trouble.',
-    image: require('DNDManager/assets/images/races/portrait_gnome.png'),
+    image: gnome,
   },
   {
     name: 'Half-Elf',
     description: 'Often caught between the worlds of their progenitor races, half-elves are a race of both grace and contradiction.',
-    image: require('DNDManager/assets/images/races/portrait_half_elf.png'),
+    image: halfElf,
   },
   {
     name: 'Half-Orc',
     description: 'Often fierce and savage, sometimes noble and resolute, half-orcs can manifest the best and worst qualities of their parent races.',
-    image: require('DNDManager/assets/images/races/portrait_half_orc.png'),
+    image: halfOrc,
   },
   {
     name: 'Tiefling',
     description: 'Tieflings, often descendants of fiends and humans, are known for their cunning, allure, and leadership.',
-    image: require('DNDManager/assets/images/races/portrait_tiefling.png'),
+    image: tiefling,
   },
 ];
 
@@ -61,7 +92,7 @@ export const CLASSES = [
       savingThrow: 'Strength & Constitution',
       armorAndWeapon: 'Light and medium armor, shields, simple and martial weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_barbarian.png'),
+    image: barbarian,
   },
   {
     name: 'Bard',
@@ -73,7 +104,7 @@ export const CLASSES = [
       armorAndWeapon: 'Light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords',
     },
 
-    image: require('DNDManager/assets/images/classes/class_bard.png'),
+    image: bard,
   },
   {
     name: 'Cleric',
@@ -84,7 +115,7 @@ export const CLASSES = [
       savingThrow: 'Wisdom & Charisma',
       armorAndWeapon: 'Light and medium armor, shields, simple weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_cleric.png'),
+    image: cleric,
   },
   {
     name: 'Druid',
@@ -95,7 +126,7 @@ export const CLASSES = [
       savingThrow: 'Intelligence & Wisdom',
       armorAndWeapon: 'Light and medium armor (nonmetal), shields (nonmetal), clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears',
     },
-    image: require('DNDManager/assets/images/classes/class_druid.png'),
+    image: druid,
   },
   {
     name: 'Fighter',
@@ -106,7 +137,7 @@ export const CLASSES = [
       savingThrow: 'Strength & Constitution',
       armorAndWeapon: 'All armor, shields, simple and martial weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_fighter.png'),
+    image: fighter,
   },
   {
     name: 'Monk',
@@ -117,7 +148,7 @@ export const CLASSES = [
       savingThrow: 'Strength & Dexterity',
       armorAndWeapon: 'Simple weapons, shortswords',
     },
-    image: require('DNDManager/assets/images/classes/class_monk.png'),
+    image: monk,
   },
   {
     name: 'Paladin',
@@ -128,7 +159,7 @@ export const CLASSES = [
       savingThrow: 'Wisdom & Charisma',
       armorAndWeapon: 'All armor, shields, simple and martial weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_paladin.png'),
+    image: paladin,
   },
   {
     name: 'Ranger',
@@ -139,7 +170,7 @@ export const CLASSES = [
       savingThrow: 'Strength & Dexterity',
       armorAndWeapon: 'Light and medium armor, shields, simple and martial weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_ranger.png'),
+    image: ranger,
   },
   {
     name: 'Rogue',
@@ -150,7 +181,7 @@ export const CLASSES = [
       savingThrow: 'Dexterity & Intelligence',
       armorAndWeapon: 'Light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords',
     },
-    image: require('DNDManager/assets/images/classes/class_rogue.png'),
+    image: rogue,
   },
   {
     name: 'Sorcerer',
@@ -161,7 +192,7 @@ export const CLASSES = [
       savingThrow: 'Constitution & Charisma',
       armorAndWeapon: 'Daggers, darts, slings, quarterstaffs, light crossbows',
     },
-    image: require('DNDManager/assets/images/classes/class_sorcerer.png'),
+    image: sorcerer,
   },
   {
     name: 'Warlock',
@@ -172,7 +203,7 @@ export const CLASSES = [
       savingThrow: 'Wisdom & Charisma',
       armorAndWeapon: 'Light armor, simple weapons',
     },
-    image: require('DNDManager/assets/images/classes/class_warlock.png'),
+    image: warlock,
   },
   {
     name: 'Wizard',
@@ -183,7 +214,7 @@ export const CLASSES = [
       savingThrow: 'Intelligence & Wisdom',
       armorAndWeapon: 'Daggers, darts, slings, quarterstaffs, light crossbows',
     },
-    image: require('DNDManager/assets/images/classes/class_wizard.png'),
+    image: wizard,
   },
 ];
 

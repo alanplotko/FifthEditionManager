@@ -11,6 +11,16 @@ import store from 'react-native-simple-store';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
   from 'DNDManager/config/StoreKeys';
 
+// Return compare function with the corresponding timestamp key
+const compareDates = key => (a, b) => {
+  if (a[key] > b[key]) {
+    return -1;
+  } else if (a[key] < b[key]) {
+    return 1;
+  }
+  return 0;
+};
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'D&D Manager',
@@ -26,6 +36,7 @@ export default class HomeScreen extends React.Component {
       isLoading: true,
       isRefreshing: false,
       fabActive: false,
+      fabVisible: true,
     };
   }
 
@@ -33,23 +44,21 @@ export default class HomeScreen extends React.Component {
     this.getData();
   }
 
-  compareDates = (a, b) => {
-    // Order by most recent to least recent update
-    if (a.lastUpdated > b.lastUpdated) {
-      return -1;
-    } else if (a.lastUpdated < b.lastUpdated) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
   getData = () => {
     store.get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
+      data.forEach((set) => {
+        if (set && set.length > 2) {
+          set.push({
+            key: 'spacing',
+            timestamp: 0,
+            lastUpdated: 0,
+          });
+        }
+      });
       this.setState({
-          activity: data[0] ? data[0].sort(this.compareDates) : [],
-          campaigns: data[1] ? data[1].sort(this.compareDates) : [],
-          characters: data[2] ? data[2].sort(this.compareDates) : [],
+        activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
+        campaigns: data[1] ? data[1] : [],
+        characters: data[2] ? data[2].sort(compareDates('lastUpdated')) : [],
       });
     }).catch((error) => {
       // TODO: Show error message on screen that encourages user to refresh again
@@ -86,9 +95,12 @@ export default class HomeScreen extends React.Component {
               this.state.activity.length > 0 &&
               <FlatList
                 data={this.state.activity}
-                renderItem={({ item }) => (
-                  <ActivityCard activity={item} />
-                )}
+                renderItem={({ item }) => {
+                  if (item.key === 'spacing') {
+                    return <View style={{ paddingTop: 100 }} />;
+                  }
+                  return <ActivityCard activity={item} />;
+                }}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
               />
@@ -135,7 +147,7 @@ export default class HomeScreen extends React.Component {
                   No campaigns found.
                 </Text>
                 <Text style={styles.text}>
-                  Let's get started!
+                  Let&apos;s get started!
                 </Text>
               </View>
             }
@@ -148,9 +160,12 @@ export default class HomeScreen extends React.Component {
               this.state.characters.length > 0 &&
               <FlatList
                 data={this.state.characters}
-                renderItem={({ item }) => (
-                  <CharacterProfileCard character={item} />
-                )}
+                renderItem={({ item }) => {
+                  if (item.key === 'spacing') {
+                    return <View style={{ paddingTop: 100 }} />;
+                  }
+                  return <CharacterProfileCard character={item} />;
+                }}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
               />
@@ -166,45 +181,48 @@ export default class HomeScreen extends React.Component {
                   No characters found.
                 </Text>
                 <Text style={styles.text}>
-                  Let's get started!
+                  Let&apos;s get started!
                 </Text>
               </View>
             }
           </Tab>
         </Tabs>
-        <Fab
-          active={this.state.fabActive}
-          direction="up"
-          style={{ backgroundColor: '#3F51B5' }}
-          position="bottomRight"
-          onPress={() => this.setState({ fabActive: !this.state.fabActive })}
-        >
-          <Icon name="add" />
-          {
-            this.state.fabActive && [
-              <Button
-                key="CreateCharacter"
-                style={{ backgroundColor: '#999' }}
-                onPress={() => {
-                  this.setState({ fabActive: false });
-                  navigate('CreateCharacter');
-                }}
-              >
-                <Icon name="person" />
-              </Button>,
-              <Button
-                key="CreateCampaign"
-                style={{ backgroundColor: '#999' }}
-                onPress={() => {
-                  this.setState({ fabActive: false });
-                  navigate('CreateCampaign');
-                }}
-              >
-                <Icon name="book" />
-              </Button>
-            ]
-          }
-        </Fab>
+        {
+          this.state.fabVisible &&
+          <Fab
+            active={this.state.fabActive}
+            direction="up"
+            style={{ backgroundColor: '#3F51B5' }}
+            position="bottomRight"
+            onPress={() => this.setState({ fabActive: !this.state.fabActive })}
+          >
+            <Icon name="add" />
+            {
+              this.state.fabActive && [
+                <Button
+                  key="CreateCharacter"
+                  style={{ backgroundColor: '#999' }}
+                  onPress={() => {
+                    this.setState({ fabActive: false });
+                    navigate('CreateCharacter');
+                  }}
+                >
+                  <Icon name="person" />
+                </Button>,
+                <Button
+                  key="CreateCampaign"
+                  style={{ backgroundColor: '#999' }}
+                  onPress={() => {
+                    this.setState({ fabActive: false });
+                    navigate('CreateCampaign');
+                  }}
+                >
+                  <Icon name="book" />
+                </Button>,
+              ]
+            }
+          </Fab>
+        }
       </Container>
     );
   }

@@ -1,9 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Button, Card, CardItem, Text, Icon, Left, Body }
+import { Card, CardItem, Text, Left, Body }
   from 'native-base';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
 const ActivityCard = props => (
   <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
@@ -21,8 +21,6 @@ const ActivityCard = props => (
           <Text style={styles.subheading}>
             {props.activity.extra}&nbsp;&bull;&nbsp;
             {moment(props.activity.timestamp).fromNow()}
-          </Text>
-          <Text style={styles.timestampText}>
           </Text>
         </Body>
       </Left>
@@ -48,11 +46,16 @@ const styles = StyleSheet.create({
 });
 
 ActivityCard.propTypes = {
-  character: PropTypes.object,
+  activity: PropTypes.shape({
+    thumbnail: PropTypes.number,
+    action: PropTypes.string,
+    extra: PropTypes.string,
+    timestamp: PropTypes.number,
+  }),
 };
 
 ActivityCard.defaultProps = {
-  character: undefined,
+  activity: undefined,
 };
 
 export default ActivityCard;
