@@ -1,33 +1,34 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Button, Card, CardItem, Text, Icon, Body, Left, Right, Thumbnail }
+import { Button, Card, CardItem, Text, Icon, Body, Left, Right }
   from 'native-base';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE } from 'DNDManager/config/Info';
 
-const calculateLevelProgress = (level, experience) => {
-  return level < 20 ? experience / EXPERIENCE[level] : 1;
-};
+const calculateLevelProgress = (level, experience) => (
+  level < 20 ? experience / EXPERIENCE[level] : 1
+);
 
-const toTitleCase = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
+const toTitleCase = str =>
+  `${str.charAt(0).toUpperCase()}${str.slice(1).toLowerCase()}`;
 
-const formatNumber = num => num > 999 ? (num / 1000).toFixed(1) + 'k' : num;
+const formatNumber = num => (
+  num > 999 ? `${(num / 1000).toFixed(1)}k` : num
+);
 
 const CharacterProfileCard = props => (
   <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
     <CardItem cardBody>
       <Image
         source={props.character.profile.images.race}
-        resizeMode='cover'
+        resizeMode="cover"
         style={{ height: 120, width: null, flex: 1 }}
       />
       <View style={{ position: 'absolute', top: 0, right: 0 }}>
         <Button transparent>
-          <Icon name='more' style={{ color: '#fff' }} />
+          <Icon name="more" style={{ color: '#fff' }} />
         </Button>
       </View>
       <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
@@ -41,7 +42,7 @@ const CharacterProfileCard = props => (
         <Image
           source={props.character.profile.images.baseClass}
           style={{ width: 48, height: 64 }}
-          resizeMode='contain'
+          resizeMode="contain"
         />
         <Body>
           <Text style={styles.heading} numberOfLines={1}>
@@ -49,10 +50,6 @@ const CharacterProfileCard = props => (
             {toTitleCase(props.character.profile.lastName)}&nbsp;
           </Text>
           <Text style={styles.subheading}>
-            <Icon
-              name={props.character.profile.gender.toLowerCase()}
-              style={styles.genderIcon}
-            />&nbsp;
             {props.character.profile.race}&nbsp;
             {props.character.profile.baseClass}
           </Text>
@@ -63,7 +60,7 @@ const CharacterProfileCard = props => (
       </Left>
       <Right style={{ flex: 1 }}>
         <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
           <Text style={styles.levelText}>
             Level {props.character.profile.level}
@@ -71,11 +68,11 @@ const CharacterProfileCard = props => (
           <Progress.Bar
             progress={calculateLevelProgress(
               props.character.profile.level,
-              props.character.profile.experience
+              props.character.profile.experience,
             )}
             animated={false}
-            color='#3F51B5'
-            borderColor='#3F51B5'
+            color="#3F51B5"
+            borderColor="#3F51B5"
             width={100}
             style={{ marginTop: 3, marginBottom: 3 }}
           />
@@ -133,11 +130,15 @@ const styles = StyleSheet.create({
   },
   lastUpdatedBanner: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
     color: '#fff',
     fontFamily: 'Roboto',
     fontStyle: 'italic',
-    fontSize: 14,
+    fontSize: 12,
+    borderTopLeftRadius: 5,
   },
 });
 

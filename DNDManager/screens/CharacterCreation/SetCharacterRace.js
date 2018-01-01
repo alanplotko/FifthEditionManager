@@ -9,14 +9,11 @@ import {
   Content,
   Icon,
   List,
-  ListHeader,
   ListItem,
   Body,
-  Text as NBText
+  Text as NBText,
 } from 'native-base';
 
-import store from 'react-native-simple-store';
-import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { RACES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -29,15 +26,15 @@ const t = require('tcomb-form-native');
 
 const CharacterRace = t.struct({
   race: t.enums({
-    'Dwarf': 'Dwarf',
-    'Elf': 'Elf',
-    'Halfling': 'Halfling',
-    'Human': 'Human',
-    'Dragonborn': 'Dragonborn',
-    'Gnome': 'Gnome',
+    Dwarf: 'Dwarf',
+    Elf: 'Elf',
+    Halfling: 'Halfling',
+    Human: 'Human',
+    Dragonborn: 'Dragonborn',
+    Gnome: 'Gnome',
     'Half-Elf': 'Half-Elf',
     'Half-Orc': 'Half-Orc',
-    'Tiefling': 'Tiefling',
+    Tiefling: 'Tiefling',
   }),
 });
 
@@ -45,23 +42,21 @@ const CharacterRace = t.struct({
  * Form template setup
  */
 
-const template = (locals) => {
-  return (
-    <View>
-      <Text style={FormStyle.heading}>Character Race</Text>
-      <View style={{ flex: 1 }}>
-        {locals.inputs.race}
-      </View>
+const template = locals => (
+  <View>
+    <Text style={FormStyle.heading}>Character Race</Text>
+    <View style={{ flex: 1 }}>
+      {locals.inputs.race}
     </View>
-  );
-}
+  </View>
+);
 
 /**
  * Define form options
  */
 
 const options = {
-  template: template,
+  template,
   fields: {
     race: {
       label: 'Race',
@@ -96,18 +91,19 @@ export default class SetCharacterRace extends React.Component {
     const { navigate, state } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
-      let newCharacter = Object.assign({}, state.params.character);
-      newCharacter.lastUpdated = Date.now
+      const newCharacter = Object.assign({}, state.params.character);
+      newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      newCharacter.profile.images = Object.assign({},
+      newCharacter.profile.images = Object.assign(
+        {},
         newCharacter.profile.images,
-        { race: this.state.selection.image }
+        { race: this.state.selection.image },
       );
       navigate('SetCharacterClass', { character: newCharacter });
     }
   }
 
-  onChange = (value, path) => {
+  onChange = (value) => {
     this.setState({ isSelectionLoading: true, form: value }, () => {
       this.updateCard = setTimeout(() => {
         this.setState({
@@ -121,37 +117,35 @@ export default class SetCharacterRace extends React.Component {
   }
 
   render() {
-    const list = RACES.map((option) => {
-      return (
-        <View key={option.name}>
-          {
+    const list = RACES.map(option => (
+      <View key={option.name}>
+        {
+          this.state.selection &&
+          this.state.selection.name === option.name &&
+          <View style={styles.absoluteCentered}>
+            <Text style={styles.selectedText}>Selected</Text>
+          </View>
+        }
+        <ListItem
+          style={[
+            { marginLeft: 0, paddingLeft: 20 },
             this.state.selection &&
-            this.state.selection.name === option.name &&
-            <View style={styles.absoluteCentered}>
-              <Text style={styles.selectedText}>Selected</Text>
-            </View>
-          }
-          <ListItem
-            style={[
-              { marginLeft: 0, paddingLeft: 20 },
-              this.state.selection &&
-              this.state.selection.name === option.name ?
-              styles.selectedListItem :
-              null
-            ]}
-          >
-            <Image
-              style={{ width: 48, height: 48 }}
-              source={option.image}
-            />
-            <Body>
-              <NBText>{option.name}</NBText>
-              <NBText note>{option.description}</NBText>
-            </Body>
-          </ListItem>
-        </View>
-      );
-    });
+            this.state.selection.name === option.name ?
+            styles.selectedListItem :
+            null,
+          ]}
+        >
+          <Image
+            style={{ width: 48, height: 48 }}
+            source={option.image}
+          />
+          <Body>
+            <NBText>{option.name}</NBText>
+            <NBText note>{option.description}</NBText>
+          </Body>
+        </ListItem>
+      </View>
+    ));
 
     // Set up card for displaying currently selected option
     let displayCard = null;
@@ -219,7 +213,7 @@ export default class SetCharacterRace extends React.Component {
                 FormStyle.submitBtn,
                 this.state.isSelectionLoading ?
                   { opacity: 0.5 } :
-                  { opacity: 1 }
+                  { opacity: 1 },
               ]}
               onPress={this.onPress}
               underlayColor="#1A237E"
@@ -283,5 +277,5 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
-  }
+  },
 });

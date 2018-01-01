@@ -1,23 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  ActivityIndicator,
   Keyboard,
-  StyleSheet,
   TouchableHighlight,
   Text,
   ScrollView,
-  View
+  View,
 } from 'react-native';
 import { Container, Content } from 'native-base';
-import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { EXPERIENCE } from 'DNDManager/config/Info';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
-const _ = require('lodash');
 const uuidv4 = require('uuid/v4');
 
 /**
@@ -25,30 +20,30 @@ const uuidv4 = require('uuid/v4');
  */
 
 const validateInteger = (value, altErrorMessage) => {
- if (value === null || value === undefined) return 'Required';
- return (value % 1 !== 0) ? 'Integer only' : altErrorMessage;
-}
+  if (value === null || value === undefined) return 'Required';
+  return (value % 1 !== 0) ? 'Integer only' : altErrorMessage;
+};
 
 // Integer in range [1, 20]
 const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
-Level.getValidationErrorMessage = (value) => {
-  return validateInteger(value, 'Integer in range [1, 20]');
-};
+Level.getValidationErrorMessage = value => validateInteger(
+  value,
+  'Integer in range [1, 20]',
+);
 
 // Integer >= 0
 const Experience = t.refinement(t.Number, n => n % 1 === 0 && n >= 0);
-Experience.getValidationErrorMessage = (value, path, context) => {
-  return validateInteger(value, 'Minimum of 0');
-};
+Experience.getValidationErrorMessage = value => validateInteger(
+  value,
+  'Minimum of 0',
+);
 
 // Integer >= 1
 const Age = t.refinement(t.Number, n => n % 1 === 0 && n >= 1);
-Age.getValidationErrorMessage = (value) => {
-  return validateInteger(value, 'Minimum of 1');
-};
+Age.getValidationErrorMessage = value => validateInteger(value, 'Minimum of 1');
 
 const getExperienceRange = (level) => {
-  let range = {
+  const range = {
     min: null,
     max: null,
   };
@@ -61,25 +56,26 @@ const getExperienceRange = (level) => {
   return range;
 };
 
-const isInExperienceRange = (experience, range) => {
-  return (range.max === null) ?
+const isInExperienceRange = (experience, range) => (
+  range.max === null ?
     experience >= range.min :
-    experience >= range.min && experience <= range.max;
-}
+    experience >= range.min && experience <= range.max
+);
 
 const Power = t.refinement(t.struct({
   level: Level,
   experience: Experience,
-}), power => {
-  return isInExperienceRange(power.experience, getExperienceRange(power.level));
-});
+}), power => isInExperienceRange(
+  power.experience,
+  getExperienceRange(power.level),
+));
+
 Power.getValidationErrorMessage = (value) => {
   const range = getExperienceRange(value.level);
   if (range.max === null) {
     return `Level ${value.level} has a minimum of ${range.min} experience`;
-  } else {
-    return `Level ${value.level} experience range [${range.min}, ${range.max}]`;
   }
+  return `Level ${value.level} experience range [${range.min}, ${range.max}]`;
 };
 
 const defaultError = () => 'Required';
@@ -119,54 +115,52 @@ const Character = t.struct({
  * Form template setup
  */
 
-const template = (locals) => {
-  return (
-    <View>
-      <Text style={FormStyle.heading}>Character Name</Text>
-      <View style={FormStyle.horizontalLayout}>
-        <View style={{ flex: 1, marginRight: 5 }}>
-          {locals.inputs.firstName}
-        </View>
-        <View style={{ flex: 1, marginLeft: 5 }}>
-          {locals.inputs.lastName}
-        </View>
+const template = locals => (
+  <View>
+    <Text style={FormStyle.heading}>Character Name</Text>
+    <View style={FormStyle.horizontalLayout}>
+      <View style={{ flex: 1, marginRight: 5 }}>
+        {locals.inputs.firstName}
       </View>
-
-      <Text style={FormStyle.heading}>Power</Text>
-      {locals.inputs.power}
-
-      <Text style={FormStyle.heading}>About</Text>
-      <View style={FormStyle.horizontalLayout}>
-        <View style={{ flex: 1 }}>
-          {locals.inputs.gender}
-        </View>
-        <View style={{ flex: 1 }}>
-          {locals.inputs.alignment}
-        </View>
-      </View>
-
-      <Text style={FormStyle.heading}>Measurements</Text>
-      <View style={FormStyle.horizontalLayout}>
-        <View style={{ flex: 1, marginRight: 5 }}>
-          {locals.inputs.age}
-        </View>
-        <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
-          {locals.inputs.height}
-        </View>
-        <View style={{ flex: 1, marginLeft: 5 }}>
-          {locals.inputs.weight}
-        </View>
+      <View style={{ flex: 1, marginLeft: 5 }}>
+        {locals.inputs.lastName}
       </View>
     </View>
-  );
-}
+
+    <Text style={FormStyle.heading}>Power</Text>
+    {locals.inputs.power}
+
+    <Text style={FormStyle.heading}>About</Text>
+    <View style={FormStyle.horizontalLayout}>
+      <View style={{ flex: 1 }}>
+        {locals.inputs.gender}
+      </View>
+      <View style={{ flex: 1 }}>
+        {locals.inputs.alignment}
+      </View>
+    </View>
+
+    <Text style={FormStyle.heading}>Measurements</Text>
+    <View style={FormStyle.horizontalLayout}>
+      <View style={{ flex: 1, marginRight: 5 }}>
+        {locals.inputs.age}
+      </View>
+      <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
+        {locals.inputs.height}
+      </View>
+      <View style={{ flex: 1, marginLeft: 5 }}>
+        {locals.inputs.weight}
+      </View>
+    </View>
+  </View>
+);
 
 /**
  * Define form options
  */
 
 const options = {
-  template: template,
+  template,
   fields: {
     firstName: {
       label: 'First Name',
@@ -201,7 +195,7 @@ const options = {
     },
     height: {
       label: 'Height',
-      help: 'e.g. 5\'5\"',
+      help: 'e.g. 5\'5"',
     },
     weight: {
       label: 'Weight',
@@ -222,7 +216,7 @@ export default class CreateCharacterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: options,
+      options,
       form: null,
     };
   }
@@ -234,7 +228,7 @@ export default class CreateCharacterScreen extends React.Component {
 
     if (data) {
       const timestamp = Date.now();
-      let profile = Object.assign({}, data);
+      const profile = Object.assign({}, data);
 
       // Flatten nested power object
       profile.level = profile.power.level;
@@ -244,7 +238,7 @@ export default class CreateCharacterScreen extends React.Component {
       // Set up new character object
       const newCharacter = {
         key: uuidv4(),
-        profile: profile,
+        profile,
         created: timestamp,
         lastUpdated: timestamp,
       };
@@ -255,9 +249,10 @@ export default class CreateCharacterScreen extends React.Component {
 
   onChange = (value) => {
     let helpText = 'Select valid level to view range';
-    if (value && value.hasOwnProperty('power') &&
-        value.power.hasOwnProperty('level') && value.power.level.length > 0) {
-      const level = parseInt(value.power.level);
+    if (value && Object.prototype.hasOwnProperty.call(value, 'power') &&
+        Object.prototype.hasOwnProperty.call(value.power, 'level') &&
+        value.power.level.length > 0) {
+      const level = parseInt(value.power.level, 10);
       const range = getExperienceRange(level);
       if (range.min !== null) {
         if (range.max === null) {
@@ -267,18 +262,18 @@ export default class CreateCharacterScreen extends React.Component {
         }
       }
     }
-    let options = t.update(this.state.options, {
+    const updatedOptions = t.update(this.state.options, {
       fields: {
         power: {
           fields: {
             experience: {
-              help: { '$set': helpText },
+              help: { $set: helpText },
             },
           },
         },
       },
     });
-    this.setState({ options: options, form: value });
+    this.setState({ options: updatedOptions, form: value });
   }
 
   render() {
@@ -290,7 +285,7 @@ export default class CreateCharacterScreen extends React.Component {
       ['power', 'experience'],
       ['age'],
       ['height'],
-      ['weight']
+      ['weight'],
     ];
     fieldOrder.forEach((name, index) => {
       if (index + 1 < fieldOrder.length) {

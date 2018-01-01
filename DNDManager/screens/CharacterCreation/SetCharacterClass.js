@@ -12,11 +12,8 @@ import {
   List,
   ListItem,
   Body,
-  Text as NBText
 } from 'native-base';
 
-import store from 'react-native-simple-store';
-import { CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { CLASSES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -29,18 +26,18 @@ const t = require('tcomb-form-native');
 
 const CharacterBaseClass = t.struct({
   baseClass: t.enums({
-    'Barbarian': 'Barbarian',
-    'Bard': 'Bard',
-    'Cleric': 'Cleric',
-    'Druid': 'Druid',
-    'Fighter': 'Fighter',
-    'Monk': 'Monk',
-    'Paladin': 'Paladin',
-    'Ranger': 'Ranger',
-    'Rogue': 'Rogue',
-    'Sorcerer': 'Sorcerer',
-    'Warlock': 'Warlock',
-    'Wizard': 'Wizard',
+    Barbarian: 'Barbarian',
+    Bard: 'Bard',
+    Cleric: 'Cleric',
+    Druid: 'Druid',
+    Fighter: 'Fighter',
+    Monk: 'Monk',
+    Paladin: 'Paladin',
+    Ranger: 'Ranger',
+    Rogue: 'Rogue',
+    Sorcerer: 'Sorcerer',
+    Warlock: 'Warlock',
+    Wizard: 'Wizard',
   }),
 });
 
@@ -48,23 +45,21 @@ const CharacterBaseClass = t.struct({
  * Form template setup
  */
 
-const template = (locals) => {
-  return (
-    <View>
-      <Text style={FormStyle.heading}>Character Class</Text>
-      <View style={{ flex: 1 }}>
-        {locals.inputs.baseClass}
-      </View>
+const template = locals => (
+  <View>
+    <Text style={FormStyle.heading}>Character Class</Text>
+    <View style={{ flex: 1 }}>
+      {locals.inputs.baseClass}
     </View>
-  );
-}
+  </View>
+);
 
 /**
  * Define form options
  */
 
 const options = {
-  template: template,
+  template,
   fields: {
     baseClass: {
       label: 'Class',
@@ -96,21 +91,22 @@ export default class SetCharacterClass extends React.Component {
   }
 
   onPress = () => {
-    const { navigate, state, dispatch } = this.props.navigation;
+    const { navigate, state } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
-      let newCharacter = Object.assign({}, state.params.character);
+      const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      newCharacter.profile.images = Object.assign({},
+      newCharacter.profile.images = Object.assign(
+        {},
         newCharacter.profile.images,
-        { baseClass: this.state.selection.image }
+        { baseClass: this.state.selection.image },
       );
       navigate('SetCharacterBackground', { character: newCharacter });
     }
   }
 
-  onChange = (value, path) => {
+  onChange = (value) => {
     this.setState({ isSelectionLoading: true, form: value }, () => {
       this.updateCard = setTimeout(() => {
         this.setState({
@@ -124,62 +120,60 @@ export default class SetCharacterClass extends React.Component {
   }
 
   render() {
-    const list = CLASSES.map((option) => {
-      return (
-        <View key={option.name}>
-          {
+    const list = CLASSES.map(option => (
+      <View key={option.name}>
+        {
+          this.state.selection &&
+          this.state.selection.name === option.name &&
+          <View style={styles.absoluteCentered}>
+            <Text style={styles.selectedText}>Selected</Text>
+          </View>
+        }
+        <ListItem
+          style={[
+            { marginLeft: 0, paddingLeft: 20 },
             this.state.selection &&
-            this.state.selection.name === option.name &&
-            <View style={styles.absoluteCentered}>
-              <Text style={styles.selectedText}>Selected</Text>
-            </View>
-          }
-          <ListItem
-            style={[
-              { marginLeft: 0, paddingLeft: 20 },
-              this.state.selection &&
-              this.state.selection.name === option.name ?
-              styles.selectedListItem :
-              null
-            ]}
-          >
-            <Body>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
-                <Image
-                  resizeMode="contain"
-                  style={{ width: 64, height: 64, flex: 0.2 }}
-                  source={option.image}
-                />
-                <View style={{ flex: 0.8 }}>
-                  <Text style={styles.listItemHeading}>{option.name}</Text>
-                  <Text
-                    style={[
-                      styles.infoText,
-                      { paddingLeft: 0, paddingBottom: 10 }
-                    ]}
-                  >
-                    {option.description}
-                  </Text>
-                  <Text style={styles.infoHeading}>
-                    &#9656; Hit Die / Primary Ability
-                  </Text>
-                  <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                    {option.hitDie} / {option.primaryAbility}
-                  </Text>
-                  <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                  <Text style={styles.infoText}>
-                    Saving Throw: {option.proficiencies.savingThrow}
-                  </Text>
-                  <Text style={styles.infoText}>
-                    Armor & Weapons: {option.proficiencies.armorAndWeapon}
-                  </Text>
-                </View>
+            this.state.selection.name === option.name ?
+            styles.selectedListItem :
+            null,
+          ]}
+        >
+          <Body>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <Image
+                resizeMode="contain"
+                style={{ width: 64, height: 64, flex: 0.2 }}
+                source={option.image}
+              />
+              <View style={{ flex: 0.8 }}>
+                <Text style={styles.listItemHeading}>{option.name}</Text>
+                <Text
+                  style={[
+                    styles.infoText,
+                    { paddingLeft: 0, paddingBottom: 10 },
+                  ]}
+                >
+                  {option.description}
+                </Text>
+                <Text style={styles.infoHeading}>
+                  &#9656; Hit Die / Primary Ability
+                </Text>
+                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+                  {option.hitDie} / {option.primaryAbility}
+                </Text>
+                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
+                <Text style={styles.infoText}>
+                  Saving Throw: {option.proficiencies.savingThrow}
+                </Text>
+                <Text style={styles.infoText}>
+                  Armor & Weapons: {option.proficiencies.armorAndWeapon}
+                </Text>
               </View>
-            </Body>
-          </ListItem>
-        </View>
-      );
-    });
+            </View>
+          </Body>
+        </ListItem>
+      </View>
+    ));
 
     // Set up card for displaying currently selected option
     let displayCard = null;
@@ -272,7 +266,7 @@ export default class SetCharacterClass extends React.Component {
                 FormStyle.submitBtn,
                 this.state.isSelectionLoading ?
                   { opacity: 0.5 } :
-                  { opacity: 1 }
+                  { opacity: 1 },
               ]}
               onPress={this.onPress}
               underlayColor="#1A237E"
@@ -353,5 +347,5 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
-  }
+  },
 });

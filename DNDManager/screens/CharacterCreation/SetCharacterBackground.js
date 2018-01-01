@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text, Image }
+import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
   from 'react-native';
 import {
   Card,
@@ -9,11 +9,9 @@ import {
   Container,
   Content,
   Icon,
-  Left,
   List,
   ListItem,
   Body,
-  Text as NBText
 } from 'native-base';
 
 import store from 'react-native-simple-store';
@@ -31,19 +29,19 @@ const uuidv4 = require('uuid/v4');
 
 const CharacterBackground = t.struct({
   background: t.enums({
-    'Acolyte': 'Acolyte',
-    'Charlatan': 'Charlatan',
-    'Criminal': 'Criminal',
-    'Entertainer': 'Entertainer',
+    Acolyte: 'Acolyte',
+    Charlatan: 'Charlatan',
+    Criminal: 'Criminal',
+    Entertainer: 'Entertainer',
     'Folk Hero': 'Folk Hero',
     'Guild Artisan': 'Guild Artisan',
-    'Hermit': 'Hermit',
-    'Noble': 'Noble',
-    'Outlander': 'Outlander',
-    'Sage': 'Sage',
-    'Sailor': 'Sailor',
-    'Soldier': 'Soldier',
-    'Urchin': 'Urchin',
+    Hermit: 'Hermit',
+    Noble: 'Noble',
+    Outlander: 'Outlander',
+    Sage: 'Sage',
+    Sailor: 'Sailor',
+    Soldier: 'Soldier',
+    Urchin: 'Urchin',
   }),
 });
 
@@ -51,23 +49,21 @@ const CharacterBackground = t.struct({
  * Form template setup
  */
 
-const template = (locals) => {
-  return (
-    <View>
-      <Text style={FormStyle.heading}>Character Background</Text>
-      <View style={{ flex: 1 }}>
-        {locals.inputs.background}
-      </View>
+const template = locals => (
+  <View>
+    <Text style={FormStyle.heading}>Character Background</Text>
+    <View style={{ flex: 1 }}>
+      {locals.inputs.background}
     </View>
-  );
-}
+  </View>
+);
 
 /**
  * Define form options
  */
 
 const options = {
-  template: template,
+  template,
   fields: {
     background: {
       label: 'Background',
@@ -99,21 +95,18 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   onPress = () => {
-    const { navigate, state, dispatch } = this.props.navigation;
+    const { state, dispatch } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
-      let newCharacter = Object.assign({}, state.params.character);
+      const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      let newActivity = {
+      const newActivity = {
         key: uuidv4(),
         timestamp: newCharacter.lastUpdated,
         action: 'Created New Character',
         // Format character's full name for extra text
-        extra: newCharacter.profile.firstName.charAt(0).toUpperCase() +
-          newCharacter.profile.firstName.slice(1) + ' ' +
-          newCharacter.profile.lastName.charAt(0).toUpperCase() +
-          newCharacter.profile.lastName.slice(1),
+        extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
         thumbnail: newCharacter.profile.images.race,
       };
       store
@@ -124,23 +117,23 @@ export default class SetCharacterBackground extends React.Component {
             .then(() => {
               const resetAction = NavigationActions.reset({
                 index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Home'})]
+                actions: [NavigationActions.navigate({ routeName: 'Home' })],
               });
               dispatch(resetAction);
             })
-            .catch(error => {
+            .catch((error) => {
               // TODO: Retry activity creation
-          		console.error(error);
-          	});
+              console.error(error);
+            });
         })
-        .catch(error => {
+        .catch((error) => {
           // TODO: Show error message on screen and allow resubmit
-      		console.error(error);
-      	});
+          console.error(error);
+        });
     }
   }
 
-  onChange = (value, path) => {
+  onChange = (value) => {
     this.setState({ isSelectionLoading: true, form: value }, () => {
       this.updateCard = setTimeout(() => {
         this.setState({
@@ -154,59 +147,57 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   render() {
-    const list = BACKGROUNDS.map((option) => {
-      return (
-        <View key={option.name}>
-          {
+    const list = BACKGROUNDS.map(option => (
+      <View key={option.name}>
+        {
+          this.state.selection &&
+          this.state.selection.name === option.name &&
+          <View style={styles.absoluteCentered}>
+            <Text style={styles.selectedText}>Selected</Text>
+          </View>
+        }
+        <ListItem
+          style={[
+            { marginLeft: 0, paddingLeft: 20 },
             this.state.selection &&
-            this.state.selection.name === option.name &&
-            <View style={styles.absoluteCentered}>
-              <Text style={styles.selectedText}>Selected</Text>
-            </View>
-          }
-          <ListItem
-            style={[
-              { marginLeft: 0, paddingLeft: 20 },
-              this.state.selection &&
-              this.state.selection.name === option.name ?
-              styles.selectedListItem :
-              null
-            ]}
-          >
-            <Body>
-              <Text style={styles.listItemHeading}>{option.name}</Text>
-              <Text
-                style={[
-                  styles.infoText,
-                  { paddingLeft: 0, paddingBottom: 10 }
-                ]}
-              >
-                {option.description}
-              </Text>
-              <Text style={styles.infoHeading}>
-                &#9656; Starting Equipment
-              </Text>
-              <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                {option.equipment}
-              </Text>
-              <Text style={styles.infoHeading}>
-                &#9656; Additional Languages
-              </Text>
-              <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                {option.languages}
-              </Text>
-              <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-              <Text style={styles.infoText}>
-                Skills: {option.proficiencies.skills}
-              </Text>
-              <Text style={styles.infoText}>
-                Tools: {option.proficiencies.tools}
-              </Text>
-            </Body>
-          </ListItem>
-        </View>
-      );
-    });
+            this.state.selection.name === option.name ?
+            styles.selectedListItem :
+            null,
+          ]}
+        >
+          <Body>
+            <Text style={styles.listItemHeading}>{option.name}</Text>
+            <Text
+              style={[
+                styles.infoText,
+                { paddingLeft: 0, paddingBottom: 10 },
+              ]}
+            >
+              {option.description}
+            </Text>
+            <Text style={styles.infoHeading}>
+              &#9656; Starting Equipment
+            </Text>
+            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+              {option.equipment}
+            </Text>
+            <Text style={styles.infoHeading}>
+              &#9656; Additional Languages
+            </Text>
+            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+              {option.languages}
+            </Text>
+            <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
+            <Text style={styles.infoText}>
+              Skills: {option.proficiencies.skills}
+            </Text>
+            <Text style={styles.infoText}>
+              Tools: {option.proficiencies.tools}
+            </Text>
+          </Body>
+        </ListItem>
+      </View>
+    ));
 
     // Set up card for displaying currently selected option
     let displayCard = null;
@@ -295,7 +286,7 @@ export default class SetCharacterBackground extends React.Component {
                 FormStyle.submitBtn,
                 this.state.isSelectionLoading ?
                   { opacity: 0.5 } :
-                  { opacity: 1 }
+                  { opacity: 1 },
               ]}
               onPress={this.onPress}
               underlayColor="#1A237E"
@@ -376,5 +367,5 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
-  }
+  },
 });
