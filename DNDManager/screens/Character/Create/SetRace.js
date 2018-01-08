@@ -13,7 +13,7 @@ import {
   Body,
   Text as NBText,
 } from 'native-base';
-
+import { Toolbar } from 'react-native-material-ui';
 import { RACES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -65,9 +65,16 @@ const options = {
   },
 };
 
-export default class SetCharacterRace extends React.Component {
+export default class SetRace extends React.Component {
   static navigationOptions = {
-    title: 'Character Race',
+    header: ({ navigation }) => {
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(),
+        centerElement: 'Character Race',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   static propTypes = {

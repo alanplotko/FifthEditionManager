@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View, UIManager }
+  from 'react-native';
 import { Container, Tab, Tabs, TabHeading, Text, Icon } from 'native-base';
-import FAB from 'react-native-fab';
-import SnackBar from 'react-native-snackbar-component';
+import Modal from 'react-native-modal';
+import { ActionButton, Button, Toolbar } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
 import CharacterProfileCard from 'DNDManager/components/CharacterProfileCard';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
   from 'DNDManager/config/StoreKeys';
-
-const CAMPAIGN_TAB = 1; // Campaign tab index
-const CHARACTER_TAB = 2; // Character tab index
 
 // Return compare function with the corresponding timestamp key
 const compareDates = key => (a, b) => {
@@ -26,7 +24,12 @@ const compareDates = key => (a, b) => {
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'D&D Manager',
+    header: () => {
+      const props = {
+        centerElement: 'D&D Manager',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   static propTypes = {
@@ -38,55 +41,27 @@ export default class HomeScreen extends React.Component {
     this.state = {
       isLoading: true,
       isRefreshing: false,
+      isModalVisible: false,
+      modalContent: null,
+      error: null,
       activity: [],
       campaigns: [],
       characters: [],
-      fabAction: null,
-      fabVisible: false,
-      snackbarMessage: '',
-      snackbarVisible: false,
     };
+  }
+
+  componentWillMount() {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
 
   componentDidMount() {
     this.getData();
-    const { state } = this.props.navigation;
-    if (state.params && state.params.snackbarAction) {
-      this.invokeSnackbar(
-        state.params.snackbarAction.message,
-        state.params.snackbarAction.duration,
-      );
-      delete state.params.snackbarAction;
-    }
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.showFab);
-    clearTimeout(this.showSnackbar);
-    clearTimeout(this.hideSnackbar);
-  }
-
-  onChangeTab = ({ i }) => {
-    switch (i) {
-      case CAMPAIGN_TAB:
-        this.setState({
-          fabVisible: true,
-          fabAction: 'CreateCampaign',
-        });
-        break;
-      case CHARACTER_TAB:
-        this.setState({
-          fabVisible: true,
-          fabAction: 'CreateCharacter',
-        });
-        break;
-      default:
-        this.setState({
-          fabVisible: false,
-          fabAction: null,
-        });
-        break;
-    }
+  openModal = (modalContent) => {
+    this.setState({ isModalVisible: true, modalContent });
   };
 
   getData = () => {
@@ -100,31 +75,35 @@ export default class HomeScreen extends React.Component {
       })
       .catch(error => error) // Propogate error
       .then((error) => {
-        this.setState({ isLoading: false, isRefreshing: false }, () => {
-          // Animate in snackbar after setting state and rerender
-          if (error) {
-            this.invokeSnackbar('Error loading data: try again later.', 5000);
-          }
-        });
+        this.setState({ isLoading: false, isRefreshing: false, error });
       });
   };
 
-  invokeSnackbar = (message, duration) => {
-    this.showSnackbar = setTimeout(() => {
-      this.setState({ snackbarVisible: true, snackbarMessage: message });
-      this.hideSnackbar = setTimeout(() => {
-        this.setState({ snackbarVisible: false });
-      }, duration + 500); // Add time for setting state and rerender
-    }, 500);
-  };
-
   handleRefresh = () => {
-    this.setState({ isRefreshing: true });
-    this.getData();
+    this.setState({ isRefreshing: true }, () => this.getData());
   };
 
   render() {
     const { navigate } = this.props.navigation;
+    const errorView = (
+      <View style={styles.centered}>
+        <Icon name="alert" style={styles.messageIcon} />
+        <Text style={styles.heading}>
+          An error occurred!
+        </Text>
+        <Text style={styles.text}>
+          We had some trouble fetching your data.
+        </Text>
+        <Button
+          primary
+          text="Refresh"
+          disabled={this.state.isRefreshing}
+          onPress={this.handleRefresh}
+          icon="refresh"
+          style={{ container: { marginTop: 10 } }}
+        />
+      </View>
+    );
 
     if (this.state.isLoading) {
       return (
@@ -136,32 +115,24 @@ export default class HomeScreen extends React.Component {
 
     return (
       <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
-        <Tabs
-          initialPage={0}
-          locked
-          onChangeTab={this.onChangeTab}
-        >
+        <Tabs initialPage={0} locked>
           <Tab
             heading={<TabHeading><Icon name="home" /></TabHeading>}
             style={styles.tab}
           >
+            { this.state.error && errorView }
             {
-              this.state.activity.length > 0 &&
+              !this.state.error && this.state.activity.length > 0 &&
               <FlatList
                 data={this.state.activity}
-                renderItem={({ item }) => {
-                  if (item.key === 'spacing') {
-                    return <View style={{ paddingTop: 100 }} />;
-                  }
-                  return <ActivityCard activity={item} />;
-                }}
+                renderItem={({ item }) => <ActivityCard activity={item} />}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
                 contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
               />
             }
             {
-              this.state.activity.length === 0 &&
+              !this.state.error && this.state.activity.length === 0 &&
               <View style={styles.centered}>
                 <Icon name="analytics" style={styles.messageIcon} />
                 <Text style={styles.heading}>
@@ -180,8 +151,9 @@ export default class HomeScreen extends React.Component {
             heading={<TabHeading><Text>Campaigns</Text></TabHeading>}
             style={styles.tab}
           >
+            { this.state.error && errorView }
             {
-              this.state.campaigns.length > 0 &&
+              !this.state.error && this.state.campaigns.length > 0 &&
               <FlatList
                 data={this.state.campaigns}
                 renderItem={({ item }) => (
@@ -193,7 +165,7 @@ export default class HomeScreen extends React.Component {
               />
             }
             {
-              this.state.campaigns.length === 0 &&
+              !this.state.error && this.state.campaigns.length === 0 &&
               <View style={styles.centered}>
                 <Icon name="document" style={styles.messageIcon} />
                 <Text style={styles.heading}>
@@ -212,12 +184,16 @@ export default class HomeScreen extends React.Component {
             heading={<TabHeading><Text>Characters</Text></TabHeading>}
             style={styles.tab}
           >
+            { this.state.error && errorView }
             {
-              this.state.characters.length > 0 &&
+              !this.state.error && this.state.characters.length > 0 &&
               <FlatList
                 data={this.state.characters}
                 renderItem={({ item }) => (
-                  <CharacterProfileCard character={item} />
+                  <CharacterProfileCard
+                    character={item}
+                    modalHandler={this.openModal}
+                  />
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
@@ -225,7 +201,7 @@ export default class HomeScreen extends React.Component {
               />
             }
             {
-              this.state.characters.length === 0 &&
+              !this.state.error && this.state.characters.length === 0 &&
               <View style={styles.centered}>
                 <Icon name="person" style={styles.messageIcon} />
                 <Text style={styles.heading}>
@@ -241,18 +217,51 @@ export default class HomeScreen extends React.Component {
             }
           </Tab>
         </Tabs>
-        <FAB
-          visible={this.state.fabVisible}
-          buttonColor="#3F51B5"
-          iconTextColor="#fff"
-          iconTextComponent={<Icon name="add" />}
-          onClickAction={() => navigate(this.state.fabAction)}
-          snackOffset={this.state.snackbarVisible ? 40 : 0}
+        <ActionButton
+          onPress={dst => navigate(dst)}
+          icon="add"
+          actions={[{
+            icon: 'book',
+            label: 'Campaign',
+            name: 'CreateCampaign',
+          }, {
+            icon: 'person',
+            label: 'Character',
+            name: 'CreateCharacter',
+          }]}
+          transition="speedDial"
+          style={{
+            container: {
+              elevation: 6,
+            },
+            overlayContainer: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            speedDialActionLabel: {
+              paddingTop: 2,
+              paddingBottom: 2,
+              paddingLeft: 5,
+              paddingRight: 5,
+            },
+          }}
         />
-        <SnackBar
-          visible={this.state.snackbarVisible}
-          textMessage={this.state.snackbarMessage}
-        />
+        <Modal
+          isVisible={this.state.isModalVisible}
+          onBackButtonPress={() => this.setState({ isModalVisible: false })}
+          onBackdropPress={() => this.setState({ isModalVisible: false })}
+          backdropOpacity={0.5}
+          style={{ margin: 0 }}
+        >
+          <View style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+          }}>
+            {this.state.modalContent}
+          </View>
+        </Modal>
       </Container>
     );
   }

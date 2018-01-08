@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Container, Content } from 'native-base';
+import { Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import { EXPERIENCE } from 'DNDManager/config/Info';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -204,9 +205,16 @@ const options = {
   },
 };
 
-export default class CreateCharacterScreen extends React.Component {
+export default class Create extends React.Component {
   static navigationOptions = {
-    title: 'New Character',
+    header: ({ navigation }) => {
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(),
+        centerElement: 'New Character',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   static propTypes = {

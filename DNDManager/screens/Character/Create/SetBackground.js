@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text, Image }
+import { NavigationActions } from 'react-navigation';
+import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
   from 'react-native';
 import {
   Card,
@@ -8,36 +9,39 @@ import {
   Container,
   Content,
   Icon,
-  Left,
   List,
   ListItem,
   Body,
 } from 'native-base';
-
-import { CLASSES } from 'DNDManager/config/Info';
+import { Toolbar } from 'react-native-material-ui';
+import store from 'react-native-simple-store';
+import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
+import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
+const uuidv4 = require('uuid/v4');
 
 /**
- * Character class selection
+ * Character background selection
  */
 
-const CharacterBaseClass = t.struct({
-  baseClass: t.enums({
-    Barbarian: 'Barbarian',
-    Bard: 'Bard',
-    Cleric: 'Cleric',
-    Druid: 'Druid',
-    Fighter: 'Fighter',
-    Monk: 'Monk',
-    Paladin: 'Paladin',
-    Ranger: 'Ranger',
-    Rogue: 'Rogue',
-    Sorcerer: 'Sorcerer',
-    Warlock: 'Warlock',
-    Wizard: 'Wizard',
+const CharacterBackground = t.struct({
+  background: t.enums({
+    Acolyte: 'Acolyte',
+    Charlatan: 'Charlatan',
+    Criminal: 'Criminal',
+    Entertainer: 'Entertainer',
+    'Folk Hero': 'Folk Hero',
+    'Guild Artisan': 'Guild Artisan',
+    Hermit: 'Hermit',
+    Noble: 'Noble',
+    Outlander: 'Outlander',
+    Sage: 'Sage',
+    Sailor: 'Sailor',
+    Soldier: 'Soldier',
+    Urchin: 'Urchin',
   }),
 });
 
@@ -47,9 +51,8 @@ const CharacterBaseClass = t.struct({
 
 const template = locals => (
   <View>
-    <Text style={FormStyle.heading}>Character Class</Text>
     <View style={{ flex: 1 }}>
-      {locals.inputs.baseClass}
+      {locals.inputs.background}
     </View>
   </View>
 );
@@ -61,16 +64,23 @@ const template = locals => (
 const options = {
   template,
   fields: {
-    baseClass: {
-      label: 'Class',
-      nullOption: { value: '', text: 'Select Class' },
+    background: {
+      label: 'Background',
+      nullOption: { value: '', text: 'Select Background' },
     },
   },
 };
 
-export default class SetCharacterClass extends React.Component {
+export default class SetBackground extends React.Component {
   static navigationOptions = {
-    title: 'Character Class',
+    header: ({ navigation }) => {
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(),
+        centerElement: 'Character Background',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   static propTypes = {
@@ -83,6 +93,7 @@ export default class SetCharacterClass extends React.Component {
       selection: null,
       form: null,
       isSelectionLoading: false,
+      error: null,
     };
   }
 
@@ -91,18 +102,41 @@ export default class SetCharacterClass extends React.Component {
   }
 
   onPress = () => {
-    const { navigate, state } = this.props.navigation;
+    const { state, dispatch } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      newCharacter.profile.images = Object.assign(
-        {},
-        newCharacter.profile.images,
-        { baseClass: this.state.selection.image },
-      );
-      navigate('SetCharacterBackground', { character: newCharacter });
+      const newActivity = {
+        key: uuidv4(),
+        timestamp: newCharacter.lastUpdated,
+        action: 'Created New Character',
+        // Format character's full name for extra text
+        extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
+        thumbnail: newCharacter.profile.images.race,
+      };
+      store
+        .push(CHARACTER_KEY, newCharacter)
+        .catch((error) => {
+          // Show error message on screen and allow resubmit
+          this.setState({ error: 'Please try again in a few minutes.' });
+          return error;
+        })
+        .then((error) => {
+          if (error) return;
+          store
+            .push(ACTIVITY_KEY, newActivity)
+            .then(() => {
+              const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({
+                  routeName: 'Home',
+                })],
+              });
+              dispatch(resetAction);
+            });
+        });
     }
   }
 
@@ -111,7 +145,7 @@ export default class SetCharacterClass extends React.Component {
       this.updateCard = setTimeout(() => {
         this.setState({
           selection: value ?
-            CLASSES.find(option => option.name === value.baseClass) :
+            BACKGROUNDS.find(option => option.name === value.background) :
             null,
           isSelectionLoading: false,
         });
@@ -120,7 +154,7 @@ export default class SetCharacterClass extends React.Component {
   }
 
   render() {
-    const list = CLASSES.map(option => (
+    const list = BACKGROUNDS.map(option => (
       <View key={option.name}>
         {
           this.state.selection &&
@@ -139,37 +173,34 @@ export default class SetCharacterClass extends React.Component {
           ]}
         >
           <Body>
-            <View style={{ flexDirection: 'row', flex: 1 }}>
-              <Image
-                resizeMode="contain"
-                style={{ width: 64, height: 64, flex: 0.2 }}
-                source={option.image}
-              />
-              <View style={{ flex: 0.8 }}>
-                <Text style={styles.listItemHeading}>{option.name}</Text>
-                <Text
-                  style={[
-                    styles.infoText,
-                    { paddingLeft: 0, paddingBottom: 10 },
-                  ]}
-                >
-                  {option.description}
-                </Text>
-                <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {option.hitDie} / {option.primaryAbility}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Saving Throw: {option.proficiencies.savingThrow}
-                </Text>
-                <Text style={styles.infoText}>
-                  Armor & Weapons: {option.proficiencies.armorAndWeapon}
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.listItemHeading}>{option.name}</Text>
+            <Text
+              style={[
+                styles.infoText,
+                { paddingLeft: 0, paddingBottom: 10 },
+              ]}
+            >
+              {option.description}
+            </Text>
+            <Text style={styles.infoHeading}>
+              &#9656; Starting Equipment
+            </Text>
+            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+              {option.equipment}
+            </Text>
+            <Text style={styles.infoHeading}>
+              &#9656; Additional Languages
+            </Text>
+            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+              {option.languages}
+            </Text>
+            <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
+            <Text style={styles.infoText}>
+              Skills: {option.proficiencies.skills}
+            </Text>
+            <Text style={styles.infoText}>
+              Tools: {option.proficiencies.tools}
+            </Text>
           </Body>
         </ListItem>
       </View>
@@ -188,39 +219,35 @@ export default class SetCharacterClass extends React.Component {
           }
           <View style={this.state.isSelectionLoading ? styles.loading : ''}>
             <CardItem>
-              <Left>
-                <Image
-                  resizeMode="contain"
-                  source={this.state.selection.image}
-                  style={{ width: 100, height: 100 }}
-                />
-                <Body>
-                  <Text style={styles.listItemHeading}>
-                    {this.state.selection.name}
-                  </Text>
-                  <Text style={[styles.infoText, { paddingLeft: 0 }]}>
-                    {this.state.selection.description}
-                  </Text>
-                </Body>
-              </Left>
+              <Body>
+                <Text style={styles.listItemHeading}>
+                  {this.state.selection.name}
+                </Text>
+                <Text style={[styles.infoText, { paddingLeft: 0 }]}>
+                  {this.state.selection.description}
+                </Text>
+              </Body>
             </CardItem>
             <CardItem>
               <Body>
                 <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
+                  &#9656; Starting Equipment
                 </Text>
                 <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.hitDie}
-                  &nbsp;/ {this.state.selection.primaryAbility}
+                  {this.state.selection.equipment}
+                </Text>
+                <Text style={styles.infoHeading}>
+                  &#9656; Additional Languages
+                </Text>
+                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+                  {this.state.selection.languages}
                 </Text>
                 <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
                 <Text style={styles.infoText}>
-                  Saving Throw:
-                  &nbsp;{this.state.selection.proficiencies.savingThrow}
+                  Skills: {this.state.selection.proficiencies.skills}
                 </Text>
                 <Text style={styles.infoText}>
-                  Armor & Weapons:
-                  &nbsp;{this.state.selection.proficiencies.armorAndWeapon}
+                  Tools: {this.state.selection.proficiencies.tools}
                 </Text>
               </Body>
             </CardItem>
@@ -253,9 +280,21 @@ export default class SetCharacterClass extends React.Component {
       <Container style={ContainerStyle.parent}>
         <Content>
           <View style={{ margin: 20 }}>
+            <Text style={FormStyle.heading}>Character Background</Text>
+            {
+              this.state.error &&
+              <View style={styles.errorDialog}>
+                <Text style={styles.errorHeading}>
+                  An error occurred!
+                </Text>
+                <Text style={styles.errorText}>
+                  {this.state.error.message}&nbsp;
+                </Text>
+              </View>
+            }
             <t.form.Form
               ref={(c) => { this.form = c; }}
-              type={CharacterBaseClass}
+              type={CharacterBackground}
               value={this.state.form}
               options={options}
               onChange={this.onChange}
@@ -273,7 +312,7 @@ export default class SetCharacterClass extends React.Component {
               disabled={this.state.isSelectionLoading}
             >
               <Text style={FormStyle.submitBtnText}>
-                Set Class
+                Set Background
               </Text>
             </TouchableHighlight>
             {displayCard}
@@ -281,7 +320,7 @@ export default class SetCharacterClass extends React.Component {
           <List>
             <ListItem itemHeader first style={{ paddingBottom: 0 }}>
               <Text style={[FormStyle.heading, { flex: 1 }]}>
-                Class Options
+                Background Options
               </Text>
             </ListItem>
             {list}
@@ -348,5 +387,21 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
+  },
+  errorDialog: {
+    backgroundColor: '#F44336',
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 3,
+  },
+  errorHeading: {
+    fontFamily: 'RobotoBold',
+    color: '#fff',
+    fontSize: 18,
+  },
+  errorText: {
+    fontFamily: 'Roboto',
+    color: '#fff',
+    fontSize: 14,
   },
 });

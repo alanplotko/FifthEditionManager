@@ -5,7 +5,27 @@ import { StackNavigator } from 'react-navigation';
 // Screens
 import HomeScreen from 'DNDManager/screens/HomeScreen';
 import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
-import * as CharacterCreation from 'DNDManager/screens/CharacterCreation';
+import * as Character from 'DNDManager/screens/Character';
+
+// UI theme
+import { COLOR, ThemeProvider } from 'react-native-material-ui';
+
+const uiTheme = {
+  palette: {
+    primaryColor: COLOR.indigo500,
+    accentColor: COLOR.red500,
+  },
+  toolbar: {
+    container: {
+      shadowOpacity: 0,
+      shadowOffset: {
+        height: 0,
+      },
+      shadowRadius: 0,
+      elevation: 0,
+    },
+  },
+};
 
 // Font assets
 const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf');
@@ -17,28 +37,10 @@ const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
-  CreateCharacter: { screen: CharacterCreation.CreateCharacterScreen },
-  SetCharacterRace: { screen: CharacterCreation.SetCharacterRace },
-  SetCharacterClass: { screen: CharacterCreation.SetCharacterClass },
-  SetCharacterBackground: { screen: CharacterCreation.SetCharacterBackground },
-}, {
-  navigationOptions: {
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      color: '#fff',
-    },
-    headerStyle: {
-      width: '100%',
-      height: 56,
-      backgroundColor: '#3F51B5',
-      shadowOpacity: 0,
-      shadowOffset: {
-        height: 0,
-      },
-      shadowRadius: 0,
-      elevation: 0,
-    },
-  },
+  CreateCharacter: { screen: Character.Create },
+  SetCharacterRace: { screen: Character.SetRace },
+  SetCharacterClass: { screen: Character.SetClass },
+  SetCharacterBackground: { screen: Character.SetBackground },
 });
 
 export default class App extends React.Component {
@@ -65,6 +67,6 @@ export default class App extends React.Component {
     if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
-    return <RootNavigator />;
+    return <ThemeProvider uiTheme={uiTheme}><RootNavigator /></ThemeProvider>;
   }
 }
