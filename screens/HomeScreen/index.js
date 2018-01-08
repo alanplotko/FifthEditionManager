@@ -60,10 +60,6 @@ export default class HomeScreen extends React.Component {
     this.getData();
   }
 
-  openModal = (modalContent) => {
-    this.setState({ isModalVisible: true, modalContent });
-  };
-
   getData = () => {
     store
       .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
@@ -77,6 +73,10 @@ export default class HomeScreen extends React.Component {
       .then((error) => {
         this.setState({ isLoading: false, isRefreshing: false, error });
       });
+  };
+
+  openModal = (modalContent) => {
+    this.setState({ isModalVisible: true, modalContent });
   };
 
   handleRefresh = () => {
@@ -252,13 +252,7 @@ export default class HomeScreen extends React.Component {
           backdropOpacity={0.5}
           style={{ margin: 0 }}
         >
-          <View style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-          }}>
+          <View style={styles.modalView}>
             {this.state.modalContent}
           </View>
         </Modal>
@@ -282,6 +276,13 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 24,
     marginBottom: 10,
+  },
+  modalView: {
+    flex: 1,
+    backgroundColor: '#fff',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   text: {
     fontFamily: 'RobotoLight',

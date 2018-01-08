@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Card, CardItem, Text, Body, Left, Right } from 'native-base';
-import { Avatar, Button, COLOR, Icon, IconToggle, ListItem }
+import { Avatar, COLOR, Icon, IconToggle, ListItem }
   from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
@@ -47,138 +47,138 @@ const navText = {
   color: '#000',
 };
 
-const CharacterProfileCard = props => (
-  <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-    <CardItem cardBody>
-      <Image
-        source={props.character.profile.images.race}
-        resizeMode="cover"
-        style={{ height: 100, width: null, flex: 1 }}
-      />
-      <View style={{ position: 'absolute', top: 0, right: 0 }}>
-        <IconToggle
-          name="more-vert"
-          color="#fff"
-          onPress={() => props.modalHandler(
-            <View style={{ margin: 0 }}>
-              <ListItem
-                leftElement={
-                  <View>
-                    <Avatar
-                      image={
-                        <Image
-                          source={props.character.profile.images.race}
-                          style={{ height: 24, width: 24, borderRadius: 12 }}
-                        />
-                      }
-                      size={24}
-                    />
-                  </View>
-                }
-                centerElement={
-                  <Text style={{
-                    fontFamily: 'Roboto',
-                    fontSize: 14,
-                    color: '#000',
-                  }}>
-                    {toTitleCase(props.character.profile.firstName)}&nbsp;
-                    {toTitleCase(props.character.profile.lastName)}
-                  </Text>
-                }
-                onPress={() => {}}
-                style={navHeader}
-              />
-              <ListItem
-                leftElement={<Icon name="open-in-new" color={COLOR.grey600} />}
-                centerElement={
-                  <Text style={navText}>View Character</Text>
-                }
-                onPress={() => {}}
-                style={navItem}
-              />
-              <ListItem
-                leftElement={<Icon name="mode-edit" color={COLOR.grey600} />}
-                centerElement={
-                  <Text style={navText}>Edit Character</Text>
-                }
-                onPress={() => {}}
-                style={navItem}
-              />
-              <ListItem
-                leftElement={<Icon name="delete" color={COLOR.grey600} />}
-                centerElement={
-                  <Text style={navText}>Delete Character</Text>
-                }
-                onPress={() => {}}
-                style={navItem}
-              />
-            </View>
-          )}
-        />
-      </View>
-      <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-        <Text style={styles.lastUpdatedBanner}>
-          Last updated {moment(props.character.lastUpdated).fromNow()}
-        </Text>
-      </View>
-    </CardItem>
-    <CardItem>
-      <Left style={{ flex: 2 }}>
-        <Image
-          source={props.character.profile.images.baseClass}
-          style={{ width: 48, height: 64 }}
-          resizeMode="contain"
-        />
-        <Body>
-          <Text style={styles.heading} numberOfLines={1}>
+const CharacterProfileCard = (props) => {
+  const modalContent = (
+    <View style={{ margin: 0 }}>
+      <ListItem
+        leftElement={
+          <View>
+            <Avatar
+              image={
+                <Image
+                  source={props.character.profile.images.race}
+                  style={{ height: 24, width: 24, borderRadius: 12 }}
+                />
+              }
+              size={24}
+            />
+          </View>
+        }
+        centerElement={
+          <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: '#000' }}>
             {toTitleCase(props.character.profile.firstName)}&nbsp;
-            {toTitleCase(props.character.profile.lastName)}&nbsp;
+            {toTitleCase(props.character.profile.lastName)}
           </Text>
-          <Text style={styles.subheading}>
-            {props.character.profile.race}&nbsp;
-            {props.character.profile.baseClass}
-          </Text>
-          <Text style={styles.subheading}>
-            {props.character.profile.background}
-          </Text>
-        </Body>
-      </Left>
-      <Right style={{ flex: 1 }}>
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Text style={styles.levelText}>
-            Level {props.character.profile.level}
-          </Text>
-          <Progress.Bar
-            progress={calculateLevelProgress(
-              props.character.profile.level,
-              props.character.profile.experience,
-            )}
-            animated={false}
-            color="#3F51B5"
-            borderColor="#3F51B5"
-            width={100}
-            style={{ marginTop: 3, marginBottom: 3 }}
+        }
+        onPress={() => {}}
+        style={navHeader}
+      />
+      <ListItem
+        leftElement={<Icon name="open-in-new" color={COLOR.grey600} />}
+        centerElement={
+          <Text style={navText}>View Character</Text>
+        }
+        onPress={() => {}}
+        style={navItem}
+      />
+      <ListItem
+        leftElement={<Icon name="mode-edit" color={COLOR.grey600} />}
+        centerElement={
+          <Text style={navText}>Edit Character</Text>
+        }
+        onPress={() => {}}
+        style={navItem}
+      />
+      <ListItem
+        leftElement={<Icon name="delete" color={COLOR.grey600} />}
+        centerElement={
+          <Text style={navText}>Delete Character</Text>
+        }
+        onPress={() => {}}
+        style={navItem}
+      />
+    </View>
+  );
+
+  return (
+    <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+      <CardItem cardBody>
+        <Image
+          source={props.character.profile.images.race}
+          resizeMode="cover"
+          style={{ height: 100, width: null, flex: 1 }}
+        />
+        <View style={{ position: 'absolute', top: 0, right: 0 }}>
+          <IconToggle
+            name="more-vert"
+            color="#fff"
+            onPress={() => props.modalHandler(modalContent)}
           />
-          {
-            props.character.profile.level < 20 &&
-            <Text style={styles.experienceText}>
-              {formatNumber(props.character.profile.experience)} /&nbsp;
-              {formatNumber(EXPERIENCE[props.character.profile.level])}
-            </Text>
-          }
-          {
-            props.character.profile.level === 20 &&
-            <Text style={styles.experienceText}>
-              {formatNumber(props.character.profile.experience)}
-            </Text>
-          }
         </View>
-      </Right>
-    </CardItem>
-  </Card>
-);
+        <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+          <Text style={styles.lastUpdatedBanner}>
+            Last updated {moment(props.character.lastUpdated).fromNow()}
+          </Text>
+        </View>
+      </CardItem>
+      <CardItem>
+        <Left style={{ flex: 2 }}>
+          <Image
+            source={props.character.profile.images.baseClass}
+            style={{ width: 48, height: 64 }}
+            resizeMode="contain"
+          />
+          <Body>
+            <Text style={styles.heading} numberOfLines={1}>
+              {toTitleCase(props.character.profile.firstName)}&nbsp;
+              {toTitleCase(props.character.profile.lastName)}&nbsp;
+            </Text>
+            <Text style={styles.subheading}>
+              {props.character.profile.race}&nbsp;
+              {props.character.profile.baseClass}
+            </Text>
+            <Text style={styles.subheading}>
+              {props.character.profile.background}
+            </Text>
+          </Body>
+        </Left>
+        <Right style={{ flex: 1 }}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text style={styles.levelText}>
+              Level {props.character.profile.level}
+            </Text>
+            <Progress.Bar
+              progress={calculateLevelProgress(
+                props.character.profile.level,
+                props.character.profile.experience,
+              )}
+              animated={false}
+              color="#3F51B5"
+              borderColor="#3F51B5"
+              width={100}
+              style={{ marginTop: 3, marginBottom: 3 }}
+            />
+            {
+              props.character.profile.level < 20 &&
+              <Text style={styles.experienceText}>
+                {formatNumber(props.character.profile.experience)} /&nbsp;
+                {formatNumber(EXPERIENCE[props.character.profile.level])}
+              </Text>
+            }
+            {
+              props.character.profile.level === 20 &&
+              <Text style={styles.experienceText}>
+                {formatNumber(props.character.profile.experience)}
+              </Text>
+            }
+          </View>
+        </Right>
+      </CardItem>
+    </Card>
+  );
+};
 
 const styles = StyleSheet.create({
   heading: {
