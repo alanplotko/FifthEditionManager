@@ -2,6 +2,9 @@
 
 # DnD Manager
 
+[![dependencies Status](https://david-dm.org/alanplotko/DnD-Manager/status.svg)](https://david-dm.org/alanplotko/DnD-Manager)
+[![devDependencies Status](https://david-dm.org/alanplotko/DnD-Manager/dev-status.svg)](https://david-dm.org/alanplotko/DnD-Manager?type=dev)
+
 DnD Manager is an application for managing your campaigns and characters. It is aimed towards DMs and players regardless of experience.
 
 ## Roadmap
@@ -23,7 +26,8 @@ The user has 2 starting options: a campaign or a character. When getting togethe
 Track every session of your campaign and see how your character(s) evolves over time.
 
 - Character attachment
-    - If you're a player, you'll build your character and attach it here to associate it with the campaign. As a DM, you'll probably have many characters attached here.
+    - As a player, you'll build your character and attach it here to associate it with the campaign.
+    - As a DM, you'll probably have many characters attached here. You won't need all the specific details - just enough to track combat and what not.
 - Session management
     - Meeting metadata: e.g., date, time, duration, place, next expected session time
     - Notes: e.g., inventory changes, experience gained, session notes
@@ -35,7 +39,9 @@ Each character you build is a potential template. Save it for reuse if you'd lik
 - Character information (basic, race, class, background)
 - Character stats
 - Character notes
-- Quick mode (simple)
-    - Good for DMs and players that want to build out their characters.
-- Guided mode (advanced)
+- Guided mode (simple)
     - Good for new players who need help building their characters and players who want to track other notes and information with their characters digitally.
+    - Slower process to create a character. Assumes you're interested in the information associated with the basics like choosing a background.
+- Quick mode (advanced)
+    - Good for DMs and players that want to build out their characters.
+    - Very quick process to create a character. Assumes you know what you want and want it done.
