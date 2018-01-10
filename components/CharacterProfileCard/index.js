@@ -7,13 +7,11 @@ import { Avatar, COLOR, Icon, IconToggle, ListItem }
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE } from 'DNDManager/config/Info';
+import { getCharacterDisplayName } from 'DNDManager/util';
 
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1
 );
-
-const toTitleCase = str =>
-  `${str.charAt(0).toUpperCase()}${str.slice(1).toLowerCase()}`;
 
 const formatNumber = num => (
   num > 999 ? `${(num / 1000).toFixed(1)}k` : num
@@ -66,11 +64,9 @@ const CharacterProfileCard = (props) => {
         }
         centerElement={
           <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: '#000' }}>
-            {toTitleCase(props.character.profile.firstName)}&nbsp;
-            {toTitleCase(props.character.profile.lastName)}
+            {getCharacterDisplayName(props.character)}
           </Text>
         }
-        onPress={() => {}}
         style={navHeader}
       />
       <ListItem
@@ -78,7 +74,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>View Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.viewHandler(props.character.key)}
         style={navItem}
       />
       <ListItem
@@ -86,7 +82,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>Edit Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.editHandler(props.character.key)}
         style={navItem}
       />
       <ListItem
@@ -94,7 +90,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>Delete Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.deleteHandler(props.character)}
         style={navItem}
       />
     </View>
@@ -130,8 +126,7 @@ const CharacterProfileCard = (props) => {
           />
           <Body>
             <Text style={styles.heading} numberOfLines={1}>
-              {toTitleCase(props.character.profile.firstName)}&nbsp;
-              {toTitleCase(props.character.profile.lastName)}&nbsp;
+              {getCharacterDisplayName(props.character)}&nbsp;
             </Text>
             <Text style={styles.subheading}>
               {props.character.profile.race}&nbsp;
@@ -219,11 +214,17 @@ const styles = StyleSheet.create({
 CharacterProfileCard.propTypes = {
   character: PropTypes.object,
   modalHandler: PropTypes.func,
+  viewHandler: PropTypes.func,
+  editHandler: PropTypes.func,
+  deleteHandler: PropTypes.func,
 };
 
 CharacterProfileCard.defaultProps = {
   character: undefined,
   modalHandler: () => null,
+  viewHandler: () => null,
+  editHandler: () => null,
+  deleteHandler: () => null,
 };
 
 export default CharacterProfileCard;

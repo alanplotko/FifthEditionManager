@@ -115,6 +115,10 @@ export default class SetCharacterBackground extends React.Component {
         // Format character's full name for extra text
         extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
         thumbnail: newCharacter.profile.images.race,
+        icon: {
+          name: 'add-circle',
+          color: '#fff',
+        },
       };
       store
         .push(CHARACTER_KEY, newCharacter)

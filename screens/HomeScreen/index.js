@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, FlatList, StyleSheet, View, UIManager }
+import { ActivityIndicator, Alert, FlatList, StyleSheet, View, UIManager }
   from 'react-native';
 import { Container, Tab, Tabs, TabHeading, Text, Icon } from 'native-base';
 import Modal from 'react-native-modal';
@@ -9,8 +9,11 @@ import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
 import CharacterProfileCard from 'DNDManager/components/CharacterProfileCard';
+import { getCharacterDisplayName } from 'DNDManager/util';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
   from 'DNDManager/config/StoreKeys';
+
+const uuidv4 = require('uuid/v4');
 
 // Return compare function with the corresponding timestamp key
 const compareDates = key => (a, b) => {
@@ -62,7 +65,8 @@ export default class HomeScreen extends React.Component {
 
   getData = () => {
     store
-      .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
+      .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY])
+      .then((data) => {
         this.setState({
           activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
           campaigns: data[1] ? data[1] : [],
@@ -77,6 +81,65 @@ export default class HomeScreen extends React.Component {
 
   openModal = (modalContent) => {
     this.setState({ isModalVisible: true, modalContent });
+  };
+
+  closeModal = (done) => {
+    this.setState({ isModalVisible: false, modalContent: null }, done);
+  };
+
+  viewCharacter = (key) => {
+    console.log('view ' + key);
+  };
+
+  editCharacter = (key) => {
+    console.log('edit ' + key);
+  };
+
+  removeCharacter = (key, deleteActivity, done) => {
+    store
+      .get(CHARACTER_KEY)
+      .then((characters) => {
+        characters.splice(characters.findIndex(c => c.key === key), 1);
+        store
+          .save(CHARACTER_KEY, characters)
+          .then(() => {
+            store
+              .push(ACTIVITY_KEY, deleteActivity)
+              .then(done);
+          });
+      });
+  };
+
+  askDeleteCharacter = (character) => {
+    const fullName = getCharacterDisplayName(character);
+    this.closeModal(() => {
+      Alert.alert(
+        'Character Deletion',
+        `You are about to permanently remove ${fullName}.`,
+        [
+          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+          {
+            text: 'Delete',
+            onPress: () => {
+              const deleteActivity = {
+                key: uuidv4(),
+                timestamp: Date.now(),
+                action: 'Deleted Character',
+                extra: fullName,
+                thumbnail: character.profile.images.race,
+                icon: {
+                  name: 'delete-forever',
+                  color: '#fff',
+                },
+              };
+              this.removeCharacter(character.key, deleteActivity,
+                this.handleRefresh);
+            }
+          },
+        ],
+        { cancelable: false },
+      );
+    });
   };
 
   handleRefresh = () => {
@@ -128,7 +191,7 @@ export default class HomeScreen extends React.Component {
                 renderItem={({ item }) => <ActivityCard activity={item} />}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
-                contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
+                contentContainerStyle={{ paddingTop: 10, paddingBottom: 100 }}
               />
             }
             {
@@ -193,6 +256,9 @@ export default class HomeScreen extends React.Component {
                   <CharacterProfileCard
                     character={item}
                     modalHandler={this.openModal}
+                    viewHandler={this.viewCharacter}
+                    editHandler={this.editCharacter}
+                    deleteHandler={this.askDeleteCharacter}
                   />
                 )}
                 refreshing={this.state.isRefreshing}
