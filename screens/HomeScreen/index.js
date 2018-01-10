@@ -87,13 +87,9 @@ export default class HomeScreen extends React.Component {
     this.setState({ isModalVisible: false, modalContent: null }, done);
   };
 
-  viewCharacter = (key) => {
-    console.log('view ' + key);
-  };
+  viewCharacter = () => {};
 
-  editCharacter = (key) => {
-    console.log('edit ' + key);
-  };
+  editCharacter = () => {};
 
   removeCharacter = (key, deleteActivity, done) => {
     store
@@ -132,9 +128,12 @@ export default class HomeScreen extends React.Component {
                   color: '#fff',
                 },
               };
-              this.removeCharacter(character.key, deleteActivity,
-                this.handleRefresh);
-            }
+              this.removeCharacter(
+                character.key,
+                deleteActivity,
+                this.handleRefresh,
+              );
+            },
           },
         ],
         { cancelable: false },
