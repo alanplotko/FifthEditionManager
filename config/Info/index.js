@@ -261,7 +261,7 @@ export const BACKGROUNDS = [
   },
   {
     name: 'Folk Hero',
-    description: 'You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the com m on folk everywhere.',
+    description: 'You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the common folk everywhere.',
     equipment: 'A set of artisan\'s tools of your choice, a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10gp',
     languages: 'None',
     proficiencies: {

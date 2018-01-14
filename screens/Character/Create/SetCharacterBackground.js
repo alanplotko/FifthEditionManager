@@ -102,47 +102,58 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   onPress = () => {
-    const { state, dispatch } = this.props.navigation;
+    const { navigate, state } = this.props.navigation;
     const data = this.form.getValue();
     if (data) {
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      const newActivity = {
-        key: uuidv4(),
-        timestamp: newCharacter.lastUpdated,
-        action: 'Created New Character',
-        // Format character's full name for extra text
-        extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
-        thumbnail: newCharacter.profile.images.race,
-        icon: {
-          name: 'add-circle',
-          color: '#fff',
-        },
-      };
-      store
-        .push(CHARACTER_KEY, newCharacter)
-        .catch((error) => {
-          // Show error message on screen and allow resubmit
-          this.setState({ error: 'Please try again in a few minutes.' });
-          return error;
-        })
-        .then((error) => {
-          if (error) return;
-          store
-            .push(ACTIVITY_KEY, newActivity)
-            .then(() => {
-              const resetAction = NavigationActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({
-                  routeName: 'Home',
-                })],
-              });
-              dispatch(resetAction);
-            });
-        });
+      navigate('ChooseScoringMethod', { character: newCharacter });
     }
   }
+
+  // onPress = () => {
+  //   const { state, dispatch } = this.props.navigation;
+  //   const data = this.form.getValue();
+  //   if (data) {
+  //     const newCharacter = Object.assign({}, state.params.character);
+  //     newCharacter.lastUpdated = Date.now();
+  //     newCharacter.profile = Object.assign({}, newCharacter.profile, data);
+  //     const newActivity = {
+  //       key: uuidv4(),
+  //       timestamp: newCharacter.lastUpdated,
+  //       action: 'Created New Character',
+  //       // Format character's full name for extra text
+  //       extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
+  //       thumbnail: newCharacter.profile.images.race,
+  //       icon: {
+  //         name: 'add-circle',
+  //         color: '#fff',
+  //       },
+  //     };
+  //     store
+  //       .push(CHARACTER_KEY, newCharacter)
+  //       .catch((error) => {
+  //         // Show error message on screen and allow resubmit
+  //         this.setState({ error: 'Please try again in a few minutes.' });
+  //         return error;
+  //       })
+  //       .then((error) => {
+  //         if (error) return;
+  //         store
+  //           .push(ACTIVITY_KEY, newActivity)
+  //           .then(() => {
+  //             const resetAction = NavigationActions.reset({
+  //               index: 0,
+  //               actions: [NavigationActions.navigate({
+  //                 routeName: 'Home',
+  //               })],
+  //             });
+  //             dispatch(resetAction);
+  //           });
+  //       });
+  //   }
+  // }
 
   onChange = (value) => {
     this.setState({ isSelectionLoading: true, form: value }, () => {

@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   submitBtnText: {
     fontSize: 18,
-    color: 'white',
+    color: '#fff',
     alignSelf: 'center',
   },
   submitBtn: {

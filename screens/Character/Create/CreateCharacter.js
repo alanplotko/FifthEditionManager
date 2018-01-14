@@ -12,6 +12,7 @@ import { Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import { EXPERIENCE } from 'DNDManager/config/Info';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { validateInteger } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
 const uuidv4 = require('uuid/v4');
@@ -19,11 +20,6 @@ const uuidv4 = require('uuid/v4');
 /**
  * Form valdiation setup
  */
-
-const validateInteger = (value, altErrorMessage) => {
-  if (value === null || value === undefined) return 'Required';
-  return (value % 1 !== 0) ? 'Integer only' : altErrorMessage;
-};
 
 // Integer in range [1, 20]
 const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
