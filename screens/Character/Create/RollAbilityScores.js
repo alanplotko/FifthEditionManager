@@ -1,20 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationActions } from 'react-navigation';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, Image, View, Text }
+import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
   from 'react-native';
-import { Container, Content, List, ListItem } from 'native-base';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Container, Content } from 'native-base';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
-import store from 'react-native-simple-store';
-import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
-import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import { validateInteger } from 'DNDManager/util';
+import { formatSingleDigit, reverseSort } from 'DNDManager/util';
 
-var Chance = require('chance');
+const Chance = require('chance');
 
 const chance = new Chance();
 
@@ -55,30 +50,41 @@ export default class RollAbilityScores extends React.Component {
   }
 
   rollAbilityScores = (done) => {
-    let scoreReports = [];
-    let sortedScores = [];
+    const scoreReports = [];
+    const sortedScores = [];
     // Roll for 6 ability scores
-    for (let i = 0; i < 6; i++) {
-      let rolls = [];
+    for (let i = 0; i < 6; i += 1) {
+      const rolls = [];
       // Roll 4d6
-      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < 4; j += 1) {
         rolls.push(chance.d6());
       }
-      // Record all rolls
-      let report = { rolls: rolls.slice(0) };
+      // Set up roll report
+      const report = { rolls: [] };
+      // Record roll number (roll #x of 6 ability scores) and final dice values
+      report.rollNumber = i + 1;
+      rolls.forEach(roll =>
+        report.rolls.push({ result: roll, isLowest: false }));
       // Drop and record lowest roll
-      let lowestRollIndex = rolls.indexOf(Math.min.apply(null, rolls));
-      report.lowestRollIndex = lowestRollIndex;
+      const lowestRollIndex = rolls.indexOf(Math.min.apply(null, rolls));
+      report.rolls[lowestRollIndex].isLowest = true;
       rolls.splice(lowestRollIndex, 1);
-      // Record sum and save report
+      // Record final score in report and separate score list
       report.score = rolls.reduce((sum, x) => sum + x);
       scoreReports.push(report);
       sortedScores.push(report.score);
     }
-    // Sort in reverse order
-    sortedScores.sort((a, b) => (a > b) ? -1 : ((a < b) ? 1 : 0));
-    // Return unsorted score reports and sorted scores
+    // Return score reports (rolled order) and sorted scores (descending order)
+    sortedScores.sort(reverseSort);
     done(scoreReports, sortedScores);
+  }
+
+  acceptRolls = () => {
+    const { navigate, state } = this.props.navigation;
+    navigate('AssignAbilityScores', {
+      scores: this.state.sortedScores,
+      ...state.params,
+    });
   }
 
   prepareRolls = () => {
@@ -86,7 +92,7 @@ export default class RollAbilityScores extends React.Component {
       isLoading: true,
       rollCount: this.state.rollCount + 1,
     }, () => {
-      let callback = (scoreReports, sortedScores) => this.setState({
+      const callback = (scoreReports, sortedScores) => this.setState({
         isLoading: false,
         scoreReports,
         sortedScores,
@@ -98,6 +104,13 @@ export default class RollAbilityScores extends React.Component {
   }
 
   render() {
+    const dice = roll => (
+      <Icon
+        name={`dice-${roll.result}`}
+        size={36}
+        color={roll.isLowest ? COLOR.red500 : '#333'}
+      />
+    );
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -107,21 +120,12 @@ export default class RollAbilityScores extends React.Component {
               <Card
                 style={{ container: { marginBottom: 10, padding: 10 } }}
               >
-                <View style={styles.diceLayout}>
-                  <Text style={styles.scoreLabel}>
-                    Rolls:
+                <Text style={styles.scoreLabel}>
+                  Rolls:&nbsp;
+                  <Text style={styles.makeBold}>
+                    {this.state.sortedScores.join(', ')}
                   </Text>
-                  {this.state.sortedScores.map((val, key) => {
-                    return (
-                      <Text
-                        key={key}
-                        style={styles.scoreValue}
-                      >
-                        {val}
-                      </Text>
-                    );
-                  })}
-                </View>
+                </Text>
               </Card>
               <View style={styles.buttonLayout}>
                 <TouchableHighlight
@@ -154,37 +158,25 @@ export default class RollAbilityScores extends React.Component {
                   <Text style={styles.buttonText}>Proceed</Text>
                 </TouchableHighlight>
               </View>
-              {this.state.scoreReports.map((report, key) => {
-                return (
-                  <Card
-                    key={key}
-                    style={{ container: { marginBottom: 5, padding: 10 } }}
-                  >
-                    <View style={styles.diceLayout}>
-                      <Text style={styles.scoreLabel}>
-                        Roll {key + 1}:
-                      </Text>
-                      <Text style={styles.scoreValue}>
-                        {report.score}
-                      </Text>
-                      {report.rolls.map((val, key) => {
-                        return (
-                          <Icon
-                            key={key}
-                            name={`dice-${val}`}
-                            size={36}
-                            color={
-                              key === report.lowestRollIndex ?
-                                COLOR.red500 :
-                                "#333"
-                            }
-                          />
-                        );
-                      })}
-                    </View>
-                  </Card>
-                );
-              })}
+              {this.state.scoreReports.map(report => (
+                <Card
+                  key={`${report.rollNumber}-${report.score}-${report.rolls.join('-')}`}
+                  style={{ container: { marginBottom: 5, padding: 10 } }}
+                >
+                  <View style={styles.diceLayout}>
+                    <Text style={styles.scoreLabel}>
+                      Roll {report.rollNumber}:
+                    </Text>
+                    <Text style={[styles.scoreLabel, styles.makeBold]}>
+                      {formatSingleDigit(report.score)}
+                    </Text>
+                    {dice(report.rolls[0])}
+                    {dice(report.rolls[1])}
+                    {dice(report.rolls[2])}
+                    {dice(report.rolls[3])}
+                  </View>
+                </Card>
+              ))}
             </View>
           }
         </Content>
@@ -214,35 +206,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  cardHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-    marginBottom: 10,
-  },
-  cardText: {
-    fontFamily: 'Roboto',
-    color: '#000',
-    fontSize: 16,
-    marginBottom: 10,
-  },
   diceLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  dicePreText: {
-    fontFamily: 'Roboto',
-    color: '#333',
-    fontSize: 18,
-    marginRight: 5,
-  },
-  dicePostText: {
-    fontFamily: 'RobotoBold',
-    color: '#333',
-    fontSize: 18,
-    marginLeft: 5,
   },
   loadingText: {
     fontFamily: 'RobotoBold',
@@ -255,20 +223,13 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 24,
   },
-  scoreValue: {
+  makeBold: {
     fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 24,
   },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
   },
   button: {
     height: 48,
@@ -278,6 +239,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10,
     marginBottom: 20,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff',
+    alignSelf: 'center',
   },
   rerollButton: {
     backgroundColor: COLOR.red500,

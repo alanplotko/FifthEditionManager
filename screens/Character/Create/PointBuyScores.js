@@ -1,22 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationActions } from 'react-navigation';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, Image, View, Text }
-  from 'react-native';
+import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Badge, Card, COLOR, IconToggle, Toolbar }
+import { Card, COLOR, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import Modal from 'react-native-modal';
-import store from 'react-native-simple-store';
-import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
-import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import { validateInteger } from 'DNDManager/util';
+import { formatSingleDigit, reverseSort } from 'DNDManager/util';
 
-var Chance = require('chance');
-
-const chance = new Chance();
+const initialState = {
+  points: 27,
+  scores: [],
+  scoreSet: {
+    8: 0,
+    9: 0,
+    10: 0,
+    11: 0,
+    12: 0,
+    13: 0,
+    14: 0,
+    15: 0,
+  },
+};
 
 export default class PointBuyScores extends React.Component {
   static navigationOptions = {
@@ -36,75 +40,93 @@ export default class PointBuyScores extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      points: 27,
-      scores: [],
-      scoreSet: {
-        '8': 0,
-        '9': 0,
-        '10': 0,
-        '11': 0,
-        '12': 0,
-        '13': 0,
-        '14': 0,
-        '15': 0,
-      }
-    };
+    this.state = initialState;
   }
 
+  acceptRolls = () => {
+    const { navigate, state } = this.props.navigation;
+    navigate('AssignAbilityScores', {
+      scores: this.state.scores,
+      ...state.params,
+    });
+  }
+
+  resetScores = () => this.setState(initialState);
+
   render() {
-    const PointCard = (score, cost) => (
-      <Card style={{ container: { flex: 1, height: 100 } }}>
-        <View style={styles.horizontalLayout}>
+    const cannotBuy = cost => this.state.points < cost ||
+      this.state.scores.length === 6;
+    const cannotSell = score => this.state.scoreSet[score.toString()] === 0;
+    const options = [
+      { score: 15, cost: 9 },
+      { score: 14, cost: 7 },
+      { score: 13, cost: 5 },
+      { score: 12, cost: 4 },
+      { score: 11, cost: 3 },
+      { score: 10, cost: 2 },
+      { score: 9, cost: 1 },
+      { score: 8, cost: 0 },
+    ];
+
+    const ListItemRow = (score, cost) => (
+      <ListItem
+        key={score}
+        divider
+        leftElement={
           <IconToggle
-            name="remove-circle"
-            size={24}
-            percent={75}
+            name="arrow-drop-down"
+            size={36}
+            percent={50}
+            color="#000"
             onPress={() => {
-              let scoreSet = Object.assign({}, this.state.scoreSet);
-              let scores = [...this.state.scores];
-              scoreSet[score.toString()]--;
-              let points = this.state.points + cost;
+              const scoreSet = Object.assign({}, this.state.scoreSet);
+              const scores = [...this.state.scores];
+              scoreSet[score.toString()] -= 1;
+              const points = this.state.points + cost;
               if (scores.length === 0 || scoreSet[score.toString()] < 0) {
                 return;
               }
               scores.splice(scores.indexOf(score), 1);
               this.setState({ points, scores, scoreSet });
             }}
+            disabled={cannotSell(score)}
           />
-          <Text style={[styles.generalLabel, styles.scoreLabel]}>{score}</Text>
+        }
+        centerElement={
+          <View style={styles.horizontalLayout}>
+            <Text style={styles.smallHeading}>
+              {formatSingleDigit(score)}
+            </Text>
+            <Text style={styles.smallHeading}>
+              {cost}
+            </Text>
+            <Text style={[styles.smallHeading, styles.makeBold]}>
+              {this.state.scoreSet[score.toString()]}
+            </Text>
+          </View>
+        }
+        rightElement={
           <IconToggle
-            name="add-circle"
-            size={24}
-            percent={75}
+            name="arrow-drop-up"
+            size={36}
+            percent={50}
+            color="#000"
             onPress={() => {
-              let scoreSet = Object.assign({}, this.state.scoreSet);
-              let scores = [...this.state.scores];
-              scoreSet[score.toString()]++;
-              let points = this.state.points - cost;
+              const scoreSet = Object.assign({}, this.state.scoreSet);
+              const scores = [...this.state.scores];
+              scoreSet[score.toString()] += 1;
+              const points = this.state.points - cost;
               if (scores.length === 6 || points < 0) {
                 return;
               }
               scores.push(score);
-              // Sort in reverse order
-              scores.sort((a, b) => (a > b) ? -1 : ((a < b) ? 1 : 0));
+              scores.sort(reverseSort);
               this.setState({ points, scores, scoreSet });
             }}
+            disabled={cannotBuy(cost)}
           />
-        </View>
-        <View style={{ alignItems: 'center', paddingBottom: 10 }}>
-          <Text style={styles.infoText}>
-            <Text style={styles.number}>
-              {cost}
-            </Text>&nbsp;points
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.number}>
-              {this.state.scoreSet[score.toString()]}
-            </Text>&nbsp;used
-          </Text>
-        </View>
-      </Card>
+        }
+      />
     );
     return (
       <Container style={ContainerStyle.parent}>
@@ -113,87 +135,78 @@ export default class PointBuyScores extends React.Component {
             <Card
               style={{ container: { marginBottom: 10, padding: 10 } }}
             >
-              <Text style={[styles.generalLabel, styles.scoreLabel]}>
-                <Text style={[styles.generalLabel, styles.number]}>
+              <Text style={styles.bigHeading}>
+                <Text style={styles.makeBold}>
                   {this.state.points}
                 </Text>
-                &nbsp;Points&nbsp;/&nbsp;
-                <Text
-                  style={{
-                    color: 6 - this.state.scores.length > 0 ?
-                      COLOR.red500 :
-                      COLOR.green500,
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.generalLabel,
-                      styles.number,
-                      {
-                        color: 6 - this.state.scores.length > 0 ?
-                          COLOR.red500 :
-                          COLOR.green500,
-                      },
-                    ]}>
-                    {6 - this.state.scores.length}
-                  </Text>&nbsp;Scores Left
-                </Text>
+                &nbsp;Points Remaining
               </Text>
               <View style={styles.scoreList}>
-                <Text
-                  key="scoreLabel"
-                  style={[styles.generalLabel, styles.scoreLabel]}
-                >
+                <Text style={styles.bigHeading}>
                   Scores:&nbsp;
                   {
                     this.state.scores.length === 0 &&
                     'None'
                   }
                 </Text>
-                {this.state.scores.map((val, key) => {
-                  return (
-                    <Text
-                      key={key}
-                      style={[styles.generalLabel, styles.number]}
-                    >
-                      {
-                        key < this.state.scores.length - 1 ?
-                        `${val}, ` :
-                        `${val}`
-                      }
-                    </Text>
-                  );
-                })}
+                <Text style={[styles.bigHeading, styles.makeBold]}>
+                  {this.state.scores.join(', ')}
+                </Text>
               </View>
             </Card>
-            <TouchableHighlight
-              style={[
-                styles.button,
-                styles.acceptScoresButton,
-                this.state.scores.length < 6 ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-              ]}
-              onPress={() => this.acceptRolls()}
-              underlayColor="#1A237E"
-              disabled={this.state.scores.length < 6}
-            >
-              <Text style={styles.buttonText}>Proceed</Text>
-            </TouchableHighlight>
-            <View style={styles.horizontalLayout}>
-              {PointCard(15, 9)}
-              {PointCard(14, 7)}
-              {PointCard(13, 5)}
+            <View style={styles.buttonLayout}>
+              <TouchableHighlight
+                style={[
+                  styles.button,
+                  styles.resetButton,
+                  this.state.scores.length === 0 ?
+                    { opacity: 0.5 } :
+                    { opacity: 1 },
+                ]}
+                onPress={() => this.resetScores()}
+                color={COLOR.red500}
+                underlayColor={COLOR.red800}
+                disabled={this.state.scores.length === 0}
+              >
+                <Text style={styles.buttonText}>Reset</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={[
+                  styles.button,
+                  styles.acceptScoresButton,
+                  this.state.scores.length < 6 ?
+                    { opacity: 0.5 } :
+                    { opacity: 1 },
+                ]}
+                onPress={() => this.acceptRolls()}
+                underlayColor="#1A237E"
+                disabled={this.state.scores.length < 6}
+              >
+                <Text style={styles.buttonText}>
+                  {
+                    (6 - this.state.scores.length) > 0 ?
+                      `${6 - this.state.scores.length} Scores Remaining` :
+                      'Proceed'
+                  }
+                </Text>
+              </TouchableHighlight>
             </View>
-            <View style={styles.horizontalLayout}>
-              {PointCard(12, 4)}
-              {PointCard(11, 3)}
-              {PointCard(10, 2)}
-            </View>
-            <View style={styles.horizontalLayout}>
-              {PointCard(9, 1)}
-              {PointCard(8, 0)}
-            </View>
+            <ListItem
+              divider
+              centerElement={
+                <View style={styles.horizontalLayout}>
+                  <Text style={{ paddingHorizontal: 20 }} />
+                  <Text style={styles.smallHeading}>Score</Text>
+                  <Text style={styles.smallHeading}>Cost (Points)</Text>
+                  <Text style={styles.smallHeading}>Used</Text>
+                  <Text style={{ paddingHorizontal: 20 }} />
+                </View>
+              }
+            />
+            {
+              options.map(option =>
+                ListItemRow(option.score, option.cost))
+            }
           </View>
         </Content>
       </Container>
@@ -212,20 +225,23 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  infoText: {
+  bigHeading: {
+    fontFamily: 'RobotoLight',
+    color: '#000',
+    fontSize: 24,
+  },
+  smallHeading: {
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 18,
   },
-  number: {
+  makeBold: {
     fontFamily: 'RobotoBold',
   },
-  scoreLabel: {
-    fontFamily: 'RobotoLight',
-  },
-  generalLabel: {
-    color: '#000',
-    fontSize: 24,
+  buttonLayout: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   button: {
     height: 48,
@@ -241,10 +257,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     alignSelf: 'center',
   },
+  resetButton: {
+    backgroundColor: COLOR.red500,
+    borderColor: COLOR.red500,
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 5,
+  },
   acceptScoresButton: {
     backgroundColor: '#3F51B5',
     borderColor: '#3F51B5',
-    flex: 1,
+    flex: 2,
     marginLeft: 5,
     marginRight: 10,
   },

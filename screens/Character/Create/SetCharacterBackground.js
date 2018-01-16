@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationActions } from 'react-navigation';
 import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
   from 'react-native';
 import {
@@ -14,14 +13,11 @@ import {
   Body,
 } from 'native-base';
 import { Toolbar } from 'react-native-material-ui';
-import store from 'react-native-simple-store';
-import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
-const uuidv4 = require('uuid/v4');
 
 /**
  * Character background selection
@@ -111,49 +107,6 @@ export default class SetCharacterBackground extends React.Component {
       navigate('ChooseScoringMethod', { character: newCharacter });
     }
   }
-
-  // onPress = () => {
-  //   const { state, dispatch } = this.props.navigation;
-  //   const data = this.form.getValue();
-  //   if (data) {
-  //     const newCharacter = Object.assign({}, state.params.character);
-  //     newCharacter.lastUpdated = Date.now();
-  //     newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-  //     const newActivity = {
-  //       key: uuidv4(),
-  //       timestamp: newCharacter.lastUpdated,
-  //       action: 'Created New Character',
-  //       // Format character's full name for extra text
-  //       extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
-  //       thumbnail: newCharacter.profile.images.race,
-  //       icon: {
-  //         name: 'add-circle',
-  //         color: '#fff',
-  //       },
-  //     };
-  //     store
-  //       .push(CHARACTER_KEY, newCharacter)
-  //       .catch((error) => {
-  //         // Show error message on screen and allow resubmit
-  //         this.setState({ error: 'Please try again in a few minutes.' });
-  //         return error;
-  //       })
-  //       .then((error) => {
-  //         if (error) return;
-  //         store
-  //           .push(ACTIVITY_KEY, newActivity)
-  //           .then(() => {
-  //             const resetAction = NavigationActions.reset({
-  //               index: 0,
-  //               actions: [NavigationActions.navigate({
-  //                 routeName: 'Home',
-  //               })],
-  //             });
-  //             dispatch(resetAction);
-  //           });
-  //       });
-  //   }
-  // }
 
   onChange = (value) => {
     this.setState({ isSelectionLoading: true, form: value }, () => {
