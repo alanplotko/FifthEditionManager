@@ -39,46 +39,82 @@ export const RACES = [
     name: 'Dwarf',
     description: 'These short and stocky defenders of mountain fortresses are often seen as stern and humorless; they\'re known for mining the earth\'s treasures and crafting magnificent items from ore and gemstones.',
     image: dwarf,
+    modifiers: {
+      constitution: 2,
+    },
   },
   {
     name: 'Elf',
     description: 'Tall, noble, and often haughty, elves are long-lived and subtle masters of the wilderness, and excel in the arcane arts.',
     image: elf,
+    modifiers: {
+      dexterity: 2,
+    },
   },
   {
     name: 'Halfling',
     description: 'Members of this diminutive race find strength in family, community, and their own innate and seemingly inexhaustible luck.',
     image: halfling,
+    modifiers: {
+      dexterity: 2,
+    },
   },
   {
     name: 'Human',
     description: 'Ambitious, sometimes heroic, and always confident, humans have an ability to work together toward common goals that makes them a force to be reckoned with.',
     image: human,
+    modifiers: {
+      strength: 1,
+      dexterity: 1,
+      constitution: 1,
+      intelligence: 1,
+      wisdom: 1,
+      charisma: 1,
+    },
   },
   {
     name: 'Dragonborn',
     description: 'Born to fight, dragonborn are a race of wandering mercenaries, soldiers, and adventurers.',
     image: dragonborn,
+    modifiers: {
+      strength: 2,
+      charisma: 1,
+    },
   },
   {
     name: 'Gnome',
     description: 'Gnomes are whimsical artisans and tinkers, creating strange devices powered by magic, alchemy, and their quirky imagination; they have an insatiable need for new experiences that often gets them in trouble.',
     image: gnome,
+    modifiers: {
+      intelligence: 2,
+    },
   },
   {
     name: 'Half-Elf',
     description: 'Often caught between the worlds of their progenitor races, half-elves are a race of both grace and contradiction.',
     image: halfElf,
+    modifiers: {
+      charisma: 2,
+      extra: 2, // Extra 2 points to apply (+1 max to a single ability)
+    },
   },
   {
     name: 'Half-Orc',
     description: 'Often fierce and savage, sometimes noble and resolute, half-orcs can manifest the best and worst qualities of their parent races.',
     image: halfOrc,
+    modifiers: {
+      strength: 2,
+      constitution: 1,
+    },
   },
   {
     name: 'Tiefling',
     description: 'Tieflings, often descendants of fiends and humans, are known for their cunning, allure, and leadership.',
     image: tiefling,
+    modifiers: {
+      intelligence: 1,
+      charisma: 2,
+    },
   },
 ];
 

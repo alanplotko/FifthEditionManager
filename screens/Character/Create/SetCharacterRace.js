@@ -13,7 +13,7 @@ import {
   Body,
   Text as NBText,
 } from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
+import { COLOR, Toolbar } from 'react-native-material-ui';
 import { RACES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -101,6 +101,12 @@ export default class SetCharacterRace extends React.Component {
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
       newCharacter.profile = Object.assign({}, newCharacter.profile, data);
+      const raceModifiers = this.state.selection.modifiers;
+      newCharacter.profile = Object.assign(
+        {},
+        newCharacter.profile,
+        { raceModifiers },
+      );
       newCharacter.profile.images = Object.assign(
         {},
         newCharacter.profile.images,
@@ -279,7 +285,7 @@ const styles = StyleSheet.create({
   },
   selectedListItem: {
     opacity: 0.2,
-    backgroundColor: '#b2f0b2',
+    backgroundColor: COLOR.greenA100,
   },
   selectedText: {
     fontFamily: 'RobotoLight',

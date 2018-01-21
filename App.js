@@ -36,8 +36,7 @@ const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
-  // TODO: Change after development complete for ability score screen
-  Home: { screen: Character.ChooseScoringMethod }, //HomeScreen },
+  Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
   CreateCharacter: { screen: Character.Create },
   SetCharacterRace: { screen: Character.SetRace },

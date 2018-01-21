@@ -24,3 +24,7 @@ export const reverseSort = (a, b) => {
   if (a < b) return 1;
   return 0;
 };
+
+export const calculateModifier = score => Math.floor((score - 10) / 2);
+
+export const calculateProficiencyBonus = level => Math.ceil(level / 4) + 1;

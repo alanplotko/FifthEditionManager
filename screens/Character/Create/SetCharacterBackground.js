@@ -12,10 +12,11 @@ import {
   ListItem,
   Body,
 } from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
+import { COLOR, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import DialogStyle from 'DNDManager/stylesheets/DialogStyle';
 
 const t = require('tcomb-form-native');
 
@@ -251,11 +252,11 @@ export default class SetCharacterBackground extends React.Component {
             <Text style={FormStyle.heading}>Character Background</Text>
             {
               this.state.error &&
-              <View style={styles.errorDialog}>
-                <Text style={styles.errorHeading}>
+              <View style={DialogStyle.errorDialog}>
+                <Text style={DialogStyle.errorHeading}>
                   An error occurred!
                 </Text>
-                <Text style={styles.errorText}>
+                <Text style={DialogStyle.errorText}>
                   {this.state.error.message}&nbsp;
                 </Text>
               </View>
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   },
   selectedListItem: {
     opacity: 0.2,
-    backgroundColor: '#b2f0b2',
+    backgroundColor: COLOR.greenA100,
   },
   selectedText: {
     fontFamily: 'RobotoLight',

@@ -13,7 +13,7 @@ import {
   ListItem,
   Body,
 } from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
+import { COLOR, Toolbar } from 'react-native-material-ui';
 import { CLASSES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   },
   selectedListItem: {
     opacity: 0.2,
-    backgroundColor: '#b2f0b2',
+    backgroundColor: COLOR.greenA100,
   },
   selectedText: {
     fontFamily: 'RobotoLight',
