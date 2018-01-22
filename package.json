@@ -34,6 +34,7 @@
     "@expo/vector-icons": "^6.2.0",
     "chance": "^1.0.13",
     "expo": "^24.0.2",
+    "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "native-base": "^2.3.3",
     "prop-types": "^15.6.0",

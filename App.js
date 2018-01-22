@@ -36,7 +36,8 @@ const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
-  Home: { screen: HomeScreen },
+  // TODO: Change back to home screen after development
+  Home: { screen: Character.SetSkills },//HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
   CreateCharacter: { screen: Character.Create },
   SetCharacterRace: { screen: Character.SetRace },
@@ -46,6 +47,7 @@ const RootNavigator = StackNavigator({
   RollAbilityScores: { screen: Character.RollAbilityScores },
   PointBuyScores: { screen: Character.PointBuyScores },
   AssignAbilityScores: { screen: Character.AssignAbilityScores },
+  SetSkills: { screen: Character.SetSkills },
 });
 
 export default class App extends React.Component {

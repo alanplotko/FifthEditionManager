@@ -6,3 +6,4 @@ export ChooseScoringMethod from './Create/ChooseScoringMethod';
 export RollAbilityScores from './Create/RollAbilityScores';
 export PointBuyScores from './Create/PointBuyScores';
 export AssignAbilityScores from './Create/AssignAbilityScores';
+export SetSkills from './Create/SetSkills';
