@@ -2,7 +2,7 @@ import React from 'react'; // Needed for any JSX in file
 import { Text } from 'react-native';
 
 export const toTitleCase = str =>
-  `${str.charAt(0).toUpperCase()}${str.slice(1).toLowerCase()}`;
+  str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 
 export const getCharacterDisplayName = character =>
   `${toTitleCase(character.profile.firstName)} ${toTitleCase(character.profile.lastName)}`;

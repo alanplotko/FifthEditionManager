@@ -16,6 +16,9 @@ import { validateInteger } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
 const uuidv4 = require('uuid/v4');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Form valdiation setup
@@ -204,14 +207,17 @@ const options = {
 export default class CreateCharacter extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'New Character',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.generateCharacter(),
       };
       return <Toolbar {...props} />;
     },
-  }
+  };
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
@@ -223,6 +229,12 @@ export default class CreateCharacter extends React.Component {
       options,
       form: null,
     };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      generateCharacter: this.generateCharacter,
+    });
   }
 
   onPress = () => {
@@ -278,6 +290,46 @@ export default class CreateCharacter extends React.Component {
       },
     });
     this.setState({ options: updatedOptions, form: value });
+  }
+
+  generateCharacter = () => {
+    let gender;
+    let firstName;
+    let lastName;
+    if (chance.bool()) {
+      gender = 'Other';
+      firstName = chance.first();
+      lastName = chance.last();
+    } else {
+      gender = chance.gender();
+      firstName = chance.first({ gender });
+      lastName = chance.last({ gender });
+    }
+    this.setState({
+      form: {
+        firstName,
+        lastName,
+        power: { level: 1, experience: 0 },
+        gender,
+        alignment: chance.pickone([
+          'Lawful Good',
+          'Lawful Neutral',
+          'Lawful Evil',
+          'Neutral Good',
+          'True Neutral',
+          'Neutral Evil',
+          'Chaotic Good',
+          'Chaotic Neutral',
+          'Chaotic Evil',
+        ]),
+        // Age min/max: Human/Elf
+        age: chance.natural({ min: 10, max: 800 }),
+        // Height min/max: Halfling/Dragonborn
+        height: `${chance.natural({ min: 3, max: 6 })}'${chance.natural({ min: 1, max: 12 })}"`,
+        // Weight min/max: Halfling/Dragonborn
+        weight: `${chance.natural({ min: 70, max: 250 })} lbs.`,
+      },
+    });
   }
 
   render() {

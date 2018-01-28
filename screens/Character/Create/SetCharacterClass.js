@@ -17,6 +17,7 @@ import { COLOR, Toolbar } from 'react-native-material-ui';
 import { CLASSES } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { toTitleCase } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
 
@@ -127,6 +128,81 @@ export default class SetCharacterClass extends React.Component {
   }
 
   render() {
+    const getAdditionalClassInfo = option => (
+      <View>
+        <Text style={styles.infoHeading}>
+          &#9656; Hit Die / Primary Ability
+        </Text>
+        <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+          {option.hitDie} / {option.primaryAbility}
+        </Text>
+        <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
+        <Text style={styles.infoText}>
+          Saving Throws:&nbsp;
+          {option.proficiencies.savingThrows.length === 0 && 'None'}
+          {
+            option.proficiencies.savingThrows.length > 0 &&
+            toTitleCase(option.proficiencies.savingThrows.join(', '))
+          }
+        </Text>
+        <Text style={styles.infoText}>
+          Armor:&nbsp;
+          {option.proficiencies.armor.length === 0 && 'None'}
+          {
+            option.proficiencies.armor.length > 0 &&
+            toTitleCase(option.proficiencies.armor.join(', '))
+          }
+        </Text>
+        <Text style={styles.infoText}>
+          Weapons:&nbsp;
+          {option.proficiencies.weapons.length === 0 && 'None'}
+          {
+            option.proficiencies.weapons.length > 0 &&
+            toTitleCase(option.proficiencies.weapons.join(', '))
+          }
+        </Text>
+        <Text style={styles.infoText}>
+          Tools:&nbsp;
+          {option.proficiencies.tools.length === 0 && 'None'}
+          {
+            option.proficiencies.tools.length > 0 &&
+            option.proficiencies.tools
+              .map((tool) => {
+                if (tool.name) {
+                  return toTitleCase(tool.name);
+                } else if (tool.options) {
+                  const toolOptions = [];
+                  tool.options.forEach((toolOption) => {
+                    toolOptions.push(`${toolOption.quantity} of ${toTitleCase(toolOption.tag)}`);
+                  });
+                  return toolOptions.join(' or ');
+                } else if (tool.tag) {
+                  return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
+                }
+                return '';
+              })
+              .join(', ')
+          }
+        </Text>
+        <Text style={styles.infoText}>
+          Skills:&nbsp;
+          {
+            !option.proficiencies.skills.options &&
+            `${option.proficiencies.skills.quantity} of Any Skill`
+          }
+          {
+            option.proficiencies.skills.options &&
+            option.proficiencies.skills.options.length === 0 &&
+            'None'
+          }
+          {
+            option.proficiencies.skills.options &&
+            option.proficiencies.skills.options.length > 0 &&
+            `${option.proficiencies.skills.quantity} of ${toTitleCase(option.proficiencies.skills.options.join(', '))}`
+          }
+        </Text>
+      </View>
+    );
     const list = CLASSES.map(option => (
       <View key={option.name}>
         {
@@ -162,19 +238,7 @@ export default class SetCharacterClass extends React.Component {
                 >
                   {option.description}
                 </Text>
-                <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {option.hitDie} / {option.primaryAbility}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Saving Throw: {option.proficiencies.savingThrow}
-                </Text>
-                <Text style={styles.infoText}>
-                  Armor & Weapons: {option.proficiencies.armorAndWeapon}
-                </Text>
+                {getAdditionalClassInfo(option)}
               </View>
             </View>
           </Body>
@@ -213,22 +277,7 @@ export default class SetCharacterClass extends React.Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.hitDie}
-                  &nbsp;/ {this.state.selection.primaryAbility}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Saving Throw:
-                  &nbsp;{this.state.selection.proficiencies.savingThrow}
-                </Text>
-                <Text style={styles.infoText}>
-                  Armor & Weapons:
-                  &nbsp;{this.state.selection.proficiencies.armorAndWeapon}
-                </Text>
+                {getAdditionalClassInfo(this.state.selection)}
               </Body>
             </CardItem>
           </View>

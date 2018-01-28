@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, FlatList, StyleSheet, View, UIManager }
   from 'react-native';
 import { Container, Tab, Tabs, TabHeading, Text, Icon } from 'native-base';
 import Modal from 'react-native-modal';
-import { ActionButton, Button, Toolbar } from 'react-native-material-ui';
+import { ActionButton, Button, COLOR, Toolbar } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import ActivityCard from 'DNDManager/components/ActivityCard';
@@ -294,6 +294,7 @@ export default class HomeScreen extends React.Component {
             label: 'Character',
             name: 'CreateCharacter',
           }]}
+          rippleColor={COLOR.red200}
           transition="speedDial"
           style={{
             container: {

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Card, COLOR, IconToggle, ListItem, Toolbar }
-  from 'react-native-material-ui';
+import { COLOR, IconToggle, ListItem, Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import { BASE_SKILLS } from 'DNDManager/config/Info';
-import { formatSingleDigit, toTitleCase } from 'DNDManager/util';
+import Note from 'DNDManager/components/Note';
+import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'DNDManager/config/Info';
+import { toTitleCase, calculateProficiencyBonus } from 'DNDManager/util';
 import { cloneDeep } from 'lodash';
 
 export default class SetSkills extends React.Component {
@@ -29,78 +29,112 @@ export default class SetSkills extends React.Component {
     super(props);
     this.state = {
       skills: cloneDeep(BASE_SKILLS),
+      isProficiencyNoteCollapsed: false,
+      isBackgroundNoteCollapsed: false,
+      isClassNoteCollapsed: false,
       ...props.navigation.state.params,
     };
-    // TODO: remove after development
-    this.state.character = {};
-    this.state.character.proficiency = 2;
-    this.state.character.profile = {};
-    this.state.character.profile.stats = {
-      strength: {
-        score: 15,
-        modifier: 2,
-        total: 17,
-      },
-      dexterity: {
-        score: 14,
-        modifier: 2,
-        total: 16,
-      },
-      constitution: {
-        score: 13,
-        modifier: 1,
-        total: 14,
-      },
-      intelligence: {
-        score: 12,
-        modifier: 1,
-        total: 13,
-      },
-      wisdom: {
-        score: 10,
-        modifier: 0,
-        total: 10,
-      },
-      charisma: {
-        score: 8,
-        modifier: -1,
-        total: 7,
-      },
+
+    // Set character proficiency
+    this.state.character.proficiency =
+      calculateProficiencyBonus(this.state.character.profile.level);
+
+    // Track given proficiencies
+    this.state.proficiencies = {
+      background: BACKGROUNDS
+        .find(option => option.name === this.state.character.profile.background)
+        .proficiencies.skills,
+      baseClass: CLASSES
+        .find(option => option.name === this.state.character.profile.baseClass)
+        .proficiencies.skills,
     };
-    this.setBaseSkills(this.state.skills);
+
+    // Define proficiency options
+    this.state.proficiencies.options =
+      [...this.state.proficiencies.baseClass.options]
+        .filter(skill => !this.state.proficiencies.background.includes(skill));
+    // Track number of proficiency replacements the user will need to select
+    this.state.proficiencies.extras =
+      [...this.state.proficiencies.baseClass.options]
+        .filter(skill => this.state.proficiencies.background.includes(skill))
+        .length;
+    // Keep original number of extras with original quantity in base class
+    this.state.proficiencies.baseClass.extras = this.state.proficiencies.extras;
+    // Track number of proficiencies that the user must select from the options
+    this.state.proficiencies.quantity =
+      this.state.proficiencies.baseClass.quantity;
+
+    // Set up base skills with default proficiencies
+    this.state.skills = this.setBaseSkills(this.state.skills);
   }
 
-  // acceptRolls = () => {
-  //   const { navigate, state } = this.props.navigation;
-  //   navigate('AssignAbilityScores', {
-  //     scores: this.state.scores,
-  //     ...state.params,
-  //   });
-  // }
-
-  setBaseSkills = (skills) => {
-    Object.entries(skills).forEach((skill) => {
-      skills[skill[0]].modifier =
-        this.state.character.profile.stats[skill[1].ability].modifier;
+  setSkills = () => {
+    const { navigate, state } = this.props.navigation;
+    navigate('AssignAbilityScores', {
+      skills: this.state.skills,
+      ...state.params,
     });
   }
 
+  setBaseSkills = (copy) => {
+    const skills = cloneDeep(copy);
+    Object.entries(skills).forEach((skill) => {
+      skills[skill[0]].modifier =
+        this.state.character.profile.stats[skill[1].ability].modifier;
+      skills[skill[0]].proficient = this.state.proficiencies.background
+        .includes(skill[0]);
+      if (skills[skill[0]].proficient) {
+        skills[skill[0]].modifier += this.state.character.proficiency;
+      }
+    });
+    return skills;
+  }
+
   resetSkills = () => {
-    const skills = cloneDeep(BASE_SKILLS);
-    this.setBaseSkills(skills);
-    this.setState({ skills });
+    let skills = cloneDeep(BASE_SKILLS);
+    const proficiencies = cloneDeep(this.state.proficiencies);
+    proficiencies.quantity = this.state.proficiencies.baseClass.quantity;
+    proficiencies.extras = this.state.proficiencies.baseClass.extras;
+    skills = this.setBaseSkills(skills);
+    this.setState({ skills, proficiencies });
   }
 
   toggleProficient = (key) => {
     const skills = cloneDeep(this.state.skills);
+    const proficiencies = cloneDeep(this.state.proficiencies);
+
     // Toggle proficiency in skill
     skills[key].proficient = !skills[key].proficient;
 
-    // Add or subtract proficiency appropriately after toggle
-    skills[key].modifier +=
-      (this.state.character.proficiency * (skills[key].proficient ? 1 : -1));
+    const change = (skills[key].proficient ? 1 : -1);
 
-    this.setState({ skills });
+    // Add or subtract proficiency and quantity appropriately after toggle
+    skills[key].modifier += (this.state.character.proficiency * change);
+    proficiencies.quantity -= change;
+    const skillName = key.split(/(?=[A-Z])/).join(' ').toLowerCase();
+    if (!proficiencies.options.includes(skillName)) {
+      proficiencies.extras -= change;
+    }
+
+    this.setState({ skills, proficiencies });
+  }
+
+  toggleProficiencyNote = () => {
+    this.setState({
+      isProficiencyNoteCollapsed: !this.state.isProficiencyNoteCollapsed,
+    });
+  }
+
+  toggleBackgroundNote = () => {
+    this.setState({
+      isBackgroundNoteCollapsed: !this.state.isBackgroundNoteCollapsed,
+    });
+  }
+
+  toggleClassNote = () => {
+    this.setState({
+      isClassNoteCollapsed: !this.state.isClassNoteCollapsed,
+    });
   }
 
   render() {
@@ -108,7 +142,6 @@ export default class SetSkills extends React.Component {
       const negative = skill.modifier < 0;
       const textColor = negative ? COLOR.red500 : COLOR.green500;
       const modifier = Math.abs(skill.modifier);
-      const proficiency = this.state.character.proficiency;
       return (
         <ListItem
           key={key}
@@ -136,7 +169,8 @@ export default class SetSkills extends React.Component {
                 {
                   skill.proficient &&
                   <Text>
-                    {modifier - proficiency} + {proficiency} =&nbsp;
+                    {modifier - this.state.character.proficiency} +&nbsp;
+                    {this.state.character.proficiency} =&nbsp;
                     <Text style={{ color: textColor }}>
                       {modifier >= 0 ? <Text>+</Text> : <Text>&minus;</Text>}
                       {modifier}
@@ -151,22 +185,135 @@ export default class SetSkills extends React.Component {
               name="check-circle"
               color={skill.proficient ? COLOR.green500 : COLOR.grey600}
               onPress={() => this.toggleProficient(key)}
+              disabled={
+                this.state.proficiencies.background.includes(key) ||
+                (
+                  !skill.proficient &&
+                  (
+                    this.state.proficiencies.quantity === 0 ||
+                    (
+                      !this.state.proficiencies.options.includes(key) &&
+                      this.state.proficiencies.extras === 0
+                    )
+                  )
+                )
+              }
             />
           }
         />
       );
     };
-    const remainingSkills = Object.keys(this.state.skills).length -
-      Object.keys(this.state.skills).filter(s => s.modifier === 0).length;
-    const totalSkills = Object.keys(BASE_SKILLS).length;
     const hasChanged = Object.keys(this.state.skills)
-      .filter(key => this.state.skills[key].proficient).length > 0;
+      .filter(key => this.state.skills[key].proficient)
+      .length > this.state.proficiencies.background.length;
 
-    // TODO: info dialog about proficiency (based on level) above buttons
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
           <View style={{ margin: 20 }}>
+            <Note
+              title="Calculating Proficiency Bonus"
+              type="info"
+              icon="info"
+              collapsible
+              isCollapsed={this.state.isProficiencyNoteCollapsed}
+              toggleNoteHandler={this.toggleProficiencyNote}
+            >
+              <Text style={{ marginBottom: 10 }}>
+                The proficiency bonus is derived from your level. At
+                <Text style={styles.makeBold}>
+                  &nbsp;level {this.state.character.profile.level}
+                </Text>
+                ,&nbsp;your proficiency bonus is
+                <Text style={styles.makeBold}>
+                  &nbsp;+{this.state.character.proficiency}
+                </Text>
+                . A shortcut to determine the proficiency bonus is
+                dividing your level by 4, rounding up, and adding 1.{'\n\n'}
+                ceil({this.state.character.profile.level} / 4) + 1 =&nbsp;
+                {Math.ceil(this.state.character.profile.level / 4)} + 1 =&nbsp;
+                <Text style={styles.makeBold}>
+                  +{this.state.character.proficiency}
+                </Text>
+                .
+              </Text>
+            </Note>
+            <Note
+              title={`${this.state.character.profile.background} Proficiencies`}
+              type="info"
+              icon="info"
+              collapsible
+              isCollapsed={this.state.isBackgroundNoteCollapsed}
+              toggleNoteHandler={this.toggleBackgroundNote}
+            >
+              <Text style={{ marginBottom: 10 }}>
+                The
+                <Text style={styles.makeBold}>
+                  &nbsp;{this.state.character.profile.background}&nbsp;
+                </Text>
+                background grants the following proficiencies and will be
+                set automatically:{'\n\n'}
+              </Text>
+              {this.state.proficiencies.background.map(key => (
+                <Text key={`${key}-background-list`}>
+                  &emsp;&bull;&nbsp;{toTitleCase(key)}{'\n'}
+                </Text>
+              ))}
+            </Note>
+            <Note
+              title={`${this.state.character.profile.baseClass} Proficiencies`}
+              type="info"
+              icon="info"
+              collapsible
+              isCollapsed={this.state.isClassNoteCollapsed}
+              toggleNoteHandler={this.toggleClassNote}
+            >
+              <Text style={{ marginBottom: 10 }}>
+                The
+                <Text style={styles.makeBold}>
+                  &nbsp;{this.state.character.profile.baseClass}&nbsp;
+                </Text>
+                class grants
+                <Text style={styles.makeBold}>
+                  &nbsp;{this.state.proficiencies.baseClass.quantity}&nbsp;
+                </Text>
+                proficiencies from the list below
+                {
+                  this.state.proficiencies.baseClass.extras === 0 &&
+                  <Text>
+                  :
+                  </Text>
+                }
+                {
+                  this.state.proficiencies.baseClass.extras > 0 &&
+                  <Text>
+                    ,
+                    <Text style={styles.makeBold}>
+                      &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
+                    </Text>
+                    of which are accounted for with your
+                    <Text style={styles.makeBold}>
+                      &nbsp;{this.state.character.profile.background}&nbsp;
+                    </Text>
+                    background. As such, of the
+                    <Text style={styles.makeBold}>
+                      &nbsp;{this.state.proficiencies.baseClass.quantity}&nbsp;
+                    </Text>
+                    proficiencies to select,
+                    <Text style={styles.makeBold}>
+                      &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
+                    </Text>
+                    proficiencies may come from outside the below list:
+                  </Text>
+                }
+                {'\n\n'}
+              </Text>
+              {this.state.proficiencies.options.map(key => (
+                <Text key={`${key}-option-list`}>
+                  &emsp;&bull;&nbsp;{toTitleCase(key)}{'\n'}
+                </Text>
+              ))}
+            </Note>
             <View style={styles.buttonLayout}>
               <TouchableHighlight
                 style={[
@@ -187,18 +334,18 @@ export default class SetSkills extends React.Component {
                 style={[
                   styles.button,
                   styles.acceptScoresButton,
-                  remainingSkills > 0 ?
+                  this.state.proficiencies.quantity > 0 ?
                     { opacity: 0.5 } :
                     { opacity: 1 },
                 ]}
                 onPress={() => this.setSkills()}
                 underlayColor="#1A237E"
-                disabled={remainingSkills > 0}
+                disabled={this.state.proficiencies.quantity > 0}
               >
                 <Text style={styles.buttonText}>
                   {
-                    remainingSkills > 0 ?
-                      `${remainingSkills} Skills Remaining` :
+                    this.state.proficiencies.quantity > 0 ?
+                      `${this.state.proficiencies.quantity} Skills Remaining` :
                       'Proceed'
                   }
                 </Text>

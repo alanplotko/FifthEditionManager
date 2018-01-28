@@ -16,7 +16,7 @@ import { COLOR, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import DialogStyle from 'DNDManager/stylesheets/DialogStyle';
+import { toTitleCase } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
 
@@ -90,7 +90,6 @@ export default class SetCharacterBackground extends React.Component {
       selection: null,
       form: null,
       isSelectionLoading: false,
-      error: null,
     };
   }
 
@@ -123,6 +122,51 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   render() {
+    const getAdditionalBackgroundInfo = option => (
+      <View>
+        <Text style={styles.infoHeading}>
+          &#9656; Starting Equipment
+        </Text>
+        <Text style={[styles.infoText, { paddingBottom: 10 }]}>
+          {option.equipment}
+        </Text>
+        <Text style={[styles.infoHeading, { paddingBottom: 10 }]}>
+          &#9656; Additional Languages: {option.languages}
+        </Text>
+        <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
+        <Text style={styles.infoText}>
+          Skills:&nbsp;
+          {option.proficiencies.skills.length === 0 && 'None'}
+          {
+            option.proficiencies.skills.length > 0 &&
+            toTitleCase(option.proficiencies.skills.join(', '))
+          }
+        </Text>
+        <Text style={styles.infoText}>
+          Tools:&nbsp;
+          {option.proficiencies.tools.length === 0 && 'None'}
+          {
+            option.proficiencies.tools.length > 0 &&
+            option.proficiencies.tools
+              .map((tool) => {
+                if (tool.name) {
+                  return toTitleCase(tool.name);
+                } else if (tool.options) {
+                  const toolOptions = [];
+                  tool.options.forEach((toolOption) => {
+                    toolOptions.push(`${toolOption.quantity} of ${toTitleCase(toolOption.tag)}`);
+                  });
+                  return toolOptions.join(' or ');
+                } else if (tool.tag) {
+                  return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
+                }
+                return '';
+              })
+              .join(', ')
+          }
+        </Text>
+      </View>
+    );
     const list = BACKGROUNDS.map(option => (
       <View key={option.name}>
         {
@@ -151,25 +195,7 @@ export default class SetCharacterBackground extends React.Component {
             >
               {option.description}
             </Text>
-            <Text style={styles.infoHeading}>
-              &#9656; Starting Equipment
-            </Text>
-            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-              {option.equipment}
-            </Text>
-            <Text style={styles.infoHeading}>
-              &#9656; Additional Languages
-            </Text>
-            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-              {option.languages}
-            </Text>
-            <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-            <Text style={styles.infoText}>
-              Skills: {option.proficiencies.skills}
-            </Text>
-            <Text style={styles.infoText}>
-              Tools: {option.proficiencies.tools}
-            </Text>
+            {getAdditionalBackgroundInfo(option)}
           </Body>
         </ListItem>
       </View>
@@ -199,25 +225,7 @@ export default class SetCharacterBackground extends React.Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Text style={styles.infoHeading}>
-                  &#9656; Starting Equipment
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.equipment}
-                </Text>
-                <Text style={styles.infoHeading}>
-                  &#9656; Additional Languages
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.languages}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Skills: {this.state.selection.proficiencies.skills}
-                </Text>
-                <Text style={styles.infoText}>
-                  Tools: {this.state.selection.proficiencies.tools}
-                </Text>
+                {getAdditionalBackgroundInfo(this.state.selection)}
               </Body>
             </CardItem>
           </View>
@@ -250,17 +258,6 @@ export default class SetCharacterBackground extends React.Component {
         <Content>
           <View style={{ margin: 20 }}>
             <Text style={FormStyle.heading}>Character Background</Text>
-            {
-              this.state.error &&
-              <View style={DialogStyle.errorDialog}>
-                <Text style={DialogStyle.errorHeading}>
-                  An error occurred!
-                </Text>
-                <Text style={DialogStyle.errorText}>
-                  {this.state.error.message}&nbsp;
-                </Text>
-              </View>
-            }
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={CharacterBackground}
@@ -356,21 +353,5 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 48,
-  },
-  errorDialog: {
-    backgroundColor: '#F44336',
-    marginBottom: 15,
-    padding: 15,
-    borderRadius: 3,
-  },
-  errorHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#fff',
-    fontSize: 18,
-  },
-  errorText: {
-    fontFamily: 'Roboto',
-    color: '#fff',
-    fontSize: 14,
   },
 });

@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Icon, IconToggle, Toolbar }
-  from 'react-native-material-ui';
+import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
+import Note from 'DNDManager/components/Note';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import DialogStyle from 'DNDManager/stylesheets/DialogStyle';
 import { toTitleCase, calculateModifier } from 'DNDManager/util';
 
 const abilities = [
@@ -99,16 +98,17 @@ export default class AssignAbilityScores extends React.Component {
       stats[abilityName] = { score, modifier, total };
     });
     newCharacter.profile = Object.assign({}, newCharacter.profile, { stats });
-
-    // TODO: Create review page for proficiency bonus and perception
-    navigate('ChooseScoringMethod', { character: newCharacter });
+    navigate('SetSkills', { character: newCharacter });
 
     // const newActivity = {
     //   key: uuidv4(),
     //   timestamp: newCharacter.lastUpdated,
     //   action: 'Created New Character',
     //   // Format character's full name for extra text
-    //   extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
+    //   extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}
+    //     ${newCharacter.profile.firstName.slice(1)}
+    //     ${newCharacter.profile.lastName.charAt(0).toUpperCase()}
+    //     ${newCharacter.profile.lastName.slice(1)}`,
     //   thumbnail: newCharacter.profile.images.race,
     //   icon: {
     //     name: 'add-circle',
@@ -223,6 +223,14 @@ export default class AssignAbilityScores extends React.Component {
     extraPoints += 1;
 
     this.setState({ extraPoints, hasExtraPoint, additionalStats });
+  }
+
+  toggleInfoNote = () => {
+    this.setState({ isInfoCollapsed: !this.state.isInfoCollapsed });
+  }
+
+  toggleErrorNote = () => {
+    this.setState({ isErrorCollapsed: !this.state.isErrorCollapsed });
   }
 
   render() {
@@ -459,122 +467,67 @@ export default class AssignAbilityScores extends React.Component {
             <Text style={FormStyle.heading}>Character Ability Scores</Text>
             {
               modifierList.length > 0 &&
-              <View style={DialogStyle.infoDialog}>
-                <View style={{ position: 'absolute', top: 0, right: 0 }}>
-                  <IconToggle
-                    name={
-                      this.state.isInfoCollapsed ?
-                        'arrow-drop-down' :
-                        'arrow-drop-up'
-                    }
-                    color={COLOR.lightBlue500}
-                    size={28}
-                    percent={50}
-                    onPress={() => this.setState({
-                      isInfoCollapsed: !this.state.isInfoCollapsed,
-                    })}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    marginBottom: !this.state.isInfoCollapsed ? 10 : 0,
-                  }}
-                >
-                  <Icon
-                    name="info"
-                    color={COLOR.lightBlue500}
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={DialogStyle.infoHeading}>
-                    {this.state.character.profile.race} Stats
+              <Note
+                title={`${this.state.character.profile.race} Stats`}
+                type="info"
+                icon="info"
+                collapsible
+                isCollapsed={this.state.isInfoCollapsed}
+                toggleNoteHandler={this.toggleInfoNote}
+              >
+                <Text style={{ marginBottom: 10 }}>
+                  The
+                  <Text style={styles.makeBold}>
+                    &nbsp;{this.state.character.profile.race}&nbsp;
                   </Text>
-                </View>
-                {
-                  !this.state.isInfoCollapsed &&
-                  <View>
-                    <Text style={[DialogStyle.infoText, { marginBottom: 10 }]}>
-                      The
-                      <Text style={styles.makeBold}>
-                        &nbsp;{this.state.character.profile.race}&nbsp;
-                      </Text>
-                      race grants the following points and will be allocated
-                      automatically:
-                    </Text>
-                    {modifierList.map(key => (
-                      <Text key={key} style={DialogStyle.infoText}>
-                        &emsp;&bull;&nbsp;{toTitleCase(key)}&nbsp;(
-                        {
-                          this.state.character.profile.raceModifiers[key] > 0 ?
-                          '+' :
-                          ''
-                        }
-                        {this.state.character.profile.raceModifiers[key]})
-                      </Text>
-                    ))}
-                  </View>
-                }
-              </View>
+                  race grants the following points and will be allocated
+                  automatically:{'\n\n'}
+                </Text>
+                {modifierList.map(key => (
+                  <Text key={key}>
+                    &emsp;&bull;&nbsp;{toTitleCase(key)}&nbsp;(
+                    {
+                      this.state.character.profile.raceModifiers[key] > 0 ?
+                      '+' :
+                      ''
+                    }
+                    {this.state.character.profile.raceModifiers[key]})
+                    {'\n'}
+                  </Text>
+                ))}
+              </Note>
             }
             {
               this.state.extraPoints > 0 &&
-              <View style={DialogStyle.errorDialog}>
-                <View style={{ position: 'absolute', top: 0, right: 0 }}>
-                  <IconToggle
-                    name={
-                      this.state.isErrorCollapsed ?
-                        'arrow-drop-down' :
-                        'arrow-drop-up'
-                    }
-                    color={COLOR.red500}
-                    size={28}
-                    percent={50}
-                    onPress={() => this.setState({
-                      isErrorCollapsed: !this.state.isErrorCollapsed,
-                    })}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    marginBottom: !this.state.isErrorCollapsed ? 10 : 0,
-                  }}
-                >
-                  <Icon
-                    name="error"
-                    color={COLOR.red500}
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={DialogStyle.errorHeading}>
-                    {this.state.extraPoints} points remaining!
+              <Note
+                title={`${this.state.extraPoints} points remaining!`}
+                type="error"
+                icon="error"
+                collapsible
+                isCollapsed={this.state.isErrorCollapsed}
+                toggleNoteHandler={this.toggleErrorNote}
+              >
+                <Text>
+                  The
+                  <Text style={styles.makeBold}>
+                    &nbsp;{this.state.character.profile.race}&nbsp;
                   </Text>
-                </View>
-                {
-                  !this.state.isErrorCollapsed &&
-                  <Text style={DialogStyle.errorText}>
-                    The
-                    <Text style={styles.makeBold}>
-                      &nbsp;{this.state.character.profile.race}&nbsp;
-                    </Text>
-                    race grants an additional
-                    <Text style={styles.makeBold}>
-                      &nbsp;
-                      {this.state.character.profile.raceModifiers.extra}
-                      &nbsp;
-                    </Text>
-                    points to your abilities. You can allocate only 1 additional
-                    point for a single ability until all
-                    <Text style={styles.makeBold}>
-                      &nbsp;
-                      {this.state.character.profile.raceModifiers.extra}
-                      &nbsp;
-                    </Text>
-                    points are spent.
+                  race grants an additional
+                  <Text style={styles.makeBold}>
+                    &nbsp;
+                    {this.state.character.profile.raceModifiers.extra}
+                    &nbsp;
                   </Text>
-                }
-              </View>
+                  points to your abilities. You can allocate only 1 additional
+                  point for a single ability until all
+                  <Text style={styles.makeBold}>
+                    &nbsp;
+                    {this.state.character.profile.raceModifiers.extra}
+                    &nbsp;
+                  </Text>
+                  points are spent.
+                </Text>
+              </Note>
             }
             <View style={styles.horizontalLayout}>
               {abilities.slice(0, 3).map(ability => (
