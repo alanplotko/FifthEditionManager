@@ -291,7 +291,13 @@ export default class SetSkills extends React.Component {
                     <Text style={styles.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
                     </Text>
-                    of which are accounted for with your
+                    of which&nbsp;
+                    {
+                      this.state.proficiencies.baseClass.extras > 1 ?
+                        'are' :
+                        'is'
+                    }
+                    &nbsp;accounted for with your
                     <Text style={styles.makeBold}>
                       &nbsp;{this.state.character.profile.background}&nbsp;
                     </Text>
@@ -299,11 +305,21 @@ export default class SetSkills extends React.Component {
                     <Text style={styles.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.quantity}&nbsp;
                     </Text>
-                    proficiencies to select,
+                    {
+                      this.state.proficiencies.baseClass.quantity > 1 ?
+                        'proficiencies' :
+                        'proficiency'
+                    }
+                    &nbsp;to select,
                     <Text style={styles.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
                     </Text>
-                    proficiencies may come from outside the below list:
+                    {
+                      this.state.proficiencies.baseClass.extras > 1 ?
+                        'proficiencies' :
+                        'proficiency'
+                    }
+                    &nbsp;may come from outside the below list:
                   </Text>
                 }
                 {'\n\n'}
