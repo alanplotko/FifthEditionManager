@@ -4,6 +4,8 @@
   "private": true,
   "devDependencies": {
     "babel-eslint": "^8.0.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.12.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-import-resolver-reactnative": "^1.0.2",
@@ -12,6 +14,8 @@
     "eslint-plugin-react": "^7.5.1",
     "jest": "^22.0.4",
     "jest-expo": "^24.0.0",
+    "react-dom": "^16.2.0",
+    "react-native-mock-render": "0.0.19",
     "react-native-scripts": "1.8.1",
     "react-test-renderer": "16.2.0"
   },

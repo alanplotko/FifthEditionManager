@@ -36,8 +36,7 @@ const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
-  // TODO: Change back to home screen after development
-  Home: { screen: Character.SetSkills },//HomeScreen },
+  Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
   CreateCharacter: { screen: Character.Create },
   SetCharacterRace: { screen: Character.SetRace },
@@ -58,16 +57,15 @@ export default class App extends React.Component {
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
+    this.loadFontAssets().done();
+  }
+
+  async loadFontAssets() {
     await Expo.Font.loadAsync({
-      RobotoThin,
-      RobotoLight,
-      Roboto,
-      RobotoBold,
+      RobotoThin, RobotoLight, Roboto, RobotoBold,
     });
-    this.setState({
-      isReady: true,
-    });
+    this.setState({ isReady: true });
   }
 
   render() {
