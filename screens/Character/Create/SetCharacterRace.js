@@ -19,6 +19,9 @@ import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import FormStyle from 'DNDManager/stylesheets/FormStyle';
 
 const t = require('tcomb-form-native');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Character race selection
@@ -68,10 +71,13 @@ const options = {
 export default class SetCharacterRace extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Character Race',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeRace(),
       };
       return <Toolbar {...props} />;
     },
@@ -88,6 +94,12 @@ export default class SetCharacterRace extends React.Component {
       form: null,
       isSelectionLoading: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      randomizeRace: this.randomizeRace,
+    });
   }
 
   componentWillUnmount() {
@@ -127,6 +139,10 @@ export default class SetCharacterRace extends React.Component {
         });
       }, 500);
     });
+  }
+
+  randomizeRace = () => {
+    this.onChange({ race: chance.pickone(RACES.map(race => race.name)) });
   }
 
   render() {

@@ -460,6 +460,8 @@ export default class AssignAbilityScores extends React.Component {
       .keys(this.state.character.profile.raceModifiers)
       .filter(name => name !== 'extra');
 
+    const pointPlurality = this.state.extraPoints > 1 ? 'points' : 'point';
+
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -500,7 +502,7 @@ export default class AssignAbilityScores extends React.Component {
             {
               this.state.extraPoints > 0 &&
               <Note
-                title={`${this.state.extraPoints} points remaining!`}
+                title={`${this.state.extraPoints} ${pointPlurality} remaining!`}
                 type="error"
                 icon="error"
                 collapsible

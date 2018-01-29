@@ -4,6 +4,24 @@ import { Text } from 'react-native';
 export const toTitleCase = str =>
   str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 
+export const reformatCamelCaseKey = key =>
+  key.split(/(?=[A-Z])/).join(' ').toLowerCase();
+
+export const toProperList = (list, lastWord, capitalize) => {
+  if (list.length === 0) return '';
+  if (list.length === 1) return capitalize ? toTitleCase(list[0]) : list[0];
+  if (list.length === 2) {
+    const first = capitalize ? toTitleCase(list[0]) : list[0];
+    const last = capitalize ? toTitleCase(list[1]) : list[1];
+    return `${first} ${lastWord} ${last}`;
+  }
+  const newList = [...list];
+  const lastItem = newList.pop();
+  return capitalize ?
+    `${toTitleCase(newList.join(', '))}, ${lastWord} ${toTitleCase(lastItem)}` :
+    `${newList.join(', ')}, ${lastWord} ${lastItem}`;
+};
+
 export const getCharacterDisplayName = character =>
   `${toTitleCase(character.profile.firstName)} ${toTitleCase(character.profile.lastName)}`;
 
