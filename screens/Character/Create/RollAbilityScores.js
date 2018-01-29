@@ -146,7 +146,7 @@ export default class RollAbilityScores extends React.Component {
                 <TouchableHighlight
                   style={[
                     styles.button,
-                    styles.acceptScoresButton,
+                    styles.acceptButton,
                     this.state.isLoading ?
                       { opacity: 0.5 } :
                       { opacity: 1 },
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 5,
   },
-  acceptScoresButton: {
+  acceptButton: {
     backgroundColor: '#3F51B5',
     borderColor: '#3F51B5',
     flex: 1,

@@ -47,6 +47,9 @@ const RootNavigator = StackNavigator({
   PointBuyScores: { screen: Character.PointBuyScores },
   AssignAbilityScores: { screen: Character.AssignAbilityScores },
   SetSkills: { screen: Character.SetSkills },
+  AssignLanguages: { screen: Character.AssignLanguages },
+  ReviewSavingThrows: { screen: Character.ReviewSavingThrows },
+  ReviewHitPoints: { screen: Character.ReviewHitPoints },
 });
 
 export default class App extends React.Component {

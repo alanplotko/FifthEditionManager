@@ -20,6 +20,9 @@ import FormStyle from 'DNDManager/stylesheets/FormStyle';
 import { toTitleCase } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Character class selection
@@ -72,10 +75,13 @@ const options = {
 export default class SetCharacterClass extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Character Class',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeClass(),
       };
       return <Toolbar {...props} />;
     },
@@ -92,6 +98,12 @@ export default class SetCharacterClass extends React.Component {
       form: null,
       isSelectionLoading: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      randomizeClass: this.randomizeClass,
+    });
   }
 
   componentWillUnmount() {
@@ -124,6 +136,12 @@ export default class SetCharacterClass extends React.Component {
           isSelectionLoading: false,
         });
       }, 500);
+    });
+  }
+
+  randomizeClass = () => {
+    this.onChange({
+      baseClass: chance.pickone(CLASSES.map(baseClass => baseClass.name)),
     });
   }
 

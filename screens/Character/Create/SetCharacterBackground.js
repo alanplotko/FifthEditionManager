@@ -19,6 +19,9 @@ import FormStyle from 'DNDManager/stylesheets/FormStyle';
 import { toTitleCase } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Character background selection
@@ -71,10 +74,13 @@ const options = {
 export default class SetCharacterBackground extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Character Background',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeBackground(),
       };
       return <Toolbar {...props} />;
     },
@@ -91,6 +97,12 @@ export default class SetCharacterBackground extends React.Component {
       form: null,
       isSelectionLoading: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      randomizeBackground: this.randomizeBackground,
+    });
   }
 
   componentWillUnmount() {
@@ -121,6 +133,13 @@ export default class SetCharacterBackground extends React.Component {
     });
   }
 
+  randomizeBackground = () => {
+    this.onChange({
+      background:
+        chance.pickone(BACKGROUNDS.map(background => background.name)),
+    });
+  }
+
   render() {
     const getAdditionalBackgroundInfo = option => (
       <View>
@@ -131,7 +150,7 @@ export default class SetCharacterBackground extends React.Component {
           {option.equipment}
         </Text>
         <Text style={[styles.infoHeading, { paddingBottom: 10 }]}>
-          &#9656; Additional Languages: {option.languages}
+          &#9656; Additional Languages: {option.additionalLanguages}
         </Text>
         <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
         <Text style={styles.infoText}>

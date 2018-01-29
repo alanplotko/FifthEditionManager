@@ -34,10 +34,17 @@ export const EXPERIENCE = [
   120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
 ];
 
+export const ABILITIES = [
+  'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma',
+];
+
 export const RACES = [
   {
     name: 'Dwarf',
     description: 'These short and stocky defenders of mountain fortresses are often seen as stern and humorless; they\'re known for mining the earth\'s treasures and crafting magnificent items from ore and gemstones.',
+    speed: 25,
+    languages: ['common', 'dwarvish'],
+    additionalLanguages: 0,
     image: dwarf,
     modifiers: {
       constitution: 2,
@@ -46,6 +53,9 @@ export const RACES = [
   {
     name: 'Elf',
     description: 'Tall, noble, and often haughty, elves are long-lived and subtle masters of the wilderness, and excel in the arcane arts.',
+    speed: 30,
+    languages: ['common', 'elvish'],
+    additionalLanguages: 0,
     image: elf,
     modifiers: {
       dexterity: 2,
@@ -54,6 +64,9 @@ export const RACES = [
   {
     name: 'Halfling',
     description: 'Members of this diminutive race find strength in family, community, and their own innate and seemingly inexhaustible luck.',
+    speed: 25,
+    languages: ['common', 'halfling'],
+    additionalLanguages: 0,
     image: halfling,
     modifiers: {
       dexterity: 2,
@@ -62,6 +75,9 @@ export const RACES = [
   {
     name: 'Human',
     description: 'Ambitious, sometimes heroic, and always confident, humans have an ability to work together toward common goals that makes them a force to be reckoned with.',
+    speed: 30,
+    languages: ['common'],
+    additionalLanguages: 1,
     image: human,
     modifiers: {
       strength: 1,
@@ -75,6 +91,9 @@ export const RACES = [
   {
     name: 'Dragonborn',
     description: 'Born to fight, dragonborn are a race of wandering mercenaries, soldiers, and adventurers.',
+    speed: 30,
+    languages: ['common', 'draconic'],
+    additionalLanguages: 0,
     image: dragonborn,
     modifiers: {
       strength: 2,
@@ -84,6 +103,9 @@ export const RACES = [
   {
     name: 'Gnome',
     description: 'Gnomes are whimsical artisans and tinkers, creating strange devices powered by magic, alchemy, and their quirky imagination; they have an insatiable need for new experiences that often gets them in trouble.',
+    speed: 25,
+    languages: ['common', 'gnomish'],
+    additionalLanguages: 0,
     image: gnome,
     modifiers: {
       intelligence: 2,
@@ -92,6 +114,9 @@ export const RACES = [
   {
     name: 'Half-Elf',
     description: 'Often caught between the worlds of their progenitor races, half-elves are a race of both grace and contradiction.',
+    speed: 30,
+    languages: ['common', 'elvish'],
+    additionalLanguages: 1,
     image: halfElf,
     modifiers: {
       charisma: 2,
@@ -101,6 +126,9 @@ export const RACES = [
   {
     name: 'Half-Orc',
     description: 'Often fierce and savage, sometimes noble and resolute, half-orcs can manifest the best and worst qualities of their parent races.',
+    speed: 30,
+    languages: ['common', 'orc'],
+    additionalLanguages: 0,
     image: halfOrc,
     modifiers: {
       strength: 2,
@@ -110,6 +138,9 @@ export const RACES = [
   {
     name: 'Tiefling',
     description: 'Tieflings, often descendants of fiends and humans, are known for their cunning, allure, and leadership.',
+    speed: 30,
+    languages: ['common', 'infernal'],
+    additionalLanguages: 0,
     image: tiefling,
     modifiers: {
       intelligence: 1,
@@ -122,10 +153,10 @@ export const CLASSES = [
   {
     name: 'Barbarian',
     description: 'A fierce warrior of primitive background who can enter a battle rage.',
-    hitDie: 'd12',
+    hitDie: 12,
     primaryAbility: 'Strength',
     proficiencies: {
-      savingThrows: ['Strength', 'Constitution'],
+      savingThrows: ['strength', 'constitution'],
       armor: ['light armor', 'medium armor', 'shields'],
       weapons: ['simple weapons', 'martial weapons'],
       tools: [],
@@ -139,10 +170,10 @@ export const CLASSES = [
   {
     name: 'Bard',
     description: 'An inspiring magician whose power echoes the music of creation.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Charisma',
     proficiencies: {
-      savingThrows: ['Dexterity', 'Charisma'],
+      savingThrows: ['dexterity', 'charisma'],
       armor: ['light armor'],
       weapons: ['simple weapons', 'hand crossbows', 'longswords', 'rapiers', 'shortswords'],
       tools: [{ tag: 'musical instruments', quantity: 3 }],
@@ -156,10 +187,10 @@ export const CLASSES = [
   {
     name: 'Cleric',
     description: 'A priestly champion who wields divine magic in service of a higher power.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Wisdom',
     proficiencies: {
-      savingThrows: ['Wisdom', 'Charisma'],
+      savingThrows: ['wisdom', 'charisma'],
       armor: ['light armor', 'medium armor', 'shields'],
       weapons: ['simple weapons'],
       tools: [],
@@ -173,10 +204,10 @@ export const CLASSES = [
   {
     name: 'Druid',
     description: 'A priest of the Old Faith, wielding the powers of nature - moonlight and plant growth, fire and lightning - and adopting animal forms.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Wisdom',
     proficiencies: {
-      savingThrows: ['Intelligence', 'Wisdom'],
+      savingThrows: ['intelligence', 'wisdom'],
       armor: ['light nonmetal armor', 'medium nonmetal armor', 'nonmetal shields'],
       weapons: ['clubs', 'daggers', 'darts', 'javelins', 'maces', 'quarterstaffs', 'scimitars', 'sickles', 'slings', 'spears'],
       tools: [{ name: 'herbalism kit' }],
@@ -190,10 +221,10 @@ export const CLASSES = [
   {
     name: 'Fighter',
     description: 'A master of martial combat, skilled with a variety of weapons and armor.',
-    hitDie: 'd10',
+    hitDie: 10,
     primaryAbility: 'Strength or Dexterity',
     proficiencies: {
-      savingThrows: ['Strength', 'Constitution'],
+      savingThrows: ['strength', 'constitution'],
       armor: ['all armor', 'shields'],
       weapons: ['simple weapons', 'martial weapons'],
       tools: [],
@@ -207,10 +238,10 @@ export const CLASSES = [
   {
     name: 'Monk',
     description: 'An master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Dexterity & Wisdom',
     proficiencies: {
-      savingThrows: ['Strength', 'Dexterity'],
+      savingThrows: ['strength', 'dexterity'],
       armor: [],
       weapons: ['simple weapons', 'shortswords'],
       tools: [{
@@ -229,10 +260,10 @@ export const CLASSES = [
   {
     name: 'Paladin',
     description: 'A holy warrior bound to a sacred oath.',
-    hitDie: 'd10',
+    hitDie: 10,
     primaryAbility: 'Strength & Charisma',
     proficiencies: {
-      savingThrows: ['Wisdom', 'Charisma'],
+      savingThrows: ['wisdom', 'charisma'],
       armor: ['all armor', 'shields'],
       weapons: ['simple weapons', 'martial weapons'],
       tools: [],
@@ -246,10 +277,10 @@ export const CLASSES = [
   {
     name: 'Ranger',
     description: 'A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization.',
-    hitDie: 'd10',
+    hitDie: 10,
     primaryAbility: 'Dexterity & Wisdom',
     proficiencies: {
-      savingThrows: ['Strength', 'Dexterity'],
+      savingThrows: ['strength', 'dexterity'],
       armor: ['light armor', 'medium armor', 'shields'],
       weapons: ['simple weapons', 'martial weapons'],
       tools: [],
@@ -263,10 +294,10 @@ export const CLASSES = [
   {
     name: 'Rogue',
     description: 'A scoundrel who uses stealth and trickery to overcome obstacles and enemies.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Dexterity',
     proficiencies: {
-      savingThrows: ['Dexterity', 'Intelligence'],
+      savingThrows: ['dexterity', 'intelligence'],
       armor: ['light armor'],
       weapons: ['simple weapons', 'hand crossbows', 'longswords', 'rapiers', 'shortswords'],
       tools: [{ name: 'thieves\' tools' }],
@@ -280,10 +311,10 @@ export const CLASSES = [
   {
     name: 'Sorcerer',
     description: 'A spellcaster who draws on inherent magic from a gift or bloodline.',
-    hitDie: 'd6',
+    hitDie: 6,
     primaryAbility: 'Charisma',
     proficiencies: {
-      savingThrows: ['Constitution', 'Charisma'],
+      savingThrows: ['constitution', 'charisma'],
       armor: [],
       weapons: ['daggers', 'darts', 'slings', 'quarterstaffs', 'light crossbows'],
       tools: [],
@@ -297,10 +328,10 @@ export const CLASSES = [
   {
     name: 'Warlock',
     description: 'A wielder of magic that is derived from a bargain with an extraplanar entity.',
-    hitDie: 'd8',
+    hitDie: 8,
     primaryAbility: 'Charisma',
     proficiencies: {
-      savingThrows: ['Wisdom', 'Charisma'],
+      savingThrows: ['wisdom', 'charisma'],
       armor: ['light armor'],
       weapons: ['simple weapons'],
       tools: [],
@@ -314,10 +345,10 @@ export const CLASSES = [
   {
     name: 'Wizard',
     description: 'A scholarly magic-user capable of manipulating the structures of reality.',
-    hitDie: 'd6',
+    hitDie: 6,
     primaryAbility: 'Intelligence',
     proficiencies: {
-      savingThrows: ['Intelligence', 'Wisdom'],
+      savingThrows: ['intelligence', 'wisdom'],
       armor: [],
       weapons: ['daggers', 'darts', 'slings', 'quarterstaffs', 'light crossbows'],
       tools: [],
@@ -335,7 +366,7 @@ export const BACKGROUNDS = [
     name: 'Acolyte',
     description: 'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, perform ing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.',
     equipment: 'A holy symbol, a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a beth pouch containing 15gp',
-    languages: 2,
+    additionalLanguages: 2,
     proficiencies: {
       skills: ['insight', 'religion'],
       tools: [],
@@ -345,7 +376,7 @@ export const BACKGROUNDS = [
     name: 'Charlatan',
     description: 'You have always had a way with people. You know what makes them tick, you can tease out their hearts\' desires after a few minutes of conversation, and with a few leading questions you can read them like they were children\'s books. It’s a useful talent, and one that you’re perfectly willing to use for your advantage.',
     equipment: 'A set of fine clothes, a disguise kit, tools of the con of your choice (ten stoppered bottles filled with colored liquid, a set of weighted dice, a deck of marked cards, or a signet ring of an imaginary duke), and a belt pouch containing 15gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['deception', 'sleight of hand'],
       tools: [
@@ -358,7 +389,7 @@ export const BACKGROUNDS = [
     name: 'Criminal',
     description: 'You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld.',
     equipment: 'A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['deception', 'stealth'],
       tools: [
@@ -371,7 +402,7 @@ export const BACKGROUNDS = [
     name: 'Entertainer',
     description: 'You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them. Your poetics can stir the hearts of those who hear you, awakening grief or joy, laughter or anger.',
     equipment: 'A musical instrument of your choice, the favor of an admirer (love letter, lock of hair, or trinket), a costume, and a belt pouch containing 15gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['acrobatics', 'performance'],
       tools: [
@@ -384,7 +415,7 @@ export const BACKGROUNDS = [
     name: 'Folk Hero',
     description: 'You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the common folk everywhere.',
     equipment: 'A set of artisan\'s tools of your choice, a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['animal handling', 'survival'],
       tools: [
@@ -397,7 +428,7 @@ export const BACKGROUNDS = [
     name: 'Guild Artisan',
     description: 'You are a member of an artisan’s guild, skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth from the constraints of a feudal social order.',
     equipment: 'A set of artisan\'s tools of your choice, a letter of introduction from your guild, a set of traveler\'s clothes, and a belt pouch containing 15gp',
-    languages: 1,
+    additionalLanguages: 1,
     proficiencies: {
       skills: ['insight', 'persuasion'],
       tools: [{ tag: 'artisan\'s tools', quantity: 1 }],
@@ -407,7 +438,7 @@ export const BACKGROUNDS = [
     name: 'Hermit',
     description: 'You lived in seclusion - either in a sheltered community such as a monastery, or entirely alone - for a formative part of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for.',
     equipment: 'A scroll case stuffed full of notes from your studies or prayers, a winter blanket, a set of common clothes, an herbalism kit, and 5 gp',
-    languages: 1,
+    additionalLanguages: 1,
     proficiencies: {
       skills: ['medicine', 'religion'],
       tools: [{ name: 'herbalism kit' }],
@@ -417,7 +448,7 @@ export const BACKGROUNDS = [
     name: 'Noble',
     description: 'You understand wealth, power, and privilege. You carry a noble title, and your family owns land, collects taxes, and wields significant political influence. You might be a pampered aristocrat unfamiliar with work or discomfort, a former merchant just elevated to the nobility, or a disinherited scoundrel with a disproportionate sense of entitlement.',
     equipment: 'A set of fine clothes, a signet ring, a scroll of pedigree, and a purse containing 25gp',
-    languages: 1,
+    additionalLanguages: 1,
     proficiencies: {
       skills: ['history', 'persuasion'],
       tools: [{ tag: 'gaming set', quantity: 1 }],
@@ -427,7 +458,7 @@ export const BACKGROUNDS = [
     name: 'Outlander',
     description: 'You grew up in the wilds, far from civilization and the comforts of town and technology. You\'ve witnessed the migration of herds larger than forests, survived weather more extreme than any city-dweller could comprehend, and enjoyed the solitude of being the only thinking creature for miles in any direction.',
     equipment: 'A staff, a hunting trap, a trophy from an animal you killed, a set of traveler\'s clothes, and a belt pouch containing 10 gp.',
-    languages: 1,
+    additionalLanguages: 1,
     proficiencies: {
       skills: ['athletics', 'survival'],
       tools: [{ tag: 'musical instruments', quantity: 1 }],
@@ -437,7 +468,7 @@ export const BACKGROUNDS = [
     name: 'Sage',
     description: 'You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you. Your efforts have made you a master in your fields of study.',
     equipment: 'A bottle of black ink, a quill, a small knife, a letter from a dead colleague posing a question you have not been able to answer, a set of common clothes, and a belt pouch containing 10gp',
-    languages: 2,
+    additionalLanguages: 2,
     proficiencies: {
       skills: ['arcana', 'history'],
       tools: [],
@@ -447,7 +478,7 @@ export const BACKGROUNDS = [
     name: 'Sailor',
     description: 'You sailed on a seagoing vessel for years. In that time, you faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottom less depths. Your first love is the distant line of the horizon, but the time has com e to try your hand at something new.',
     equipment: 'A belaying pin (club), 50 feet of silk rope, a lucky charm such as a rabbit foot or a small stone with a hole in the center (or may roll for a trinket), a set of common clothes, and a belt pouch containing 10gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['athletics', 'perception'],
       tools: [
@@ -460,7 +491,7 @@ export const BACKGROUNDS = [
     name: 'Soldier',
     description: 'War has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, learned basic survival techniques, including how to stay alive on the battlefield.',
     equipment: 'An insignia of rank, a trophy taken from a fallen enemy, a set of bone dice or deck of cards, a set of common clothes, and a belt pouch containing 10gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['athletics', 'intimidation'],
       tools: [
@@ -473,7 +504,7 @@ export const BACKGROUNDS = [
     name: 'Urchin',
     description: 'You grew up on the streets alone, orphaned, and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself.',
     equipment: 'A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10gp',
-    languages: 0,
+    additionalLanguages: 0,
     proficiencies: {
       skills: ['sleight of hand', 'stealth'],
       tools: [
@@ -593,4 +624,27 @@ export const BASE_SKILLS = {
     ability: 'wisdom',
     proficient: false,
   },
+};
+
+export const LANGUAGES = {
+  standard: [
+    { language: 'common', speakers: ['humans'], script: 'common' },
+    { language: 'dwarvish', speakers: ['dwarves'], script: 'dwarvish' },
+    { language: 'elvish', speakers: ['elves'], script: 'elvish' },
+    { language: 'giant', speakers: ['ogres', 'giants'], script: 'dwarvish' },
+    { language: 'gnomish', speakers: ['gnomes'], script: 'dwarvish' },
+    { language: 'goblin', speakers: ['goblinoids'], script: 'dwarvish' },
+    { language: 'halfling', speakers: ['halflings'], script: 'common' },
+    { language: 'orc', speakers: ['orcs'], script: 'dwarvish' },
+  ],
+  exotic: [
+    { language: 'abyssal', speakers: ['demons'], script: 'common' },
+    { language: 'celestial', speakers: ['celestials'], script: 'dwarvish' },
+    { language: 'draconic', speakers: ['dragons', 'dragonborn'], script: 'elvish' },
+    { language: 'deep speech', speakers: ['mind flayers', 'beholders'], script: 'none' },
+    { language: 'infernal', speakers: ['devils'], script: 'infernal' },
+    { language: 'primordial', speakers: ['elementals'], script: 'dwarvish' },
+    { language: 'sylvan', speakers: ['fey creatures'], script: 'elvish' },
+    { language: 'undercommon', speakers: ['underdark traders'], script: 'elvish' },
+  ],
 };

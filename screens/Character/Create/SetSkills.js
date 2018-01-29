@@ -2,11 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, IconToggle, ListItem, Toolbar } from 'react-native-material-ui';
+import { COLOR, Icon, IconToggle, ListItem, Toolbar }
+  from 'react-native-material-ui';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import Note from 'DNDManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'DNDManager/config/Info';
-import { toTitleCase, calculateProficiencyBonus } from 'DNDManager/util';
+import {
+  toTitleCase,
+  calculateProficiencyBonus,
+  reformatCamelCaseKey,
+} from 'DNDManager/util';
 import { cloneDeep } from 'lodash';
 
 export default class SetSkills extends React.Component {
@@ -36,7 +41,7 @@ export default class SetSkills extends React.Component {
     };
 
     // Set character proficiency
-    this.state.character.proficiency =
+    this.state.character.profile.proficiency =
       calculateProficiencyBonus(this.state.character.profile.level);
 
     // Track given proficiencies
@@ -70,10 +75,9 @@ export default class SetSkills extends React.Component {
 
   setSkills = () => {
     const { navigate, state } = this.props.navigation;
-    navigate('AssignAbilityScores', {
-      skills: this.state.skills,
-      ...state.params,
-    });
+    state.params.character.lastUpdated = Date.now();
+    state.params.character.profile.skills = cloneDeep(this.state.skills);
+    navigate('AssignLanguages', { ...state.params });
   }
 
   setBaseSkills = (copy) => {
@@ -84,7 +88,7 @@ export default class SetSkills extends React.Component {
       skills[skill[0]].proficient = this.state.proficiencies.background
         .includes(skill[0]);
       if (skills[skill[0]].proficient) {
-        skills[skill[0]].modifier += this.state.character.proficiency;
+        skills[skill[0]].modifier += this.state.character.profile.proficiency;
       }
     });
     return skills;
@@ -109,9 +113,9 @@ export default class SetSkills extends React.Component {
     const change = (skills[key].proficient ? 1 : -1);
 
     // Add or subtract proficiency and quantity appropriately after toggle
-    skills[key].modifier += (this.state.character.proficiency * change);
+    skills[key].modifier += (this.state.character.profile.proficiency * change);
     proficiencies.quantity -= change;
-    const skillName = key.split(/(?=[A-Z])/).join(' ').toLowerCase();
+    const skillName = reformatCamelCaseKey(key);
     if (!proficiencies.options.includes(skillName)) {
       proficiencies.extras -= change;
     }
@@ -139,6 +143,7 @@ export default class SetSkills extends React.Component {
 
   render() {
     const ListItemRow = (key, skill) => {
+      const skillName = reformatCamelCaseKey(key);
       const negative = skill.modifier < 0;
       const textColor = negative ? COLOR.red500 : COLOR.green500;
       const modifier = Math.abs(skill.modifier);
@@ -169,8 +174,9 @@ export default class SetSkills extends React.Component {
                 {
                   skill.proficient &&
                   <Text>
-                    {modifier - this.state.character.proficiency} +&nbsp;
-                    {this.state.character.proficiency} =&nbsp;
+                    {modifier - this.state.character.profile.proficiency}
+                    &nbsp;+&nbsp;
+                    {this.state.character.profile.proficiency} =&nbsp;
                     <Text style={{ color: textColor }}>
                       {modifier >= 0 ? <Text>+</Text> : <Text>&minus;</Text>}
                       {modifier}
@@ -181,24 +187,28 @@ export default class SetSkills extends React.Component {
             </View>
           }
           rightElement={
-            <IconToggle
-              name="check-circle"
-              color={skill.proficient ? COLOR.green500 : COLOR.grey600}
-              onPress={() => this.toggleProficient(key)}
-              disabled={
-                this.state.proficiencies.background.includes(key) ||
-                (
+            this.state.proficiencies.background.includes(skillName) ?
+              <Icon
+                name="check-circle"
+                color={COLOR.green500}
+                style={{ opacity: 0.5, paddingHorizontal: 12 }}
+              /> :
+              <IconToggle
+                name="check-circle"
+                color={skill.proficient ? COLOR.green500 : COLOR.grey600}
+                percent={75}
+                onPress={() => this.toggleProficient(key)}
+                disabled={
                   !skill.proficient &&
                   (
                     this.state.proficiencies.quantity === 0 ||
                     (
-                      !this.state.proficiencies.options.includes(key) &&
+                      !this.state.proficiencies.options.includes(skillName) &&
                       this.state.proficiencies.extras === 0
                     )
                   )
-                )
-              }
-            />
+                }
+              />
           }
         />
       );
@@ -226,14 +236,14 @@ export default class SetSkills extends React.Component {
                 </Text>
                 ,&nbsp;your proficiency bonus is
                 <Text style={styles.makeBold}>
-                  &nbsp;+{this.state.character.proficiency}
+                  &nbsp;+{this.state.character.profile.proficiency}
                 </Text>
                 . A shortcut to determine the proficiency bonus is
                 dividing your level by 4, rounding up, and adding 1.{'\n\n'}
                 ceil({this.state.character.profile.level} / 4) + 1 =&nbsp;
                 {Math.ceil(this.state.character.profile.level / 4)} + 1 =&nbsp;
                 <Text style={styles.makeBold}>
-                  +{this.state.character.proficiency}
+                  +{this.state.character.profile.proficiency}
                 </Text>
                 .
               </Text>
@@ -349,7 +359,7 @@ export default class SetSkills extends React.Component {
               <TouchableHighlight
                 style={[
                   styles.button,
-                  styles.acceptScoresButton,
+                  styles.acceptButton,
                   this.state.proficiencies.quantity > 0 ?
                     { opacity: 0.5 } :
                     { opacity: 1 },
@@ -439,7 +449,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 5,
   },
-  acceptScoresButton: {
+  acceptButton: {
     backgroundColor: '#3F51B5',
     borderColor: '#3F51B5',
     flex: 2,

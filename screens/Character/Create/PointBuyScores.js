@@ -67,6 +67,8 @@ export default class PointBuyScores extends React.Component {
       { score: 9, cost: 1 },
       { score: 8, cost: 0 },
     ];
+    const remainingScores = 6 - this.state.scores.length;
+    const scorePlurality = remainingScores !== 1 ? 'Scores' : 'Score';
 
     const ListItemRow = (score, cost) => (
       <ListItem
@@ -173,7 +175,7 @@ export default class PointBuyScores extends React.Component {
               <TouchableHighlight
                 style={[
                   styles.button,
-                  styles.acceptScoresButton,
+                  styles.acceptButton,
                   this.state.scores.length < 6 ?
                     { opacity: 0.5 } :
                     { opacity: 1 },
@@ -184,8 +186,8 @@ export default class PointBuyScores extends React.Component {
               >
                 <Text style={styles.buttonText}>
                   {
-                    (6 - this.state.scores.length) > 0 ?
-                      `${6 - this.state.scores.length} Scores Remaining` :
+                    remainingScores > 0 ?
+                      `${remainingScores} ${scorePlurality} Remaining` :
                       'Proceed'
                   }
                 </Text>
@@ -264,7 +266,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 5,
   },
-  acceptScoresButton: {
+  acceptButton: {
     backgroundColor: '#3F51B5',
     borderColor: '#3F51B5',
     flex: 2,
