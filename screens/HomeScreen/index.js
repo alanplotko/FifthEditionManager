@@ -292,7 +292,7 @@ export default class HomeScreen extends React.Component {
           }, {
             icon: 'person',
             label: 'Character',
-            name: 'CreateCharacter',
+            name: 'SetCharacterRace',
           }]}
           rippleColor={COLOR.red200}
           transition="speedDial"

@@ -1,22 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
-  from 'react-native';
-import {
-  Card,
-  CardItem,
-  Container,
-  Content,
-  Icon,
-  List,
-  ListItem,
-  Body,
-} from 'native-base';
-import { COLOR, Toolbar } from 'react-native-material-ui';
+import { StyleSheet, View, Text, Image } from 'react-native';
+import { Container, Content } from 'native-base';
+import { Button, Card, COLOR, Icon, Toolbar, ListItem }
+  from 'react-native-material-ui';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
+import { toProperList, toTitleCase } from 'DNDManager/util';
 import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import { toTitleCase } from 'DNDManager/util';
+import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -27,49 +18,30 @@ const chance = new Chance();
  * Character background selection
  */
 
+const backgrounds = BACKGROUNDS.map((background) => ({
+  key: background.key,
+  name: background.name,
+}));
+const BackgroundType = backgrounds.reduce((o, background) =>
+  Object.assign(o, { [background.key]: background.name }), {});
 const CharacterBackground = t.struct({
-  background: t.enums({
-    Acolyte: 'Acolyte',
-    Charlatan: 'Charlatan',
-    Criminal: 'Criminal',
-    Entertainer: 'Entertainer',
-    'Folk Hero': 'Folk Hero',
-    'Guild Artisan': 'Guild Artisan',
-    Hermit: 'Hermit',
-    Noble: 'Noble',
-    Outlander: 'Outlander',
-    Sage: 'Sage',
-    Sailor: 'Sailor',
-    Soldier: 'Soldier',
-    Urchin: 'Urchin',
-  }),
+  background: t.enums(BackgroundType),
 });
 
 /**
- * Form template setup
+ * Form stylesheet setup
  */
 
-const template = locals => (
-  <View>
-    <View style={{ flex: 1 }}>
-      {locals.inputs.background}
-    </View>
-  </View>
-);
+const stylesheet = cloneDeep(t.form.Form.stylesheet);
 
-/**
- * Define form options
- */
-
-const options = {
-  template,
-  fields: {
-    background: {
-      label: 'Background',
-      nullOption: { value: '', text: 'Select Background' },
-    },
-  },
-};
+stylesheet.formGroup.normal.flexDirection = 'row';
+stylesheet.formGroup.error.flexDirection = 'row';
+stylesheet.formGroup.normal.alignItems = 'center';
+stylesheet.formGroup.error.alignItems = 'center';
+stylesheet.select.normal.flex = 1;
+stylesheet.select.error.flex = 1;
+stylesheet.select.normal.marginLeft = 10;
+stylesheet.select.error.marginLeft = 10;
 
 export default class SetCharacterBackground extends React.Component {
   static navigationOptions = {
@@ -93,9 +65,8 @@ export default class SetCharacterBackground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selection: null,
+      background: null,
       form: null,
-      isSelectionLoading: false,
     };
   }
 
@@ -105,211 +76,201 @@ export default class SetCharacterBackground extends React.Component {
     });
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.updateCard);
+  formOptions = {
+    template: (locals) => {
+      const { race } = this.props.navigation.state.params.character.profile;
+      return (
+        <View
+          style={[
+            styles.centered,
+            {
+              borderWidth: 2,
+              borderColor: 'rgba(0, 0, 0, 0.7)',
+              paddingTop: 30,
+            },
+          ]}
+        >
+          <Text style={styles.label}>Your {race.name}'s Background</Text>
+          <View style={{ flex: 1, margin: 0, padding: 0, height: 50 }}>
+            {locals.inputs.background}
+          </View>
+        </View>
+      );
+    },
+    stylesheet,
+    fields: {
+      background: {
+        auto: 'none',
+        nullOption: { value: '', text: 'Select Background' },
+      },
+    },
   }
 
   onPress = () => {
-    const { navigate, state } = this.props.navigation;
-    const data = this.form.getValue();
-    if (data) {
+    const background = this.form.getValue();
+    if (background) {
+      const { navigate, state } = this.props.navigation;
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, data);
+      newCharacter.profile = Object.assign({}, newCharacter.profile, {
+        background: {
+          lookupKey: this.state.background.key,
+          name: this.state.background.name,
+        },
+      });
+      console.log(newCharacter);
       navigate('ChooseScoringMethod', { character: newCharacter });
     }
   }
 
   onChange = (value) => {
-    this.setState({ isSelectionLoading: true, form: value }, () => {
-      this.updateCard = setTimeout(() => {
-        this.setState({
-          selection: value ?
-            BACKGROUNDS.find(option => option.name === value.background) :
-            null,
-          isSelectionLoading: false,
-        });
-      }, 500);
+    this.setState({
+      form: value,
+      background:
+        BACKGROUNDS.find(background => background.key === value.background),
     });
   }
 
   randomizeBackground = () => {
-    this.onChange({
-      background:
-        chance.pickone(BACKGROUNDS.map(background => background.name)),
+    const background = chance.pickone(BACKGROUNDS);
+    this.setState({
+      background,
+      form: { background: background.key },
     });
   }
 
   render() {
-    const getAdditionalBackgroundInfo = option => (
-      <View>
-        <Text style={styles.infoHeading}>
-          &#9656; Starting Equipment
-        </Text>
-        <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-          {option.equipment}
-        </Text>
-        <Text style={[styles.infoHeading, { paddingBottom: 10 }]}>
-          &#9656; Additional Languages: {option.additionalLanguages}
-        </Text>
-        <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-        <Text style={styles.infoText}>
-          Skills:&nbsp;
-          {option.proficiencies.skills.length === 0 && 'None'}
-          {
-            option.proficiencies.skills.length > 0 &&
-            toTitleCase(option.proficiencies.skills.join(', '))
-          }
-        </Text>
-        <Text style={styles.infoText}>
-          Tools:&nbsp;
-          {option.proficiencies.tools.length === 0 && 'None'}
-          {
-            option.proficiencies.tools.length > 0 &&
-            option.proficiencies.tools
-              .map((tool) => {
-                if (tool.name) {
-                  return toTitleCase(tool.name);
-                } else if (tool.options) {
-                  const toolOptions = [];
-                  tool.options.forEach((toolOption) => {
-                    toolOptions.push(`${toolOption.quantity} of ${toTitleCase(toolOption.tag)}`);
-                  });
-                  return toolOptions.join(' or ');
-                } else if (tool.tag) {
-                  return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
-                }
-                return '';
-              })
-              .join(', ')
-          }
-        </Text>
-      </View>
-    );
-    const list = BACKGROUNDS.map(option => (
-      <View key={option.name}>
-        {
-          this.state.selection &&
-          this.state.selection.name === option.name &&
-          <View style={styles.absoluteCentered}>
-            <Text style={styles.selectedText}>Selected</Text>
-          </View>
-        }
-        <ListItem
-          style={[
-            { marginLeft: 0, paddingLeft: 20 },
-            this.state.selection &&
-            this.state.selection.name === option.name ?
-            styles.selectedListItem :
-            null,
-          ]}
-        >
-          <Body>
-            <Text style={styles.listItemHeading}>{option.name}</Text>
-            <Text
-              style={[
-                styles.infoText,
-                { paddingLeft: 0, paddingBottom: 10 },
-              ]}
-            >
-              {option.description}
-            </Text>
-            {getAdditionalBackgroundInfo(option)}
-          </Body>
-        </ListItem>
-      </View>
-    ));
-
-    // Set up card for displaying currently selected option
-    let displayCard = null;
-    if (this.state.selection) {
-      displayCard = (
-        <Card>
-          {
-            this.state.isSelectionLoading &&
-            <View style={styles.absoluteCentered}>
-              <ActivityIndicator color="#3F51B5" size="large" />
-            </View>
-          }
-          <View style={this.state.isSelectionLoading ? styles.loading : ''}>
-            <CardItem>
-              <Body>
-                <Text style={styles.listItemHeading}>
-                  {this.state.selection.name}
-                </Text>
-                <Text style={[styles.infoText, { paddingLeft: 0 }]}>
-                  {this.state.selection.description}
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                {getAdditionalBackgroundInfo(this.state.selection)}
-              </Body>
-            </CardItem>
-          </View>
-        </Card>
-      );
-    } else {
-      displayCard = (
-        <Card>
-          <CardItem cardBody style={styles.centered}>
-            {
-              this.state.isSelectionLoading &&
-              <ActivityIndicator color="#3F51B5" size="large" />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Icon name="information-circle" style={styles.messageIcon} />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Text style={styles.displayCardHeading}>
-                Selection details will display here
-              </Text>
-            }
-          </CardItem>
-        </Card>
-      );
-    }
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
-            <Text style={FormStyle.heading}>Character Background</Text>
-            <t.form.Form
-              ref={(c) => { this.form = c; }}
-              type={CharacterBackground}
-              value={this.state.form}
-              options={options}
-              onChange={this.onChange}
-            />
-            <TouchableHighlight
-              style={[
-                FormStyle.submitBtn,
-                this.state.isSelectionLoading ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-                { marginTop: 0, marginBottom: 10 },
+          <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
+            <View style={styles.centered}>
+              <t.form.Form
+                ref={(c) => { this.form = c; }}
+                type={CharacterBackground}
+                value={this.state.form}
+                options={this.formOptions}
+                onChange={this.onChange}
+              />
+            </View>
+            <View style={[styles.centered, { marginVertical: 20 }]}>
+              <Button
+                primary
+                raised
+                disabled={!this.state.background}
+                onPress={this.onPress}
+                text="Proceed"
+                style={{ container: { flex: 1 } }}
+              />
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              {
+                this.state.background && [
+                <Card
+                  key={`${this.state.background.name}Background`}
+                  style={{ container: { padding: 15, width: '100%' } }}
+                >
+                  <Text style={styles.cardHeading}>
+                    {this.state.background.name}
+                  </Text>
+                  <Text style={styles.cardText}>
+                    {this.state.background.description}{'\n'}
+                  </Text>
+                  <Text style={styles.cardText}>
+                    You can learn&nbsp;
+                    <Text style={styles.makeBold}>
+                      {this.state.background.additionalLanguages}&nbsp;
+                    </Text>
+                    additional&nbsp;
+                    {
+                      this.state.background.additionalLanguages !== 1 ?
+                        'languages' : 'language'
+                    }
+                    .
+                  </Text>
+                </Card>,
+                <Card
+                  key={`${this.state.background.name}Equipment`}
+                  style={{ container: { padding: 15, width: '100%' } }}
+                >
+                  <Text style={styles.cardHeading}>
+                    Starting Equipment
+                  </Text>
+                  <Text style={styles.cardText}>
+                    {this.state.background.equipment}
+                  </Text>
+                </Card>,
+                <Card
+                  key={`${this.state.background.name}Proficiencies`}
+                  style={{ container: { padding: 15, width: '100%' } }}
+                >
+                  <Text style={styles.cardHeading}>
+                    Proficiencies
+                  </Text>
+                  <Text style={styles.cardText}>
+                    <Text style={styles.makeBold}>Skills:&nbsp;</Text>
+                    {
+                      this.state.background.proficiencies.skills.length === 0 &&
+                      'None'
+                    }
+                    {
+                      this.state.background.proficiencies.skills.length > 0 &&
+                      toTitleCase(
+                        this.state.background.proficiencies.skills.join(', '),
+                      )
+                    }
+                    .
+                  </Text>
+                  <Text style={styles.cardText}>
+                    <Text style={styles.makeBold}>Tools:&nbsp;</Text>
+                    {
+                      this.state.background.proficiencies.tools.length === 0 &&
+                      'None'
+                    }
+                    {
+                      this.state.background.proficiencies.tools.length > 0 &&
+                      this.state.background.proficiencies.tools
+                        .map((tool) => {
+                          if (tool.name) {
+                            return toTitleCase(tool.name);
+                          } else if (tool.options) {
+                            const toolOptions = [];
+                            tool.options.forEach((opt) => {
+                              toolOptions.push(`${opt.quantity} of ${toTitleCase(opt.tag)}`);
+                            });
+                            return toolOptions.join(' or ');
+                          } else if (tool.tag) {
+                            return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
+                          }
+                          return '';
+                        })
+                        .join(', ')
+                    }
+                    .
+                  </Text>
+                </Card>
               ]}
-              onPress={this.onPress}
-              underlayColor="#1A237E"
-              disabled={this.state.isSelectionLoading}
-            >
-              <Text style={FormStyle.submitBtnText}>
-                Set Background
-              </Text>
-            </TouchableHighlight>
-            {displayCard}
+              {
+                !this.state.background &&
+                <Card style={{ container: { padding: 20 } }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Icon
+                      name="info"
+                      style={{
+                        color: '#ccc',
+                        fontSize: 48,
+                        width: 48,
+                        height: 48,
+                        marginRight: 10,
+                      }} />
+                    <Text style={styles.placeholderMessage}>
+                      Selection details will display here
+                    </Text>
+                  </View>
+                </Card>
+              }
+            </View>
           </View>
-          <List>
-            <ListItem itemHeader first style={{ paddingBottom: 0 }}>
-              <Text style={[FormStyle.heading, { flex: 1 }]}>
-                Background Options
-              </Text>
-            </ListItem>
-            {list}
-          </List>
         </Content>
       </Container>
     );
@@ -317,60 +278,46 @@ export default class SetCharacterBackground extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  absoluteCentered: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+  cardHeading: {
+    fontFamily: 'RobotoLight',
+    color: '#000',
+    fontSize: 24,
+    marginBottom: 5,
+  },
+  cardNote: {
+    fontFamily: 'Roboto',
+    color: '#666',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  cardText: {
+    fontFamily: 'Roboto',
+    color: '#666',
+    fontSize: 16,
   },
   centered: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: 10,
+    alignItems: 'center',
   },
-  listItemHeading: {
+  makeBold: {
     fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 20,
   },
-  infoHeading: {
+  label: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: '#fff',
     fontSize: 16,
-    paddingLeft: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingVertical: 5,
+    paddingHorizontal: 18,
   },
-  infoText: {
-    fontFamily: 'Roboto',
-    color: '#666',
-    fontSize: 14,
-    paddingLeft: 10,
-  },
-  displayCardHeading: {
+  placeholderMessage: {
     fontFamily: 'RobotoLight',
     color: '#666',
     fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 48,
-    width: 48,
-    height: 48,
-    marginRight: 10,
-  },
-  loading: {
-    opacity: 0.1,
-  },
-  selectedListItem: {
-    opacity: 0.2,
-    backgroundColor: COLOR.greenA100,
-  },
-  selectedText: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 48,
   },
 });

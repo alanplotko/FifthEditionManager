@@ -67,12 +67,13 @@ export default class AssignAbilityScores extends React.Component {
     if (this.state.character.profile.raceModifiers.extra) {
       this.state.extraPoints = this.state.character.profile.raceModifiers.extra;
     }
-    Object.keys(this.state.character.profile.raceModifiers).forEach((key) => {
-      if (key !== 'extra') {
+    Object
+      .keys(this.state.character.profile.raceModifiers)
+      .filter(key => key !== 'extra')
+      .forEach((key) => {
         this.state.additionalStats[key] =
           this.state.character.profile.raceModifiers[key];
-      }
-    });
+      });
 
     this.state.scores.forEach((score) => {
       const index = this.state.scoreBank.findIndex(s => s.score === score);

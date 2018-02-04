@@ -7,6 +7,7 @@ import { Avatar, COLOR, Icon, IconToggle, ListItem }
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE } from 'DNDManager/config/Info';
+import { IMAGES } from 'DNDManager/config/Info';
 import { getCharacterDisplayName } from 'DNDManager/util';
 
 const calculateLevelProgress = (level, experience) => (
@@ -54,8 +55,9 @@ const CharacterProfileCard = (props) => {
             <Avatar
               image={
                 <Image
-                  source={props.character.profile.images.race}
+                  source={IMAGES.BASE_CLASS[props.character.profile.baseClass]}
                   style={{ height: 24, width: 24, borderRadius: 12 }}
+                  resizeMode="contain"
                 />
               }
               size={24}
@@ -100,7 +102,7 @@ const CharacterProfileCard = (props) => {
     <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
       <CardItem cardBody>
         <Image
-          source={props.character.profile.images.race}
+          source={IMAGES.RACE[props.character.profile.race]}
           resizeMode="cover"
           style={{ height: 100, width: null, flex: 1 }}
         />

@@ -15,7 +15,6 @@ import FormStyle from 'DNDManager/stylesheets/FormStyle';
 import { validateInteger } from 'DNDManager/util';
 
 const t = require('tcomb-form-native');
-const uuidv4 = require('uuid/v4');
 const Chance = require('chance');
 
 const chance = new Chance();
@@ -204,7 +203,7 @@ const options = {
   },
 };
 
-export default class CreateCharacter extends React.Component {
+export default class SetUpProfile extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
