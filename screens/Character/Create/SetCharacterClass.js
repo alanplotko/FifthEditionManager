@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
-import { CLASSES } from 'DNDManager/config/Info';
+import { CLASSES, IMAGES } from 'DNDManager/config/Info';
 import { toProperList, toTitleCase } from 'DNDManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'DNDManager/stylesheets';
 import { cloneDeep } from 'lodash';
@@ -151,25 +151,35 @@ export default class SetCharacterClass extends React.Component {
                   key={`${this.state.baseClass.name}Class`}
                   style={{ container: CardStyle.container }}
                 >
-                  <Text style={CardStyle.cardHeading}>
-                    {this.state.baseClass.name}
-                  </Text>
-                  <Text style={CardStyle.cardText}>
-                    {this.state.baseClass.description}{'\n'}
-                  </Text>
-                  <Text style={CardStyle.cardText}>
-                    Their primary ability derives from&nbsp;
-                    <Text style={CardStyle.makeBold}>
-                      {toProperList(
-                        this.state.baseClass.primaryAbility.abilities,
-                        this.state.baseClass.primaryAbility.isAllPrimary ? 'and' : 'or',
-                        true,
-                      )}
-                    </Text>
-                    . Their hit die is a&nbsp;
-                    <Text style={CardStyle.makeBold}>d{this.state.baseClass.hitDie}</Text>
-                    .
-                  </Text>
+                  <View style={{ flexDirection: 'row', flex: 1 }}>
+                    <View style={{ flex: 2 }}>
+                      <Text style={CardStyle.cardHeading}>
+                        {this.state.baseClass.name}
+                      </Text>
+                      <Text style={CardStyle.cardText}>
+                        {this.state.baseClass.description}{'\n'}
+                      </Text>
+                      <Text style={CardStyle.cardText}>
+                        Their primary ability derives from&nbsp;
+                        <Text style={CardStyle.makeBold}>
+                          {toProperList(
+                            this.state.baseClass.primaryAbility.abilities,
+                            this.state.baseClass.primaryAbility.isAllPrimary ? 'and' : 'or',
+                            true,
+                          )}
+                        </Text>
+                        . Their hit die is a&nbsp;
+                        <Text style={CardStyle.makeBold}>d{this.state.baseClass.hitDie}</Text>
+                        .
+                      </Text>
+                    </View>
+                    <Image
+                      source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
+                      style={{
+                        flex: 1, width: 100, resizeMode: 'contain', height: null,
+                      }}
+                    />
+                  </View>
                 </Card>,
                 <Card
                   key={`${this.state.baseClass.name}Proficiencies`}
