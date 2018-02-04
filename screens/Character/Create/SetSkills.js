@@ -4,9 +4,9 @@ import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import Note from 'DNDManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'DNDManager/config/Info';
+import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
 import {
   toTitleCase,
   calculateProficiencyBonus,
@@ -159,7 +159,7 @@ export default class SetSkills extends React.Component {
               <Text
                 style={[
                   styles.smallHeading,
-                  styles.makeBold,
+                  CardStyle.makeBold,
                   { color: skill.proficient ? COLOR.black : textColor },
                 ]}
               >
@@ -231,18 +231,18 @@ export default class SetSkills extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 The proficiency bonus is derived from your level. At
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;level {this.state.character.profile.level}
                 </Text>
                 ,&nbsp;your proficiency bonus is
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;+{this.state.character.profile.proficiency}
                 </Text>
                 . A shortcut to determine the proficiency bonus is
                 dividing your level by 4, rounding up, and adding 1.{'\n\n'}
                 ceil({this.state.character.profile.level} / 4) + 1 =&nbsp;
                 {Math.ceil(this.state.character.profile.level / 4)} + 1 =&nbsp;
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   +{this.state.character.profile.proficiency}
                 </Text>
                 .
@@ -258,7 +258,7 @@ export default class SetSkills extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 The
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.character.profile.background}&nbsp;
                 </Text>
                 background grants the following proficiencies and will be
@@ -280,11 +280,11 @@ export default class SetSkills extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 The
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.character.profile.baseClass}&nbsp;
                 </Text>
                 class grants
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.proficiencies.baseClass.quantity}&nbsp;
                 </Text>
                 proficiencies from the list below
@@ -298,7 +298,7 @@ export default class SetSkills extends React.Component {
                   this.state.proficiencies.baseClass.extras > 0 &&
                   <Text>
                     ,
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
                     </Text>
                     of which&nbsp;
@@ -308,11 +308,11 @@ export default class SetSkills extends React.Component {
                         'is'
                     }
                     &nbsp;accounted for with your
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.character.profile.background}&nbsp;
                     </Text>
                     background. As such, of the
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.quantity}&nbsp;
                     </Text>
                     {
@@ -321,7 +321,7 @@ export default class SetSkills extends React.Component {
                         'proficiency'
                     }
                     &nbsp;to select,
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.proficiencies.baseClass.extras}&nbsp;
                     </Text>
                     {
@@ -419,9 +419,6 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 18,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   buttonLayout: {
     flex: 1,

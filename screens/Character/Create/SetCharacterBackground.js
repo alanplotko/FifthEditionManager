@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Icon, Toolbar, ListItem }
-  from 'react-native-material-ui';
+import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'DNDManager/config/Info';
-import { toProperList, toTitleCase } from 'DNDManager/util';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import { toTitleCase } from 'DNDManager/util';
+import { CardStyle, ContainerStyle, FormStyle, LayoutStyle }
+  from 'DNDManager/stylesheets';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -18,15 +18,10 @@ const chance = new Chance();
  * Character background selection
  */
 
-const backgrounds = BACKGROUNDS.map((background) => ({
-  key: background.key,
-  name: background.name,
-}));
+const backgrounds = BACKGROUNDS.map(background => ({ key: background.key, name: background.name }));
 const BackgroundType = backgrounds.reduce((o, background) =>
   Object.assign(o, { [background.key]: background.name }), {});
-const CharacterBackground = t.struct({
-  background: t.enums(BackgroundType),
-});
+const CharacterBackground = t.struct({ background: t.enums(BackgroundType) });
 
 /**
  * Form stylesheet setup
@@ -71,39 +66,7 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({
-      randomizeBackground: this.randomizeBackground,
-    });
-  }
-
-  formOptions = {
-    template: (locals) => {
-      const { race } = this.props.navigation.state.params.character.profile;
-      return (
-        <View
-          style={[
-            styles.centered,
-            {
-              borderWidth: 2,
-              borderColor: 'rgba(0, 0, 0, 0.7)',
-              paddingTop: 30,
-            },
-          ]}
-        >
-          <Text style={styles.label}>Your {race.name}'s Background</Text>
-          <View style={{ flex: 1, margin: 0, padding: 0, height: 50 }}>
-            {locals.inputs.background}
-          </View>
-        </View>
-      );
-    },
-    stylesheet,
-    fields: {
-      background: {
-        auto: 'none',
-        nullOption: { value: '', text: 'Select Background' },
-      },
-    },
+    this.props.navigation.setParams({ randomizeBackground: this.randomizeBackground });
   }
 
   onPress = () => {
@@ -118,7 +81,6 @@ export default class SetCharacterBackground extends React.Component {
           name: this.state.background.name,
         },
       });
-      console.log(newCharacter);
       navigate('ChooseScoringMethod', { character: newCharacter });
     }
   }
@@ -126,107 +88,107 @@ export default class SetCharacterBackground extends React.Component {
   onChange = (value) => {
     this.setState({
       form: value,
-      background:
-        BACKGROUNDS.find(background => background.key === value.background),
+      background: BACKGROUNDS.find(background => background.key === value.background),
     });
+  }
+
+  formOptions = {
+    template: (locals) => {
+      const { race } = this.props.navigation.state.params.character.profile;
+      return (
+        <View
+          style={[
+            LayoutStyle.centered,
+            { borderWidth: 2, borderColor: 'rgba(0, 0, 0, 0.7)', paddingTop: 30 },
+          ]}
+        >
+          <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
+          <View
+            style={{
+              flex: 1, margin: 0, padding: 0, height: 50,
+            }}
+          >
+            {locals.inputs.background}
+          </View>
+        </View>
+      );
+    },
+    stylesheet,
+    fields: {
+      background: {
+        auto: 'none',
+        nullOption: { value: '', text: 'Select Background' },
+      },
+    },
   }
 
   randomizeBackground = () => {
     const background = chance.pickone(BACKGROUNDS);
-    this.setState({
-      background,
-      form: { background: background.key },
-    });
+    this.setState({ background, form: { background: background.key } });
   }
 
   render() {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
-            <View style={styles.centered}>
-              <t.form.Form
-                ref={(c) => { this.form = c; }}
-                type={CharacterBackground}
-                value={this.state.form}
-                options={this.formOptions}
-                onChange={this.onChange}
-              />
-            </View>
-            <View style={[styles.centered, { marginVertical: 20 }]}>
-              <Button
-                primary
-                raised
-                disabled={!this.state.background}
-                onPress={this.onPress}
-                text="Proceed"
-                style={{ container: { flex: 1 } }}
-              />
-            </View>
-            <View style={{ alignItems: 'center' }}>
-              {
-                this.state.background && [
+          <View style={{ margin: 20, alignItems: 'center' }}>
+            <t.form.Form
+              ref={(c) => { this.form = c; }}
+              type={CharacterBackground}
+              value={this.state.form}
+              options={this.formOptions}
+              onChange={this.onChange}
+            />
+            <Button
+              primary
+              raised
+              disabled={!this.state.background}
+              onPress={this.onPress}
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
+            {
+              this.state.background && [
                 <Card
                   key={`${this.state.background.name}Background`}
-                  style={{ container: { padding: 15, width: '100%' } }}
+                  style={{ container: CardStyle.container }}
                 >
-                  <Text style={styles.cardHeading}>
-                    {this.state.background.name}
-                  </Text>
-                  <Text style={styles.cardText}>
-                    {this.state.background.description}{'\n'}
-                  </Text>
-                  <Text style={styles.cardText}>
+                  <Text style={CardStyle.cardHeading}>{this.state.background.name}</Text>
+                  <Text style={CardStyle.cardText}>{this.state.background.description}{'\n'}</Text>
+                  <Text style={CardStyle.cardText}>
                     You can learn&nbsp;
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       {this.state.background.additionalLanguages}&nbsp;
                     </Text>
                     additional&nbsp;
-                    {
-                      this.state.background.additionalLanguages !== 1 ?
-                        'languages' : 'language'
-                    }
+                    {this.state.background.additionalLanguages !== 1 ? 'languages' : 'language'}
                     .
                   </Text>
                 </Card>,
                 <Card
                   key={`${this.state.background.name}Equipment`}
-                  style={{ container: { padding: 15, width: '100%' } }}
+                  style={{ container: CardStyle.container }}
                 >
-                  <Text style={styles.cardHeading}>
-                    Starting Equipment
-                  </Text>
-                  <Text style={styles.cardText}>
-                    {this.state.background.equipment}
-                  </Text>
+                  <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
+                  <Text style={CardStyle.cardText}>{this.state.background.equipment}</Text>
                 </Card>,
                 <Card
                   key={`${this.state.background.name}Proficiencies`}
-                  style={{ container: { padding: 15, width: '100%' } }}
+                  style={{ container: CardStyle.container }}
                 >
-                  <Text style={styles.cardHeading}>
-                    Proficiencies
-                  </Text>
-                  <Text style={styles.cardText}>
-                    <Text style={styles.makeBold}>Skills:&nbsp;</Text>
-                    {
-                      this.state.background.proficiencies.skills.length === 0 &&
-                      'None'
-                    }
+                  <Text style={CardStyle.cardHeading}>Proficiencies</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Skills:&nbsp;</Text>
+                    {this.state.background.proficiencies.skills.length === 0 && 'None'}
                     {
                       this.state.background.proficiencies.skills.length > 0 &&
-                      toTitleCase(
-                        this.state.background.proficiencies.skills.join(', '),
-                      )
+                      toTitleCase(this.state.background.proficiencies.skills.join(', '))
                     }
                     .
                   </Text>
-                  <Text style={styles.cardText}>
-                    <Text style={styles.makeBold}>Tools:&nbsp;</Text>
-                    {
-                      this.state.background.proficiencies.tools.length === 0 &&
-                      'None'
-                    }
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Tools:&nbsp;</Text>
+                    {this.state.background.proficiencies.tools.length === 0 && 'None'}
                     {
                       this.state.background.proficiencies.tools.length > 0 &&
                       this.state.background.proficiencies.tools
@@ -248,28 +210,22 @@ export default class SetCharacterBackground extends React.Component {
                     }
                     .
                   </Text>
-                </Card>
+                </Card>,
               ]}
-              {
-                !this.state.background &&
-                <Card style={{ container: { padding: 20 } }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Icon
-                      name="info"
-                      style={{
-                        color: '#ccc',
-                        fontSize: 48,
-                        width: 48,
-                        height: 48,
-                        marginRight: 10,
-                      }} />
-                    <Text style={styles.placeholderMessage}>
-                      Selection details will display here
-                    </Text>
-                  </View>
-                </Card>
-              }
-            </View>
+            {
+              !this.state.background &&
+              <Card style={{ container: { padding: 20 } }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon
+                    name="info"
+                    style={{
+                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                    }}
+                  />
+                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                </View>
+              </Card>
+            }
           </View>
         </Content>
       </Container>
@@ -278,43 +234,6 @@ export default class SetCharacterBackground extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  cardHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-    marginBottom: 5,
-  },
-  cardNote: {
-    fontFamily: 'Roboto',
-    color: '#666',
-    fontSize: 14,
-    marginTop: 5,
-  },
-  cardText: {
-    fontFamily: 'Roboto',
-    color: '#666',
-    fontSize: 16,
-  },
-  centered: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
-  },
-  label: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    fontFamily: 'RobotoBold',
-    color: '#fff',
-    fontSize: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    paddingVertical: 5,
-    paddingHorizontal: 18,
-  },
   placeholderMessage: {
     fontFamily: 'RobotoLight',
     color: '#666',

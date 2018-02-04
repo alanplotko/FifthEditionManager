@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import Note from 'DNDManager/components/Note';
 import { CLASSES } from 'DNDManager/config/Info';
 import { validateInteger } from 'DNDManager/util';
 import { cloneDeep } from 'lodash';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { CardStyle, ContainerStyle, FormStyle } from 'DNDManager/stylesheets';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -185,36 +184,36 @@ export default class ReviewHitPoints extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 The
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{baseClass}&nbsp;
                 </Text>
                 class grants a hit die of
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;1d{hitDie}&nbsp;
                 </Text>
                 plus your constitution modifier&nbsp;
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   (+{modifier})
                 </Text>
                 &nbsp;per level after the first level.
                 For the first level, take&nbsp;
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   {hitDie} + {modifier} = {hitDie + modifier}
                 </Text>
                 . After every level, add a roll of
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;1d{hitDie} + {modifier}&nbsp;
                 </Text>
                 or take
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{(hitDie / 2) + 1}&nbsp;
                 </Text>
                 automatically.{'\n\n'}
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   Total Hit Points:&nbsp;
                 </Text>
                 {level}d{hitDie} + ({level} * {modifier}) =&nbsp;
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   {level}d{hitDie} + {level * modifier}
                 </Text>
               </Text>
@@ -331,7 +330,7 @@ export default class ReviewHitPoints extends React.Component {
                 }}
               >
                 <Text style={[styles.cardTitle, { marginBottom: 0 }]}>
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     Total Hit Points
                   </Text>
                   &nbsp;=&nbsp;
@@ -343,7 +342,7 @@ export default class ReviewHitPoints extends React.Component {
                       .join(' + ')
                   }
                   &nbsp;=&nbsp;
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     {this.state.hitPoints}
                   </Text>
                 </Text>
@@ -382,9 +381,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     padding: 10,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   buttonLayout: {
     flex: 1,

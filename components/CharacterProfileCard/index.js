@@ -6,8 +6,7 @@ import { Avatar, COLOR, Icon, IconToggle, ListItem }
   from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { EXPERIENCE } from 'DNDManager/config/Info';
-import { IMAGES } from 'DNDManager/config/Info';
+import { EXPERIENCE, IMAGES } from 'DNDManager/config/Info';
 import { getCharacterDisplayName } from 'DNDManager/util';
 
 const calculateLevelProgress = (level, experience) => (

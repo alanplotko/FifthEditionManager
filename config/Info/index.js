@@ -2,6 +2,7 @@
  * Character race image assets
  */
 const RACE_IMAGES = {
+  /* eslint-disable global-require */
   dwarf: require('DNDManager/assets/images/races/portrait_dwarf.png'),
   elf: require('DNDManager/assets/images/races/portrait_elf.png'),
   halfling: require('DNDManager/assets/images/races/portrait_halfling.png'),
@@ -11,12 +12,14 @@ const RACE_IMAGES = {
   half_elf: require('DNDManager/assets/images/races/portrait_half_elf.png'),
   half_orc: require('DNDManager/assets/images/races/portrait_half_orc.png'),
   tiefling: require('DNDManager/assets/images/races/portrait_tiefling.png'),
+  /* eslint-enable global-require */
 };
 
 /**
  * Character class image assets
  */
 const BASE_CLASS_IMAGES = {
+  /* eslint-disable global-require */
   barbarian: require('DNDManager/assets/images/classes/class_barbarian.png'),
   bard: require('DNDManager/assets/images/classes/class_bard.png'),
   cleric: require('DNDManager/assets/images/classes/class_cleric.png'),
@@ -29,6 +32,7 @@ const BASE_CLASS_IMAGES = {
   sorcerer: require('DNDManager/assets/images/classes/class_sorcerer.png'),
   warlock: require('DNDManager/assets/images/classes/class_warlock.png'),
   wizard: require('DNDManager/assets/images/classes/class_wizard.png'),
+  /* eslint-enable global-require */
 };
 
 export const IMAGES = { RACE: RACE_IMAGES, BASE_CLASS: BASE_CLASS_IMAGES };

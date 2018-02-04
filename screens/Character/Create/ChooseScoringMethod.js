@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Card, COLOR, Toolbar } from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import { ContainerStyle } from 'DNDManager/stylesheets';
 
 /**
  * Define form options

@@ -4,7 +4,7 @@ import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import { ContainerStyle, CardStyle } from 'DNDManager/stylesheets';
 import Note from 'DNDManager/components/Note';
 import { RACES, BACKGROUNDS, LANGUAGES } from 'DNDManager/config/Info';
 import { toTitleCase, toProperList } from 'DNDManager/util';
@@ -168,22 +168,22 @@ export default class AssignLanguages extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 As {raceIndefiniteArticle}
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.race.name}
                 </Text>
                 , you can speak, read, and write in
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{toProperList(this.state.knownLanguages, 'and', true)}
                 </Text>
                 . You can learn
                 {
                   this.state.race.additionalLanguages > 0 &&
                   <Text>
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.race.additionalLanguages}&nbsp;
                     </Text>
                     additional {racePlurality} as {raceIndefiniteArticle}
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.race.name}&nbsp;
                     </Text>
                     and&nbsp;
@@ -192,12 +192,12 @@ export default class AssignLanguages extends React.Component {
                 {
                   this.state.background.additionalLanguages > 0 &&
                   <Text>
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.background.additionalLanguages}&nbsp;
                     </Text>
                     additional {backgroundPlurality} with&nbsp;
                     {backgroundIndefiniteArticle}
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.background.name}&nbsp;
                     </Text>
                     background
@@ -220,7 +220,7 @@ export default class AssignLanguages extends React.Component {
                   this.state.race.additionalLanguages > 0 &&
                   this.state.background.additionalLanguages > 0 &&
                   <Text>
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.additionalLanguages}&nbsp;
                     </Text>
                     additional {additionalPlurality} in total.
@@ -230,15 +230,15 @@ export default class AssignLanguages extends React.Component {
                   this.state.race.additionalLanguages === 0 &&
                   this.state.background.additionalLanguages === 0 &&
                   <Text>
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;0 additional languages&nbsp;
                     </Text>
                     as {raceIndefiniteArticle}
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.race.name}&nbsp;
                     </Text>
                     with {backgroundIndefiniteArticle}
-                    <Text style={styles.makeBold}>
+                    <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.background.name}&nbsp;
                     </Text>
                     background.
@@ -307,7 +307,7 @@ export default class AssignLanguages extends React.Component {
                   <Text
                     style={[
                       styles.smallHeading,
-                      styles.makeBold,
+                      CardStyle.makeBold,
                       { color: COLOR.white },
                     ]}
                   >
@@ -332,7 +332,7 @@ export default class AssignLanguages extends React.Component {
                   <Text
                     style={[
                       styles.smallHeading,
-                      styles.makeBold,
+                      CardStyle.makeBold,
                       { color: COLOR.white },
                     ]}
                   >
@@ -378,9 +378,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     padding: 10,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   buttonLayout: {
     flex: 1,

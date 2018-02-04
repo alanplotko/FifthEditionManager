@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Card, COLOR, IconToggle, ListItem, Toolbar }
+import { Card, Button, COLOR, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'DNDManager/util';
 
 const initialState = {
@@ -69,7 +69,6 @@ export default class PointBuyScores extends React.Component {
     ];
     const remainingScores = 6 - this.state.scores.length;
     const scorePlurality = remainingScores !== 1 ? 'Scores' : 'Score';
-
     const ListItemRow = (score, cost) => (
       <ListItem
         key={score}
@@ -102,7 +101,7 @@ export default class PointBuyScores extends React.Component {
             <Text style={styles.smallHeading}>
               {cost}
             </Text>
-            <Text style={[styles.smallHeading, styles.makeBold]}>
+            <Text style={[styles.smallHeading, CardStyle.makeBold]}>
               {this.state.scoreSet[score.toString()]}
             </Text>
           </View>
@@ -138,7 +137,7 @@ export default class PointBuyScores extends React.Component {
               style={{ container: { marginBottom: 10, padding: 10 } }}
             >
               <Text style={styles.bigHeading}>
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   {this.state.points}
                 </Text>
                 &nbsp;Points Remaining
@@ -151,47 +150,44 @@ export default class PointBuyScores extends React.Component {
                     'None'
                   }
                 </Text>
-                <Text style={[styles.bigHeading, styles.makeBold]}>
+                <Text style={[styles.bigHeading, CardStyle.makeBold]}>
                   {this.state.scores.join(', ')}
                 </Text>
               </View>
             </Card>
             <View style={styles.buttonLayout}>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.resetButton,
-                  this.state.scores.length === 0 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.resetScores()}
-                color={COLOR.red500}
-                underlayColor={COLOR.red800}
+              <Button
+                accent
+                raised
                 disabled={this.state.scores.length === 0}
-              >
-                <Text style={styles.buttonText}>Reset</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.acceptButton,
-                  this.state.scores.length < 6 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.acceptRolls()}
-                underlayColor="#1A237E"
+                onPress={() => this.resetScores()}
+                text="Reset"
+                style={{
+                  container: {
+                    flex: 1,
+                    height: 40,
+                    marginHorizontal: 10,
+                  },
+                }}
+              />
+              <Button
+                primary
+                raised
                 disabled={this.state.scores.length < 6}
-              >
-                <Text style={styles.buttonText}>
-                  {
-                    remainingScores > 0 ?
-                      `${remainingScores} ${scorePlurality} Remaining` :
-                      'Proceed'
-                  }
-                </Text>
-              </TouchableHighlight>
+                onPress={() => this.acceptRolls()}
+                text={
+                  remainingScores > 0 ?
+                    `${remainingScores} ${scorePlurality} Remaining` :
+                    'Proceed'
+                }
+                style={{
+                  container: {
+                    flex: 2,
+                    height: 40,
+                    marginHorizontal: 10,
+                  },
+                }}
+              />
             </View>
             <ListItem
               divider
@@ -237,13 +233,11 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 18,
   },
-  makeBold: {
-    fontFamily: 'RobotoBold',
-  },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginVertical: 20,
   },
   button: {
     height: 48,

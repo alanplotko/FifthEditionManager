@@ -6,7 +6,7 @@ import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'DNDManager/util';
 
 const Chance = require('chance');
@@ -122,7 +122,7 @@ export default class RollAbilityScores extends React.Component {
               >
                 <Text style={styles.scoreLabel}>
                   Rolls:&nbsp;
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     {this.state.sortedScores.join(', ')}
                   </Text>
                 </Text>
@@ -167,7 +167,7 @@ export default class RollAbilityScores extends React.Component {
                     <Text style={styles.scoreLabel}>
                       Roll {report.rollNumber}:
                     </Text>
-                    <Text style={[styles.scoreLabel, styles.makeBold]}>
+                    <Text style={[styles.scoreLabel, CardStyle.makeBold]}>
                       {formatSingleDigit(report.score)}
                     </Text>
                     {dice(report.rolls[0])}
@@ -222,9 +222,6 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 24,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   buttonLayout: {
     flex: 1,

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { COLOR, Icon, ListItem, Toolbar } from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
 import Note from 'DNDManager/components/Note';
 import { ABILITIES, CLASSES } from 'DNDManager/config/Info';
 import { toTitleCase, toProperList } from 'DNDManager/util';
+import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
 import { cloneDeep, zipObject } from 'lodash';
 
 export default class ReviewSavingThrows extends React.Component {
@@ -82,7 +82,7 @@ export default class ReviewSavingThrows extends React.Component {
               <Text
                 style={[
                   styles.smallHeading,
-                  styles.makeBold,
+                  CardStyle.makeBold,
                   { color: isChecked ? COLOR.black : textColor },
                 ]}
               >
@@ -146,11 +146,11 @@ export default class ReviewSavingThrows extends React.Component {
             >
               <Text style={{ marginBottom: 10 }}>
                 As {classIndefiniteArticle}
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.baseClass.name}
                 </Text>
                 , you have proficiency in saving throws for
-                <Text style={styles.makeBold}>
+                <Text style={CardStyle.makeBold}>
                   &nbsp;{toProperList(baseClassProficiencies, 'and', true)}
                 </Text>
                 . The saving throws derive from your ability modifiers and
@@ -209,9 +209,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     padding: 10,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   buttonLayout: {
     flex: 1,

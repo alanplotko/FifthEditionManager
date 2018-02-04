@@ -8,8 +8,9 @@ import HomeScreen from 'DNDManager/screens/HomeScreen';
 import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
 import * as Character from 'DNDManager/screens/Character';
 
-// UI theme
-import { COLOR, ThemeProvider } from 'react-native-material-ui';
+// UI theme and styles
+import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
+import { StyleSheet, Text, View } from 'react-native';
 
 const uiTheme = {
   palette: {
@@ -29,6 +30,13 @@ const uiTheme = {
   },
 };
 
+// Font assets
+const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf');
+const RobotoLight = require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf');
+const RobotoRegular =
+  require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf');
+const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
+
 // Navigation config
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
@@ -47,7 +55,7 @@ const RootNavigator = StackNavigator({
   ReviewHitPoints: { screen: Character.ReviewHitPoints },
 });
 
-const cacheFonts = fonts => fonts.map(font => Font.loadAsync(font));
+const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
   images.map(image => Asset.fromModule(image).downloadAsync());
 
@@ -56,45 +64,79 @@ export default class App extends React.Component {
     super();
     this.state = {
       isReady: false,
+      error: null,
     };
   }
 
-  async loadAssetsAsync() {
+  loadAssetsAsync = () => {
     const imageAssets = cacheImages([
       ...Object.values(IMAGES.RACE),
       ...Object.values(IMAGES.BASE_CLASS),
     ]);
-    const fontAssets = cacheFonts([
-      {
-        RobotoThin:
-          require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf'),
-      },
-      {
-        RobotoLight:
-          require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf'),
-      },
-      {
-        RobotoRegular:
-          require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf'),
-      },
-      {
-        RobotoBold:
-          require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf'),
-      },
-    ]);
-    await Promise.all([...imageAssets, ...fontAssets]);
+    const fontAssets = cacheFonts({
+      RobotoThin, RobotoLight, RobotoRegular, RobotoBold,
+    });
+    return Promise.all([imageAssets, fontAssets]);
   }
 
   render() {
+    if (this.state.error) {
+      return (
+        <ThemeProvider uiTheme={uiTheme}>
+          <View style={styles.centered}>
+            <Icon name="error" style={[styles.messageIcon]} />
+            <Text style={styles.heading}>
+              We&apos;re having some trouble!
+            </Text>
+            <Text style={styles.text}>
+              We couldn&apos;t load some assets.
+            </Text>
+            <Text style={styles.text}>
+              Try again in a moment.
+            </Text>
+            <Button
+              primary
+              raised
+              icon="refresh"
+              onPress={() => this.setState({ error: null })}
+              text="Reload"
+              style={{ container: { width: '75%', margin: 20 } }}
+            />
+          </View>
+        </ThemeProvider>
+      );
+    }
     if (!this.state.isReady) {
       return (
         <AppLoading
           startAsync={this.loadAssetsAsync}
           onFinish={() => this.setState({ isReady: true })}
-          onError={console.warn}
+          onError={error => this.setState({ error })}
         />
       );
     }
     return <ThemeProvider uiTheme={uiTheme}><RootNavigator /></ThemeProvider>;
   }
 }
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  heading: {
+    color: '#666',
+    fontSize: 24,
+    marginBottom: 10,
+  },
+  text: {
+    color: '#666',
+    fontSize: 18,
+  },
+  messageIcon: {
+    color: '#ccc',
+    fontSize: 156,
+  },
+});

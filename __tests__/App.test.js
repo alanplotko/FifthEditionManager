@@ -3,7 +3,7 @@ import App from 'DNDManager/App';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-/* eslint-disable-line global-require */
+/* eslint-disable global-require */
 require('react-native-mock-render/mock');
 /* eslint-enable global-require */
 
@@ -23,10 +23,20 @@ describe('renders app properly', () => {
   });
 
   test('after assets have loaded', async () => {
+    // Set up App and AppLoading component
     const wrapper = shallow(<App />);
-    // Load font assets
-    await wrapper.instance().loadFontAssets();
+    wrapper.dive();
+
+    // Assets not loaded yet; expect not ready
+    const promise = wrapper.instance().loadAssetsAsync();
+    expect(wrapper.state()).toHaveProperty('isReady', false);
+
+    // Load assets and update wrapper
+    await expect(promise).resolves.toEqual(expect.anything());
     wrapper.update();
+
+    // Assets loaded; expect ready
+    expect(wrapper.state()).toHaveProperty('isReady', true);
     expect(wrapper.name()).toBe('ThemeProvider');
     expect(wrapper.dive().name()).toBe('NavigationContainer');
     expect(wrapper.props()).toHaveProperty('uiTheme');

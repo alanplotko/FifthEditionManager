@@ -334,8 +334,8 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 60,
   },
   heading: {
     fontFamily: 'RobotoLight',

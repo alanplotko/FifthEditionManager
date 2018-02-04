@@ -5,8 +5,7 @@ import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import Note from 'DNDManager/components/Note';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { CardStyle, ContainerStyle, FormStyle } from 'DNDManager/stylesheets';
 import { toTitleCase, calculateModifier } from 'DNDManager/util';
 
 const abilities = [
@@ -480,7 +479,7 @@ export default class AssignAbilityScores extends React.Component {
               >
                 <Text style={{ marginBottom: 10 }}>
                   The
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     &nbsp;{this.state.character.profile.race}&nbsp;
                   </Text>
                   race grants the following points and will be allocated
@@ -512,18 +511,18 @@ export default class AssignAbilityScores extends React.Component {
               >
                 <Text>
                   The
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     &nbsp;{this.state.character.profile.race}&nbsp;
                   </Text>
                   race grants an additional
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     &nbsp;
                     {this.state.character.profile.raceModifiers.extra}
                     &nbsp;
                   </Text>
                   points to your abilities. You can allocate only 1 additional
                   point for a single ability until all
-                  <Text style={styles.makeBold}>
+                  <Text style={CardStyle.makeBold}>
                     &nbsp;
                     {this.state.character.profile.raceModifiers.extra}
                     &nbsp;
@@ -634,9 +633,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 24,
     marginBottom: 10,
-  },
-  makeBold: {
-    fontFamily: 'RobotoBold',
   },
   calculationTitle: {
     fontFamily: 'RobotoLight',
