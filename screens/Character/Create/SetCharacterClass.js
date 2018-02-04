@@ -151,7 +151,7 @@ export default class SetCharacterClass extends React.Component {
                   key={`${this.state.baseClass.name}Class`}
                   style={{ container: CardStyle.container }}
                 >
-                  <View style={{ flexDirection: 'row', flex: 1 }}>
+                  <View style={LayoutStyle.centered}>
                     <View style={{ flex: 2 }}>
                       <Text style={CardStyle.cardHeading}>
                         {this.state.baseClass.name}
@@ -173,12 +173,15 @@ export default class SetCharacterClass extends React.Component {
                         .
                       </Text>
                     </View>
-                    <Image
-                      source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
-                      style={{
-                        flex: 1, width: 100, resizeMode: 'contain', height: null,
-                      }}
-                    />
+                    <View style={{ flex: 1 }}>
+                      <Image
+                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
+                        style={{
+                          flex: 1, width: null, height: '100%',
+                        }}
+                        resizeMode="contain"
+                      />
+                    </View>
                   </View>
                 </Card>,
                 <Card
