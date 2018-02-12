@@ -5,8 +5,8 @@ import { Container, Content } from 'native-base';
 import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
 import { toTitleCase } from 'FifthEditionManager/util';
-import { CardStyle, ContainerStyle, FormStyle, LayoutStyle }
-  from 'FifthEditionManager/stylesheets';
+import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -155,7 +155,7 @@ export default class SetCharacterBackground extends React.Component {
                 >
                   <Text style={CardStyle.cardHeading}>{this.state.background.name}</Text>
                   <Text style={CardStyle.cardText}>{this.state.background.description}{'\n'}</Text>
-                  <Text style={CardStyle.cardText}>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
                     You can learn&nbsp;
                     <Text style={CardStyle.makeBold}>
                       {this.state.background.additionalLanguages}&nbsp;
@@ -164,13 +164,17 @@ export default class SetCharacterBackground extends React.Component {
                     {this.state.background.additionalLanguages !== 1 ? 'languages' : 'language'}
                     .
                   </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
                   key={`${this.state.background.name}Equipment`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
-                  <Text style={CardStyle.cardText}>{this.state.background.equipment}</Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    {this.state.background.equipment}
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
                   key={`${this.state.background.name}Proficiencies`}
@@ -186,7 +190,7 @@ export default class SetCharacterBackground extends React.Component {
                     }
                     .
                   </Text>
-                  <Text style={CardStyle.cardText}>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
                     <Text style={CardStyle.makeBold}>Tools:&nbsp;</Text>
                     {this.state.background.proficiencies.tools.length === 0 && 'None'}
                     {
@@ -210,6 +214,7 @@ export default class SetCharacterBackground extends React.Component {
                     }
                     .
                   </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
               ]}
             {

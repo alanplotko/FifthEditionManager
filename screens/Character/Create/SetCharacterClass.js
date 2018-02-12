@@ -161,26 +161,47 @@ export default class SetCharacterClass extends React.Component {
                         {this.state.baseClass.description}{'\n'}
                       </Text>
                     </View>
-                      {/* <View style={{ flex: 1 }}>
-                        <Image
-                          source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
-                          style={{
-                            flex: 1, width: null, height: '100%',
-                          }}
-                          resizeMode="contain"
-                        />
-                      </View> */}
+                    <View style={{ flex: 1 }}>
+                      <Image
+                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
+                        style={{ width: 96, height: 96, marginLeft: 20 }}
+                      />
+                    </View>
                   </View>
+                </Card>,
+                <Card
+                  key={`${this.state.baseClass.name}HitDie`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>Hit Die</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>{this.state.baseClass.name}s&nbsp;</Text>
+                    gain&nbsp;
+                    <Text style={CardStyle.makeBold}>1d{this.state.baseClass.hitDie}&nbsp;</Text>
+                    per level.
+                  </Text>
+                  <Text style={CardStyle.cardText}>
+                    At the 1st level, you start with:{'\n'}
+                    <Text style={CardStyle.makeBold}>
+                      {this.state.baseClass.hitDie} + your Constitution modifier
+                    </Text>
+                    .
+                  </Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    At higher levels (after level 1), you gain:{'\n'}
+                    <Text style={CardStyle.makeBold}>
+                      {this.state.baseClass.hitDie} (or {(this.state.baseClass.hitDie / 2) + 1})
+                      + your Constitution modifier
+                    </Text>
+                    .
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
                   key={`${this.state.baseClass.name}Proficiencies`}
                   style={{ container: CardStyle.container }}
                 >
-                  <Text style={CardStyle.cardHeading}>Additional Information</Text>
-                  <Text style={CardStyle.cardText}>
-                    <Text style={CardStyle.makeBold}>Hit Die:&nbsp;</Text>
-                    d{this.state.baseClass.hitDie}
-                  </Text>
+                  <Text style={CardStyle.cardHeading}>Proficiencies</Text>
                   <Text style={CardStyle.cardText}>
                     <Text style={CardStyle.makeBold}>Saving Throws:&nbsp;</Text>
                     {this.state.baseClass.proficiencies.savingThrows.length === 0 && 'None'}
