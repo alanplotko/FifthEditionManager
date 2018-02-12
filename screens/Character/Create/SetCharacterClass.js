@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
-import { CLASSES, IMAGES } from 'DNDManager/config/Info';
-import { toProperList, toTitleCase } from 'DNDManager/util';
-import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'DNDManager/stylesheets';
+import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
+import { toProperList, toTitleCase } from 'FifthEditionManager/util';
+import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -159,36 +160,27 @@ export default class SetCharacterClass extends React.Component {
                       <Text style={CardStyle.cardText}>
                         {this.state.baseClass.description}{'\n'}
                       </Text>
-                      <Text style={CardStyle.cardText}>
-                        Their primary ability derives from&nbsp;
-                        <Text style={CardStyle.makeBold}>
-                          {toProperList(
-                            this.state.baseClass.primaryAbility.abilities,
-                            this.state.baseClass.primaryAbility.isAllPrimary ? 'and' : 'or',
-                            true,
-                          )}
-                        </Text>
-                        . Their hit die is a&nbsp;
-                        <Text style={CardStyle.makeBold}>d{this.state.baseClass.hitDie}</Text>
-                        .
-                      </Text>
                     </View>
-                    <View style={{ flex: 1 }}>
-                      <Image
-                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
-                        style={{
-                          flex: 1, width: null, height: '100%',
-                        }}
-                        resizeMode="contain"
-                      />
-                    </View>
+                      {/* <View style={{ flex: 1 }}>
+                        <Image
+                          source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
+                          style={{
+                            flex: 1, width: null, height: '100%',
+                          }}
+                          resizeMode="contain"
+                        />
+                      </View> */}
                   </View>
                 </Card>,
                 <Card
                   key={`${this.state.baseClass.name}Proficiencies`}
                   style={{ container: CardStyle.container }}
                 >
-                  <Text style={CardStyle.cardHeading}>Proficiencies</Text>
+                  <Text style={CardStyle.cardHeading}>Additional Information</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Hit Die:&nbsp;</Text>
+                    d{this.state.baseClass.hitDie}
+                  </Text>
                   <Text style={CardStyle.cardText}>
                     <Text style={CardStyle.makeBold}>Saving Throws:&nbsp;</Text>
                     {this.state.baseClass.proficiencies.savingThrows.length === 0 && 'None'}
@@ -240,7 +232,7 @@ export default class SetCharacterClass extends React.Component {
                     }
                     .
                   </Text>
-                  <Text style={CardStyle.cardText}>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
                     <Text style={CardStyle.makeBold}>Skills:&nbsp;</Text>
                     {
                       !this.state.baseClass.proficiencies.skills.options &&
@@ -258,6 +250,7 @@ export default class SetCharacterClass extends React.Component {
                     }
                     .
                   </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
               ]
             }

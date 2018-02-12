@@ -5,12 +5,16 @@ export default StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#000',
     fontSize: 24,
-    marginBottom: 10,
+    paddingBottom: 10,
   },
   cardText: {
     fontFamily: 'Roboto',
     color: '#666',
     fontSize: 16,
+    paddingBottom: 5,
+  },
+  extraPadding: {
+    paddingBottom: 30,
   },
   cardNote: {
     fontFamily: 'Roboto',

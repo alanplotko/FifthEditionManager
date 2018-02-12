@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, View, UIManager }
   from 'react-native';
-import { Container, Tab, Tabs, TabHeading, Text, Icon } from 'native-base';
+import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
-import { ActionButton, Button, COLOR, Toolbar } from 'react-native-material-ui';
+import { ActionButton, Button, Icon, COLOR, Toolbar } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import ActivityCard from 'DNDManager/components/ActivityCard';
-import CharacterProfileCard from 'DNDManager/components/CharacterProfileCard';
-import { getCharacterDisplayName } from 'DNDManager/util';
+import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
+import ActivityCard from 'FifthEditionManager/components/ActivityCard';
+import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfileCard';
+import { getCharacterDisplayName } from 'FifthEditionManager/util';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
-  from 'DNDManager/config/StoreKeys';
+  from 'FifthEditionManager/config/StoreKeys';
 
 const uuidv4 = require('uuid/v4');
 
@@ -149,7 +149,7 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     const errorView = (
       <View style={styles.centered}>
-        <Icon name="alert" style={styles.messageIcon} />
+        <Icon name="error" size={156} color="#ccc" />
         <Text style={styles.heading}>
           An error occurred!
         </Text>
@@ -179,7 +179,7 @@ export default class HomeScreen extends React.Component {
       <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
         <Tabs initialPage={0} locked>
           <Tab
-            heading={<TabHeading><Icon name="home" /></TabHeading>}
+            heading={<TabHeading><NBIcon name="home" /></TabHeading>}
             style={styles.tab}
           >
             { this.state.error && errorView }
@@ -196,7 +196,7 @@ export default class HomeScreen extends React.Component {
             {
               !this.state.error && this.state.activity.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="analytics" style={styles.messageIcon} />
+                <Icon name="timeline" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
@@ -229,12 +229,12 @@ export default class HomeScreen extends React.Component {
             {
               !this.state.error && this.state.campaigns.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="document" style={styles.messageIcon} />
+                <Icon name="book" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
                 <Text style={styles.text}>
-                  No campaigns found.
+                  No existing campaigns found.
                 </Text>
                 <Text style={styles.text}>
                   Let&apos;s get started!
@@ -268,12 +268,12 @@ export default class HomeScreen extends React.Component {
             {
               !this.state.error && this.state.characters.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="person" style={styles.messageIcon} />
+                <Icon name="person" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
                 <Text style={styles.text}>
-                  No characters found.
+                  No existing characters found.
                 </Text>
                 <Text style={styles.text}>
                   Let&apos;s get started!
@@ -332,8 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   centered: {
-    flex: 1,
-    flexDirection: 'column',
+    marginTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -341,7 +340,13 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: '#666',
     fontSize: 24,
-    marginBottom: 10,
+    paddingBottom: 20,
+  },
+  text: {
+    fontFamily: 'RobotoLight',
+    color: '#666',
+    fontSize: 18,
+    paddingBottom: 5,
   },
   modalView: {
     flex: 1,
@@ -349,14 +354,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-  },
-  text: {
-    fontFamily: 'RobotoLight',
-    color: '#666',
-    fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 156,
   },
 });

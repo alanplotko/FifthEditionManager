@@ -1,12 +1,12 @@
 import { AppLoading, Asset, Font } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import { IMAGES } from 'DNDManager/config/Info';
+import { IMAGES } from 'FifthEditionManager/config/Info';
 
 // Screens
-import HomeScreen from 'DNDManager/screens/HomeScreen';
-import CreateCampaignScreen from 'DNDManager/screens/CreateCampaignScreen';
-import * as Character from 'DNDManager/screens/Character';
+import HomeScreen from 'FifthEditionManager/screens/HomeScreen';
+import CreateCampaignScreen from 'FifthEditionManager/screens/CreateCampaignScreen';
+import * as Character from 'FifthEditionManager/screens/Character';
 
 // UI theme and styles
 import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
@@ -31,20 +31,20 @@ const uiTheme = {
 };
 
 // Font assets
-const RobotoThin = require('DNDManager/assets/fonts/Roboto/Roboto-Thin.ttf');
-const RobotoLight = require('DNDManager/assets/fonts/Roboto/Roboto-Light.ttf');
+const RobotoThin = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Thin.ttf');
+const RobotoLight = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Light.ttf');
 const RobotoRegular =
-  require('DNDManager/assets/fonts/Roboto/Roboto-Regular.ttf');
-const RobotoBold = require('DNDManager/assets/fonts/Roboto/Roboto-Bold.ttf');
+  require('FifthEditionManager/assets/fonts/Roboto/Roboto-Regular.ttf');
+const RobotoBold = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
   CreateCampaign: { screen: CreateCampaignScreen },
-  SetUpProfile: { screen: Character.SetUpProfile },
   SetCharacterRace: { screen: Character.SetRace },
   SetCharacterClass: { screen: Character.SetClass },
   SetCharacterBackground: { screen: Character.SetBackground },
+  SetUpProfile: { screen: Character.SetUpProfile },
   ChooseScoringMethod: { screen: Character.ChooseScoringMethod },
   RollAbilityScores: { screen: Character.RollAbilityScores },
   PointBuyScores: { screen: Character.PointBuyScores },

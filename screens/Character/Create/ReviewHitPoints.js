@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
-import Note from 'DNDManager/components/Note';
-import { CLASSES } from 'DNDManager/config/Info';
-import { validateInteger } from 'DNDManager/util';
+import Note from 'FifthEditionManager/components/Note';
+import { CLASSES } from 'FifthEditionManager/config/Info';
+import { validateInteger } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
-import { CardStyle, ContainerStyle, FormStyle } from 'DNDManager/stylesheets';
+import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');

@@ -4,14 +4,14 @@ import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import Note from 'DNDManager/components/Note';
-import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'DNDManager/config/Info';
-import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
+import Note from 'FifthEditionManager/components/Note';
+import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'FifthEditionManager/config/Info';
+import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import {
   toTitleCase,
   calculateProficiencyBonus,
   reformatCamelCaseKey,
-} from 'DNDManager/util';
+} from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 
 export default class SetSkills extends React.Component {

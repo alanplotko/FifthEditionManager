@@ -4,8 +4,8 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Card, Button, COLOR, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
-import { formatSingleDigit, reverseSort } from 'DNDManager/util';
+import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
+import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
 
 const initialState = {
   points: 27,

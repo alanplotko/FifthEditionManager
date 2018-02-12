@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Toolbar } from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import { EXPERIENCE } from 'DNDManager/config/Info';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
-import { validateInteger } from 'DNDManager/util';
+import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
+import { ALIGNMENTS, EXPERIENCE } from 'FifthEditionManager/config/Info';
+import FormStyle from 'FifthEditionManager/stylesheets/FormStyle';
+import { validateInteger } from 'FifthEditionManager/util';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -85,6 +85,8 @@ t.String.getValidationErrorMessage = defaultError;
  * Define character
  */
 
+const AlignmentType = ALIGNMENTS.reduce((o, alignment) =>
+ Object.assign(o, { [alignment]: alignment }), {});
 const Character = t.struct({
   power: Power,
   firstName: t.String,
@@ -94,17 +96,7 @@ const Character = t.struct({
     Female: 'Female',
     Other: 'Other',
   }),
-  alignment: t.enums({
-    'Lawful Good': 'Lawful Good',
-    'Lawful Neutral': 'Lawful Neutral',
-    'Lawful Evil': 'Lawful Evil',
-    'Neutral Good': 'Neutral Good',
-    'True Neutral': 'True Neutral',
-    'Neutral Evil': 'Neutral Evil',
-    'Chaotic Good': 'Chaotic Good',
-    'Chaotic Neutral': 'Chaotic Neutral',
-    'Chaotic Evil': 'Chaotic Evil',
-  }),
+  alignment: t.enums(AlignmentType),
   age: Age,
   height: t.String,
   weight: t.String,
@@ -140,16 +132,14 @@ const template = locals => (
     </View>
 
     <Text style={FormStyle.heading}>Measurements</Text>
-    <View style={FormStyle.horizontalLayout}>
-      <View style={{ flex: 1, marginRight: 5 }}>
-        {locals.inputs.age}
-      </View>
-      <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
-        {locals.inputs.height}
-      </View>
-      <View style={{ flex: 1, marginLeft: 5 }}>
-        {locals.inputs.weight}
-      </View>
+    <View style={{ flex: 1, marginRight: 5 }}>
+      {locals.inputs.age}
+    </View>
+    <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
+      {locals.inputs.height}
+    </View>
+    <View style={{ flex: 1, marginLeft: 5 }}>
+      {locals.inputs.weight}
     </View>
   </View>
 );
@@ -311,17 +301,7 @@ export default class SetUpProfile extends React.Component {
         lastName,
         power: { level: 1, experience: 0 },
         gender,
-        alignment: chance.pickone([
-          'Lawful Good',
-          'Lawful Neutral',
-          'Lawful Evil',
-          'Neutral Good',
-          'True Neutral',
-          'Neutral Evil',
-          'Chaotic Good',
-          'Chaotic Neutral',
-          'Chaotic Evil',
-        ]),
+        alignment: chance.pickone(ALIGNMENTS),
         // Age min/max: Human/Elf
         age: chance.natural({ min: 10, max: 800 }),
         // Height min/max: Halfling/Dragonborn

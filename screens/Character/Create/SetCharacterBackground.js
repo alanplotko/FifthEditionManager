@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
-import { BACKGROUNDS } from 'DNDManager/config/Info';
-import { toTitleCase } from 'DNDManager/util';
+import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
+import { toTitleCase } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle }
-  from 'DNDManager/stylesheets';
+  from 'FifthEditionManager/stylesheets';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -81,7 +81,7 @@ export default class SetCharacterBackground extends React.Component {
           name: this.state.background.name,
         },
       });
-      navigate('ChooseScoringMethod', { character: newCharacter });
+      navigate('SetUpProfile', { character: newCharacter });
     }
   }
 

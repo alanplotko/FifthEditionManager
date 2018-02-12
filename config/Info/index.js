@@ -3,15 +3,15 @@
  */
 const RACE_IMAGES = {
   /* eslint-disable global-require */
-  dwarf: require('DNDManager/assets/images/races/portrait_dwarf.png'),
-  elf: require('DNDManager/assets/images/races/portrait_elf.png'),
-  halfling: require('DNDManager/assets/images/races/portrait_halfling.png'),
-  human: require('DNDManager/assets/images/races/portrait_human.png'),
-  dragonborn: require('DNDManager/assets/images/races/portrait_dragonborn.png'),
-  gnome: require('DNDManager/assets/images/races/portrait_gnome.png'),
-  half_elf: require('DNDManager/assets/images/races/portrait_half_elf.png'),
-  half_orc: require('DNDManager/assets/images/races/portrait_half_orc.png'),
-  tiefling: require('DNDManager/assets/images/races/portrait_tiefling.png'),
+  dwarf: require('FifthEditionManager/assets/images/races/portrait_dwarf.png'),
+  elf: require('FifthEditionManager/assets/images/races/portrait_elf.png'),
+  halfling: require('FifthEditionManager/assets/images/races/portrait_halfling.png'),
+  human: require('FifthEditionManager/assets/images/races/portrait_human.png'),
+  dragonborn: require('FifthEditionManager/assets/images/races/portrait_dragonborn.png'),
+  gnome: require('FifthEditionManager/assets/images/races/portrait_gnome.png'),
+  half_elf: require('FifthEditionManager/assets/images/races/portrait_half_elf.png'),
+  half_orc: require('FifthEditionManager/assets/images/races/portrait_half_orc.png'),
+  tiefling: require('FifthEditionManager/assets/images/races/portrait_tiefling.png'),
   /* eslint-enable global-require */
 };
 
@@ -20,22 +20,27 @@ const RACE_IMAGES = {
  */
 const BASE_CLASS_IMAGES = {
   /* eslint-disable global-require */
-  barbarian: require('DNDManager/assets/images/classes/class_barbarian.png'),
-  bard: require('DNDManager/assets/images/classes/class_bard.png'),
-  cleric: require('DNDManager/assets/images/classes/class_cleric.png'),
-  druid: require('DNDManager/assets/images/classes/class_druid.png'),
-  fighter: require('DNDManager/assets/images/classes/class_fighter.png'),
-  monk: require('DNDManager/assets/images/classes/class_monk.png'),
-  paladin: require('DNDManager/assets/images/classes/class_paladin.png'),
-  ranger: require('DNDManager/assets/images/classes/class_ranger.png'),
-  rogue: require('DNDManager/assets/images/classes/class_rogue.png'),
-  sorcerer: require('DNDManager/assets/images/classes/class_sorcerer.png'),
-  warlock: require('DNDManager/assets/images/classes/class_warlock.png'),
-  wizard: require('DNDManager/assets/images/classes/class_wizard.png'),
+  barbarian: require('FifthEditionManager/assets/images/classes/class_barbarian.png'),
+  bard: require('FifthEditionManager/assets/images/classes/class_bard.png'),
+  cleric: require('FifthEditionManager/assets/images/classes/class_cleric.png'),
+  druid: require('FifthEditionManager/assets/images/classes/class_druid.png'),
+  fighter: require('FifthEditionManager/assets/images/classes/class_fighter.png'),
+  monk: require('FifthEditionManager/assets/images/classes/class_monk.png'),
+  paladin: require('FifthEditionManager/assets/images/classes/class_paladin.png'),
+  ranger: require('FifthEditionManager/assets/images/classes/class_ranger.png'),
+  rogue: require('FifthEditionManager/assets/images/classes/class_rogue.png'),
+  sorcerer: require('FifthEditionManager/assets/images/classes/class_sorcerer.png'),
+  warlock: require('FifthEditionManager/assets/images/classes/class_warlock.png'),
+  wizard: require('FifthEditionManager/assets/images/classes/class_wizard.png'),
   /* eslint-enable global-require */
 };
 
 export const IMAGES = { RACE: RACE_IMAGES, BASE_CLASS: BASE_CLASS_IMAGES };
+
+export const ALIGNMENTS = [
+  'Lawful Good', 'Lawful Neutral', 'Lawful Evil', 'Neutral Good', 'True Neutral', 'Neutral Evil',
+  'Chaotic Good', 'Chaotic Neutral', 'Chaotic Evil',
+];
 
 export const EXPERIENCE = [
   0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
@@ -52,6 +57,16 @@ export const RACES = [
     name: 'Dwarf',
     description: 'These short and stocky defenders of mountain fortresses are often seen as stern and humorless; they\'re known for mining the earth\'s treasures and crafting magnificent items from ore and gemstones.',
     speed: 25,
+    age: { adulthood: 50, lifespan: 350 },
+    alignment: ['lawful', 'good'],
+    height: {
+      base: 44,
+      modifier: [2, 4], // 2d4
+    },
+    weight: {
+      base: 115,
+      modifier: [2, 6], // 2d6
+    },
     languages: ['common', 'dwarvish'],
     additionalLanguages: 0,
     image: IMAGES.RACE.dwarf,
@@ -64,6 +79,16 @@ export const RACES = [
     name: 'Elf',
     description: 'Tall, noble, and often haughty, elves are long-lived and subtle masters of the wilderness, and excel in the arcane arts.',
     speed: 30,
+    age: { adulthood: 100, lifespan: 750 },
+    alignment: ['chaotic', 'good'],
+    height: {
+      base: 54,
+      modifier: [2, 10], // 2d10
+    },
+    weight: {
+      base: 90,
+      modifier: [1, 4], // 1d4
+    },
     languages: ['common', 'elvish'],
     additionalLanguages: 0,
     image: IMAGES.RACE.elf,
@@ -76,6 +101,16 @@ export const RACES = [
     name: 'Halfling',
     description: 'Members of this diminutive race find strength in family, community, and their own innate and seemingly inexhaustible luck.',
     speed: 25,
+    age: { adulthood: 20, lifespan: 250 },
+    alignment: ['lawful', 'good'],
+    height: {
+      base: 31,
+      modifier: [2, 4], // 2d4
+    },
+    weight: {
+      base: 35,
+      modifier: [1, 1], // 1
+    },
     languages: ['common', 'halfling'],
     additionalLanguages: 0,
     image: IMAGES.RACE.halfling,
@@ -88,6 +123,16 @@ export const RACES = [
     name: 'Human',
     description: 'Ambitious, sometimes heroic, and always confident, humans have an ability to work together toward common goals that makes them a force to be reckoned with.',
     speed: 30,
+    age: { adulthood: 18, lifespan: 100 },
+    alignment: ['lawful', 'good'],
+    height: {
+      base: 56,
+      modifier: [2, 10], // 2d10
+    },
+    weight: {
+      base: 110,
+      modifier: [2, 4], // 2d4
+    },
     languages: ['common'],
     additionalLanguages: 1,
     image: IMAGES.RACE.human,
@@ -105,6 +150,16 @@ export const RACES = [
     name: 'Dragonborn',
     description: 'Born to fight, dragonborn are a race of wandering mercenaries, soldiers, and adventurers.',
     speed: 30,
+    age: { adulthood: 15, lifespan: 80 },
+    alignment: ['good'],
+    height: {
+      base: 66,
+      modifier: [2, 8], // 2d8
+    },
+    weight: {
+      base: 175,
+      modifier: [2, 6], // 2d6
+    },
     languages: ['common', 'draconic'],
     additionalLanguages: 0,
     image: IMAGES.RACE.dragonborn,
@@ -118,6 +173,16 @@ export const RACES = [
     name: 'Gnome',
     description: 'Gnomes are whimsical artisans and tinkers, creating strange devices powered by magic, alchemy, and their quirky imagination; they have an insatiable need for new experiences that often gets them in trouble.',
     speed: 25,
+    age: { adulthood: 40, lifespan: 500 },
+    alignment: ['good'],
+    height: {
+      base: 35,
+      modifier: [2, 4], // 2d4
+    },
+    weight: {
+      base: 35,
+      modifier: [1, 1], // 1
+    },
     languages: ['common', 'gnomish'],
     additionalLanguages: 0,
     image: IMAGES.RACE.gnome,
@@ -130,6 +195,16 @@ export const RACES = [
     name: 'Half-Elf',
     description: 'Often caught between the worlds of their progenitor races, half-elves are a race of both grace and contradiction.',
     speed: 30,
+    age: { adulthood: 20, lifespan: 180 },
+    alignment: ['good'],
+    height: {
+      base: 57,
+      modifier: [2, 8], // 2d8
+    },
+    weight: {
+      base: 110,
+      modifier: [2, 4], // 2d4
+    },
     languages: ['common', 'elvish'],
     additionalLanguages: 1,
     image: IMAGES.RACE.half_elf,
@@ -143,6 +218,16 @@ export const RACES = [
     name: 'Half-Orc',
     description: 'Often fierce and savage, sometimes noble and resolute, half-orcs can manifest the best and worst qualities of their parent races.',
     speed: 30,
+    age: { adulthood: 14, lifespan: 75 },
+    alignment: ['chaotic', 'evil'],
+    height: {
+      base: 58,
+      modifier: [2, 10], // 2d10
+    },
+    weight: {
+      base: 140,
+      modifier: [2, 6], // 2d6
+    },
     languages: ['common', 'orc'],
     additionalLanguages: 0,
     image: IMAGES.RACE.half_orc,
@@ -156,6 +241,16 @@ export const RACES = [
     name: 'Tiefling',
     description: 'Tieflings, often descendants of fiends and humans, are known for their cunning, allure, and leadership.',
     speed: 30,
+    age: { adulthood: 18, lifespan: 100 },
+    alignment: ['chaotic', 'evil'],
+    height: {
+      base: 57,
+      modifier: [2, 8], // 2d8
+    },
+    weight: {
+      base: 110,
+      modifier: [2, 4], // 2d4
+    },
     languages: ['common', 'infernal'],
     additionalLanguages: 0,
     image: IMAGES.RACE.tiefling,
@@ -170,9 +265,8 @@ export const CLASSES = [
   {
     key: 'barbarian',
     name: 'Barbarian',
-    description: 'A fierce warrior of primitive background who can enter a battle rage.',
+    description: 'A relentless combatant, fueled by fury and in tune with the natural order.',
     hitDie: 12,
-    primaryAbility: { isAllPrimary: true, abilities: ['strength'] },
     proficiencies: {
       savingThrows: ['strength', 'constitution'],
       armor: ['light armor', 'medium armor', 'shields'],
@@ -188,9 +282,8 @@ export const CLASSES = [
   {
     key: 'bard',
     name: 'Bard',
-    description: 'An inspiring magician whose power echoes the music of creation.',
+    description: 'A story teller or musician using their wits, magic, and lore to get out of or avoid tight situations.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['charisma'] },
     proficiencies: {
       savingThrows: ['dexterity', 'charisma'],
       armor: ['light armor'],
@@ -206,9 +299,8 @@ export const CLASSES = [
   {
     key: 'cleric',
     name: 'Cleric',
-    description: 'A priestly champion who wields divine magic in service of a higher power.',
+    description: 'A devotee of a deity. They are capable of supporting a party, healing their wounds or laying low their enemies with divine wrath.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['wisdom'] },
     proficiencies: {
       savingThrows: ['wisdom', 'charisma'],
       armor: ['light armor', 'medium armor', 'shields'],
@@ -224,9 +316,8 @@ export const CLASSES = [
   {
     key: 'druid',
     name: 'Druid',
-    description: 'A priest of the Old Faith, wielding the powers of nature - moonlight and plant growth, fire and lightning - and adopting animal forms.',
+    description: 'A nomad devoted to the world and the powers of nature. They are capable of adopting the form of a beast for battle or utility. Capable of supporting a party, healing their wounds or laying low their enemies with nature\'s wrath.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['wisdom'] },
     proficiencies: {
       savingThrows: ['intelligence', 'wisdom'],
       armor: ['light nonmetal armor', 'medium nonmetal armor', 'nonmetal shields'],
@@ -242,9 +333,8 @@ export const CLASSES = [
   {
     key: 'fighter',
     name: 'Fighter',
-    description: 'A master of martial combat, skilled with a variety of weapons and armor.',
+    description: 'A skilled combatant or strategist typically relying on their heavy armor and weapons to cut down their enemies. Their training gives them unique abilities.',
     hitDie: 10,
-    primaryAbility: { isAllPrimary: false, abilities: ['strength', 'dexterity'] },
     proficiencies: {
       savingThrows: ['strength', 'constitution'],
       armor: ['all armor', 'shields'],
@@ -260,9 +350,8 @@ export const CLASSES = [
   {
     key: 'monk',
     name: 'Monk',
-    description: 'An master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.',
+    description: 'A martial artist relying on the power of their own body to produce impressive results.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['dexterity', 'wisdom'] },
     proficiencies: {
       savingThrows: ['strength', 'dexterity'],
       armor: [],
@@ -283,9 +372,8 @@ export const CLASSES = [
   {
     key: 'paladin',
     name: 'Paladin',
-    description: 'A holy warrior bound to a sacred oath.',
+    description: 'A skilled combatant who holds an oath with a God. They support their efforts with divine magic. Through their devotion, they gain special boons from their God.',
     hitDie: 10,
-    primaryAbility: { isAllPrimary: true, abilities: ['strength', 'charisma'] },
     proficiencies: {
       savingThrows: ['wisdom', 'charisma'],
       armor: ['all armor', 'shields'],
@@ -301,9 +389,8 @@ export const CLASSES = [
   {
     key: 'ranger',
     name: 'Ranger',
-    description: 'A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization.',
+    description: 'A deadly hunter who uses a unique blend of wilderness knowledge and martial ability.',
     hitDie: 10,
-    primaryAbility: { isAllPrimary: true, abilities: ['dexterity', 'wisdom'] },
     proficiencies: {
       savingThrows: ['strength', 'dexterity'],
       armor: ['light armor', 'medium armor', 'shields'],
@@ -319,9 +406,8 @@ export const CLASSES = [
   {
     key: 'rogue',
     name: 'Rogue',
-    description: 'A scoundrel who uses stealth and trickery to overcome obstacles and enemies.',
+    description: 'A thief or assassin who has a knack for picking out and exploiting their enemies\' weaknesses. They stealthily move about, using trickery to get their way.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['dexterity'] },
     proficiencies: {
       savingThrows: ['dexterity', 'intelligence'],
       armor: ['light armor'],
@@ -337,9 +423,8 @@ export const CLASSES = [
   {
     key: 'sorcerer',
     name: 'Sorcerer',
-    description: 'A spellcaster who draws on inherent magic from a gift or bloodline.',
+    description: 'A user of magic who draws power from within, summoning their innate magical power and bending it to their will.',
     hitDie: 6,
-    primaryAbility: { isAllPrimary: true, abilities: ['charisma'] },
     proficiencies: {
       savingThrows: ['constitution', 'charisma'],
       armor: [],
@@ -355,9 +440,8 @@ export const CLASSES = [
   {
     key: 'warlock',
     name: 'Warlock',
-    description: 'A wielder of magic that is derived from a bargain with an extraplanar entity.',
+    description: 'A user of magic who holds a pact with a powerful entity, trading favors for power.',
     hitDie: 8,
-    primaryAbility: { isAllPrimary: true, abilities: ['charisma'] },
     proficiencies: {
       savingThrows: ['wisdom', 'charisma'],
       armor: ['light armor'],
@@ -373,9 +457,8 @@ export const CLASSES = [
   {
     key: 'wizard',
     name: 'Wizard',
-    description: 'A scholarly magic-user capable of manipulating the structures of reality.',
+    description: 'A keeper of arcane secrets and forgotten knowledge who manipulates magic and spells with cunning.',
     hitDie: 6,
-    primaryAbility: { isAllPrimary: true, abilities: ['intelligence'] },
     proficiencies: {
       savingThrows: ['intelligence', 'wisdom'],
       armor: [],
@@ -395,164 +478,11 @@ export const BACKGROUNDS = [
     key: 'acolyte',
     name: 'Acolyte',
     description: 'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, perform ing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.',
-    equipment: 'A holy symbol, a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a beth pouch containing 15gp.',
+    equipment: 'A holy symbol (a	gift to	you	when you entered	the	priesthood), a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a pouch containing 15gp.',
     additionalLanguages: 2,
     proficiencies: {
       skills: ['insight', 'religion'],
       tools: [],
-    },
-  },
-  {
-    key: 'charlatan',
-    name: 'Charlatan',
-    description: 'You have always had a way with people. You know what makes them tick, you can tease out their hearts\' desires after a few minutes of conversation, and with a few leading questions you can read them like they were children\'s books. It’s a useful talent, and one that you’re perfectly willing to use for your advantage.',
-    equipment: 'A set of fine clothes, a disguise kit, tools of the con of your choice (ten stoppered bottles filled with colored liquid, a set of weighted dice, a deck of marked cards, or a signet ring of an imaginary duke), and a belt pouch containing 15gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['deception', 'sleight of hand'],
-      tools: [
-        { name: 'disguise kit' },
-        { name: 'forgery kit' },
-      ],
-    },
-  },
-  {
-    key: 'criminal',
-    name: 'Criminal',
-    description: 'You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld.',
-    equipment: 'A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['deception', 'stealth'],
-      tools: [
-        { tag: 'gaming set', quantity: 1 },
-        { name: 'thieves\' tools' },
-      ],
-    },
-  },
-  {
-    key: 'entertainer',
-    name: 'Entertainer',
-    description: 'You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them. Your poetics can stir the hearts of those who hear you, awakening grief or joy, laughter or anger.',
-    equipment: 'A musical instrument of your choice, the favor of an admirer (love letter, lock of hair, or trinket), a costume, and a belt pouch containing 15gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['acrobatics', 'performance'],
-      tools: [
-        { name: 'disguise kit' },
-        { tag: 'musical instruments', quantity: 1 },
-      ],
-    },
-  },
-  {
-    key: 'folk_hero',
-    name: 'Folk Hero',
-    description: 'You come from a humble social rank, but you are destined for so much more. Already the people of your home village regard you as their champion, and your destiny calls you to stand against the tyrants and monsters that threaten the common folk everywhere.',
-    equipment: 'A set of artisan\'s tools of your choice, a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['animal handling', 'survival'],
-      tools: [
-        { tag: 'artisan\'s tools', quantity: 1 },
-        { name: 'land vehicles' },
-      ],
-    },
-  },
-  {
-    key: 'guild_artisan',
-    name: 'Guild Artisan',
-    description: 'You are a member of an artisan’s guild, skilled in a particular field and closely associated with other artisans. You are a well-established part of the mercantile world, freed by talent and wealth from the constraints of a feudal social order.',
-    equipment: 'A set of artisan\'s tools of your choice, a letter of introduction from your guild, a set of traveler\'s clothes, and a belt pouch containing 15gp.',
-    additionalLanguages: 1,
-    proficiencies: {
-      skills: ['insight', 'persuasion'],
-      tools: [{ tag: 'artisan\'s tools', quantity: 1 }],
-    },
-  },
-  {
-    key: 'hermit',
-    name: 'Hermit',
-    description: 'You lived in seclusion - either in a sheltered community such as a monastery, or entirely alone - for a formative part of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for.',
-    equipment: 'A scroll case stuffed full of notes from your studies or prayers, a winter blanket, a set of common clothes, an herbalism kit, and 5 gp.',
-    additionalLanguages: 1,
-    proficiencies: {
-      skills: ['medicine', 'religion'],
-      tools: [{ name: 'herbalism kit' }],
-    },
-  },
-  {
-    key: 'noble',
-    name: 'Noble',
-    description: 'You understand wealth, power, and privilege. You carry a noble title, and your family owns land, collects taxes, and wields significant political influence. You might be a pampered aristocrat unfamiliar with work or discomfort, a former merchant just elevated to the nobility, or a disinherited scoundrel with a disproportionate sense of entitlement.',
-    equipment: 'A set of fine clothes, a signet ring, a scroll of pedigree, and a purse containing 25gp.',
-    additionalLanguages: 1,
-    proficiencies: {
-      skills: ['history', 'persuasion'],
-      tools: [{ tag: 'gaming set', quantity: 1 }],
-    },
-  },
-  {
-    key: 'outlander',
-    name: 'Outlander',
-    description: 'You grew up in the wilds, far from civilization and the comforts of town and technology. You\'ve witnessed the migration of herds larger than forests, survived weather more extreme than any city-dweller could comprehend, and enjoyed the solitude of being the only thinking creature for miles in any direction.',
-    equipment: 'A staff, a hunting trap, a trophy from an animal you killed, a set of traveler\'s clothes, and a belt pouch containing 10 gp.',
-    additionalLanguages: 1,
-    proficiencies: {
-      skills: ['athletics', 'survival'],
-      tools: [{ tag: 'musical instruments', quantity: 1 }],
-    },
-  },
-  {
-    key: 'sage',
-    name: 'Sage',
-    description: 'You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you. Your efforts have made you a master in your fields of study.',
-    equipment: 'A bottle of black ink, a quill, a small knife, a letter from a dead colleague posing a question you have not been able to answer, a set of common clothes, and a belt pouch containing 10gp.',
-    additionalLanguages: 2,
-    proficiencies: {
-      skills: ['arcana', 'history'],
-      tools: [],
-    },
-  },
-  {
-    key: 'sailor',
-    name: 'Sailor',
-    description: 'You sailed on a seagoing vessel for years. In that time, you faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottom less depths. Your first love is the distant line of the horizon, but the time has come to try your hand at something new.',
-    equipment: 'A belaying pin (club), 50 feet of silk rope, a lucky charm such as a rabbit foot or a small stone with a hole in the center (or may roll for a trinket), a set of common clothes, and a belt pouch containing 10gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['athletics', 'perception'],
-      tools: [
-        { name: 'navigator\'s tools' },
-        { name: 'water vehicles' },
-      ],
-    },
-  },
-  {
-    key: 'soldier',
-    name: 'Soldier',
-    description: 'War has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, learned basic survival techniques, including how to stay alive on the battlefield.',
-    equipment: 'An insignia of rank, a trophy taken from a fallen enemy, a set of bone dice or deck of cards, a set of common clothes, and a belt pouch containing 10gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['athletics', 'intimidation'],
-      tools: [
-        { tag: 'gaming set', quantity: 1 },
-        { name: 'land vehicles' },
-      ],
-    },
-  },
-  {
-    key: 'urchin',
-    name: 'Urchin',
-    description: 'You grew up on the streets alone, orphaned, and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself.',
-    equipment: 'A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10gp.',
-    additionalLanguages: 0,
-    proficiencies: {
-      skills: ['sleight of hand', 'stealth'],
-      tools: [
-        { name: 'disguise kit' },
-        { name: 'thieves\' tools' },
-      ],
     },
   },
 ];

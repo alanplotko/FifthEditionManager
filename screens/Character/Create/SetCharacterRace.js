@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Dimensions, StyleSheet, View, Text, Image } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
-import { RACES } from 'DNDManager/config/Info';
-import { CardStyle, ContainerStyle, LayoutStyle } from 'DNDManager/stylesheets';
+import { RACES } from 'FifthEditionManager/config/Info';
+import { CardStyle, ContainerStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import OGLButton from 'FifthEditionManager/components/OGLButton';
 
 const uuidv4 = require('uuid/v4');
 const Chance = require('chance');
@@ -154,7 +155,10 @@ export default class SetCharacterRace extends React.Component {
               this.state.race &&
               <Card style={{ container: CardStyle.container }}>
                 <Text style={CardStyle.cardHeading}>{this.state.race.name}</Text>
-                <Text style={CardStyle.cardText}>{this.state.race.description}</Text>
+                <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                  {this.state.race.description}
+                </Text>
+                <OGLButton sourceText="Source: Pathfinder Roleplaying Game Advanced Race Guide" />
               </Card>
             }
             {

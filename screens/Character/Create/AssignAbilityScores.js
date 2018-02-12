@@ -4,9 +4,9 @@ import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
-import Note from 'DNDManager/components/Note';
-import { CardStyle, ContainerStyle, FormStyle } from 'DNDManager/stylesheets';
-import { toTitleCase, calculateModifier } from 'DNDManager/util';
+import Note from 'FifthEditionManager/components/Note';
+import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
+import { toTitleCase, calculateModifier } from 'FifthEditionManager/util';
 
 const abilities = [
   'Strength',

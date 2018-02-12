@@ -6,8 +6,8 @@ import { Avatar, COLOR, Icon, IconToggle, ListItem }
   from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { EXPERIENCE, IMAGES } from 'DNDManager/config/Info';
-import { getCharacterDisplayName } from 'DNDManager/util';
+import { EXPERIENCE, IMAGES } from 'FifthEditionManager/config/Info';
+import { getCharacterDisplayName } from 'FifthEditionManager/util';
 
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1

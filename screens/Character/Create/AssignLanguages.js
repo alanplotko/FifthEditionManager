@@ -4,10 +4,10 @@ import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
-import { ContainerStyle, CardStyle } from 'DNDManager/stylesheets';
-import Note from 'DNDManager/components/Note';
-import { RACES, BACKGROUNDS, LANGUAGES } from 'DNDManager/config/Info';
-import { toTitleCase, toProperList } from 'DNDManager/util';
+import { ContainerStyle, CardStyle } from 'FifthEditionManager/stylesheets';
+import Note from 'FifthEditionManager/components/Note';
+import { RACES, BACKGROUNDS, LANGUAGES } from 'FifthEditionManager/config/Info';
+import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 
 export default class AssignLanguages extends React.Component {

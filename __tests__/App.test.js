@@ -1,5 +1,5 @@
 import React from 'react';
-import App from 'DNDManager/App';
+import App from 'FifthEditionManager/App';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 

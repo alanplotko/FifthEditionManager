@@ -6,8 +6,8 @@ import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
-import { CardStyle, ContainerStyle } from 'DNDManager/stylesheets';
-import { formatSingleDigit, reverseSort } from 'DNDManager/util';
+import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
+import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
 
 const Chance = require('chance');
 
