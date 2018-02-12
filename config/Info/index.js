@@ -478,7 +478,7 @@ export const BACKGROUNDS = [
     key: 'acolyte',
     name: 'Acolyte',
     description: 'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, perform ing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.',
-    equipment: 'A holy symbol (a	gift to	you	when you entered	the	priesthood), a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a pouch containing 15gp.',
+    equipment: 'A holy symbol (a gift to you when you entered the priesthood), a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a pouch containing 15gp.',
     additionalLanguages: 2,
     proficiencies: {
       skills: ['insight', 'religion'],
