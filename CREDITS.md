@@ -2,7 +2,7 @@
 
 <div style="text-align: center;">
 
-![Android Asset Studio Logo](https://raw.githubusercontent.com/alanplotko/FifthEditionManager/master/docs/credits/logos/android-asset-studio.png) ![Game Icons Logo](https://raw.githubusercontent.com/alanplotko/FifthEditionManager/master/docs/credits/logos/game-icons.png) ![Icons8 Logo](https://raw.githubusercontent.com/alanplotko/FifthEditionManager/master/docs/credits/logos/icons8.png)
+[![Android Asset Studio Logo](./docs/credits/logos/android-asset-studio.png)](https://romannurik.github.io/AndroidAssetStudio/) &nbsp;&nbsp;&nbsp; [![Game Icons Logo](./docs/credits/logos/game-icons.png)](http://game-icons.net/lorc/originals/dragon-head.html) &nbsp;&nbsp;&nbsp; [![Icons8 Logo](./docs/credits/logos/icons8.png)](https://icons8.com)
 
 </div>
 

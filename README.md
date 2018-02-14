@@ -1,4 +1,4 @@
-<p align="center"><img title="Fifth Edition Manager Banner" src="https://raw.githubusercontent.com/alanplotko/FifthEditionManager/master/docs/banner.png" /></p>
+<p align="center"><img title="Fifth Edition Manager Banner" src="./docs/banner.png" /></p>
 
 # Fifth Edition Manager
 
