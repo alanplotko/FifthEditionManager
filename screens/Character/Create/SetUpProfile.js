@@ -9,21 +9,19 @@ import {
 } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Toolbar } from 'react-native-material-ui';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import { EXPERIENCE } from 'DNDManager/config/Info';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
+import { ALIGNMENTS, EXPERIENCE } from 'FifthEditionManager/config/Info';
+import FormStyle from 'FifthEditionManager/stylesheets/FormStyle';
+import { validateInteger } from 'FifthEditionManager/util';
 
 const t = require('tcomb-form-native');
-const uuidv4 = require('uuid/v4');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Form valdiation setup
  */
-
-const validateInteger = (value, altErrorMessage) => {
-  if (value === null || value === undefined) return 'Required';
-  return (value % 1 !== 0) ? 'Integer only' : altErrorMessage;
-};
 
 // Integer in range [1, 20]
 const Level = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 20);
@@ -87,6 +85,8 @@ t.String.getValidationErrorMessage = defaultError;
  * Define character
  */
 
+const AlignmentType = ALIGNMENTS.reduce((o, alignment) =>
+ Object.assign(o, { [alignment]: alignment }), {});
 const Character = t.struct({
   power: Power,
   firstName: t.String,
@@ -96,17 +96,7 @@ const Character = t.struct({
     Female: 'Female',
     Other: 'Other',
   }),
-  alignment: t.enums({
-    'Lawful Good': 'Lawful Good',
-    'Lawful Neutral': 'Lawful Neutral',
-    'Lawful Evil': 'Lawful Evil',
-    'Neutral Good': 'Neutral Good',
-    'True Neutral': 'True Neutral',
-    'Neutral Evil': 'Neutral Evil',
-    'Chaotic Good': 'Chaotic Good',
-    'Chaotic Neutral': 'Chaotic Neutral',
-    'Chaotic Evil': 'Chaotic Evil',
-  }),
+  alignment: t.enums(AlignmentType),
   age: Age,
   height: t.String,
   weight: t.String,
@@ -142,16 +132,14 @@ const template = locals => (
     </View>
 
     <Text style={FormStyle.heading}>Measurements</Text>
-    <View style={FormStyle.horizontalLayout}>
-      <View style={{ flex: 1, marginRight: 5 }}>
-        {locals.inputs.age}
-      </View>
-      <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
-        {locals.inputs.height}
-      </View>
-      <View style={{ flex: 1, marginLeft: 5 }}>
-        {locals.inputs.weight}
-      </View>
+    <View style={{ flex: 1, marginRight: 5 }}>
+      {locals.inputs.age}
+    </View>
+    <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
+      {locals.inputs.height}
+    </View>
+    <View style={{ flex: 1, marginLeft: 5 }}>
+      {locals.inputs.weight}
     </View>
   </View>
 );
@@ -205,17 +193,20 @@ const options = {
   },
 };
 
-export default class CreateCharacter extends React.Component {
+export default class SetUpProfile extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'New Character',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.generateCharacter(),
       };
       return <Toolbar {...props} />;
     },
-  }
+  };
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
@@ -229,30 +220,37 @@ export default class CreateCharacter extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.navigation.setParams({
+      generateCharacter: this.generateCharacter,
+    });
+  }
+
   onPress = () => {
-    Keyboard.dismiss();
-    const { navigate } = this.props.navigation;
-    const data = this.form.getValue();
-
-    if (data) {
-      const timestamp = Date.now();
-      const profile = Object.assign({}, data);
-
-      // Flatten nested power object
-      profile.level = profile.power.level;
-      profile.experience = profile.power.experience;
-      delete profile.power;
-
-      // Set up new character object
-      const newCharacter = {
-        key: uuidv4(),
-        profile,
-        created: timestamp,
-        lastUpdated: timestamp,
-      };
-
-      navigate('SetCharacterRace', { character: newCharacter });
-    }
+    // TODO: Integrate screen into character process again
+    // Keyboard.dismiss();
+    // const { navigate } = this.props.navigation;
+    // const data = this.form.getValue();
+    //
+    // if (data) {
+    //   const timestamp = Date.now();
+    //   const profile = Object.assign({}, data);
+    //
+    //   // Flatten nested power object
+    //   profile.level = profile.power.level;
+    //   profile.experience = profile.power.experience;
+    //   delete profile.power;
+    //
+    //   // Set up new character object
+    //   const newCharacter = {
+    //     key: uuidv4(),
+    //     profile,
+    //     created: timestamp,
+    //     lastUpdated: timestamp,
+    //   };
+    //
+    //   navigate('SetCharacterRace', { character: newCharacter });
+    // }
   }
 
   onChange = (value) => {
@@ -282,6 +280,36 @@ export default class CreateCharacter extends React.Component {
       },
     });
     this.setState({ options: updatedOptions, form: value });
+  }
+
+  generateCharacter = () => {
+    let gender;
+    let firstName;
+    let lastName;
+    if (chance.bool()) {
+      gender = 'Other';
+      firstName = chance.first();
+      lastName = chance.last();
+    } else {
+      gender = chance.gender();
+      firstName = chance.first({ gender });
+      lastName = chance.last({ gender });
+    }
+    this.setState({
+      form: {
+        firstName,
+        lastName,
+        power: { level: 1, experience: 0 },
+        gender,
+        alignment: chance.pickone(ALIGNMENTS),
+        // Age min/max: Human/Elf
+        age: chance.natural({ min: 10, max: 800 }),
+        // Height min/max: Halfling/Dragonborn
+        height: `${chance.natural({ min: 3, max: 6 })}'${chance.natural({ min: 1, max: 12 })}"`,
+        // Weight min/max: Halfling/Dragonborn
+        weight: `${chance.natural({ min: 70, max: 250 })} lbs.`,
+      },
+    });
   }
 
   render() {

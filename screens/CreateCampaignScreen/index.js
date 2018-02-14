@@ -1,7 +1,7 @@
 import React from 'react';
 // import { StyleSheet } from 'react-native';
 import { Container, Content, Form, Item, Input, Label } from 'native-base';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
+import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
 
 export default class CreateCampaignScreen extends React.Component {
   static navigationOptions = {

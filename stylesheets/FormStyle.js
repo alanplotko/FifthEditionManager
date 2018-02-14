@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   submitBtnText: {
     fontSize: 18,
-    color: 'white',
+    color: '#fff',
     alignSelf: 'center',
   },
   submitBtn: {
@@ -29,5 +29,16 @@ export default StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'stretch',
     justifyContent: 'center',
+  },
+  label: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    fontFamily: 'RobotoBold',
+    color: '#fff',
+    fontSize: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingVertical: 5,
+    paddingHorizontal: 18,
   },
 });

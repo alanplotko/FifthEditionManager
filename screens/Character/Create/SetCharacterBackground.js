@@ -1,83 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationActions } from 'react-navigation';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
-  from 'react-native';
-import {
-  Card,
-  CardItem,
-  Container,
-  Content,
-  Icon,
-  List,
-  ListItem,
-  Body,
-} from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
-import store from 'react-native-simple-store';
-import { ACTIVITY_KEY, CHARACTER_KEY } from 'DNDManager/config/StoreKeys';
-import { BACKGROUNDS } from 'DNDManager/config/Info';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { StyleSheet, View, Text } from 'react-native';
+import { Container, Content } from 'native-base';
+import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
+import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
+import { toTitleCase } from 'FifthEditionManager/util';
+import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import OGLButton from 'FifthEditionManager/components/OGLButton';
+import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
-const uuidv4 = require('uuid/v4');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Character background selection
  */
 
-const CharacterBackground = t.struct({
-  background: t.enums({
-    Acolyte: 'Acolyte',
-    Charlatan: 'Charlatan',
-    Criminal: 'Criminal',
-    Entertainer: 'Entertainer',
-    'Folk Hero': 'Folk Hero',
-    'Guild Artisan': 'Guild Artisan',
-    Hermit: 'Hermit',
-    Noble: 'Noble',
-    Outlander: 'Outlander',
-    Sage: 'Sage',
-    Sailor: 'Sailor',
-    Soldier: 'Soldier',
-    Urchin: 'Urchin',
-  }),
-});
+const backgrounds = BACKGROUNDS.map(background => ({ key: background.key, name: background.name }));
+const BackgroundType = backgrounds.reduce((o, background) =>
+  Object.assign(o, { [background.key]: background.name }), {});
+const CharacterBackground = t.struct({ background: t.enums(BackgroundType) });
 
 /**
- * Form template setup
+ * Form stylesheet setup
  */
 
-const template = locals => (
-  <View>
-    <View style={{ flex: 1 }}>
-      {locals.inputs.background}
-    </View>
-  </View>
-);
+const stylesheet = cloneDeep(t.form.Form.stylesheet);
 
-/**
- * Define form options
- */
-
-const options = {
-  template,
-  fields: {
-    background: {
-      label: 'Background',
-      nullOption: { value: '', text: 'Select Background' },
-    },
-  },
-};
+stylesheet.formGroup.normal.flexDirection = 'row';
+stylesheet.formGroup.error.flexDirection = 'row';
+stylesheet.formGroup.normal.alignItems = 'center';
+stylesheet.formGroup.error.alignItems = 'center';
+stylesheet.select.normal.flex = 1;
+stylesheet.select.error.flex = 1;
+stylesheet.select.normal.marginLeft = 10;
+stylesheet.select.error.marginLeft = 10;
 
 export default class SetCharacterBackground extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Character Background',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeBackground(),
       };
       return <Toolbar {...props} />;
     },
@@ -90,241 +60,178 @@ export default class SetCharacterBackground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selection: null,
+      background: null,
       form: null,
-      isSelectionLoading: false,
-      error: null,
     };
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.updateCard);
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeBackground: this.randomizeBackground });
   }
 
   onPress = () => {
-    const { state, dispatch } = this.props.navigation;
-    const data = this.form.getValue();
-    if (data) {
+    const background = this.form.getValue();
+    if (background) {
+      const { navigate, state } = this.props.navigation;
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      const newActivity = {
-        key: uuidv4(),
-        timestamp: newCharacter.lastUpdated,
-        action: 'Created New Character',
-        // Format character's full name for extra text
-        extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
-        thumbnail: newCharacter.profile.images.race,
-      };
-      store
-        .push(CHARACTER_KEY, newCharacter)
-        .catch((error) => {
-          // Show error message on screen and allow resubmit
-          this.setState({ error: 'Please try again in a few minutes.' });
-          return error;
-        })
-        .then((error) => {
-          if (error) return;
-          store
-            .push(ACTIVITY_KEY, newActivity)
-            .then(() => {
-              const resetAction = NavigationActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({
-                  routeName: 'Home',
-                })],
-              });
-              dispatch(resetAction);
-            });
-        });
+      newCharacter.profile = Object.assign({}, newCharacter.profile, {
+        background: {
+          lookupKey: this.state.background.key,
+          name: this.state.background.name,
+        },
+      });
+      navigate('SetUpProfile', { character: newCharacter });
     }
   }
 
   onChange = (value) => {
-    this.setState({ isSelectionLoading: true, form: value }, () => {
-      this.updateCard = setTimeout(() => {
-        this.setState({
-          selection: value ?
-            BACKGROUNDS.find(option => option.name === value.background) :
-            null,
-          isSelectionLoading: false,
-        });
-      }, 500);
+    this.setState({
+      form: value,
+      background: BACKGROUNDS.find(background => background.key === value.background),
     });
   }
 
-  render() {
-    const list = BACKGROUNDS.map(option => (
-      <View key={option.name}>
-        {
-          this.state.selection &&
-          this.state.selection.name === option.name &&
-          <View style={styles.absoluteCentered}>
-            <Text style={styles.selectedText}>Selected</Text>
-          </View>
-        }
-        <ListItem
+  formOptions = {
+    template: (locals) => {
+      const { race } = this.props.navigation.state.params.character.profile;
+      return (
+        <View
           style={[
-            { marginLeft: 0, paddingLeft: 20 },
-            this.state.selection &&
-            this.state.selection.name === option.name ?
-            styles.selectedListItem :
-            null,
+            LayoutStyle.centered,
+            { borderWidth: 2, borderColor: 'rgba(0, 0, 0, 0.7)', paddingTop: 30 },
           ]}
         >
-          <Body>
-            <Text style={styles.listItemHeading}>{option.name}</Text>
-            <Text
-              style={[
-                styles.infoText,
-                { paddingLeft: 0, paddingBottom: 10 },
-              ]}
-            >
-              {option.description}
-            </Text>
-            <Text style={styles.infoHeading}>
-              &#9656; Starting Equipment
-            </Text>
-            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-              {option.equipment}
-            </Text>
-            <Text style={styles.infoHeading}>
-              &#9656; Additional Languages
-            </Text>
-            <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-              {option.languages}
-            </Text>
-            <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-            <Text style={styles.infoText}>
-              Skills: {option.proficiencies.skills}
-            </Text>
-            <Text style={styles.infoText}>
-              Tools: {option.proficiencies.tools}
-            </Text>
-          </Body>
-        </ListItem>
-      </View>
-    ));
-
-    // Set up card for displaying currently selected option
-    let displayCard = null;
-    if (this.state.selection) {
-      displayCard = (
-        <Card>
-          {
-            this.state.isSelectionLoading &&
-            <View style={styles.absoluteCentered}>
-              <ActivityIndicator color="#3F51B5" size="large" />
-            </View>
-          }
-          <View style={this.state.isSelectionLoading ? styles.loading : ''}>
-            <CardItem>
-              <Body>
-                <Text style={styles.listItemHeading}>
-                  {this.state.selection.name}
-                </Text>
-                <Text style={[styles.infoText, { paddingLeft: 0 }]}>
-                  {this.state.selection.description}
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text style={styles.infoHeading}>
-                  &#9656; Starting Equipment
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.equipment}
-                </Text>
-                <Text style={styles.infoHeading}>
-                  &#9656; Additional Languages
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.languages}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Skills: {this.state.selection.proficiencies.skills}
-                </Text>
-                <Text style={styles.infoText}>
-                  Tools: {this.state.selection.proficiencies.tools}
-                </Text>
-              </Body>
-            </CardItem>
+          <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
+          <View
+            style={{
+              flex: 1, margin: 0, padding: 0, height: 50,
+            }}
+          >
+            {locals.inputs.background}
           </View>
-        </Card>
+        </View>
       );
-    } else {
-      displayCard = (
-        <Card>
-          <CardItem cardBody style={styles.centered}>
-            {
-              this.state.isSelectionLoading &&
-              <ActivityIndicator color="#3F51B5" size="large" />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Icon name="information-circle" style={styles.messageIcon} />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Text style={styles.displayCardHeading}>
-                Selection details will display here
-              </Text>
-            }
-          </CardItem>
-        </Card>
-      );
-    }
+    },
+    stylesheet,
+    fields: {
+      background: {
+        auto: 'none',
+        nullOption: { value: '', text: 'Select Background' },
+      },
+    },
+  }
+
+  randomizeBackground = () => {
+    const background = chance.pickone(BACKGROUNDS);
+    this.setState({ background, form: { background: background.key } });
+  }
+
+  render() {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
-            <Text style={FormStyle.heading}>Character Background</Text>
-            {
-              this.state.error &&
-              <View style={styles.errorDialog}>
-                <Text style={styles.errorHeading}>
-                  An error occurred!
-                </Text>
-                <Text style={styles.errorText}>
-                  {this.state.error.message}&nbsp;
-                </Text>
-              </View>
-            }
+          <View style={{ margin: 20, alignItems: 'center' }}>
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={CharacterBackground}
               value={this.state.form}
-              options={options}
+              options={this.formOptions}
               onChange={this.onChange}
             />
-            <TouchableHighlight
-              style={[
-                FormStyle.submitBtn,
-                this.state.isSelectionLoading ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-                { marginTop: 0, marginBottom: 10 },
-              ]}
+            <Button
+              primary
+              raised
+              disabled={!this.state.background}
               onPress={this.onPress}
-              underlayColor="#1A237E"
-              disabled={this.state.isSelectionLoading}
-            >
-              <Text style={FormStyle.submitBtnText}>
-                Set Background
-              </Text>
-            </TouchableHighlight>
-            {displayCard}
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
+            {
+              this.state.background && [
+                <Card
+                  key={`${this.state.background.name}Background`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>{this.state.background.name}</Text>
+                  <Text style={CardStyle.cardText}>{this.state.background.description}{'\n'}</Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    You can learn&nbsp;
+                    <Text style={CardStyle.makeBold}>
+                      {this.state.background.additionalLanguages}&nbsp;
+                    </Text>
+                    additional&nbsp;
+                    {this.state.background.additionalLanguages !== 1 ? 'languages' : 'language'}
+                    .
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
+                </Card>,
+                <Card
+                  key={`${this.state.background.name}Equipment`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    {this.state.background.equipment}
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
+                </Card>,
+                <Card
+                  key={`${this.state.background.name}Proficiencies`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>Proficiencies</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Skills:&nbsp;</Text>
+                    {this.state.background.proficiencies.skills.length === 0 && 'None'}
+                    {
+                      this.state.background.proficiencies.skills.length > 0 &&
+                      toTitleCase(this.state.background.proficiencies.skills.join(', '))
+                    }
+                    .
+                  </Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    <Text style={CardStyle.makeBold}>Tools:&nbsp;</Text>
+                    {this.state.background.proficiencies.tools.length === 0 && 'None'}
+                    {
+                      this.state.background.proficiencies.tools.length > 0 &&
+                      this.state.background.proficiencies.tools
+                        .map((tool) => {
+                          if (tool.name) {
+                            return toTitleCase(tool.name);
+                          } else if (tool.options) {
+                            const toolOptions = [];
+                            tool.options.forEach((opt) => {
+                              toolOptions.push(`${opt.quantity} of ${toTitleCase(opt.tag)}`);
+                            });
+                            return toolOptions.join(' or ');
+                          } else if (tool.tag) {
+                            return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
+                          }
+                          return '';
+                        })
+                        .join(', ')
+                    }
+                    .
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
+                </Card>,
+              ]}
+            {
+              !this.state.background &&
+              <Card style={{ container: { padding: 20 } }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon
+                    name="info"
+                    style={{
+                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                    }}
+                  />
+                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                </View>
+              </Card>
+            }
           </View>
-          <List>
-            <ListItem itemHeader first style={{ paddingBottom: 0 }}>
-              <Text style={[FormStyle.heading, { flex: 1 }]}>
-                Background Options
-              </Text>
-            </ListItem>
-            {list}
-          </List>
         </Content>
       </Container>
     );
@@ -332,76 +239,9 @@ export default class SetCharacterBackground extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  absoluteCentered: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centered: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 10,
-  },
-  listItemHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 20,
-  },
-  infoHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 16,
-    paddingLeft: 10,
-  },
-  infoText: {
-    fontFamily: 'Roboto',
-    color: '#666',
-    fontSize: 14,
-    paddingLeft: 10,
-  },
-  displayCardHeading: {
+  placeholderMessage: {
     fontFamily: 'RobotoLight',
     color: '#666',
     fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 48,
-    width: 48,
-    height: 48,
-    marginRight: 10,
-  },
-  loading: {
-    opacity: 0.1,
-  },
-  selectedListItem: {
-    opacity: 0.2,
-    backgroundColor: '#b2f0b2',
-  },
-  selectedText: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 48,
-  },
-  errorDialog: {
-    backgroundColor: '#F44336',
-    marginBottom: 15,
-    padding: 15,
-    borderRadius: 3,
-  },
-  errorHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#fff',
-    fontSize: 18,
-  },
-  errorText: {
-    fontFamily: 'Roboto',
-    color: '#fff',
-    fontSize: 14,
   },
 });

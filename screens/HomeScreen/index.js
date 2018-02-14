@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, FlatList, StyleSheet, View, UIManager }
+import { ActivityIndicator, Alert, FlatList, StyleSheet, View, UIManager }
   from 'react-native';
-import { Container, Tab, Tabs, TabHeading, Text, Icon } from 'native-base';
+import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
-import { ActionButton, Button, Toolbar } from 'react-native-material-ui';
+import { ActionButton, Button, Icon, COLOR, Toolbar } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import ActivityCard from 'DNDManager/components/ActivityCard';
-import CharacterProfileCard from 'DNDManager/components/CharacterProfileCard';
+import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
+import ActivityCard from 'FifthEditionManager/components/ActivityCard';
+import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfileCard';
+import { getCharacterDisplayName } from 'FifthEditionManager/util';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
-  from 'DNDManager/config/StoreKeys';
+  from 'FifthEditionManager/config/StoreKeys';
+
+const uuidv4 = require('uuid/v4');
 
 // Return compare function with the corresponding timestamp key
 const compareDates = key => (a, b) => {
@@ -62,7 +65,8 @@ export default class HomeScreen extends React.Component {
 
   getData = () => {
     store
-      .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY]).then((data) => {
+      .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY])
+      .then((data) => {
         this.setState({
           activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
           campaigns: data[1] ? data[1] : [],
@@ -79,6 +83,64 @@ export default class HomeScreen extends React.Component {
     this.setState({ isModalVisible: true, modalContent });
   };
 
+  closeModal = (done) => {
+    this.setState({ isModalVisible: false, modalContent: null }, done);
+  };
+
+  viewCharacter = () => {};
+
+  editCharacter = () => {};
+
+  removeCharacter = (key, deleteActivity, done) => {
+    store
+      .get(CHARACTER_KEY)
+      .then((characters) => {
+        characters.splice(characters.findIndex(c => c.key === key), 1);
+        store
+          .save(CHARACTER_KEY, characters)
+          .then(() => {
+            store
+              .push(ACTIVITY_KEY, deleteActivity)
+              .then(done);
+          });
+      });
+  };
+
+  askDeleteCharacter = (character) => {
+    const fullName = getCharacterDisplayName(character);
+    this.closeModal(() => {
+      Alert.alert(
+        'Character Deletion',
+        `You are about to permanently remove ${fullName}.`,
+        [
+          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+          {
+            text: 'Delete',
+            onPress: () => {
+              const deleteActivity = {
+                key: uuidv4(),
+                timestamp: Date.now(),
+                action: 'Deleted Character',
+                extra: fullName,
+                thumbnail: character.profile.images.race,
+                icon: {
+                  name: 'delete-forever',
+                  color: '#fff',
+                },
+              };
+              this.removeCharacter(
+                character.key,
+                deleteActivity,
+                this.handleRefresh,
+              );
+            },
+          },
+        ],
+        { cancelable: false },
+      );
+    });
+  };
+
   handleRefresh = () => {
     this.setState({ isRefreshing: true }, () => this.getData());
   };
@@ -87,7 +149,7 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     const errorView = (
       <View style={styles.centered}>
-        <Icon name="alert" style={styles.messageIcon} />
+        <Icon name="error" size={156} color="#ccc" />
         <Text style={styles.heading}>
           An error occurred!
         </Text>
@@ -117,7 +179,7 @@ export default class HomeScreen extends React.Component {
       <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
         <Tabs initialPage={0} locked>
           <Tab
-            heading={<TabHeading><Icon name="home" /></TabHeading>}
+            heading={<TabHeading><NBIcon name="home" /></TabHeading>}
             style={styles.tab}
           >
             { this.state.error && errorView }
@@ -128,13 +190,13 @@ export default class HomeScreen extends React.Component {
                 renderItem={({ item }) => <ActivityCard activity={item} />}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
-                contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
+                contentContainerStyle={{ paddingTop: 10, paddingBottom: 100 }}
               />
             }
             {
               !this.state.error && this.state.activity.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="analytics" style={styles.messageIcon} />
+                <Icon name="timeline" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
@@ -167,12 +229,12 @@ export default class HomeScreen extends React.Component {
             {
               !this.state.error && this.state.campaigns.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="document" style={styles.messageIcon} />
+                <Icon name="book" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
                 <Text style={styles.text}>
-                  No campaigns found.
+                  No existing campaigns found.
                 </Text>
                 <Text style={styles.text}>
                   Let&apos;s get started!
@@ -193,6 +255,9 @@ export default class HomeScreen extends React.Component {
                   <CharacterProfileCard
                     character={item}
                     modalHandler={this.openModal}
+                    viewHandler={this.viewCharacter}
+                    editHandler={this.editCharacter}
+                    deleteHandler={this.askDeleteCharacter}
                   />
                 )}
                 refreshing={this.state.isRefreshing}
@@ -203,12 +268,12 @@ export default class HomeScreen extends React.Component {
             {
               !this.state.error && this.state.characters.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="person" style={styles.messageIcon} />
+                <Icon name="person" size={156} color="#ccc" />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
                 <Text style={styles.text}>
-                  No characters found.
+                  No existing characters found.
                 </Text>
                 <Text style={styles.text}>
                   Let&apos;s get started!
@@ -227,8 +292,9 @@ export default class HomeScreen extends React.Component {
           }, {
             icon: 'person',
             label: 'Character',
-            name: 'CreateCharacter',
+            name: 'SetCharacterRace',
           }]}
+          rippleColor={COLOR.red200}
           transition="speedDial"
           style={{
             container: {
@@ -266,16 +332,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   centered: {
-    flex: 1,
-    flexDirection: 'column',
+    marginTop: 50,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 60,
   },
   heading: {
     fontFamily: 'RobotoLight',
     color: '#666',
     fontSize: 24,
-    marginBottom: 10,
+    paddingBottom: 20,
+  },
+  text: {
+    fontFamily: 'RobotoLight',
+    color: '#666',
+    fontSize: 18,
+    paddingBottom: 5,
   },
   modalView: {
     flex: 1,
@@ -283,14 +354,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-  },
-  text: {
-    fontFamily: 'RobotoLight',
-    color: '#666',
-    fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 156,
   },
 });

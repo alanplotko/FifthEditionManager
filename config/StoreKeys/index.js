@@ -1,3 +1,3 @@
-export const ACTIVITY_KEY = '@DNDManager:activity';
-export const CAMPAIGN_KEY = '@DNDManager:campaigns';
-export const CHARACTER_KEY = '@DNDManager:characters';
+export const ACTIVITY_KEY = '@FifthEditionManager:activity';
+export const CAMPAIGN_KEY = '@FifthEditionManager:campaigns';
+export const CHARACTER_KEY = '@FifthEditionManager:characters';

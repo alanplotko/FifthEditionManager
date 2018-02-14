@@ -1,80 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text, Image }
-  from 'react-native';
-import {
-  Card,
-  CardItem,
-  Container,
-  Content,
-  Icon,
-  Left,
-  List,
-  ListItem,
-  Body,
-} from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
-import { CLASSES } from 'DNDManager/config/Info';
-import ContainerStyle from 'DNDManager/stylesheets/ContainerStyle';
-import FormStyle from 'DNDManager/stylesheets/FormStyle';
+import { StyleSheet, Image, View, Text } from 'react-native';
+import { Container, Content } from 'native-base';
+import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
+import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
+import { toProperList, toTitleCase } from 'FifthEditionManager/util';
+import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import OGLButton from 'FifthEditionManager/components/OGLButton';
+import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 /**
  * Character class selection
  */
 
-const CharacterBaseClass = t.struct({
-  baseClass: t.enums({
-    Barbarian: 'Barbarian',
-    Bard: 'Bard',
-    Cleric: 'Cleric',
-    Druid: 'Druid',
-    Fighter: 'Fighter',
-    Monk: 'Monk',
-    Paladin: 'Paladin',
-    Ranger: 'Ranger',
-    Rogue: 'Rogue',
-    Sorcerer: 'Sorcerer',
-    Warlock: 'Warlock',
-    Wizard: 'Wizard',
-  }),
-});
+const baseClasses = CLASSES.map(baseClass => ({ key: baseClass.key, name: baseClass.name }));
+const BaseClassType = baseClasses.reduce((o, baseClass) =>
+  Object.assign(o, { [baseClass.key]: baseClass.name }), {});
+const CharacterBaseClass = t.struct({ baseClass: t.enums(BaseClassType) });
 
 /**
- * Form template setup
+ * Form stylesheet setup
  */
 
-const template = locals => (
-  <View>
-    <Text style={FormStyle.heading}>Character Class</Text>
-    <View style={{ flex: 1 }}>
-      {locals.inputs.baseClass}
-    </View>
-  </View>
-);
+const stylesheet = cloneDeep(t.form.Form.stylesheet);
 
-/**
- * Define form options
- */
-
-const options = {
-  template,
-  fields: {
-    baseClass: {
-      label: 'Class',
-      nullOption: { value: '', text: 'Select Class' },
-    },
-  },
-};
+stylesheet.formGroup.normal.flexDirection = 'row';
+stylesheet.formGroup.error.flexDirection = 'row';
+stylesheet.formGroup.normal.alignItems = 'center';
+stylesheet.formGroup.error.alignItems = 'center';
+stylesheet.select.normal.flex = 1;
+stylesheet.select.error.flex = 1;
+stylesheet.select.normal.marginLeft = 10;
+stylesheet.select.error.marginLeft = 10;
 
 export default class SetCharacterClass extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Character Class',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeClass(),
       };
       return <Toolbar {...props} />;
     },
@@ -87,212 +60,236 @@ export default class SetCharacterClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selection: null,
+      baseClass: null,
       form: null,
-      isSelectionLoading: false,
     };
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.updateCard);
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeClass: this.randomizeClass });
   }
 
   onPress = () => {
-    const { navigate, state } = this.props.navigation;
-    const data = this.form.getValue();
-    if (data) {
+    if (this.state.baseClass) {
+      const { navigate, state } = this.props.navigation;
       const newCharacter = Object.assign({}, state.params.character);
       newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, data);
-      newCharacter.profile.images = Object.assign(
-        {},
-        newCharacter.profile.images,
-        { baseClass: this.state.selection.image },
-      );
+      newCharacter.profile = Object.assign({}, newCharacter.profile, {
+        baseClass: {
+          lookupKey: this.state.baseClass.key,
+          name: this.state.baseClass.name,
+        },
+      });
       navigate('SetCharacterBackground', { character: newCharacter });
     }
   }
 
   onChange = (value) => {
-    this.setState({ isSelectionLoading: true, form: value }, () => {
-      this.updateCard = setTimeout(() => {
-        this.setState({
-          selection: value ?
-            CLASSES.find(option => option.name === value.baseClass) :
-            null,
-          isSelectionLoading: false,
-        });
-      }, 500);
+    this.setState({
+      form: value,
+      baseClass: CLASSES.find(baseClass => baseClass.key === value.baseClass),
     });
   }
 
-  render() {
-    const list = CLASSES.map(option => (
-      <View key={option.name}>
-        {
-          this.state.selection &&
-          this.state.selection.name === option.name &&
-          <View style={styles.absoluteCentered}>
-            <Text style={styles.selectedText}>Selected</Text>
-          </View>
-        }
-        <ListItem
+  formOptions = {
+    template: (locals) => {
+      const { race } = this.props.navigation.state.params.character.profile;
+      return (
+        <View
           style={[
-            { marginLeft: 0, paddingLeft: 20 },
-            this.state.selection &&
-            this.state.selection.name === option.name ?
-            styles.selectedListItem :
-            null,
+            LayoutStyle.centered,
+            { borderWidth: 2, borderColor: 'rgba(0, 0, 0, 0.7)', paddingTop: 30 },
           ]}
         >
-          <Body>
-            <View style={{ flexDirection: 'row', flex: 1 }}>
-              <Image
-                resizeMode="contain"
-                style={{ width: 64, height: 64, flex: 0.2 }}
-                source={option.image}
-              />
-              <View style={{ flex: 0.8 }}>
-                <Text style={styles.listItemHeading}>{option.name}</Text>
-                <Text
-                  style={[
-                    styles.infoText,
-                    { paddingLeft: 0, paddingBottom: 10 },
-                  ]}
-                >
-                  {option.description}
-                </Text>
-                <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {option.hitDie} / {option.primaryAbility}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Saving Throw: {option.proficiencies.savingThrow}
-                </Text>
-                <Text style={styles.infoText}>
-                  Armor & Weapons: {option.proficiencies.armorAndWeapon}
-                </Text>
-              </View>
-            </View>
-          </Body>
-        </ListItem>
-      </View>
-    ));
-
-    // Set up card for displaying currently selected option
-    let displayCard = null;
-    if (this.state.selection) {
-      displayCard = (
-        <Card>
-          {
-            this.state.isSelectionLoading &&
-            <View style={styles.absoluteCentered}>
-              <ActivityIndicator color="#3F51B5" size="large" />
-            </View>
-          }
-          <View style={this.state.isSelectionLoading ? styles.loading : ''}>
-            <CardItem>
-              <Left>
-                <Image
-                  resizeMode="contain"
-                  source={this.state.selection.image}
-                  style={{ width: 100, height: 100 }}
-                />
-                <Body>
-                  <Text style={styles.listItemHeading}>
-                    {this.state.selection.name}
-                  </Text>
-                  <Text style={[styles.infoText, { paddingLeft: 0 }]}>
-                    {this.state.selection.description}
-                  </Text>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text style={styles.infoHeading}>
-                  &#9656; Hit Die / Primary Ability
-                </Text>
-                <Text style={[styles.infoText, { paddingBottom: 10 }]}>
-                  {this.state.selection.hitDie}
-                  &nbsp;/ {this.state.selection.primaryAbility}
-                </Text>
-                <Text style={styles.infoHeading}>&#9656; Proficiencies</Text>
-                <Text style={styles.infoText}>
-                  Saving Throw:
-                  &nbsp;{this.state.selection.proficiencies.savingThrow}
-                </Text>
-                <Text style={styles.infoText}>
-                  Armor & Weapons:
-                  &nbsp;{this.state.selection.proficiencies.armorAndWeapon}
-                </Text>
-              </Body>
-            </CardItem>
+          <Text style={FormStyle.label}>Your {race.name}&apos;s Class</Text>
+          <View
+            style={{
+              flex: 1, margin: 0, padding: 0, height: 50,
+            }}
+          >
+            {locals.inputs.baseClass}
           </View>
-        </Card>
+        </View>
       );
-    } else {
-      displayCard = (
-        <Card>
-          <CardItem cardBody style={styles.centered}>
-            {
-              this.state.isSelectionLoading &&
-              <ActivityIndicator color="#3F51B5" size="large" />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Icon name="information-circle" style={styles.messageIcon} />
-            }
-            {
-              !this.state.isSelectionLoading &&
-              <Text style={styles.displayCardHeading}>
-                Selection details will display here
-              </Text>
-            }
-          </CardItem>
-        </Card>
-      );
-    }
+    },
+    stylesheet,
+    fields: {
+      baseClass: {
+        auto: 'none',
+        nullOption: { value: '', text: 'Select Class' },
+      },
+    },
+  }
+
+  randomizeClass = () => {
+    const baseClass = chance.pickone(CLASSES);
+    this.setState({ baseClass, form: { baseClass: baseClass.key } });
+  }
+
+  render() {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={{ margin: 20, alignItems: 'center' }}>
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={CharacterBaseClass}
               value={this.state.form}
-              options={options}
+              options={this.formOptions}
               onChange={this.onChange}
             />
-            <TouchableHighlight
-              style={[
-                FormStyle.submitBtn,
-                this.state.isSelectionLoading ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-                { marginTop: 0, marginBottom: 10 },
-              ]}
+            <Button
+              primary
+              raised
+              disabled={!this.state.baseClass}
               onPress={this.onPress}
-              underlayColor="#1A237E"
-              disabled={this.state.isSelectionLoading}
-            >
-              <Text style={FormStyle.submitBtnText}>
-                Set Class
-              </Text>
-            </TouchableHighlight>
-            {displayCard}
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
+            {
+              this.state.baseClass && [
+                <Card
+                  key={`${this.state.baseClass.name}Class`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <View style={LayoutStyle.centered}>
+                    <View style={{ flex: 2 }}>
+                      <Text style={CardStyle.cardHeading}>
+                        {this.state.baseClass.name}
+                      </Text>
+                      <Text style={CardStyle.cardText}>
+                        {this.state.baseClass.description}{'\n'}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Image
+                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
+                        style={{ width: 96, height: 96, marginLeft: 20 }}
+                      />
+                    </View>
+                  </View>
+                </Card>,
+                <Card
+                  key={`${this.state.baseClass.name}HitDie`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>Hit Die</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>{this.state.baseClass.name}s&nbsp;</Text>
+                    gain&nbsp;
+                    <Text style={CardStyle.makeBold}>1d{this.state.baseClass.hitDie}&nbsp;</Text>
+                    per level.
+                  </Text>
+                  <Text style={CardStyle.cardText}>
+                    At the 1st level, you start with:{'\n'}
+                    <Text style={CardStyle.makeBold}>
+                      {this.state.baseClass.hitDie} + your Constitution modifier
+                    </Text>
+                    .
+                  </Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    At higher levels (after level 1), you gain:{'\n'}
+                    <Text style={CardStyle.makeBold}>
+                      {this.state.baseClass.hitDie} (or {(this.state.baseClass.hitDie / 2) + 1})
+                      + your Constitution modifier
+                    </Text>
+                    .
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
+                </Card>,
+                <Card
+                  key={`${this.state.baseClass.name}Proficiencies`}
+                  style={{ container: CardStyle.container }}
+                >
+                  <Text style={CardStyle.cardHeading}>Proficiencies</Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Saving Throws:&nbsp;</Text>
+                    {this.state.baseClass.proficiencies.savingThrows.length === 0 && 'None'}
+                    {
+                      this.state.baseClass.proficiencies.savingThrows.length > 0 &&
+                      toTitleCase(this.state.baseClass.proficiencies.savingThrows.join(', '))
+                    }
+                    .
+                  </Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Armor:&nbsp;</Text>
+                    {this.state.baseClass.proficiencies.armor.length === 0 && 'None'}
+                    {
+                      this.state.baseClass.proficiencies.armor.length > 0 &&
+                      toTitleCase(this.state.baseClass.proficiencies.armor.join(', '))
+                    }
+                    .
+                  </Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Weapons:&nbsp;</Text>
+                    {this.state.baseClass.proficiencies.weapons.length === 0 && 'None'}
+                    {
+                      this.state.baseClass.proficiencies.weapons.length > 0 &&
+                      toTitleCase(this.state.baseClass.proficiencies.weapons.join(', '))
+                    }
+                    .
+                  </Text>
+                  <Text style={CardStyle.cardText}>
+                    <Text style={CardStyle.makeBold}>Tools:&nbsp;</Text>
+                    {this.state.baseClass.proficiencies.tools.length === 0 && 'None'}
+                    {
+                      this.state.baseClass.proficiencies.tools.length > 0 &&
+                      this.state.baseClass.proficiencies.tools
+                        .map((tool) => {
+                          if (tool.name) {
+                            return toTitleCase(tool.name);
+                          } else if (tool.options) {
+                            const toolOptions = [];
+                            tool.options.forEach((opt) => {
+                              toolOptions.push(`${opt.quantity} of ${toTitleCase(opt.tag)}`);
+                            });
+                            return toolOptions.join(' or ');
+                          } else if (tool.tag) {
+                            return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
+                          }
+                          return '';
+                        })
+                        .join(', ')
+                    }
+                    .
+                  </Text>
+                  <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                    <Text style={CardStyle.makeBold}>Skills:&nbsp;</Text>
+                    {
+                      !this.state.baseClass.proficiencies.skills.options &&
+                      `${this.state.baseClass.proficiencies.skills.quantity} of Any Skill`
+                    }
+                    {
+                      this.state.baseClass.proficiencies.skills.options &&
+                      this.state.baseClass.proficiencies.skills.options.length === 0 &&
+                      'None'
+                    }
+                    {
+                      this.state.baseClass.proficiencies.skills.options &&
+                      this.state.baseClass.proficiencies.skills.options.length > 0 &&
+                      `${this.state.baseClass.proficiencies.skills.quantity} from ${toProperList(this.state.baseClass.proficiencies.skills.options, 'and', true)}`
+                    }
+                    .
+                  </Text>
+                  <OGLButton sourceText="Source: 5th Edition SRD" />
+                </Card>,
+              ]
+            }
+            {
+              !this.state.baseClass &&
+              <Card style={{ container: { padding: 20 } }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon
+                    name="info"
+                    style={{
+                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                    }}
+                  />
+                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                </View>
+              </Card>
+            }
           </View>
-          <List>
-            <ListItem itemHeader first style={{ paddingBottom: 0 }}>
-              <Text style={[FormStyle.heading, { flex: 1 }]}>
-                Class Options
-              </Text>
-            </ListItem>
-            {list}
-          </List>
         </Content>
       </Container>
     );
@@ -300,60 +297,9 @@ export default class SetCharacterClass extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  absoluteCentered: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centered: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 10,
-  },
-  listItemHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 20,
-  },
-  infoHeading: {
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 16,
-    paddingLeft: 10,
-  },
-  infoText: {
-    fontFamily: 'Roboto',
-    color: '#666',
-    fontSize: 14,
-    paddingLeft: 10,
-  },
-  displayCardHeading: {
+  placeholderMessage: {
     fontFamily: 'RobotoLight',
     color: '#666',
     fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 48,
-    width: 48,
-    height: 48,
-    marginRight: 10,
-  },
-  loading: {
-    opacity: 0.1,
-  },
-  selectedListItem: {
-    opacity: 0.2,
-    backgroundColor: '#b2f0b2',
-  },
-  selectedText: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 48,
   },
 });

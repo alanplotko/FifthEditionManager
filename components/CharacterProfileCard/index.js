@@ -6,14 +6,12 @@ import { Avatar, COLOR, Icon, IconToggle, ListItem }
   from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { EXPERIENCE } from 'DNDManager/config/Info';
+import { EXPERIENCE, IMAGES } from 'FifthEditionManager/config/Info';
+import { getCharacterDisplayName } from 'FifthEditionManager/util';
 
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1
 );
-
-const toTitleCase = str =>
-  `${str.charAt(0).toUpperCase()}${str.slice(1).toLowerCase()}`;
 
 const formatNumber = num => (
   num > 999 ? `${(num / 1000).toFixed(1)}k` : num
@@ -56,8 +54,9 @@ const CharacterProfileCard = (props) => {
             <Avatar
               image={
                 <Image
-                  source={props.character.profile.images.race}
+                  source={IMAGES.BASE_CLASS[props.character.profile.baseClass]}
                   style={{ height: 24, width: 24, borderRadius: 12 }}
+                  resizeMode="contain"
                 />
               }
               size={24}
@@ -66,11 +65,9 @@ const CharacterProfileCard = (props) => {
         }
         centerElement={
           <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: '#000' }}>
-            {toTitleCase(props.character.profile.firstName)}&nbsp;
-            {toTitleCase(props.character.profile.lastName)}
+            {getCharacterDisplayName(props.character)}
           </Text>
         }
-        onPress={() => {}}
         style={navHeader}
       />
       <ListItem
@@ -78,7 +75,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>View Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.viewHandler(props.character.key)}
         style={navItem}
       />
       <ListItem
@@ -86,7 +83,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>Edit Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.editHandler(props.character.key)}
         style={navItem}
       />
       <ListItem
@@ -94,7 +91,7 @@ const CharacterProfileCard = (props) => {
         centerElement={
           <Text style={navText}>Delete Character</Text>
         }
-        onPress={() => {}}
+        onPress={() => props.deleteHandler(props.character)}
         style={navItem}
       />
     </View>
@@ -104,7 +101,7 @@ const CharacterProfileCard = (props) => {
     <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
       <CardItem cardBody>
         <Image
-          source={props.character.profile.images.race}
+          source={IMAGES.RACE[props.character.profile.race]}
           resizeMode="cover"
           style={{ height: 100, width: null, flex: 1 }}
         />
@@ -130,8 +127,7 @@ const CharacterProfileCard = (props) => {
           />
           <Body>
             <Text style={styles.heading} numberOfLines={1}>
-              {toTitleCase(props.character.profile.firstName)}&nbsp;
-              {toTitleCase(props.character.profile.lastName)}&nbsp;
+              {getCharacterDisplayName(props.character)}&nbsp;
             </Text>
             <Text style={styles.subheading}>
               {props.character.profile.race}&nbsp;
@@ -219,11 +215,17 @@ const styles = StyleSheet.create({
 CharacterProfileCard.propTypes = {
   character: PropTypes.object,
   modalHandler: PropTypes.func,
+  viewHandler: PropTypes.func,
+  editHandler: PropTypes.func,
+  deleteHandler: PropTypes.func,
 };
 
 CharacterProfileCard.defaultProps = {
   character: undefined,
   modalHandler: () => null,
+  viewHandler: () => null,
+  editHandler: () => null,
+  deleteHandler: () => null,
 };
 
 export default CharacterProfileCard;

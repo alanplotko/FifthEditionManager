@@ -1,19 +1,31 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Card, CardItem, Text, Left, Body }
-  from 'native-base';
-import { StyleSheet, Image } from 'react-native';
+import { Card, CardItem, Text, Left, Body } from 'native-base';
+import { StyleSheet, Image, View } from 'react-native';
+import { Icon } from 'react-native-material-ui';
 
 const ActivityCard = props => (
   <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
     <CardItem cardBody>
       <Left>
-        <Image
-          style={styles.thumbnail}
-          resizeMode="cover"
-          source={props.activity.thumbnail}
-        />
+        <View>
+          <Image
+            style={styles.thumbnail}
+            resizeMode="cover"
+            source={props.activity.thumbnail}
+            blurRadius={props.activity.icon ? 10 : 0}
+          />
+          {
+            props.activity.icon &&
+            <Icon
+              name={props.activity.icon.name}
+              color={props.activity.icon.color}
+              size={48}
+              style={{ position: 'absolute', top: 12, left: 12 }}
+            />
+          }
+        </View>
         <Body style={{ paddingLeft: 10 }}>
           <Text style={styles.heading}>
             {props.activity.action}
@@ -53,6 +65,10 @@ ActivityCard.propTypes = {
     action: PropTypes.string,
     extra: PropTypes.string,
     timestamp: PropTypes.number,
+    icon: PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string,
+    }),
   }),
 };
 
