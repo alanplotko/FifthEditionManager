@@ -227,30 +227,21 @@ export default class SetUpProfile extends React.Component {
   }
 
   onPress = () => {
-    // TODO: Integrate screen into character process again
-    // Keyboard.dismiss();
-    // const { navigate } = this.props.navigation;
-    // const data = this.form.getValue();
-    //
-    // if (data) {
-    //   const timestamp = Date.now();
-    //   const profile = Object.assign({}, data);
-    //
-    //   // Flatten nested power object
-    //   profile.level = profile.power.level;
-    //   profile.experience = profile.power.experience;
-    //   delete profile.power;
-    //
-    //   // Set up new character object
-    //   const newCharacter = {
-    //     key: uuidv4(),
-    //     profile,
-    //     created: timestamp,
-    //     lastUpdated: timestamp,
-    //   };
-    //
-    //   navigate('SetCharacterRace', { character: newCharacter });
-    // }
+    Keyboard.dismiss();
+    const generalInfo = this.form.getValue();
+    if (generalInfo) {
+      const { navigate, state } = this.props.navigation;
+      const newCharacter = Object.assign({}, state.params.character);
+      newCharacter.lastUpdated = Date.now();
+      newCharacter.profile = Object.assign({}, newCharacter.profile, generalInfo);
+
+      // Flatten nested power object
+      newCharacter.profile.level = newCharacter.profile.power.level;
+      newCharacter.profile.experience = newCharacter.profile.power.experience;
+      delete newCharacter.profile.power;
+
+      navigate('ChooseScoringMethod', { character: newCharacter });
+    }
   }
 
   onChange = (value) => {

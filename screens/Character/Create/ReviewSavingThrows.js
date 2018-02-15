@@ -32,7 +32,7 @@ export default class ReviewSavingThrows extends React.Component {
       ...props.navigation.state.params,
     };
     this.state.baseClass = CLASSES
-      .find(option => option.name === this.state.character.profile.baseClass);
+      .find(option => option.key === this.state.character.profile.baseClass.lookupKey);
     this.state.savingThrows = zipObject(
       ABILITIES,
       ABILITIES.map((ability) => {

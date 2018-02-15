@@ -5,6 +5,7 @@ import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import Note from 'FifthEditionManager/components/Note';
+import { RACES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
 import { toTitleCase, calculateModifier } from 'FifthEditionManager/util';
 
@@ -63,15 +64,19 @@ export default class AssignAbilityScores extends React.Component {
       ...props.navigation.state.params,
     };
 
-    if (this.state.character.profile.raceModifiers.extra) {
-      this.state.extraPoints = this.state.character.profile.raceModifiers.extra;
+    this.state.raceModifiers = RACES
+      .find(race => race.key === this.state.character.profile.race.lookupKey)
+      .modifiers;
+
+    if (this.state.raceModifiers.extra) {
+      this.state.extraPoints = this.state.raceModifiers.extra;
     }
     Object
-      .keys(this.state.character.profile.raceModifiers)
+      .keys(this.state.raceModifiers)
       .filter(key => key !== 'extra')
       .forEach((key) => {
         this.state.additionalStats[key] =
-          this.state.character.profile.raceModifiers[key];
+          this.state.raceModifiers[key];
       });
 
     this.state.scores.forEach((score) => {
@@ -371,8 +376,7 @@ export default class AssignAbilityScores extends React.Component {
     const buildModal = () => {
       const ability = this.state.selectedAbility;
       const hasExtraPoint = this.state.hasExtraPoint.includes(ability);
-      const characterHasModifier = this.state.character.profile
-        .raceModifiers[ability];
+      const characterHasModifier = this.state.raceModifiers[ability];
       const abilityScore = this.state.baseStats[ability];
       const additionalPoints = this.state.additionalStats[ability];
       const totalScore = abilityScore + additionalPoints;
@@ -403,7 +407,7 @@ export default class AssignAbilityScores extends React.Component {
             }
           </View>
           {
-            this.state.character.profile.raceModifiers.extra &&
+            this.state.raceModifiers.extra &&
             <Button
               onPress={
                 !hasExtraPoint ?
@@ -457,7 +461,7 @@ export default class AssignAbilityScores extends React.Component {
       );
     };
     const modifierList = Object
-      .keys(this.state.character.profile.raceModifiers)
+      .keys(this.state.raceModifiers)
       .filter(name => name !== 'extra');
 
     const pointPlurality = this.state.extraPoints > 1 ? 'points' : 'point';
@@ -470,7 +474,7 @@ export default class AssignAbilityScores extends React.Component {
             {
               modifierList.length > 0 &&
               <Note
-                title={`${this.state.character.profile.race} Stats`}
+                title={`${this.state.character.profile.race.name} Stats`}
                 type="info"
                 icon="info"
                 collapsible
@@ -480,7 +484,7 @@ export default class AssignAbilityScores extends React.Component {
                 <Text style={{ marginBottom: 10 }}>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race}&nbsp;
+                    &nbsp;{this.state.character.profile.race.name}&nbsp;
                   </Text>
                   race grants the following points and will be allocated
                   automatically:{'\n\n'}
@@ -489,11 +493,11 @@ export default class AssignAbilityScores extends React.Component {
                   <Text key={key}>
                     &emsp;&bull;&nbsp;{toTitleCase(key)}&nbsp;(
                     {
-                      this.state.character.profile.raceModifiers[key] > 0 ?
+                      this.state.raceModifiers[key] > 0 ?
                       '+' :
                       ''
                     }
-                    {this.state.character.profile.raceModifiers[key]})
+                    {this.state.raceModifiers[key]})
                     {'\n'}
                   </Text>
                 ))}
@@ -512,19 +516,19 @@ export default class AssignAbilityScores extends React.Component {
                 <Text>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race}&nbsp;
+                    &nbsp;{this.state.character.profile.race.name}&nbsp;
                   </Text>
                   race grants an additional
                   <Text style={CardStyle.makeBold}>
                     &nbsp;
-                    {this.state.character.profile.raceModifiers.extra}
+                    {this.state.raceModifiers.extra}
                     &nbsp;
                   </Text>
                   points to your abilities. You can allocate only 1 additional
                   point for a single ability until all
                   <Text style={CardStyle.makeBold}>
                     &nbsp;
-                    {this.state.character.profile.raceModifiers.extra}
+                    {this.state.raceModifiers.extra}
                     &nbsp;
                   </Text>
                   points are spent.

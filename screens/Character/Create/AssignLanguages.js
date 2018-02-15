@@ -36,9 +36,9 @@ export default class AssignLanguages extends React.Component {
     };
 
     this.state.race = RACES
-      .find(option => option.name === this.state.character.profile.race);
+      .find(option => option.key === this.state.character.profile.race.lookupKey);
     this.state.background = BACKGROUNDS
-      .find(option => option.name === this.state.character.profile.background);
+      .find(option => option.key === this.state.character.profile.background.lookupKey);
 
     // Set existing languages and remaining languages to select
     this.state.knownLanguages = this.state.race.languages;

@@ -71,7 +71,8 @@ export default class App extends React.Component {
   loadAssetsAsync = () => {
     const imageAssets = cacheImages([
       ...Object.values(IMAGES.RACE),
-      ...Object.values(IMAGES.BASE_CLASS),
+      ...Object.values(IMAGES.BASE_CLASS.ICON),
+      ...Object.values(IMAGES.BASE_CLASS.BACKDROP),
     ]);
     const fontAssets = cacheFonts({
       RobotoThin, RobotoLight, RobotoRegular, RobotoBold,

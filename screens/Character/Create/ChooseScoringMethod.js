@@ -10,7 +10,7 @@ import { ContainerStyle } from 'FifthEditionManager/stylesheets';
  * Define form options
  */
 
-export default class ChoseScoringMethod extends React.Component {
+export default class ChooseScoringMethod extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {

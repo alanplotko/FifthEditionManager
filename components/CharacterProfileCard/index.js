@@ -54,7 +54,7 @@ const CharacterProfileCard = (props) => {
             <Avatar
               image={
                 <Image
-                  source={IMAGES.BASE_CLASS[props.character.profile.baseClass]}
+                  source={IMAGES.BASE_CLASS.ICON[props.character.profile.baseClass]}
                   style={{ height: 24, width: 24, borderRadius: 12 }}
                   resizeMode="contain"
                 />

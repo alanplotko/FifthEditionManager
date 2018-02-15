@@ -47,10 +47,10 @@ export default class SetSkills extends React.Component {
     // Track given proficiencies
     this.state.proficiencies = {
       background: BACKGROUNDS
-        .find(option => option.name === this.state.character.profile.background)
+        .find(option => option.key === this.state.character.profile.background.lookupKey)
         .proficiencies.skills,
       baseClass: CLASSES
-        .find(option => option.name === this.state.character.profile.baseClass)
+        .find(option => option.key === this.state.character.profile.baseClass.lookupKey)
         .proficiencies.skills,
     };
 
@@ -249,7 +249,7 @@ export default class SetSkills extends React.Component {
               </Text>
             </Note>
             <Note
-              title={`${this.state.character.profile.background} Proficiencies`}
+              title={`${this.state.character.profile.background.name} Proficiencies`}
               type="info"
               icon="info"
               collapsible
@@ -259,7 +259,7 @@ export default class SetSkills extends React.Component {
               <Text style={{ marginBottom: 10 }}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{this.state.character.profile.background}&nbsp;
+                  &nbsp;{this.state.character.profile.background.name}&nbsp;
                 </Text>
                 background grants the following proficiencies and will be
                 set automatically:{'\n\n'}
@@ -271,7 +271,7 @@ export default class SetSkills extends React.Component {
               ))}
             </Note>
             <Note
-              title={`${this.state.character.profile.baseClass} Proficiencies`}
+              title={`${this.state.character.profile.baseClass.name} Proficiencies`}
               type="info"
               icon="info"
               collapsible
@@ -281,7 +281,7 @@ export default class SetSkills extends React.Component {
               <Text style={{ marginBottom: 10 }}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{this.state.character.profile.baseClass}&nbsp;
+                  &nbsp;{this.state.character.profile.baseClass.name}&nbsp;
                 </Text>
                 class grants
                 <Text style={CardStyle.makeBold}>
@@ -309,7 +309,7 @@ export default class SetSkills extends React.Component {
                     }
                     &nbsp;accounted for with your
                     <Text style={CardStyle.makeBold}>
-                      &nbsp;{this.state.character.profile.background}&nbsp;
+                      &nbsp;{this.state.character.profile.background.name}&nbsp;
                     </Text>
                     background. As such, of the
                     <Text style={CardStyle.makeBold}>

@@ -152,20 +152,29 @@ export default class SetCharacterClass extends React.Component {
                   key={`${this.state.baseClass.name}Class`}
                   style={{ container: CardStyle.container }}
                 >
-                  <View style={LayoutStyle.centered}>
-                    <View style={{ flex: 2 }}>
-                      <Text style={CardStyle.cardHeading}>
+                  <View>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', height: 36, marginBottom: 15 }}>
+                      <Image
+                        source={IMAGES.BASE_CLASS.ICON[this.state.baseClass.key]}
+                        style={{ width: 36, height: 36, marginRight: 10 }}
+                      />
+                      <Text style={[CardStyle.cardHeading, { paddingTop: 6 }]}>
                         {this.state.baseClass.name}
                       </Text>
-                      <Text style={CardStyle.cardText}>
-                        {this.state.baseClass.description}{'\n'}
-                      </Text>
                     </View>
-                    <View style={{ flex: 1 }}>
-                      <Image
-                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
-                        style={{ width: 96, height: 96, marginLeft: 20 }}
-                      />
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={{ flex: 2 }}>
+                        <Text style={CardStyle.cardText}>
+                          {this.state.baseClass.description}
+                        </Text>
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Image
+                          source={IMAGES.BASE_CLASS.BACKDROP[this.state.baseClass.key]}
+                          style={{ height: 128, width: null }}
+                          resizeMode="contain"
+                        />
+                      </View>
                     </View>
                   </View>
                 </Card>,

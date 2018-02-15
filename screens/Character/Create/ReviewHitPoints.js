@@ -74,17 +74,8 @@ export default class ReviewHitPoints extends React.Component {
       options,
       ...props.navigation.state.params,
     };
-    this.state.character = {
-      profile: {
-        level: 3,
-        baseClass: 'Sorcerer',
-        stats: {
-          constitution: { modifier: 3 },
-        },
-      },
-    };
     this.state.baseClass = CLASSES
-      .find(option => option.name === this.state.character.profile.baseClass);
+      .find(option => option.key === this.state.character.profile.baseClass.lookupKey);
   }
 
   componentWillMount() {
@@ -95,9 +86,9 @@ export default class ReviewHitPoints extends React.Component {
     const updatedOptions = t.update(this.state.options, {
       fields: {
         timesAverageTaken: {
-          help: { $set: `Range [0, ${level}]` },
+          help: { $set: `Range [0, ${level - 1}]` },
           placeholder: {
-            $set: `Take ${(hitDie / 2) + 1} hit points, ${level} ${level !== 1 ? 'times' : 'time'} max`,
+            $set: `Take ${(hitDie / 2) + 1} hit points, ${level - 1} ${level - 1 !== 1 ? 'times' : 'time'} max`,
           },
         },
       },
@@ -105,10 +96,10 @@ export default class ReviewHitPoints extends React.Component {
 
     // Form validation setup after considering level
     const TimesAverageTaken = t
-      .refinement(t.Number, n => n % 1 === 0 && n >= 0 && n <= level);
+      .refinement(t.Number, n => n % 1 === 0 && n >= 0 && n <= level - 1);
     TimesAverageTaken.getValidationErrorMessage = value => validateInteger(
       value,
-      `Must be in range [0, ${level}]`,
+      `Must be in range [0, ${level - 1}]`,
     );
     const HitPointsEdited = t.struct({ timesAverageTaken: TimesAverageTaken });
     this.setState({ options: updatedOptions, type: HitPointsEdited });
@@ -131,9 +122,14 @@ export default class ReviewHitPoints extends React.Component {
 
   setHitPoints = () => {
     const { navigate, state } = this.props.navigation;
+    const { hitDie } = this.state.baseClass;
+    const { modifier } = this.state.character.profile.stats.constitution;
     state.params.character.lastUpdated = Date.now();
     state.params.character.profile.savingThrows =
       cloneDeep(this.state.savingThrows);
+    state.params.character.profile.hitPoints =
+      (this.state.hitPoints ? this.state.hitPoints : 0) + hitDie + modifier;
+    console.log(state.params.character);
     // TODO: Update with correct screen after development
     navigate('AssignLanguages', { ...state.params });
   }
@@ -148,12 +144,12 @@ export default class ReviewHitPoints extends React.Component {
     const { timesAverageTaken } = this.state;
     const { level } = this.state.character.profile;
     const { modifier } = this.state.character.profile.stats.constitution;
-    const additionFromModifier = level * modifier;
+    const additionFromModifier = ((level - 1) * modifier) - (timesAverageTaken * modifier);
     const { hitDie } = this.state.baseClass;
     const average = (hitDie / 2) + 1;
 
     const rolls = [];
-    const rollCount = level - timesAverageTaken;
+    const rollCount = (level - 1) - timesAverageTaken;
     for (let i = 0; i < rollCount; i += 1) {
       rolls.push(chance.natural({ min: 1, max: hitDie }));
     }
@@ -168,14 +164,14 @@ export default class ReviewHitPoints extends React.Component {
   render() {
     const { hitDie } = this.state.baseClass;
     const { modifier } = this.state.character.profile.stats.constitution;
-    const { level, baseClass } = this.state.character.profile;
+    const { level } = this.state.character.profile;
     const average = (hitDie / 2) + 1;
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
           <View style={{ margin: 20 }}>
             <Note
-              title={`${baseClass} Hit Points`}
+              title={`${this.state.character.profile.baseClass.name} Hit Points`}
               type="info"
               icon="info"
               collapsible
@@ -185,7 +181,7 @@ export default class ReviewHitPoints extends React.Component {
               <Text style={{ marginBottom: 10 }}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{baseClass}&nbsp;
+                  &nbsp;{this.state.character.profile.baseClass.name}&nbsp;
                 </Text>
                 class grants a hit die of
                 <Text style={CardStyle.makeBold}>
@@ -209,51 +205,53 @@ export default class ReviewHitPoints extends React.Component {
                   &nbsp;{(hitDie / 2) + 1}&nbsp;
                 </Text>
                 automatically.{'\n\n'}
-                <Text style={CardStyle.makeBold}>
-                  Total Hit Points:&nbsp;
-                </Text>
-                {level}d{hitDie} + ({level} * {modifier}) =&nbsp;
-                <Text style={CardStyle.makeBold}>
-                  {level}d{hitDie} + {level * modifier}
+                <Text>
+                  Total Hit Points = First Level + Later Levels + Modifier Total
                 </Text>
               </Text>
             </Note>
-            <View style={FormStyle.horizontalLayout}>
-              <View style={{ flex: 3, marginRight: 10 }}>
-                <t.form.Form
-                  ref={(c) => { this.form = c; }}
-                  type={this.state.type}
-                  value={this.state.form}
-                  options={this.state.options}
-                  onChange={this.onChange}
-                />
+            {
+              level !== 1 &&
+              <View style={FormStyle.horizontalLayout}>
+                <View style={{ flex: 3, marginRight: 10 }}>
+                  <t.form.Form
+                    ref={(c) => { this.form = c; }}
+                    type={this.state.type}
+                    value={this.state.form}
+                    options={this.state.options}
+                    onChange={this.onChange}
+                  />
+                </View>
+                <View style={{ flex: 1, marginTop: 30 }}>
+                  <Button
+                    primary
+                    raised
+                    text="Update"
+                    onPress={this.onPress}
+                  />
+                </View>
               </View>
-              <View style={{ flex: 1, marginTop: 30 }}>
-                <Button
-                  primary
-                  raised
-                  text="Update"
-                  onPress={this.onPress}
-                />
-              </View>
-            </View>
+            }
             <View
               style={[styles.buttonLayout, { marginTop: 10, marginBottom: 20 }]}
             >
-              <Button
-                accent
-                raised
-                text="Reroll"
-                onPress={() => this.reroll()}
-                disabled={this.state.timesAverageTaken === null}
-                style={{ container: { flex: 1, marginRight: 10 } }}
-              />
+              {
+                level !== 1 &&
+                <Button
+                  accent
+                  raised
+                  text="Reroll"
+                  onPress={() => this.reroll()}
+                  disabled={this.state.timesAverageTaken === null}
+                  style={{ container: { flex: 1, marginRight: 10 } }}
+                />
+              }
               <Button
                 primary
                 raised
                 text="Proceed"
                 onPress={() => this.setHitPoints()}
-                disabled={!this.state.hitPoints}
+                disabled={!this.state.hitPoints && level !== 1}
                 style={{ container: { flex: 1, marginLeft: 10 } }}
               />
             </View>
@@ -307,11 +305,11 @@ export default class ReviewHitPoints extends React.Component {
                   <Text style={styles.points}>
                     {
                       !this.state.hitPoints &&
-                      <Text>&mdash;</Text>
+                      <Text>{hitDie + modifier}</Text>
                     }
                     {
                       this.state.hitPoints &&
-                      this.state.hitPoints
+                      this.state.hitPoints + hitDie + modifier
                     }
                   </Text>
                 </Card>
@@ -330,20 +328,44 @@ export default class ReviewHitPoints extends React.Component {
                 }}
               >
                 <Text style={[styles.cardTitle, { marginBottom: 0 }]}>
+                {/* .concat(Array(this.state.timesAverageTaken).fill(average))
+                .concat([(level - 1) * modifier]) */}
                   <Text style={CardStyle.makeBold}>
-                    Total Hit Points
+                    First Level
+                  </Text>
+                  &nbsp;= {hitDie} + {modifier} = {hitDie + modifier}{'\n'}
+                  <Text style={CardStyle.makeBold}>
+                    Rolls
                   </Text>
                   &nbsp;=&nbsp;
                   {
                     this.state.hitPoints &&
                     this.state.rolls
-                      .concat(Array(this.state.timesAverageTaken).fill(average))
-                      .concat([level * modifier])
+                      .map(roll => `(${roll} + ${modifier})`)
                       .join(' + ')
                   }
                   &nbsp;=&nbsp;
+                  {
+                    this.state.hitPoints &&
+                    this.state.rolls
+                      .map(roll => roll + modifier)
+                      .reduce((sum, x) => sum + x)
+                  }
+                  {'\n'}
                   <Text style={CardStyle.makeBold}>
-                    {this.state.hitPoints}
+                    Average Taken
+                  </Text>
+                  &nbsp;=&nbsp;
+                  {
+                    Array(this.state.timesAverageTaken).fill(average).join(' + ')
+                  }
+                  &nbsp;= {this.state.timesAverageTaken * average}{'\n'}
+                  <Text style={CardStyle.makeBold}>
+                    Total Hit Points
+                  </Text>
+                  &nbsp;=&nbsp;
+                  <Text style={CardStyle.makeBold}>
+                    {this.state.hitPoints + hitDie + modifier}
                   </Text>
                 </Text>
               </Card>

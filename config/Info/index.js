@@ -18,24 +18,47 @@ const RACE_IMAGES = {
 /**
  * Character class image assets
  */
-const BASE_CLASS_IMAGES = {
+const BASE_CLASS_ICONS = {
   /* eslint-disable global-require */
-  barbarian: require('FifthEditionManager/assets/images/classes/class_barbarian.png'),
-  bard: require('FifthEditionManager/assets/images/classes/class_bard.png'),
-  cleric: require('FifthEditionManager/assets/images/classes/class_cleric.png'),
-  druid: require('FifthEditionManager/assets/images/classes/class_druid.png'),
-  fighter: require('FifthEditionManager/assets/images/classes/class_fighter.png'),
-  monk: require('FifthEditionManager/assets/images/classes/class_monk.png'),
-  paladin: require('FifthEditionManager/assets/images/classes/class_paladin.png'),
-  ranger: require('FifthEditionManager/assets/images/classes/class_ranger.png'),
-  rogue: require('FifthEditionManager/assets/images/classes/class_rogue.png'),
-  sorcerer: require('FifthEditionManager/assets/images/classes/class_sorcerer.png'),
-  warlock: require('FifthEditionManager/assets/images/classes/class_warlock.png'),
-  wizard: require('FifthEditionManager/assets/images/classes/class_wizard.png'),
+  barbarian: require('FifthEditionManager/assets/images/classes/icons/class_barbarian.png'),
+  bard: require('FifthEditionManager/assets/images/classes/icons/class_bard.png'),
+  cleric: require('FifthEditionManager/assets/images/classes/icons/class_cleric.png'),
+  druid: require('FifthEditionManager/assets/images/classes/icons/class_druid.png'),
+  fighter: require('FifthEditionManager/assets/images/classes/icons/class_fighter.png'),
+  monk: require('FifthEditionManager/assets/images/classes/icons/class_monk.png'),
+  paladin: require('FifthEditionManager/assets/images/classes/icons/class_paladin.png'),
+  ranger: require('FifthEditionManager/assets/images/classes/icons/class_ranger.png'),
+  rogue: require('FifthEditionManager/assets/images/classes/icons/class_rogue.png'),
+  sorcerer: require('FifthEditionManager/assets/images/classes/icons/class_sorcerer.png'),
+  warlock: require('FifthEditionManager/assets/images/classes/icons/class_warlock.png'),
+  wizard: require('FifthEditionManager/assets/images/classes/icons/class_wizard.png'),
   /* eslint-enable global-require */
 };
 
-export const IMAGES = { RACE: RACE_IMAGES, BASE_CLASS: BASE_CLASS_IMAGES };
+const BASE_CLASS_BACKDROPS = {
+ /* eslint-disable global-require */
+ barbarian: require('FifthEditionManager/assets/images/classes/backdrops/class_barbarian.png'),
+ bard: require('FifthEditionManager/assets/images/classes/backdrops/class_bard.png'),
+ cleric: require('FifthEditionManager/assets/images/classes/backdrops/class_cleric.png'),
+ druid: require('FifthEditionManager/assets/images/classes/backdrops/class_druid.png'),
+ fighter: require('FifthEditionManager/assets/images/classes/backdrops/class_fighter.png'),
+ monk: require('FifthEditionManager/assets/images/classes/backdrops/class_monk.png'),
+ paladin: require('FifthEditionManager/assets/images/classes/backdrops/class_paladin.png'),
+ ranger: require('FifthEditionManager/assets/images/classes/backdrops/class_ranger.png'),
+ rogue: require('FifthEditionManager/assets/images/classes/backdrops/class_rogue.png'),
+ sorcerer: require('FifthEditionManager/assets/images/classes/backdrops/class_sorcerer.png'),
+ warlock: require('FifthEditionManager/assets/images/classes/backdrops/class_warlock.png'),
+ wizard: require('FifthEditionManager/assets/images/classes/backdrops/class_wizard.png'),
+ /* eslint-enable global-require */
+};
+
+export const IMAGES = {
+  RACE: RACE_IMAGES,
+  BASE_CLASS: {
+    ICON: BASE_CLASS_ICONS,
+    BACKDROP: BASE_CLASS_BACKDROPS,
+  }
+};
 
 export const ALIGNMENTS = [
   'Lawful Good', 'Lawful Neutral', 'Lawful Evil', 'Neutral Good', 'True Neutral', 'Neutral Evil',
@@ -277,7 +300,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.barbarian,
+    image: IMAGES.BASE_CLASS.ICON.barbarian,
   },
   {
     key: 'bard',
@@ -294,7 +317,7 @@ export const CLASSES = [
       },
     },
 
-    image: IMAGES.BASE_CLASS.bard,
+    image: IMAGES.BASE_CLASS.ICON.bard,
   },
   {
     key: 'cleric',
@@ -311,12 +334,12 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.cleric,
+    image: IMAGES.BASE_CLASS.ICON.cleric,
   },
   {
     key: 'druid',
     name: 'Druid',
-    description: 'A nomad devoted to the world and the powers of nature. They are capable of adopting the form of a beast for battle or utility. Capable of supporting a party, healing their wounds or laying low their enemies with nature\'s wrath.',
+    description: 'A nomad devoted to the world and powers of nature, taking the form of a beast for battle or utility. They can support a party by healing their wounds or laying low their enemies with nature\'s wrath.',
     hitDie: 8,
     proficiencies: {
       savingThrows: ['intelligence', 'wisdom'],
@@ -328,7 +351,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.druid,
+    image: IMAGES.BASE_CLASS.ICON.druid,
   },
   {
     key: 'fighter',
@@ -345,7 +368,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.fighter,
+    image: IMAGES.BASE_CLASS.ICON.fighter,
   },
   {
     key: 'monk',
@@ -367,7 +390,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.monk,
+    image: IMAGES.BASE_CLASS.ICON.monk,
   },
   {
     key: 'paladin',
@@ -384,7 +407,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.paladin,
+    image: IMAGES.BASE_CLASS.ICON.paladin,
   },
   {
     key: 'ranger',
@@ -401,12 +424,12 @@ export const CLASSES = [
         quantity: 3,
       },
     },
-    image: IMAGES.BASE_CLASS.ranger,
+    image: IMAGES.BASE_CLASS.ICON.ranger,
   },
   {
     key: 'rogue',
     name: 'Rogue',
-    description: 'A thief or assassin who has a knack for picking out and exploiting their enemies\' weaknesses. They stealthily move about, using trickery to get their way.',
+    description: 'A thief or assassin with a knack for picking out and exploiting weaknesses. They stealthily move about, using trickery to get their way.',
     hitDie: 8,
     proficiencies: {
       savingThrows: ['dexterity', 'intelligence'],
@@ -418,7 +441,7 @@ export const CLASSES = [
         quantity: 4,
       },
     },
-    image: IMAGES.BASE_CLASS.rogue,
+    image: IMAGES.BASE_CLASS.ICON.rogue,
   },
   {
     key: 'sorcerer',
@@ -435,7 +458,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.sorcerer,
+    image: IMAGES.BASE_CLASS.ICON.sorcerer,
   },
   {
     key: 'warlock',
@@ -452,7 +475,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.warlock,
+    image: IMAGES.BASE_CLASS.ICON.warlock,
   },
   {
     key: 'wizard',
@@ -469,7 +492,7 @@ export const CLASSES = [
         quantity: 2,
       },
     },
-    image: IMAGES.BASE_CLASS.wizard,
+    image: IMAGES.BASE_CLASS.ICON.wizard,
   },
 ];
 
