@@ -113,13 +113,13 @@ export default class SetCharacterRace extends React.Component {
                 key={race.key}
                 style={{
                   container: {
-                    width: maxSize, height: maxSize, marginHorizontal: 5, marginVertical: 5,
+                    width: maxSize, height: maxSize - 10, marginHorizontal: 5, marginVertical: 5,
                   },
                 }}
                 onPress={() => this.setRace(race.key)}
               >
                 <Image
-                  style={{ width: maxSize, height: maxSize }}
+                  style={{ width: maxSize, height: maxSize - 10 }}
                   source={race.image}
                   blurRadius={this.state.race && this.state.race.key === race.key ? 10 : 0}
                 />

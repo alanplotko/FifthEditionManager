@@ -1,18 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Keyboard,
-  TouchableHighlight,
-  Text,
-  ScrollView,
-  View,
-} from 'react-native';
+import { Keyboard, Text, ScrollView, View } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Toolbar } from 'react-native-material-ui';
+import { Button, Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
-import { ALIGNMENTS, EXPERIENCE } from 'FifthEditionManager/config/Info';
+import { ALIGNMENTS, EXPERIENCE, RACES } from 'FifthEditionManager/config/Info';
 import FormStyle from 'FifthEditionManager/stylesheets/FormStyle';
-import { validateInteger } from 'FifthEditionManager/util';
+import { validateInteger, toProperList } from 'FifthEditionManager/util';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -86,7 +80,8 @@ t.String.getValidationErrorMessage = defaultError;
  */
 
 const AlignmentType = ALIGNMENTS.reduce((o, alignment) =>
- Object.assign(o, { [alignment]: alignment }), {});
+  Object.assign(o, { [alignment]: alignment }), {});
+
 const Character = t.struct({
   power: Power,
   firstName: t.String,
@@ -122,23 +117,21 @@ const template = locals => (
     {locals.inputs.power}
 
     <Text style={FormStyle.heading}>About</Text>
-    <View style={FormStyle.horizontalLayout}>
-      <View style={{ flex: 1 }}>
-        {locals.inputs.gender}
-      </View>
-      <View style={{ flex: 1 }}>
-        {locals.inputs.alignment}
-      </View>
+    <View style={{ flex: 1 }}>
+      {locals.inputs.gender}
+    </View>
+    <View style={{ flex: 1 }}>
+      {locals.inputs.alignment}
     </View>
 
     <Text style={FormStyle.heading}>Measurements</Text>
-    <View style={{ flex: 1, marginRight: 5 }}>
+    <View style={{ flex: 1 }}>
       {locals.inputs.age}
     </View>
-    <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
+    <View style={{ flex: 1 }}>
       {locals.inputs.height}
     </View>
-    <View style={{ flex: 1, marginLeft: 5 }}>
+    <View style={{ flex: 1 }}>
       {locals.inputs.weight}
     </View>
   </View>
@@ -180,15 +173,15 @@ const options = {
     },
     age: {
       label: 'Age',
-      help: 'In years',
+      placeholder: 'In years',
     },
     height: {
       label: 'Height',
-      help: 'e.g. 5\'5"',
+      placeholder: 'e.g. 5\'5"',
     },
     weight: {
       label: 'Weight',
-      help: 'e.g. 130 lbs.',
+      placeholder: 'e.g. 130 lbs.',
     },
   },
 };
@@ -200,7 +193,7 @@ export default class SetUpProfile extends React.Component {
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
-        centerElement: 'New Character',
+        centerElement: 'Character Profile',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.generateCharacter(),
       };
@@ -214,10 +207,16 @@ export default class SetUpProfile extends React.Component {
 
   constructor(props) {
     super(props);
+    const { lookupKey } = props.navigation.state.params.character.profile.race;
     this.state = {
       options,
       form: null,
+      race: RACES.find(race => race.key === lookupKey),
     };
+    this.state.options.fields.alignment.help = `${this.state.race.plural} tend to be ${toProperList(this.state.race.alignment.include, 'and', false)}`;
+    this.state.options.fields.age.help = `${this.state.race.plural} typically reach adulthood at ${this.state.race.age.adulthood} and live to approximately ${this.state.race.age.lifespan} years`;
+    this.state.options.fields.height.help = `${this.state.race.plural} are typically ${this.state.race.height.base} + ${this.state.race.height.modifier.join('d')} inches tall`;
+    this.state.options.fields.weight.help = `${this.state.race.plural} typically weigh ${this.state.race.weight.base} + (your height modifier roll * ${this.state.race.weight.modifier.join('d')}) inches tall`;
   }
 
   componentDidMount() {
@@ -274,6 +273,7 @@ export default class SetUpProfile extends React.Component {
   }
 
   generateCharacter = () => {
+    Keyboard.dismiss();
     let gender;
     let firstName;
     let lastName;
@@ -286,19 +286,37 @@ export default class SetUpProfile extends React.Component {
       firstName = chance.first({ gender });
       lastName = chance.last({ gender });
     }
+    let heightModifier = 0;
+    for (let i = 0; i < this.state.race.height.modifier[0]; i += 1) {
+      heightModifier += chance.natural({ min: 1, max: this.state.race.height.modifier[1] });
+    }
+    let weightModifier = 0;
+    for (let i = 0; i < this.state.race.weight.modifier[0]; i += 1) {
+      weightModifier += chance.natural({ min: 1, max: this.state.race.weight.modifier[1] });
+    }
+    const height = this.state.race.height.base + heightModifier;
+    const weight = this.state.race.weight.base + (heightModifier * weightModifier);
     this.setState({
       form: {
         firstName,
         lastName,
         power: { level: 1, experience: 0 },
         gender,
-        alignment: chance.pickone(ALIGNMENTS),
-        // Age min/max: Human/Elf
-        age: chance.natural({ min: 10, max: 800 }),
-        // Height min/max: Halfling/Dragonborn
-        height: `${chance.natural({ min: 3, max: 6 })}'${chance.natural({ min: 1, max: 12 })}"`,
-        // Weight min/max: Halfling/Dragonborn
-        weight: `${chance.natural({ min: 70, max: 250 })} lbs.`,
+        alignment: chance.pickone(ALIGNMENTS.filter((alignment) => {
+          const sides = alignment.toLowerCase().split(' ');
+          const includeCheck = alignment.toLowerCase() === 'true neutral' ||
+            this.state.race.alignment.include.includes(sides[0]) ||
+            this.state.race.alignment.include.includes(sides[1]);
+          const excludeCheck = !this.state.race.alignment.exclude.includes(sides[0]) &&
+            !this.state.race.alignment.exclude.includes(sides[1]);
+          return includeCheck && excludeCheck;
+        })),
+        age: chance.natural({
+          min: Math.floor(this.state.race.age.adulthood / 1.2),
+          max: this.state.race.age.lifespan,
+        }),
+        height: `${Math.floor(height / 12)}' ${height % 12}"`,
+        weight: `${weight} lbs.`,
       },
     });
   }
@@ -340,13 +358,13 @@ export default class SetUpProfile extends React.Component {
               options={this.state.options}
               onChange={this.onChange}
             />
-            <TouchableHighlight
-              style={FormStyle.submitBtn}
+            <Button
+              primary
+              raised
               onPress={this.onPress}
-              underlayColor="#1A237E"
-            >
-              <Text style={FormStyle.submitBtnText}>Save Character</Text>
-            </TouchableHighlight>
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
           </ScrollView>
         </Content>
       </Container>

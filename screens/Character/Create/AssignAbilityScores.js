@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
@@ -9,6 +9,9 @@ import { RACES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
 import { toTitleCase, calculateModifier } from 'FifthEditionManager/util';
 
+const Chance = require('chance');
+
+const chance = new Chance();
 const abilities = [
   'Strength',
   'Dexterity',
@@ -21,10 +24,13 @@ const abilities = [
 export default class AssignAbilityScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Assign Ability Scores',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
       };
       return <Toolbar {...props} />;
     },
@@ -37,8 +43,8 @@ export default class AssignAbilityScores extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scores: [],
       scoreBank: [],
+      loading: false,
       isModalVisible: false,
       isErrorCollapsed: false,
       isInfoCollapsed: false,
@@ -89,6 +95,10 @@ export default class AssignAbilityScores extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeScoreAssignments: this.randomizeScoreAssignments });
+  }
+
   onPress = () => {
     const { state, navigate } = this.props.navigation;
     const newCharacter = Object.assign({}, state.params.character);
@@ -104,43 +114,6 @@ export default class AssignAbilityScores extends React.Component {
     });
     newCharacter.profile = Object.assign({}, newCharacter.profile, { stats });
     navigate('SetSkills', { character: newCharacter });
-
-    // const newActivity = {
-    //   key: uuidv4(),
-    //   timestamp: newCharacter.lastUpdated,
-    //   action: 'Created New Character',
-    //   // Format character's full name for extra text
-    //   extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}
-    //     ${newCharacter.profile.firstName.slice(1)}
-    //     ${newCharacter.profile.lastName.charAt(0).toUpperCase()}
-    //     ${newCharacter.profile.lastName.slice(1)}`,
-    //   thumbnail: newCharacter.profile.images.race,
-    //   icon: {
-    //     name: 'add-circle',
-    //     color: '#fff',
-    //   },
-    // };
-    // store
-    //   .push(CHARACTER_KEY, newCharacter)
-    //   .catch((error) => {
-    //     // Show error message on screen and allow resubmit
-    //     this.setState({ error: 'Please try again in a few minutes.' });
-    //     return error;
-    //   })
-    //   .then((error) => {
-    //     if (error) return;
-    //     store
-    //       .push(ACTIVITY_KEY, newActivity)
-    //       .then(() => {
-    //         const resetAction = NavigationActions.reset({
-    //           index: 0,
-    //           actions: [NavigationActions.navigate({
-    //             routeName: 'Home',
-    //           })],
-    //         });
-    //         dispatch(resetAction);
-    //       });
-    //   });
   }
 
   openModal = (ability) => {
@@ -238,6 +211,46 @@ export default class AssignAbilityScores extends React.Component {
     this.setState({ isErrorCollapsed: !this.state.isErrorCollapsed });
   }
 
+  resetScoreBank = (done) => {
+    this.setState({ loading: true }, () => {
+      if (Object.values(this.state.baseStats).every(stat => stat === null)) {
+        return done();
+      }
+      const scoreBank = [];
+      this.state.scores.forEach((score) => {
+        const index = scoreBank.findIndex(s => s.score === score);
+        if (index !== -1) {
+          scoreBank[index].quantity += 1;
+        } else {
+          scoreBank.push({ score, quantity: 1 });
+        }
+      });
+      this.setState({
+        baseStats: {
+          strength: null,
+          dexterity: null,
+          constitution: null,
+          intelligence: null,
+          wisdom: null,
+          charisma: null,
+        },
+        scoreBank,
+      }, done);
+    });
+  }
+
+  randomizeScoreAssignments = () => {
+    this.resetScoreBank(() => {
+      const scoreBank = this.state.scoreBank.slice(0);
+      const baseStats = Object.assign({}, this.state.baseStats);
+      Object.keys(baseStats).forEach((stat) => {
+        baseStats[stat] = chance.pickone(scoreBank.filter(item => item.quantity > 0)).score;
+        scoreBank[scoreBank.findIndex(item => item.score === baseStats[stat])].quantity -= 1;
+      });
+      this.setState({ scoreBank, baseStats, loading: false });
+    });
+  }
+
   render() {
     const isSelectable = scoreCard => (
       // Score is selected
@@ -308,14 +321,14 @@ export default class AssignAbilityScores extends React.Component {
             }
           </Card>
           <Button
-            onPress={() => this.resetStat(ability)}
             accent
             raised
             text="Reset"
             icon="refresh"
             disabled={!this.state.baseStats[ability]}
+            onPress={() => this.resetStat(ability)}
             style={{
-              container: { width: 100, height: 40 },
+              container: { width: 100 },
             }}
           />
         </View>
@@ -551,28 +564,19 @@ export default class AssignAbilityScores extends React.Component {
                 </View>
               ))}
             </View>
-            <TouchableHighlight
-              style={[
-                FormStyle.submitBtn,
-                this.state.isModalVisible ||
-                this.state.extraPoints > 0 ||
-                Object.values(this.state.baseStats).includes(null) ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-                { marginTop: 20, marginBottom: 10 },
-              ]}
-              onPress={this.onPress}
-              underlayColor="#1A237E"
+            <Button
+              primary
+              raised
               disabled={
+                this.state.loading ||
                 this.state.isModalVisible ||
                 this.state.extraPoints > 0 ||
                 Object.values(this.state.baseStats).includes(null)
               }
-            >
-              <Text style={FormStyle.submitBtnText}>
-                Set Ability Scores
-              </Text>
-            </TouchableHighlight>
+              onPress={this.onPress}
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
           </View>
           <Modal
             isVisible={this.state.isModalVisible}

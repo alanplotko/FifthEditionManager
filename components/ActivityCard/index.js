@@ -31,7 +31,7 @@ const ActivityCard = props => (
             {props.activity.action}
           </Text>
           <Text style={styles.subheading}>
-            {props.activity.extra}&nbsp;&bull;&nbsp;
+            {props.activity.extra.trim()}&nbsp;&bull;&nbsp;
             {moment(props.activity.timestamp).fromNow()}
           </Text>
         </Body>

@@ -153,7 +153,15 @@ export default class SetCharacterClass extends React.Component {
                   style={{ container: CardStyle.container }}
                 >
                   <View>
-                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', height: 36, marginBottom: 15 }}>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        height: 36,
+                        marginBottom: 15,
+                      }}
+                    >
                       <Image
                         source={IMAGES.BASE_CLASS.ICON[this.state.baseClass.key]}
                         style={{ width: 36, height: 36, marginRight: 10 }}

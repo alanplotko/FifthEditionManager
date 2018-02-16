@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
 import Note from 'FifthEditionManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'FifthEditionManager/config/Info';
@@ -341,41 +341,40 @@ export default class SetSkills extends React.Component {
               ))}
             </Note>
             <View style={styles.buttonLayout}>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.resetButton,
-                  hasChanged ?
-                    { opacity: 1 } :
-                    { opacity: 0.5 },
-                ]}
-                onPress={() => this.resetSkills()}
-                color={COLOR.red500}
-                underlayColor={COLOR.red800}
+              <Button
+                accent
+                raised
                 disabled={!hasChanged}
-              >
-                <Text style={styles.buttonText}>Reset</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.acceptButton,
-                  this.state.proficiencies.quantity > 0 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.setSkills()}
-                underlayColor="#1A237E"
+                onPress={() => this.resetSkills()}
+                text="Reset"
+                style={{
+                  container: {
+                    flex: 1,
+                    marginRight: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
+              <Button
+                primary
+                raised
                 disabled={this.state.proficiencies.quantity > 0}
-              >
-                <Text style={styles.buttonText}>
-                  {
-                    this.state.proficiencies.quantity > 0 ?
-                      `${this.state.proficiencies.quantity} Skills Remaining` :
-                      'Proceed'
-                  }
-                </Text>
-              </TouchableHighlight>
+                onPress={() => this.setSkills()}
+                text={
+                  this.state.proficiencies.quantity > 0 ?
+                    `${this.state.proficiencies.quantity} Skills Remaining` :
+                    'Proceed'
+                }
+                style={{
+                  container: {
+                    flex: 2,
+                    marginLeft: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
             </View>
             <ListItem
               divider
@@ -424,33 +423,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

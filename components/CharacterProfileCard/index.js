@@ -2,8 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Card, CardItem, Text, Body, Left, Right } from 'native-base';
-import { Avatar, COLOR, Icon, IconToggle, ListItem }
-  from 'react-native-material-ui';
+import { COLOR, Icon, IconToggle, ListItem } from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE, IMAGES } from 'FifthEditionManager/config/Info';
@@ -50,18 +49,11 @@ const CharacterProfileCard = (props) => {
     <View style={{ margin: 0 }}>
       <ListItem
         leftElement={
-          <View>
-            <Avatar
-              image={
-                <Image
-                  source={IMAGES.BASE_CLASS.ICON[props.character.profile.baseClass]}
-                  style={{ height: 24, width: 24, borderRadius: 12 }}
-                  resizeMode="contain"
-                />
-              }
-              size={24}
-            />
-          </View>
+          <Image
+            source={IMAGES.RACE[props.character.profile.race.lookupKey]}
+            style={{ height: 36, width: 36 }}
+            resizeMode="contain"
+          />
         }
         centerElement={
           <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: '#000' }}>
@@ -101,8 +93,7 @@ const CharacterProfileCard = (props) => {
     <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
       <CardItem cardBody>
         <Image
-          source={IMAGES.RACE[props.character.profile.race]}
-          resizeMode="cover"
+          source={IMAGES.RACE[props.character.profile.race.lookupKey]}
           style={{ height: 100, width: null, flex: 1 }}
         />
         <View style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -121,7 +112,7 @@ const CharacterProfileCard = (props) => {
       <CardItem>
         <Left style={{ flex: 2 }}>
           <Image
-            source={props.character.profile.images.baseClass}
+            source={IMAGES.BASE_CLASS.ICON[props.character.profile.baseClass.lookupKey]}
             style={{ width: 48, height: 64 }}
             resizeMode="contain"
           />
@@ -130,11 +121,11 @@ const CharacterProfileCard = (props) => {
               {getCharacterDisplayName(props.character)}&nbsp;
             </Text>
             <Text style={styles.subheading}>
-              {props.character.profile.race}&nbsp;
-              {props.character.profile.baseClass}
+              {props.character.profile.race.name}&nbsp;
+              {props.character.profile.baseClass.name}
             </Text>
             <Text style={styles.subheading}>
-              {props.character.profile.background}
+              {props.character.profile.background.name}
             </Text>
           </Body>
         </Left>

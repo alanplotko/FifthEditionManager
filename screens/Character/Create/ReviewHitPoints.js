@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
+import store from 'react-native-simple-store';
+import { NavigationActions } from 'react-navigation';
 import Note from 'FifthEditionManager/components/Note';
-import { CLASSES } from 'FifthEditionManager/config/Info';
+import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { validateInteger } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
+import { ACTIVITY_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
 
 const t = require('tcomb-form-native');
+const uuidv4 = require('uuid/v4');
 const Chance = require('chance');
 
 const chance = new Chance();
@@ -121,17 +125,50 @@ export default class ReviewHitPoints extends React.Component {
   }
 
   setHitPoints = () => {
-    const { navigate, state } = this.props.navigation;
+    const { state, dispatch } = this.props.navigation;
     const { hitDie } = this.state.baseClass;
     const { modifier } = this.state.character.profile.stats.constitution;
-    state.params.character.lastUpdated = Date.now();
-    state.params.character.profile.savingThrows =
-      cloneDeep(this.state.savingThrows);
-    state.params.character.profile.hitPoints =
-      (this.state.hitPoints ? this.state.hitPoints : 0) + hitDie + modifier;
-    console.log(state.params.character);
-    // TODO: Update with correct screen after development
-    navigate('AssignLanguages', { ...state.params });
+    const newCharacter = Object.assign({}, state.params.character);
+    newCharacter.lastUpdated = Date.now();
+    newCharacter.profile.savingThrows = cloneDeep(this.state.savingThrows);
+    newCharacter.profile.hitPoints = (this.state.hitPoints ? this.state.hitPoints : 0)
+      + hitDie + modifier;
+
+    const newActivity = {
+      key: uuidv4(),
+      timestamp: newCharacter.lastUpdated,
+      action: 'Created New Character',
+      // Format character's full name for extra text
+      extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
+      thumbnail: IMAGES.RACE[newCharacter.profile.race.lookupKey],
+      icon: {
+        name: 'add-circle',
+        color: '#fff',
+      },
+    };
+
+    store
+      .push(CHARACTER_KEY, newCharacter)
+      .catch((error) => {
+        // TODO: set up error message in UI
+        // Show error message on screen and allow resubmit
+        this.setState({ error: 'Please try again in a few minutes.' });
+        return error;
+      })
+      .then((error) => {
+        if (error) return;
+        store
+          .push(ACTIVITY_KEY, newActivity)
+          .then(() => {
+            const resetAction = NavigationActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({
+                routeName: 'Home',
+              })],
+            });
+            dispatch(resetAction);
+          });
+      });
   }
 
   toggleNote = () => {
@@ -166,6 +203,11 @@ export default class ReviewHitPoints extends React.Component {
     const { modifier } = this.state.character.profile.stats.constitution;
     const { level } = this.state.character.profile;
     const average = (hitDie / 2) + 1;
+    const negative = modifier < 0;
+    let modifierDisplay = modifier;
+    if (negative) {
+      modifierDisplay *= -1;
+    }
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -189,16 +231,16 @@ export default class ReviewHitPoints extends React.Component {
                 </Text>
                 plus your constitution modifier&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  (+{modifier})
+                  ({negative ? <Text>&minus;</Text> : '+'}{modifierDisplay})
                 </Text>
                 &nbsp;per level after the first level.
                 For the first level, take&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  {hitDie} + {modifier} = {hitDie + modifier}
+                  {hitDie} {negative ? '-' : '+'} {modifierDisplay} = {hitDie + modifier}
                 </Text>
                 . After every level, add a roll of
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;1d{hitDie} + {modifier}&nbsp;
+                  &nbsp;1d{hitDie} {negative ? '-' : '+'} {modifierDisplay}&nbsp;
                 </Text>
                 or take
                 <Text style={CardStyle.makeBold}>
@@ -328,8 +370,6 @@ export default class ReviewHitPoints extends React.Component {
                 }}
               >
                 <Text style={[styles.cardTitle, { marginBottom: 0 }]}>
-                {/* .concat(Array(this.state.timesAverageTaken).fill(average))
-                .concat([(level - 1) * modifier]) */}
                   <Text style={CardStyle.makeBold}>
                     First Level
                   </Text>

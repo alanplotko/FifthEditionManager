@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, Icon, ListItem, Toolbar } from 'react-native-material-ui';
+import { Button, COLOR, Icon, ListItem, Toolbar } from 'react-native-material-ui';
 import Note from 'FifthEditionManager/components/Note';
 import { ABILITIES, CLASSES } from 'FifthEditionManager/config/Info';
 import { toTitleCase, toProperList } from 'FifthEditionManager/util';
@@ -158,13 +158,15 @@ export default class ReviewSavingThrows extends React.Component {
               </Text>
             </Note>
             <View style={styles.buttonLayout}>
-              <TouchableHighlight
-                style={[styles.button, styles.acceptButton]}
+              <Button
+                primary
+                raised
+                text="Proceed"
                 onPress={() => this.setSavingThrows()}
-                underlayColor="#1A237E"
-              >
-                <Text style={styles.buttonText}>Proceed</Text>
-              </TouchableHighlight>
+                style={{
+                  container: { width: '100%', marginTop: 10, marginBottom: 20 },
+                }}
+              />
             </View>
             <ListItem
               divider

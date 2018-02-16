@@ -10,8 +10,8 @@ import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
 import ActivityCard from 'FifthEditionManager/components/ActivityCard';
 import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfileCard';
 import { getCharacterDisplayName } from 'FifthEditionManager/util';
-import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY }
-  from 'FifthEditionManager/config/StoreKeys';
+import { IMAGES } from 'FifthEditionManager/config/Info';
+import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
 
 const uuidv4 = require('uuid/v4');
 
@@ -122,7 +122,7 @@ export default class HomeScreen extends React.Component {
                 timestamp: Date.now(),
                 action: 'Deleted Character',
                 extra: fullName,
-                thumbnail: character.profile.images.race,
+                thumbnail: IMAGES.RACE[character.profile.race.lookupKey],
                 icon: {
                   name: 'delete-forever',
                   color: '#fff',

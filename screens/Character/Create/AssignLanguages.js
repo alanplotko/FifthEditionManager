@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
 import { ContainerStyle, CardStyle } from 'FifthEditionManager/stylesheets';
 import Note from 'FifthEditionManager/components/Note';
@@ -186,7 +186,7 @@ export default class AssignLanguages extends React.Component {
                     <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.race.name}&nbsp;
                     </Text>
-                    and&nbsp;
+                    and
                   </Text>
                 }
                 {
@@ -220,6 +220,7 @@ export default class AssignLanguages extends React.Component {
                   this.state.race.additionalLanguages > 0 &&
                   this.state.background.additionalLanguages > 0 &&
                   <Text>
+                    &nbsp;for
                     <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.additionalLanguages}&nbsp;
                     </Text>
@@ -249,42 +250,41 @@ export default class AssignLanguages extends React.Component {
             <View style={styles.buttonLayout}>
               {
                 this.state.additionalLanguages > 0 &&
-                <TouchableHighlight
-                  style={[
-                    styles.button,
-                    styles.resetButton,
-                    hasChanged ?
-                      { opacity: 1 } :
-                      { opacity: 0.5 },
-                  ]}
-                  onPress={() => this.resetLanguages()}
-                  color={COLOR.red500}
-                  underlayColor={COLOR.red800}
+                <Button
+                  accent
+                  raised
                   disabled={!hasChanged}
-                >
-                  <Text style={styles.buttonText}>Reset</Text>
-                </TouchableHighlight>
+                  onPress={() => this.resetLanguages()}
+                  text="Reset"
+                  style={{
+                    container: {
+                      flex: 1,
+                      marginRight: 5,
+                      marginTop: 10,
+                      marginBottom: 20,
+                    },
+                  }}
+                />
               }
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.acceptButton,
-                  this.state.remainingLanguages > 0 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.setLanguages()}
-                underlayColor="#1A237E"
+              <Button
+                primary
+                raised
                 disabled={this.state.remainingLanguages > 0}
-              >
-                <Text style={styles.buttonText}>
-                  {
-                    this.state.remainingLanguages > 0 ?
-                      `${this.state.remainingLanguages} ${remainingPlurality} Remaining` :
-                      'Proceed'
-                  }
-                </Text>
-              </TouchableHighlight>
+                onPress={() => this.setLanguages()}
+                text={
+                  this.state.remainingLanguages > 0 ?
+                    `${this.state.remainingLanguages} ${remainingPlurality} Remaining` :
+                    'Proceed'
+                }
+                style={{
+                  container: {
+                    flex: 2,
+                    marginLeft: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
             </View>
             <ListItem
               divider
