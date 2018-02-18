@@ -100,8 +100,13 @@ export default class SetCharacterRace extends React.Component {
 
   render() {
     // Theme setup
-    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const {
+      backdropIconColor,
+      fadedTextColor,
+      fadedBackgroundColor,
+    } = this.context.uiTheme.palette;
     const fadedTextStyle = { color: fadedTextColor };
+    const fadedBackgroundStyle = { backgroundColor: fadedBackgroundColor };
 
     const avatarCount = this.state.width > this.state.height ? 5 : 3;
     const maxSize = (this.state.width / avatarCount) - AVATAR_MARGIN;
@@ -131,7 +136,7 @@ export default class SetCharacterRace extends React.Component {
                   source={race.image}
                   blurRadius={this.state.race && this.state.race.key === race.key ? 10 : 0}
                 />
-                <Text style={styles.label}>{race.name}</Text>
+                <Text style={[styles.label, fadedBackgroundStyle]}>{race.name}</Text>
                 {
                   this.state.race && this.state.race.key === race.key &&
                   <Icon
@@ -203,7 +208,6 @@ const styles = StyleSheet.create({
     width: '100%',
     fontFamily: 'RobotoBold',
     color: COLOR.white,
-    backgroundColor: COLOR.grey800,
     fontSize: 16,
     textAlign: 'center',
   },
