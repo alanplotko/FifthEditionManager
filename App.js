@@ -1,12 +1,13 @@
 import { AppLoading, Asset, Font } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+
+// Assets
 import { IMAGES } from 'FifthEditionManager/config/Info';
 
 // Screens
-import HomeScreen from 'FifthEditionManager/screens/HomeScreen';
-import CreateCampaignScreen from 'FifthEditionManager/screens/CreateCampaignScreen';
-import * as Character from 'FifthEditionManager/screens/Character';
+import { HomeScreen } from 'FifthEditionManager/screens/HomeScreen';
+import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 
 // UI theme and styles
 import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
@@ -53,19 +54,18 @@ const RobotoBold = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Bold.
 // Navigation config
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
-  CreateCampaign: { screen: CreateCampaignScreen },
-  SetCharacterRace: { screen: Character.SetRace },
-  SetCharacterClass: { screen: Character.SetClass },
-  SetCharacterBackground: { screen: Character.SetBackground },
-  SetUpProfile: { screen: Character.SetUpProfile },
-  ChooseScoringMethod: { screen: Character.ChooseScoringMethod },
-  RollAbilityScores: { screen: Character.RollAbilityScores },
-  PointBuyScores: { screen: Character.PointBuyScores },
-  AssignAbilityScores: { screen: Character.AssignAbilityScores },
-  SetSkills: { screen: Character.SetSkills },
-  AssignLanguages: { screen: Character.AssignLanguages },
-  ReviewSavingThrows: { screen: Character.ReviewSavingThrows },
-  ReviewHitPoints: { screen: Character.ReviewHitPoints },
+  SetCharacterRace: { screen: CharacterBuild.CharacterRace },
+  SetCharacterClass: { screen: CharacterBuild.CharacterBaseClass },
+  SetCharacterBackground: { screen: CharacterBuild.CharacterBackground },
+  SetUpProfile: { screen: CharacterBuild.CharacterProfile },
+  ChooseScoringMethod: { screen: CharacterBuild.ScoringMethod },
+  RollAbilityScores: { screen: CharacterBuild.RollScores },
+  PointBuyScores: { screen: CharacterBuild.PointBuyScores },
+  AssignAbilityScores: { screen: CharacterBuild.AbilityScores },
+  SetSkills: { screen: CharacterBuild.Skills },
+  AssignLanguages: { screen: CharacterBuild.Languages },
+  ReviewSavingThrows: { screen: CharacterBuild.SavingThrows },
+  ReviewHitPoints: { screen: CharacterBuild.HitPoints },
 });
 
 const cacheFonts = fonts => Font.loadAsync(fonts);

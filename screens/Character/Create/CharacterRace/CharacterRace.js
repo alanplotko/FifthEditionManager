@@ -17,7 +17,7 @@ const AVATAR_MARGIN = 15;
 // 35 = race name text height (25) + bottom padding (10) (estimation)
 const TEXT_HEIGHT = 35;
 
-export default class SetCharacterRace extends React.Component {
+export default class CharacterRace extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;

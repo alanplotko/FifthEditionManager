@@ -12,7 +12,7 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-export default class RollAbilityScores extends React.Component {
+export default class RollScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {

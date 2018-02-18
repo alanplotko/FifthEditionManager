@@ -22,7 +22,7 @@ const chance = new Chance();
  * Define hit points
  */
 
-const HitPoints = t.struct({
+const HitPointsType = t.struct({
   timesAverageTaken: t.Number,
 });
 
@@ -49,7 +49,7 @@ const options = {
   },
 };
 
-export default class ReviewHitPoints extends React.Component {
+export default class HitPoints extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {
@@ -77,7 +77,7 @@ export default class ReviewHitPoints extends React.Component {
       rolls: null,
       rollCount: 0,
       isNoteCollapsed: true,
-      type: HitPoints,
+      type: HitPointsType,
       form: null,
       options,
       ...props.navigation.state.params,

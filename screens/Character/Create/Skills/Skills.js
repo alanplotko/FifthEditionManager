@@ -17,7 +17,7 @@ import { cloneDeep } from 'lodash';
 // Styles
 const checkIconStyle = { opacity: 0.5, paddingHorizontal: 12 };
 
-export default class SetSkills extends React.Component {
+export default class Skills extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {

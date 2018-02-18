@@ -1,0 +1,1 @@
+export AbilityScores from './AbilityScores';

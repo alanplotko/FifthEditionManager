@@ -1,0 +1,1 @@
+export CharacterRace from './CharacterRace';
