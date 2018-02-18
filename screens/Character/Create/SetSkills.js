@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
 import Note from 'FifthEditionManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES } from 'FifthEditionManager/config/Info';
@@ -13,6 +13,9 @@ import {
   reformatCamelCaseKey,
 } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
+
+// Styles
+const checkIconStyle = { opacity: 0.5, paddingHorizontal: 12 };
 
 export default class SetSkills extends React.Component {
   static navigationOptions = {
@@ -30,13 +33,17 @@ export default class SetSkills extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       skills: cloneDeep(BASE_SKILLS),
-      isProficiencyNoteCollapsed: false,
-      isBackgroundNoteCollapsed: false,
-      isClassNoteCollapsed: false,
+      isProficiencyNoteCollapsed: true,
+      isBackgroundNoteCollapsed: true,
+      isClassNoteCollapsed: true,
       ...props.navigation.state.params,
     };
 
@@ -47,10 +54,10 @@ export default class SetSkills extends React.Component {
     // Track given proficiencies
     this.state.proficiencies = {
       background: BACKGROUNDS
-        .find(option => option.name === this.state.character.profile.background)
+        .find(option => option.key === this.state.character.profile.background.lookupKey)
         .proficiencies.skills,
       baseClass: CLASSES
-        .find(option => option.name === this.state.character.profile.baseClass)
+        .find(option => option.key === this.state.character.profile.baseClass.lookupKey)
         .proficiencies.skills,
     };
 
@@ -141,11 +148,16 @@ export default class SetSkills extends React.Component {
     });
   }
 
+
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const ListItemRow = (key, skill) => {
       const skillName = reformatCamelCaseKey(key);
       const negative = skill.modifier < 0;
-      const textColor = negative ? COLOR.red500 : COLOR.green500;
+      const checkedTextColor = negative ? COLOR.red500 : COLOR.green500;
       const modifier = Math.abs(skill.modifier);
       return (
         <ListItem
@@ -153,14 +165,14 @@ export default class SetSkills extends React.Component {
           divider
           centerElement={
             <View style={styles.horizontalLayout}>
-              <Text style={styles.smallHeading}>
+              <Text style={[styles.smallHeading, textStyle]}>
                 {skill.skillLabel} ({toTitleCase(skill.ability.substr(0, 3))})
               </Text>
               <Text
                 style={[
                   styles.smallHeading,
                   CardStyle.makeBold,
-                  { color: skill.proficient ? COLOR.black : textColor },
+                  { color: skill.proficient ? textColor : checkedTextColor },
                 ]}
               >
                 {
@@ -177,7 +189,7 @@ export default class SetSkills extends React.Component {
                     {modifier - this.state.character.profile.proficiency}
                     &nbsp;+&nbsp;
                     {this.state.character.profile.proficiency} =&nbsp;
-                    <Text style={{ color: textColor }}>
+                    <Text style={{ color: checkedTextColor }}>
                       {modifier >= 0 ? <Text>+</Text> : <Text>&minus;</Text>}
                       {modifier}
                     </Text>
@@ -191,7 +203,7 @@ export default class SetSkills extends React.Component {
               <Icon
                 name="check-circle"
                 color={COLOR.green500}
-                style={{ opacity: 0.5, paddingHorizontal: 12 }}
+                style={checkIconStyle}
               /> :
               <IconToggle
                 name="check-circle"
@@ -220,7 +232,7 @@ export default class SetSkills extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={styles.containerMargin}>
             <Note
               title="Calculating Proficiency Bonus"
               type="info"
@@ -228,8 +240,9 @@ export default class SetSkills extends React.Component {
               collapsible
               isCollapsed={this.state.isProficiencyNoteCollapsed}
               toggleNoteHandler={this.toggleProficiencyNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The proficiency bonus is derived from your level. At
                 <Text style={CardStyle.makeBold}>
                   &nbsp;level {this.state.character.profile.level}
@@ -249,17 +262,18 @@ export default class SetSkills extends React.Component {
               </Text>
             </Note>
             <Note
-              title={`${this.state.character.profile.background} Proficiencies`}
+              title={`${this.state.character.profile.background.name} Proficiencies`}
               type="info"
               icon="info"
               collapsible
               isCollapsed={this.state.isBackgroundNoteCollapsed}
               toggleNoteHandler={this.toggleBackgroundNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{this.state.character.profile.background}&nbsp;
+                  &nbsp;{this.state.character.profile.background.name}&nbsp;
                 </Text>
                 background grants the following proficiencies and will be
                 set automatically:{'\n\n'}
@@ -271,17 +285,18 @@ export default class SetSkills extends React.Component {
               ))}
             </Note>
             <Note
-              title={`${this.state.character.profile.baseClass} Proficiencies`}
+              title={`${this.state.character.profile.baseClass.name} Proficiencies`}
               type="info"
               icon="info"
               collapsible
               isCollapsed={this.state.isClassNoteCollapsed}
               toggleNoteHandler={this.toggleClassNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{this.state.character.profile.baseClass}&nbsp;
+                  &nbsp;{this.state.character.profile.baseClass.name}&nbsp;
                 </Text>
                 class grants
                 <Text style={CardStyle.makeBold}>
@@ -309,7 +324,7 @@ export default class SetSkills extends React.Component {
                     }
                     &nbsp;accounted for with your
                     <Text style={CardStyle.makeBold}>
-                      &nbsp;{this.state.character.profile.background}&nbsp;
+                      &nbsp;{this.state.character.profile.background.name}&nbsp;
                     </Text>
                     background. As such, of the
                     <Text style={CardStyle.makeBold}>
@@ -341,48 +356,47 @@ export default class SetSkills extends React.Component {
               ))}
             </Note>
             <View style={styles.buttonLayout}>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.resetButton,
-                  hasChanged ?
-                    { opacity: 1 } :
-                    { opacity: 0.5 },
-                ]}
-                onPress={() => this.resetSkills()}
-                color={COLOR.red500}
-                underlayColor={COLOR.red800}
+              <Button
+                accent
+                raised
                 disabled={!hasChanged}
-              >
-                <Text style={styles.buttonText}>Reset</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.acceptButton,
-                  this.state.proficiencies.quantity > 0 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.setSkills()}
-                underlayColor="#1A237E"
+                onPress={() => this.resetSkills()}
+                text="Reset"
+                style={{
+                  container: {
+                    flex: 1,
+                    marginRight: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
+              <Button
+                primary
+                raised
                 disabled={this.state.proficiencies.quantity > 0}
-              >
-                <Text style={styles.buttonText}>
-                  {
-                    this.state.proficiencies.quantity > 0 ?
-                      `${this.state.proficiencies.quantity} Skills Remaining` :
-                      'Proceed'
-                  }
-                </Text>
-              </TouchableHighlight>
+                onPress={() => this.setSkills()}
+                text={
+                  this.state.proficiencies.quantity > 0 ?
+                    `${this.state.proficiencies.quantity} Skills Remaining` :
+                    'Proceed'
+                }
+                style={{
+                  container: {
+                    flex: 2,
+                    marginLeft: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
             </View>
             <ListItem
               divider
               centerElement={
                 <View style={styles.horizontalLayout}>
-                  <Text style={styles.smallHeading}>Skill</Text>
-                  <Text style={styles.smallHeading}>
+                  <Text style={[styles.smallHeading, textStyle]}>Skill</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>
                     Modifier / Is Proficient
                   </Text>
                 </View>
@@ -400,57 +414,26 @@ export default class SetSkills extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  containerMargin: {
+    margin: 20,
+  },
+  textMargin: {
+    marginBottom: 10,
+  },
   horizontalLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

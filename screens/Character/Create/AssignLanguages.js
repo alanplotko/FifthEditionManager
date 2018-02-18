@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
   from 'react-native-material-ui';
 import { ContainerStyle, CardStyle } from 'FifthEditionManager/stylesheets';
 import Note from 'FifthEditionManager/components/Note';
@@ -26,19 +26,23 @@ export default class AssignLanguages extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       allLanguages: cloneDeep(LANGUAGES),
       selectedLanguages: [],
-      isLanguageNoteCollapsed: false,
+      isNoteCollapsed: true,
       ...props.navigation.state.params,
     };
 
     this.state.race = RACES
-      .find(option => option.name === this.state.character.profile.race);
+      .find(option => option.key === this.state.character.profile.race.lookupKey);
     this.state.background = BACKGROUNDS
-      .find(option => option.name === this.state.character.profile.background);
+      .find(option => option.key === this.state.character.profile.background.lookupKey);
 
     // Set existing languages and remaining languages to select
     this.state.knownLanguages = this.state.race.languages;
@@ -78,11 +82,15 @@ export default class AssignLanguages extends React.Component {
 
   toggleLanguageNote = () => {
     this.setState({
-      isLanguageNoteCollapsed: !this.state.isLanguageNoteCollapsed,
+      isNoteCollapsed: !this.state.isNoteCollapsed,
     });
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const ListItemRow = (languageData) => {
       const key = languageData.language;
       const isChecked = this.state.knownLanguages.includes(key) ||
@@ -99,10 +107,10 @@ export default class AssignLanguages extends React.Component {
           centerElement={
             <View style={styles.horizontalLayout}>
               <Text>
-                <Text style={[styles.smallHeading, { marginBottom: 10 }]}>
+                <Text style={[styles.smallHeading, textStyle, { marginBottom: 10 }]}>
                   {toTitleCase(key)}{'\n'}
                 </Text>
-                <Text style={styles.additionalInfo}>
+                <Text style={[styles.additionalInfo, textStyle]}>
                   &emsp;&#9656; Typically spoken by:&nbsp;
                   {toTitleCase(languageData.speakers.join(', '))}{'\n'}
                   &emsp;&#9656; Script: {toTitleCase(languageData.script)}{'\n'}
@@ -163,8 +171,9 @@ export default class AssignLanguages extends React.Component {
               type="info"
               icon="info"
               collapsible
-              isCollapsed={this.state.isLanguageNoteCollapsed}
+              isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleLanguageNote}
+              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 As {raceIndefiniteArticle}
@@ -186,7 +195,7 @@ export default class AssignLanguages extends React.Component {
                     <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.race.name}&nbsp;
                     </Text>
-                    and&nbsp;
+                    and
                   </Text>
                 }
                 {
@@ -220,6 +229,7 @@ export default class AssignLanguages extends React.Component {
                   this.state.race.additionalLanguages > 0 &&
                   this.state.background.additionalLanguages > 0 &&
                   <Text>
+                    &nbsp;for
                     <Text style={CardStyle.makeBold}>
                       &nbsp;{this.state.additionalLanguages}&nbsp;
                     </Text>
@@ -249,49 +259,48 @@ export default class AssignLanguages extends React.Component {
             <View style={styles.buttonLayout}>
               {
                 this.state.additionalLanguages > 0 &&
-                <TouchableHighlight
-                  style={[
-                    styles.button,
-                    styles.resetButton,
-                    hasChanged ?
-                      { opacity: 1 } :
-                      { opacity: 0.5 },
-                  ]}
-                  onPress={() => this.resetLanguages()}
-                  color={COLOR.red500}
-                  underlayColor={COLOR.red800}
+                <Button
+                  accent
+                  raised
                   disabled={!hasChanged}
-                >
-                  <Text style={styles.buttonText}>Reset</Text>
-                </TouchableHighlight>
+                  onPress={() => this.resetLanguages()}
+                  text="Reset"
+                  style={{
+                    container: {
+                      flex: 1,
+                      marginRight: 5,
+                      marginTop: 10,
+                      marginBottom: 20,
+                    },
+                  }}
+                />
               }
-              <TouchableHighlight
-                style={[
-                  styles.button,
-                  styles.acceptButton,
-                  this.state.remainingLanguages > 0 ?
-                    { opacity: 0.5 } :
-                    { opacity: 1 },
-                ]}
-                onPress={() => this.setLanguages()}
-                underlayColor="#1A237E"
+              <Button
+                primary
+                raised
                 disabled={this.state.remainingLanguages > 0}
-              >
-                <Text style={styles.buttonText}>
-                  {
-                    this.state.remainingLanguages > 0 ?
-                      `${this.state.remainingLanguages} ${remainingPlurality} Remaining` :
-                      'Proceed'
-                  }
-                </Text>
-              </TouchableHighlight>
+                onPress={() => this.setLanguages()}
+                text={
+                  this.state.remainingLanguages > 0 ?
+                    `${this.state.remainingLanguages} ${remainingPlurality} Remaining` :
+                    'Proceed'
+                }
+                style={{
+                  container: {
+                    flex: 2,
+                    marginLeft: 5,
+                    marginTop: 10,
+                    marginBottom: 20,
+                  },
+                }}
+              />
             </View>
             <ListItem
               divider
               centerElement={
                 <View style={styles.horizontalLayout}>
-                  <Text style={styles.smallHeading}>Language</Text>
-                  <Text style={styles.smallHeading}>Known</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Language</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Known</Text>
                 </View>
               }
             />
@@ -359,23 +368,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   additionalInfo: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 14,
     padding: 10,
   },
@@ -383,33 +383,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

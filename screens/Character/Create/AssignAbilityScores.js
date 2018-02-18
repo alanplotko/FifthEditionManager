@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableHighlight, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import Note from 'FifthEditionManager/components/Note';
+import { RACES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
 import { toTitleCase, calculateModifier } from 'FifthEditionManager/util';
 
+const Chance = require('chance');
+
+const chance = new Chance();
 const abilities = [
   'Strength',
   'Dexterity',
@@ -20,10 +24,13 @@ const abilities = [
 export default class AssignAbilityScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
         onLeftElementPress: () => navigation.goBack(),
         centerElement: 'Assign Ability Scores',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
       };
       return <Toolbar {...props} />;
     },
@@ -33,14 +40,18 @@ export default class AssignAbilityScores extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      scores: [],
       scoreBank: [],
+      loading: false,
       isModalVisible: false,
-      isErrorCollapsed: false,
-      isInfoCollapsed: false,
+      isErrorCollapsed: true,
+      isInfoCollapsed: true,
       selectedAbility: null,
       extraPoints: 0,
       hasExtraPoint: [],
@@ -63,15 +74,19 @@ export default class AssignAbilityScores extends React.Component {
       ...props.navigation.state.params,
     };
 
-    if (this.state.character.profile.raceModifiers.extra) {
-      this.state.extraPoints = this.state.character.profile.raceModifiers.extra;
+    this.state.raceModifiers = RACES
+      .find(race => race.key === this.state.character.profile.race.lookupKey)
+      .modifiers;
+
+    if (this.state.raceModifiers.extra) {
+      this.state.extraPoints = this.state.raceModifiers.extra;
     }
     Object
-      .keys(this.state.character.profile.raceModifiers)
+      .keys(this.state.raceModifiers)
       .filter(key => key !== 'extra')
       .forEach((key) => {
         this.state.additionalStats[key] =
-          this.state.character.profile.raceModifiers[key];
+          this.state.raceModifiers[key];
       });
 
     this.state.scores.forEach((score) => {
@@ -82,6 +97,10 @@ export default class AssignAbilityScores extends React.Component {
         this.state.scoreBank.push({ score, quantity: 1 });
       }
     });
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeScoreAssignments: this.randomizeScoreAssignments });
   }
 
   onPress = () => {
@@ -99,43 +118,6 @@ export default class AssignAbilityScores extends React.Component {
     });
     newCharacter.profile = Object.assign({}, newCharacter.profile, { stats });
     navigate('SetSkills', { character: newCharacter });
-
-    // const newActivity = {
-    //   key: uuidv4(),
-    //   timestamp: newCharacter.lastUpdated,
-    //   action: 'Created New Character',
-    //   // Format character's full name for extra text
-    //   extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}
-    //     ${newCharacter.profile.firstName.slice(1)}
-    //     ${newCharacter.profile.lastName.charAt(0).toUpperCase()}
-    //     ${newCharacter.profile.lastName.slice(1)}`,
-    //   thumbnail: newCharacter.profile.images.race,
-    //   icon: {
-    //     name: 'add-circle',
-    //     color: '#fff',
-    //   },
-    // };
-    // store
-    //   .push(CHARACTER_KEY, newCharacter)
-    //   .catch((error) => {
-    //     // Show error message on screen and allow resubmit
-    //     this.setState({ error: 'Please try again in a few minutes.' });
-    //     return error;
-    //   })
-    //   .then((error) => {
-    //     if (error) return;
-    //     store
-    //       .push(ACTIVITY_KEY, newActivity)
-    //       .then(() => {
-    //         const resetAction = NavigationActions.reset({
-    //           index: 0,
-    //           actions: [NavigationActions.navigate({
-    //             routeName: 'Home',
-    //           })],
-    //         });
-    //         dispatch(resetAction);
-    //       });
-    //   });
   }
 
   openModal = (ability) => {
@@ -233,7 +215,52 @@ export default class AssignAbilityScores extends React.Component {
     this.setState({ isErrorCollapsed: !this.state.isErrorCollapsed });
   }
 
+  resetScoreBank = (done) => {
+    this.setState({ loading: true }, () => {
+      if (Object.values(this.state.baseStats).every(stat => stat === null)) {
+        return done();
+      }
+      const scoreBank = [];
+      this.state.scores.forEach((score) => {
+        const index = scoreBank.findIndex(s => s.score === score);
+        if (index !== -1) {
+          scoreBank[index].quantity += 1;
+        } else {
+          scoreBank.push({ score, quantity: 1 });
+        }
+      });
+      return this.setState({
+        baseStats: {
+          strength: null,
+          dexterity: null,
+          constitution: null,
+          intelligence: null,
+          wisdom: null,
+          charisma: null,
+        },
+        scoreBank,
+      }, done);
+    });
+  }
+
+  randomizeScoreAssignments = () => {
+    this.resetScoreBank(() => {
+      const scoreBank = this.state.scoreBank.slice(0);
+      const baseStats = Object.assign({}, this.state.baseStats);
+      Object.keys(baseStats).forEach((stat) => {
+        baseStats[stat] = chance.pickone(scoreBank.filter(item => item.quantity > 0)).score;
+        scoreBank[scoreBank.findIndex(item => item.score === baseStats[stat])].quantity -= 1;
+      });
+      this.setState({ scoreBank, baseStats, loading: false });
+    });
+  }
+
   render() {
+    // Theme setup
+    const { textColor, backgroundColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+    const modalBackgroundStyle = { backgroundColor };
+
     const isSelectable = scoreCard => (
       // Score is selected
       (this.state.baseStats[this.state.selectedAbility] === scoreCard.score) ||
@@ -268,14 +295,14 @@ export default class AssignAbilityScores extends React.Component {
           >
             {
               this.state.baseStats[ability] &&
-              <Text style={styles.score}>
+              <Text style={[styles.scoreText, textStyle]}>
                 {totalScore}
               </Text>
             }
             {
               this.state.baseStats[ability] &&
               <Text
-                style={styles.modifier}
+                style={[styles.modifierText, textStyle]}
               >
                 {
                   modifier > 0 &&
@@ -299,18 +326,18 @@ export default class AssignAbilityScores extends React.Component {
             }
             {
               !this.state.baseStats[ability] &&
-              <Text style={styles.cardText}>&mdash;</Text>
+              <Text style={[styles.cardText, textStyle]}>&mdash;</Text>
             }
           </Card>
           <Button
-            onPress={() => this.resetStat(ability)}
             accent
             raised
             text="Reset"
             icon="refresh"
             disabled={!this.state.baseStats[ability]}
+            onPress={() => this.resetStat(ability)}
             style={{
-              container: { width: 100, height: 40 },
+              container: { width: 100 },
             }}
           />
         </View>
@@ -320,7 +347,7 @@ export default class AssignAbilityScores extends React.Component {
       const standardColor = isSelectable(scoreCard) ?
         COLOR.white :
         COLOR.redA100;
-      const backgroundColor = isSelected(scoreCard) ?
+      const scoreBackgroundColor = isSelected(scoreCard) ?
         COLOR.greenA100 :
         standardColor;
       return (
@@ -339,7 +366,7 @@ export default class AssignAbilityScores extends React.Component {
                 flex: 1,
                 flexWrap: 'wrap',
                 marginHorizontal: 10,
-                backgroundColor,
+                backgroundColor: scoreBackgroundColor,
                 opacity: isSelectable(scoreCard) ? 1 : 0.3,
               },
             }}
@@ -352,15 +379,15 @@ export default class AssignAbilityScores extends React.Component {
           >
             {
               scoreCard.score &&
-              <Text style={styles.cardText}>{scoreCard.score}</Text>
+              <Text style={[styles.cardText, textStyle]}>{scoreCard.score}</Text>
             }
             {
               !scoreCard.score &&
-              <Text style={styles.cardText}>&mdash;</Text>
+              <Text style={[styles.cardText, textStyle]}>&mdash;</Text>
             }
             {
               scoreCard.quantity !== null &&
-              <Text style={styles.quantityText}>
+              <Text style={[styles.quantityText, textStyle]}>
                 &times;{scoreCard.quantity}
               </Text>
             }
@@ -371,14 +398,13 @@ export default class AssignAbilityScores extends React.Component {
     const buildModal = () => {
       const ability = this.state.selectedAbility;
       const hasExtraPoint = this.state.hasExtraPoint.includes(ability);
-      const characterHasModifier = this.state.character.profile
-        .raceModifiers[ability];
+      const characterHasModifier = this.state.raceModifiers[ability];
       const abilityScore = this.state.baseStats[ability];
       const additionalPoints = this.state.additionalStats[ability];
       const totalScore = abilityScore + additionalPoints;
 
       return (
-        <View style={styles.modalLayout}>
+        <View style={[styles.modalLayout, modalBackgroundStyle]}>
           {
             ability &&
             <Text style={styles.cardTitle}>
@@ -403,7 +429,7 @@ export default class AssignAbilityScores extends React.Component {
             }
           </View>
           {
-            this.state.character.profile.raceModifiers.extra &&
+            this.state.raceModifiers.extra &&
             <Button
               onPress={
                 !hasExtraPoint ?
@@ -429,7 +455,7 @@ export default class AssignAbilityScores extends React.Component {
                   abilityScore &&
                   <Text style={styles.calculationTitle}>
                     Total:&nbsp;
-                    <Text style={styles.calculationText}>
+                    <Text style={[styles.calculationText, textStyle]}>
                       {abilityScore || '?'}
                       <Text style={{ color: COLOR.green500 }}>
                         {characterHasModifier && ` + ${characterHasModifier}`}
@@ -456,10 +482,7 @@ export default class AssignAbilityScores extends React.Component {
         </View>
       );
     };
-    const modifierList = Object
-      .keys(this.state.character.profile.raceModifiers)
-      .filter(name => name !== 'extra');
-
+    const modifierList = Object.keys(this.state.raceModifiers).filter(name => name !== 'extra');
     const pointPlurality = this.state.extraPoints > 1 ? 'points' : 'point';
 
     return (
@@ -470,17 +493,18 @@ export default class AssignAbilityScores extends React.Component {
             {
               modifierList.length > 0 &&
               <Note
-                title={`${this.state.character.profile.race} Stats`}
+                title={`${this.state.character.profile.race.name} Stats`}
                 type="info"
                 icon="info"
                 collapsible
                 isCollapsed={this.state.isInfoCollapsed}
                 toggleNoteHandler={this.toggleInfoNote}
+                uiTheme={this.context.uiTheme}
               >
                 <Text style={{ marginBottom: 10 }}>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race}&nbsp;
+                    &nbsp;{this.state.character.profile.race.name}&nbsp;
                   </Text>
                   race grants the following points and will be allocated
                   automatically:{'\n\n'}
@@ -489,11 +513,11 @@ export default class AssignAbilityScores extends React.Component {
                   <Text key={key}>
                     &emsp;&bull;&nbsp;{toTitleCase(key)}&nbsp;(
                     {
-                      this.state.character.profile.raceModifiers[key] > 0 ?
+                      this.state.raceModifiers[key] > 0 ?
                       '+' :
                       ''
                     }
-                    {this.state.character.profile.raceModifiers[key]})
+                    {this.state.raceModifiers[key]})
                     {'\n'}
                   </Text>
                 ))}
@@ -508,23 +532,24 @@ export default class AssignAbilityScores extends React.Component {
                 collapsible
                 isCollapsed={this.state.isErrorCollapsed}
                 toggleNoteHandler={this.toggleErrorNote}
+                uiTheme={this.context.uiTheme}
               >
                 <Text>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race}&nbsp;
+                    &nbsp;{this.state.character.profile.race.name}&nbsp;
                   </Text>
                   race grants an additional
                   <Text style={CardStyle.makeBold}>
                     &nbsp;
-                    {this.state.character.profile.raceModifiers.extra}
+                    {this.state.raceModifiers.extra}
                     &nbsp;
                   </Text>
                   points to your abilities. You can allocate only 1 additional
                   point for a single ability until all
                   <Text style={CardStyle.makeBold}>
                     &nbsp;
-                    {this.state.character.profile.raceModifiers.extra}
+                    {this.state.raceModifiers.extra}
                     &nbsp;
                   </Text>
                   points are spent.
@@ -534,7 +559,7 @@ export default class AssignAbilityScores extends React.Component {
             <View style={styles.horizontalLayout}>
               {abilities.slice(0, 3).map(ability => (
                 <View key={ability} style={styles.centered}>
-                  <Text style={styles.abilityText}>{ability}</Text>
+                  <Text style={[styles.abilityText, textStyle]}>{ability}</Text>
                   {buildAbilityCard(ability.toLowerCase())}
                 </View>
               ))}
@@ -542,33 +567,24 @@ export default class AssignAbilityScores extends React.Component {
             <View style={styles.horizontalLayout}>
               {abilities.slice(3, 6).map(ability => (
                 <View key={ability} style={styles.centered}>
-                  <Text style={styles.abilityText}>{ability}</Text>
+                  <Text style={[styles.abilityText, textStyle]}>{ability}</Text>
                   {buildAbilityCard(ability.toLowerCase())}
                 </View>
               ))}
             </View>
-            <TouchableHighlight
-              style={[
-                FormStyle.submitBtn,
-                this.state.isModalVisible ||
-                this.state.extraPoints > 0 ||
-                Object.values(this.state.baseStats).includes(null) ?
-                  { opacity: 0.5 } :
-                  { opacity: 1 },
-                { marginTop: 20, marginBottom: 10 },
-              ]}
-              onPress={this.onPress}
-              underlayColor="#1A237E"
+            <Button
+              primary
+              raised
               disabled={
+                this.state.loading ||
                 this.state.isModalVisible ||
                 this.state.extraPoints > 0 ||
                 Object.values(this.state.baseStats).includes(null)
               }
-            >
-              <Text style={FormStyle.submitBtnText}>
-                Set Ability Scores
-              </Text>
-            </TouchableHighlight>
+              onPress={this.onPress}
+              text="Proceed"
+              style={{ container: { width: '100%', marginVertical: 20 } }}
+            />
           </View>
           <Modal
             isVisible={this.state.isModalVisible}
@@ -588,7 +604,7 @@ export default class AssignAbilityScores extends React.Component {
 const styles = StyleSheet.create({
   abilityText: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   centered: {
@@ -601,7 +617,7 @@ const styles = StyleSheet.create({
     bottom: 5,
     right: 5,
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 16,
   },
   horizontalLayout: {
@@ -630,36 +646,36 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
     marginBottom: 10,
   },
   calculationTitle: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   calculationText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   cardText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 28,
   },
-  score: {
+  scoreText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 28,
   },
-  modifier: {
+  modifierText: {
     position: 'absolute',
     bottom: 5,
     right: 5,
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
 });

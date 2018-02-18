@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ActivityIndicator, TouchableHighlight, View, Text }
-  from 'react-native';
+import { StyleSheet, ActivityIndicator, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { Card, COLOR, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
@@ -28,6 +27,10 @@ export default class RollAbilityScores extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
   }
+
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -104,6 +107,10 @@ export default class RollAbilityScores extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const dice = roll => (
       <Icon
         name={`dice-${roll.result}`}
@@ -120,7 +127,7 @@ export default class RollAbilityScores extends React.Component {
               <Card
                 style={{ container: { marginBottom: 10, padding: 10 } }}
               >
-                <Text style={styles.scoreLabel}>
+                <Text style={[styles.scoreLabel, textStyle]}>
                   Rolls:&nbsp;
                   <Text style={CardStyle.makeBold}>
                     {this.state.sortedScores.join(', ')}
@@ -128,35 +135,36 @@ export default class RollAbilityScores extends React.Component {
                 </Text>
               </Card>
               <View style={styles.buttonLayout}>
-                <TouchableHighlight
-                  style={[
-                    styles.button,
-                    styles.rerollButton,
-                    this.state.isLoading ?
-                      { opacity: 0.5 } :
-                      { opacity: 1 },
-                  ]}
+                <Button
+                  accent
+                  raised
+                  disabled={this.state.isLoading}
                   onPress={() => this.prepareRolls()}
-                  color={COLOR.red500}
-                  underlayColor={COLOR.red800}
+                  text="Reroll Scores"
+                  style={{
+                    container: {
+                      flex: 2,
+                      marginLeft: 10,
+                      marginRight: 5,
+                      marginVertical: 20,
+                    },
+                  }}
+                />
+                <Button
+                  primary
+                  raised
                   disabled={this.state.isLoading}
-                >
-                  <Text style={styles.buttonText}>Reroll Scores</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={[
-                    styles.button,
-                    styles.acceptButton,
-                    this.state.isLoading ?
-                      { opacity: 0.5 } :
-                      { opacity: 1 },
-                  ]}
                   onPress={() => this.acceptRolls()}
-                  underlayColor="#1A237E"
-                  disabled={this.state.isLoading}
-                >
-                  <Text style={styles.buttonText}>Proceed</Text>
-                </TouchableHighlight>
+                  text="Proceed"
+                  style={{
+                    container: {
+                      flex: 1,
+                      marginLeft: 5,
+                      marginRight: 10,
+                      marginVertical: 20,
+                    },
+                  }}
+                />
               </View>
               {this.state.scoreReports.map(report => (
                 <Card
@@ -164,10 +172,10 @@ export default class RollAbilityScores extends React.Component {
                   style={{ container: { marginBottom: 5, padding: 10 } }}
                 >
                   <View style={styles.diceLayout}>
-                    <Text style={styles.scoreLabel}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
                       Roll {report.rollNumber}:
                     </Text>
-                    <Text style={[styles.scoreLabel, CardStyle.makeBold]}>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
                       {formatSingleDigit(report.score)}
                     </Text>
                     {dice(report.rolls[0])}
@@ -188,7 +196,7 @@ export default class RollAbilityScores extends React.Component {
           style={{ margin: 0 }}
         >
           <View style={[styles.centered, styles.modalView]}>
-            <ActivityIndicator color="#fff" size="large" />
+            <ActivityIndicator color={COLOR.white} size="large" />
             <Text style={styles.loadingText}>
               Rerolling...
             </Text>
@@ -214,13 +222,13 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontFamily: 'RobotoBold',
-    color: '#fff',
+    color: COLOR.white,
     fontSize: 16,
     paddingVertical: 10,
   },
   scoreLabel: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   buttonLayout: {
@@ -228,35 +236,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  rerollButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 2,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 1,
-    marginLeft: 5,
-    marginRight: 10,
-  },
   modalView: {
-    backgroundColor: 'transparent',
+    backgroundColor: COLOR.transparent,
   },
 });

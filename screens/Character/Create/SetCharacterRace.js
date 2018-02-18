@@ -14,8 +14,8 @@ const chance = new Chance();
 
 // 15 margin = (5 margin * 2 sides) + 5 spacing per avatar
 const AVATAR_MARGIN = 15;
-// 25 = race name text height (estimation)
-const TEXT_HEIGHT = 25;
+// 35 = race name text height (25) + bottom padding (10) (estimation)
+const TEXT_HEIGHT = 35;
 
 export default class SetCharacterRace extends React.Component {
   static navigationOptions = {
@@ -34,6 +34,10 @@ export default class SetCharacterRace extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
+  }
+
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -95,6 +99,10 @@ export default class SetCharacterRace extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const fadedTextStyle = { color: fadedTextColor };
+
     const avatarCount = this.state.width > this.state.height ? 5 : 3;
     const maxSize = (this.state.width / avatarCount) - AVATAR_MARGIN;
     const iconSize = maxSize / 2;
@@ -113,13 +121,13 @@ export default class SetCharacterRace extends React.Component {
                 key={race.key}
                 style={{
                   container: {
-                    width: maxSize, height: maxSize, marginHorizontal: 5, marginVertical: 5,
+                    width: maxSize, height: maxSize - 10, marginHorizontal: 5, marginVertical: 5,
                   },
                 }}
                 onPress={() => this.setRace(race.key)}
               >
                 <Image
-                  style={{ width: maxSize, height: maxSize }}
+                  style={{ width: maxSize, height: maxSize - 10 }}
                   source={race.image}
                   blurRadius={this.state.race && this.state.race.key === race.key ? 10 : 0}
                 />
@@ -168,10 +176,16 @@ export default class SetCharacterRace extends React.Component {
                   <Icon
                     name="info"
                     style={{
-                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                      color: backdropIconColor,
+                      fontSize: 48,
+                      width: 48,
+                      height: 48,
+                      marginRight: 10,
                     }}
                   />
-                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                  <Text style={[styles.placeholderMessage, fadedTextStyle]}>
+                    Selection details will display here
+                  </Text>
                 </View>
               </Card>
             }
@@ -188,14 +202,14 @@ const styles = StyleSheet.create({
     bottom: 5,
     width: '100%',
     fontFamily: 'RobotoBold',
-    color: '#fff',
+    color: COLOR.white,
+    backgroundColor: COLOR.grey800,
     fontSize: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     textAlign: 'center',
   },
   placeholderMessage: {
     fontFamily: 'RobotoLight',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 18,
   },
 });

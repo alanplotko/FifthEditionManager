@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
 import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { toProperList, toTitleCase } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
@@ -57,6 +57,10 @@ export default class SetCharacterClass extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -98,7 +102,7 @@ export default class SetCharacterClass extends React.Component {
         <View
           style={[
             LayoutStyle.centered,
-            { borderWidth: 2, borderColor: 'rgba(0, 0, 0, 0.7)', paddingTop: 30 },
+            { borderWidth: 2, borderColor: COLOR.grey800, paddingTop: 30 },
           ]}
         >
           <Text style={FormStyle.label}>Your {race.name}&apos;s Class</Text>
@@ -127,6 +131,10 @@ export default class SetCharacterClass extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const fadedTextStyle = { color: fadedTextColor };
+
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -152,20 +160,37 @@ export default class SetCharacterClass extends React.Component {
                   key={`${this.state.baseClass.name}Class`}
                   style={{ container: CardStyle.container }}
                 >
-                  <View style={LayoutStyle.centered}>
-                    <View style={{ flex: 2 }}>
-                      <Text style={CardStyle.cardHeading}>
+                  <View>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        height: 36,
+                        marginBottom: 15,
+                      }}
+                    >
+                      <Image
+                        source={IMAGES.BASE_CLASS.ICON[this.state.baseClass.key]}
+                        style={{ width: 36, height: 36, marginRight: 10 }}
+                      />
+                      <Text style={[CardStyle.cardHeading, { paddingTop: 6 }]}>
                         {this.state.baseClass.name}
                       </Text>
-                      <Text style={CardStyle.cardText}>
-                        {this.state.baseClass.description}{'\n'}
-                      </Text>
                     </View>
-                    <View style={{ flex: 1 }}>
-                      <Image
-                        source={IMAGES.BASE_CLASS[this.state.baseClass.key]}
-                        style={{ width: 96, height: 96, marginLeft: 20 }}
-                      />
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={{ flex: 2 }}>
+                        <Text style={CardStyle.cardText}>
+                          {this.state.baseClass.description}
+                        </Text>
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Image
+                          source={IMAGES.BASE_CLASS.BACKDROP[this.state.baseClass.key]}
+                          style={{ height: 128, width: null }}
+                          resizeMode="contain"
+                        />
+                      </View>
                     </View>
                   </View>
                 </Card>,
@@ -282,10 +307,16 @@ export default class SetCharacterClass extends React.Component {
                   <Icon
                     name="info"
                     style={{
-                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                      color: backdropIconColor,
+                      fontSize: 48,
+                      width: 48,
+                      height: 48,
+                      marginRight: 10,
                     }}
                   />
-                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                  <Text style={[styles.placeholderMessage, fadedTextStyle]}>
+                    Selection details will display here
+                  </Text>
                 </View>
               </Card>
             }
@@ -299,7 +330,7 @@ export default class SetCharacterClass extends React.Component {
 const styles = StyleSheet.create({
   placeholderMessage: {
     fontFamily: 'RobotoLight',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 18,
   },
 });

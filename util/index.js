@@ -1,5 +1,6 @@
 import React from 'react'; // Needed for any JSX in file
 import { Text } from 'react-native';
+import { COLOR } from 'react-native-material-ui';
 
 export const toTitleCase = str =>
   str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
@@ -33,7 +34,7 @@ export const validateInteger = (value, altErrorMessage) => {
 // Hide leading 0 used for lining up single-digit numbers
 export const formatSingleDigit = val => (
   val < 10 ?
-    (<Text><Text style={{ color: 'transparent' }}>0</Text>{val}</Text>) :
+    (<Text><Text style={{ color: COLOR.transparent }}>0</Text>{val}</Text>) :
     (<Text>{val}</Text>)
 );
 
