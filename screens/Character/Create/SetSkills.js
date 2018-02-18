@@ -14,6 +14,9 @@ import {
 } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 
+// Styles
+const checkIconStyle = { opacity: 0.5, paddingHorizontal: 12 };
+
 export default class SetSkills extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
@@ -30,13 +33,17 @@ export default class SetSkills extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       skills: cloneDeep(BASE_SKILLS),
-      isProficiencyNoteCollapsed: false,
-      isBackgroundNoteCollapsed: false,
-      isClassNoteCollapsed: false,
+      isProficiencyNoteCollapsed: true,
+      isBackgroundNoteCollapsed: true,
+      isClassNoteCollapsed: true,
       ...props.navigation.state.params,
     };
 
@@ -141,11 +148,16 @@ export default class SetSkills extends React.Component {
     });
   }
 
+
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const ListItemRow = (key, skill) => {
       const skillName = reformatCamelCaseKey(key);
       const negative = skill.modifier < 0;
-      const textColor = negative ? COLOR.red500 : COLOR.green500;
+      const checkedTextColor = negative ? COLOR.red500 : COLOR.green500;
       const modifier = Math.abs(skill.modifier);
       return (
         <ListItem
@@ -153,14 +165,14 @@ export default class SetSkills extends React.Component {
           divider
           centerElement={
             <View style={styles.horizontalLayout}>
-              <Text style={styles.smallHeading}>
+              <Text style={[styles.smallHeading, textStyle]}>
                 {skill.skillLabel} ({toTitleCase(skill.ability.substr(0, 3))})
               </Text>
               <Text
                 style={[
                   styles.smallHeading,
                   CardStyle.makeBold,
-                  { color: skill.proficient ? COLOR.black : textColor },
+                  { color: skill.proficient ? textColor : checkedTextColor },
                 ]}
               >
                 {
@@ -177,7 +189,7 @@ export default class SetSkills extends React.Component {
                     {modifier - this.state.character.profile.proficiency}
                     &nbsp;+&nbsp;
                     {this.state.character.profile.proficiency} =&nbsp;
-                    <Text style={{ color: textColor }}>
+                    <Text style={{ color: checkedTextColor }}>
                       {modifier >= 0 ? <Text>+</Text> : <Text>&minus;</Text>}
                       {modifier}
                     </Text>
@@ -191,7 +203,7 @@ export default class SetSkills extends React.Component {
               <Icon
                 name="check-circle"
                 color={COLOR.green500}
-                style={{ opacity: 0.5, paddingHorizontal: 12 }}
+                style={checkIconStyle}
               /> :
               <IconToggle
                 name="check-circle"
@@ -220,7 +232,7 @@ export default class SetSkills extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={styles.containerMargin}>
             <Note
               title="Calculating Proficiency Bonus"
               type="info"
@@ -228,8 +240,9 @@ export default class SetSkills extends React.Component {
               collapsible
               isCollapsed={this.state.isProficiencyNoteCollapsed}
               toggleNoteHandler={this.toggleProficiencyNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The proficiency bonus is derived from your level. At
                 <Text style={CardStyle.makeBold}>
                   &nbsp;level {this.state.character.profile.level}
@@ -255,8 +268,9 @@ export default class SetSkills extends React.Component {
               collapsible
               isCollapsed={this.state.isBackgroundNoteCollapsed}
               toggleNoteHandler={this.toggleBackgroundNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The
                 <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.character.profile.background.name}&nbsp;
@@ -277,8 +291,9 @@ export default class SetSkills extends React.Component {
               collapsible
               isCollapsed={this.state.isClassNoteCollapsed}
               toggleNoteHandler={this.toggleClassNote}
+              uiTheme={this.context.uiTheme}
             >
-              <Text style={{ marginBottom: 10 }}>
+              <Text style={styles.textMargin}>
                 The
                 <Text style={CardStyle.makeBold}>
                   &nbsp;{this.state.character.profile.baseClass.name}&nbsp;
@@ -380,8 +395,8 @@ export default class SetSkills extends React.Component {
               divider
               centerElement={
                 <View style={styles.horizontalLayout}>
-                  <Text style={styles.smallHeading}>Skill</Text>
-                  <Text style={styles.smallHeading}>
+                  <Text style={[styles.smallHeading, textStyle]}>Skill</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>
                     Modifier / Is Proficient
                   </Text>
                 </View>
@@ -399,24 +414,21 @@ export default class SetSkills extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  containerMargin: {
+    margin: 20,
+  },
+  textMargin: {
+    marginBottom: 10,
+  },
   horizontalLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   buttonLayout: {

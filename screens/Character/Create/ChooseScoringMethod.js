@@ -26,6 +26,10 @@ export default class ChooseScoringMethod extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  }
+
   selectMethod = (method) => {
     const { navigate, state } = this.props.navigation;
     const params = { ...state.params };
@@ -36,6 +40,8 @@ export default class ChooseScoringMethod extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { standardDiceColor, highlightedDiceColor } = this.context.uiTheme.palette;
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -54,10 +60,10 @@ export default class ChooseScoringMethod extends React.Component {
               </Text>
               <View style={styles.diceLayout}>
                 <Text style={styles.dicePreText}>Example:</Text>
-                <Icon name="dice-4" size={28} color="#333" />
-                <Icon name="dice-5" size={28} color="#333" />
-                <Icon name="dice-3" size={28} color="#333" />
-                <Icon name="dice-2" size={28} color={COLOR.red500} />
+                <Icon name="dice-4" size={28} color={standardDiceColor} />
+                <Icon name="dice-5" size={28} color={standardDiceColor} />
+                <Icon name="dice-3" size={28} color={standardDiceColor} />
+                <Icon name="dice-2" size={28} color={highlightedDiceColor} />
                 <Text style={styles.dicePostText}>= 4 + 5 + 3 = 12</Text>
               </View>
             </Card>
@@ -93,21 +99,15 @@ export default class ChooseScoringMethod extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
   cardHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
     marginBottom: 10,
   },
   cardText: {
     fontFamily: 'Roboto',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 16,
     marginBottom: 10,
   },
@@ -119,32 +119,14 @@ const styles = StyleSheet.create({
   },
   dicePreText: {
     fontFamily: 'Roboto',
-    color: '#333',
+    color: COLOR.grey800,
     fontSize: 18,
     marginRight: 5,
   },
   dicePostText: {
     fontFamily: 'RobotoBold',
-    color: '#333',
+    color: COLOR.grey800,
     fontSize: 18,
     marginLeft: 5,
-  },
-  loadingText: {
-    fontFamily: 'RobotoBold',
-    color: '#fff',
-    fontSize: 16,
-  },
-  scoreLabel: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
-  scoreValue: {
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 24,
-  },
-  modalView: {
-    backgroundColor: 'transparent',
   },
 });

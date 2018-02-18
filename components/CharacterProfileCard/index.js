@@ -11,11 +11,9 @@ import { getCharacterDisplayName } from 'FifthEditionManager/util';
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1
 );
-
 const formatNumber = num => (
   num > 999 ? `${(num / 1000).toFixed(1)}k` : num
 );
-
 const navItem = {
   container: {
     margin: 0,
@@ -25,7 +23,6 @@ const navItem = {
     marginRight: -10,
   },
 };
-
 const navHeader = Object.assign({}, navItem, {
   container: {
     margin: 0,
@@ -37,14 +34,25 @@ const navHeader = Object.assign({}, navItem, {
     backgroundColor: COLOR.grey50,
   },
 });
-
 const navText = {
   fontFamily: 'Roboto',
   fontSize: 14,
-  color: '#000',
+  color: COLOR.black,
 };
 
 const CharacterProfileCard = (props) => {
+  // Theme setup
+  const {
+    primaryColor,
+    iconColor,
+    textColor,
+    noteColor,
+    fadedBackgroundColor,
+  } = props.uiTheme.palette;
+  const textStyle = { color: textColor };
+  const noteStyle = { color: noteColor };
+  const fadedBackgroundStyle = { backgroundColor: fadedBackgroundColor };
+
   const modalContent = (
     <View style={{ margin: 0 }}>
       <ListItem
@@ -56,14 +64,14 @@ const CharacterProfileCard = (props) => {
           />
         }
         centerElement={
-          <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: '#000' }}>
+          <Text style={[styles.characterName, textStyle]}>
             {getCharacterDisplayName(props.character)}
           </Text>
         }
         style={navHeader}
       />
       <ListItem
-        leftElement={<Icon name="open-in-new" color={COLOR.grey600} />}
+        leftElement={<Icon name="open-in-new" color={iconColor} />}
         centerElement={
           <Text style={navText}>View Character</Text>
         }
@@ -71,7 +79,7 @@ const CharacterProfileCard = (props) => {
         style={navItem}
       />
       <ListItem
-        leftElement={<Icon name="mode-edit" color={COLOR.grey600} />}
+        leftElement={<Icon name="mode-edit" color={iconColor} />}
         centerElement={
           <Text style={navText}>Edit Character</Text>
         }
@@ -79,7 +87,7 @@ const CharacterProfileCard = (props) => {
         style={navItem}
       />
       <ListItem
-        leftElement={<Icon name="delete" color={COLOR.grey600} />}
+        leftElement={<Icon name="delete" color={iconColor} />}
         centerElement={
           <Text style={navText}>Delete Character</Text>
         }
@@ -99,12 +107,12 @@ const CharacterProfileCard = (props) => {
         <View style={{ position: 'absolute', top: 0, right: 0 }}>
           <IconToggle
             name="more-vert"
-            color="#fff"
+            color={COLOR.white}
             onPress={() => props.modalHandler(modalContent)}
           />
         </View>
         <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-          <Text style={styles.lastUpdatedBanner}>
+          <Text style={[styles.lastUpdatedBanner, fadedBackgroundStyle]}>
             Last updated {moment(props.character.lastUpdated).fromNow()}
           </Text>
         </View>
@@ -117,14 +125,14 @@ const CharacterProfileCard = (props) => {
             resizeMode="contain"
           />
           <Body>
-            <Text style={styles.heading} numberOfLines={1}>
+            <Text style={[styles.heading, textStyle]} numberOfLines={1}>
               {getCharacterDisplayName(props.character)}&nbsp;
             </Text>
-            <Text style={styles.subheading}>
+            <Text style={[styles.subheading, noteStyle]}>
               {props.character.profile.race.name}&nbsp;
               {props.character.profile.baseClass.name}
             </Text>
-            <Text style={styles.subheading}>
+            <Text style={[styles.subheading, noteStyle]}>
               {props.character.profile.background.name}
             </Text>
           </Body>
@@ -133,7 +141,7 @@ const CharacterProfileCard = (props) => {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.levelText}>
+            <Text style={[styles.levelText, noteStyle]}>
               Level {props.character.profile.level}
             </Text>
             <Progress.Bar
@@ -142,8 +150,8 @@ const CharacterProfileCard = (props) => {
                 props.character.profile.experience,
               )}
               animated={false}
-              color="#3F51B5"
-              borderColor="#3F51B5"
+              color={primaryColor}
+              borderColor={primaryColor}
               width={100}
               style={{ marginTop: 3, marginBottom: 3 }}
             />
@@ -171,31 +179,35 @@ const styles = StyleSheet.create({
   heading: {
     fontFamily: 'RobotoLight',
     fontSize: 18,
-    color: '#000',
+    color: COLOR.black,
     width: 175,
   },
   subheading: {
     fontFamily: 'Roboto',
     fontSize: 14,
-    color: '#999',
+    color: COLOR.grey500,
+  },
+  characterName: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: COLOR.black,
   },
   levelText: {
     fontFamily: 'RobotoLight',
     fontSize: 16,
-    color: '#999',
+    color: COLOR.grey500,
   },
   experienceText: {
     fontFamily: 'RobotoLight',
     fontSize: 14,
-    color: '#999',
+    color: COLOR.grey500,
   },
   lastUpdatedBanner: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 3,
     paddingBottom: 3,
-    color: '#fff',
+    color: COLOR.white,
     fontFamily: 'Roboto',
     fontStyle: 'italic',
     fontSize: 12,
@@ -209,6 +221,7 @@ CharacterProfileCard.propTypes = {
   viewHandler: PropTypes.func,
   editHandler: PropTypes.func,
   deleteHandler: PropTypes.func,
+  uiTheme: PropTypes.object,
 };
 
 CharacterProfileCard.defaultProps = {
@@ -217,6 +230,7 @@ CharacterProfileCard.defaultProps = {
   viewHandler: () => null,
   editHandler: () => null,
   deleteHandler: () => null,
+  uiTheme: undefined,
 };
 
 export default CharacterProfileCard;

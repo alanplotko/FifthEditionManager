@@ -26,12 +26,16 @@ export default class AssignLanguages extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       allLanguages: cloneDeep(LANGUAGES),
       selectedLanguages: [],
-      isLanguageNoteCollapsed: false,
+      isNoteCollapsed: true,
       ...props.navigation.state.params,
     };
 
@@ -78,11 +82,15 @@ export default class AssignLanguages extends React.Component {
 
   toggleLanguageNote = () => {
     this.setState({
-      isLanguageNoteCollapsed: !this.state.isLanguageNoteCollapsed,
+      isNoteCollapsed: !this.state.isNoteCollapsed,
     });
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const ListItemRow = (languageData) => {
       const key = languageData.language;
       const isChecked = this.state.knownLanguages.includes(key) ||
@@ -99,10 +107,10 @@ export default class AssignLanguages extends React.Component {
           centerElement={
             <View style={styles.horizontalLayout}>
               <Text>
-                <Text style={[styles.smallHeading, { marginBottom: 10 }]}>
+                <Text style={[styles.smallHeading, textStyle, { marginBottom: 10 }]}>
                   {toTitleCase(key)}{'\n'}
                 </Text>
-                <Text style={styles.additionalInfo}>
+                <Text style={[styles.additionalInfo, textStyle]}>
                   &emsp;&#9656; Typically spoken by:&nbsp;
                   {toTitleCase(languageData.speakers.join(', '))}{'\n'}
                   &emsp;&#9656; Script: {toTitleCase(languageData.script)}{'\n'}
@@ -163,8 +171,9 @@ export default class AssignLanguages extends React.Component {
               type="info"
               icon="info"
               collapsible
-              isCollapsed={this.state.isLanguageNoteCollapsed}
+              isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleLanguageNote}
+              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 As {raceIndefiniteArticle}
@@ -290,8 +299,8 @@ export default class AssignLanguages extends React.Component {
               divider
               centerElement={
                 <View style={styles.horizontalLayout}>
-                  <Text style={styles.smallHeading}>Language</Text>
-                  <Text style={styles.smallHeading}>Known</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Language</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Known</Text>
                 </View>
               }
             />
@@ -359,23 +368,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   additionalInfo: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 14,
     padding: 10,
   },
@@ -383,33 +383,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

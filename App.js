@@ -14,9 +14,22 @@ import { StyleSheet, Text, View } from 'react-native';
 
 const uiTheme = {
   palette: {
+    // Main colors
     primaryColor: COLOR.indigo500,
     accentColor: COLOR.red500,
+    backgroundColor: COLOR.grey200,
+    modalBackgroundColor: COLOR.white,
+    fadedBackgroundColor: 'rgba(0, 0, 0, 0.7)',
     disabledColor: COLOR.grey300,
+    // Text colors
+    textColor: COLOR.black,
+    fadedTextColor: COLOR.grey700,
+    noteColor: COLOR.grey500,
+    // Icon colors
+    iconColor: COLOR.grey600,
+    backdropIconColor: COLOR.grey400,
+    standardDiceColor: COLOR.grey800,
+    highlightedDiceColor: COLOR.red500,
   },
   toolbar: {
     container: {
@@ -59,6 +72,9 @@ const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
   images.map(image => Asset.fromModule(image).downloadAsync());
 
+// Styles
+const messageIconStyle = { fontSize: 156, color: COLOR.grey400 };
+
 export default class App extends React.Component {
   constructor() {
     super();
@@ -81,23 +97,27 @@ export default class App extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { fadedTextColor, backdropIconColor } = uiTheme.palette;
+    const fadedTextStyle = { color: fadedTextColor };
+    messageIconStyle.color = backdropIconColor;
+
     if (this.state.error) {
       return (
         <ThemeProvider uiTheme={uiTheme}>
           <View style={styles.centered}>
-            <Icon name="error" style={[styles.messageIcon]} />
-            <Text style={styles.heading}>
+            <Icon name="error" style={messageIconStyle} />
+            <Text style={[styles.heading, fadedTextStyle]}>
               We&apos;re having some trouble!
             </Text>
-            <Text style={styles.text}>
+            <Text style={[styles.text, fadedTextStyle]}>
               We couldn&apos;t load some assets.
             </Text>
-            <Text style={styles.text}>
+            <Text style={[styles.text, fadedTextStyle]}>
               Try again in a moment.
             </Text>
             <Button
               primary
-              raised
               icon="refresh"
               onPress={() => this.setState({ error: null })}
               text="Reload"
@@ -128,16 +148,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    color: '#666',
     fontSize: 24,
-    marginBottom: 10,
+    paddingBottom: 10,
+    color: COLOR.grey700,
   },
   text: {
-    color: '#666',
     fontSize: 18,
-  },
-  messageIcon: {
-    color: '#ccc',
-    fontSize: 156,
+    color: COLOR.grey700,
   },
 });

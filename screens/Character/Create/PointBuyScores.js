@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Card, Button, COLOR, IconToggle, ListItem, Toolbar }
-  from 'react-native-material-ui';
+import { Button, Card, COLOR, IconToggle, ListItem, Toolbar } from 'react-native-material-ui';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
 
@@ -38,6 +37,10 @@ export default class PointBuyScores extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -54,8 +57,11 @@ export default class PointBuyScores extends React.Component {
   resetScores = () => this.setState(initialState);
 
   render() {
-    const cannotBuy = cost => this.state.points < cost ||
-      this.state.scores.length === 6;
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
+    const cannotBuy = cost => this.state.points < cost || this.state.scores.length === 6;
     const cannotSell = score => this.state.scoreSet[score.toString()] === 0;
     const options = [
       { score: 15, cost: 9 },
@@ -95,13 +101,13 @@ export default class PointBuyScores extends React.Component {
         }
         centerElement={
           <View style={styles.horizontalLayout}>
-            <Text style={styles.smallHeading}>
+            <Text style={[styles.smallHeading, textStyle]}>
               {formatSingleDigit(score)}
             </Text>
-            <Text style={styles.smallHeading}>
+            <Text style={[styles.smallHeading, textStyle]}>
               {cost}
             </Text>
-            <Text style={[styles.smallHeading, CardStyle.makeBold]}>
+            <Text style={[[styles.smallHeading, textStyle], CardStyle.makeBold]}>
               {this.state.scoreSet[score.toString()]}
             </Text>
           </View>
@@ -136,21 +142,21 @@ export default class PointBuyScores extends React.Component {
             <Card
               style={{ container: { marginBottom: 10, padding: 10 } }}
             >
-              <Text style={styles.bigHeading}>
+              <Text style={[styles.bigHeading, textStyle]}>
                 <Text style={CardStyle.makeBold}>
                   {this.state.points}
                 </Text>
                 &nbsp;Points Remaining
               </Text>
               <View style={styles.scoreList}>
-                <Text style={styles.bigHeading}>
+                <Text style={[styles.bigHeading, textStyle]}>
                   Scores:&nbsp;
                   {
                     this.state.scores.length === 0 &&
                     'None'
                   }
                 </Text>
-                <Text style={[styles.bigHeading, CardStyle.makeBold]}>
+                <Text style={[styles.bigHeading, textStyle, CardStyle.makeBold]}>
                   {this.state.scores.join(', ')}
                 </Text>
               </View>
@@ -194,9 +200,9 @@ export default class PointBuyScores extends React.Component {
               centerElement={
                 <View style={styles.horizontalLayout}>
                   <Text style={{ paddingHorizontal: 20 }} />
-                  <Text style={styles.smallHeading}>Score</Text>
-                  <Text style={styles.smallHeading}>Cost (Points)</Text>
-                  <Text style={styles.smallHeading}>Used</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Score</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Cost (Points)</Text>
+                  <Text style={[styles.smallHeading, textStyle]}>Used</Text>
                   <Text style={{ paddingHorizontal: 20 }} />
                 </View>
               }
@@ -225,12 +231,12 @@ const styles = StyleSheet.create({
   },
   bigHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   buttonLayout: {
@@ -238,33 +244,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 20,
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

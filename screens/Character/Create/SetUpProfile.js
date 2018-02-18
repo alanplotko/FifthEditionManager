@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Keyboard, Text, ScrollView, View } from 'react-native';
+import { Keyboard, Text, ScrollView, StyleSheet, View } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
@@ -105,10 +105,10 @@ const template = locals => (
   <View>
     <Text style={FormStyle.heading}>Character Name</Text>
     <View style={FormStyle.horizontalLayout}>
-      <View style={{ flex: 1, marginRight: 5 }}>
+      <View style={[styles.flex, styles.leftField]}>
         {locals.inputs.firstName}
       </View>
-      <View style={{ flex: 1, marginLeft: 5 }}>
+      <View style={[styles.flex, styles.rightField]}>
         {locals.inputs.lastName}
       </View>
     </View>
@@ -117,21 +117,21 @@ const template = locals => (
     {locals.inputs.power}
 
     <Text style={FormStyle.heading}>About</Text>
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex}>
       {locals.inputs.gender}
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex}>
       {locals.inputs.alignment}
     </View>
 
     <Text style={FormStyle.heading}>Measurements</Text>
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex}>
       {locals.inputs.age}
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex}>
       {locals.inputs.height}
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex}>
       {locals.inputs.weight}
     </View>
   </View>
@@ -350,7 +350,7 @@ export default class SetUpProfile extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <ScrollView style={{ margin: 20 }} keyboardShouldPersistTaps="always">
+          <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="always">
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={Character}
@@ -371,3 +371,18 @@ export default class SetUpProfile extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  scrollView: {
+    margin: 20,
+  },
+  leftField: {
+    marginRight: 5,
+  },
+  rightField: {
+    marginLeft: 5,
+  },
+});

@@ -17,6 +17,9 @@
     "eslint:recommended",
     "airbnb"
   ],
+  "plugins": [
+    "react-native"
+  ],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/forbid-prop-types": 0,
@@ -24,7 +27,9 @@
     "no-warning-comments": [1, {
         "terms": ["todo", "fixme", "xxx"],
         "location": "start"
-    }]
+    }],
+    "react-native/no-unused-styles": 2,
+    "react-native/no-color-literals": 2
   },
   "settings": {
     "import/resolver": "reactnative"

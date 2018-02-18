@@ -1,15 +1,16 @@
 import { StyleSheet } from 'react-native';
+import { COLOR } from 'react-native-material-ui';
 
 export default StyleSheet.create({
   cardHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
     paddingBottom: 10,
   },
   cardText: {
     fontFamily: 'Roboto',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 16,
     paddingBottom: 5,
   },
@@ -18,7 +19,7 @@ export default StyleSheet.create({
   },
   cardNote: {
     fontFamily: 'Roboto',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 14,
     marginTop: 5,
   },

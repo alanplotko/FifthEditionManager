@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, Icon, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
 import { toTitleCase } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
@@ -57,6 +57,10 @@ export default class SetCharacterBackground extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -99,7 +103,7 @@ export default class SetCharacterBackground extends React.Component {
         <View
           style={[
             LayoutStyle.centered,
-            { borderWidth: 2, borderColor: 'rgba(0, 0, 0, 0.7)', paddingTop: 30 },
+            { borderWidth: 2, borderColor: COLOR.grey800, paddingTop: 30 },
           ]}
         >
           <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
@@ -128,6 +132,10 @@ export default class SetCharacterBackground extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const fadedTextStyle = { color: fadedTextColor };
+
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -224,10 +232,16 @@ export default class SetCharacterBackground extends React.Component {
                   <Icon
                     name="info"
                     style={{
-                      color: '#ccc', fontSize: 48, width: 48, height: 48, marginRight: 10,
+                      color: backdropIconColor,
+                      fontSize: 48,
+                      width: 48,
+                      height: 48,
+                      marginRight: 10,
                     }}
                   />
-                  <Text style={styles.placeholderMessage}>Selection details will display here</Text>
+                  <Text style={[styles.placeholderMessage, fadedTextStyle]}>
+                    Selection details will display here
+                  </Text>
                 </View>
               </Card>
             }
@@ -241,7 +255,7 @@ export default class SetCharacterBackground extends React.Component {
 const styles = StyleSheet.create({
   placeholderMessage: {
     fontFamily: 'RobotoLight',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 18,
   },
 });

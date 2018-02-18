@@ -28,6 +28,10 @@ export default class RollAbilityScores extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -103,6 +107,10 @@ export default class RollAbilityScores extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const dice = roll => (
       <Icon
         name={`dice-${roll.result}`}
@@ -119,7 +127,7 @@ export default class RollAbilityScores extends React.Component {
               <Card
                 style={{ container: { marginBottom: 10, padding: 10 } }}
               >
-                <Text style={styles.scoreLabel}>
+                <Text style={[styles.scoreLabel, textStyle]}>
                   Rolls:&nbsp;
                   <Text style={CardStyle.makeBold}>
                     {this.state.sortedScores.join(', ')}
@@ -164,10 +172,10 @@ export default class RollAbilityScores extends React.Component {
                   style={{ container: { marginBottom: 5, padding: 10 } }}
                 >
                   <View style={styles.diceLayout}>
-                    <Text style={styles.scoreLabel}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
                       Roll {report.rollNumber}:
                     </Text>
-                    <Text style={[styles.scoreLabel, CardStyle.makeBold]}>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
                       {formatSingleDigit(report.score)}
                     </Text>
                     {dice(report.rolls[0])}
@@ -188,7 +196,7 @@ export default class RollAbilityScores extends React.Component {
           style={{ margin: 0 }}
         >
           <View style={[styles.centered, styles.modalView]}>
-            <ActivityIndicator color="#fff" size="large" />
+            <ActivityIndicator color={COLOR.white} size="large" />
             <Text style={styles.loadingText}>
               Rerolling...
             </Text>
@@ -214,13 +222,13 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontFamily: 'RobotoBold',
-    color: '#fff',
+    color: COLOR.white,
     fontSize: 16,
     paddingVertical: 10,
   },
   scoreLabel: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   buttonLayout: {
@@ -228,12 +236,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
   modalView: {
-    backgroundColor: 'transparent',
+    backgroundColor: COLOR.transparent,
   },
 });

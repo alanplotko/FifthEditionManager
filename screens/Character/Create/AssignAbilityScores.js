@@ -40,14 +40,18 @@ export default class AssignAbilityScores extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       scoreBank: [],
       loading: false,
       isModalVisible: false,
-      isErrorCollapsed: false,
-      isInfoCollapsed: false,
+      isErrorCollapsed: true,
+      isInfoCollapsed: true,
       selectedAbility: null,
       extraPoints: 0,
       hasExtraPoint: [],
@@ -225,7 +229,7 @@ export default class AssignAbilityScores extends React.Component {
           scoreBank.push({ score, quantity: 1 });
         }
       });
-      this.setState({
+      return this.setState({
         baseStats: {
           strength: null,
           dexterity: null,
@@ -252,6 +256,11 @@ export default class AssignAbilityScores extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { textColor, backgroundColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+    const modalBackgroundStyle = { backgroundColor };
+
     const isSelectable = scoreCard => (
       // Score is selected
       (this.state.baseStats[this.state.selectedAbility] === scoreCard.score) ||
@@ -286,14 +295,14 @@ export default class AssignAbilityScores extends React.Component {
           >
             {
               this.state.baseStats[ability] &&
-              <Text style={styles.score}>
+              <Text style={[styles.scoreText, textStyle]}>
                 {totalScore}
               </Text>
             }
             {
               this.state.baseStats[ability] &&
               <Text
-                style={styles.modifier}
+                style={[styles.modifierText, textStyle]}
               >
                 {
                   modifier > 0 &&
@@ -317,7 +326,7 @@ export default class AssignAbilityScores extends React.Component {
             }
             {
               !this.state.baseStats[ability] &&
-              <Text style={styles.cardText}>&mdash;</Text>
+              <Text style={[styles.cardText, textStyle]}>&mdash;</Text>
             }
           </Card>
           <Button
@@ -338,7 +347,7 @@ export default class AssignAbilityScores extends React.Component {
       const standardColor = isSelectable(scoreCard) ?
         COLOR.white :
         COLOR.redA100;
-      const backgroundColor = isSelected(scoreCard) ?
+      const scoreBackgroundColor = isSelected(scoreCard) ?
         COLOR.greenA100 :
         standardColor;
       return (
@@ -357,7 +366,7 @@ export default class AssignAbilityScores extends React.Component {
                 flex: 1,
                 flexWrap: 'wrap',
                 marginHorizontal: 10,
-                backgroundColor,
+                backgroundColor: scoreBackgroundColor,
                 opacity: isSelectable(scoreCard) ? 1 : 0.3,
               },
             }}
@@ -370,15 +379,15 @@ export default class AssignAbilityScores extends React.Component {
           >
             {
               scoreCard.score &&
-              <Text style={styles.cardText}>{scoreCard.score}</Text>
+              <Text style={[styles.cardText, textStyle]}>{scoreCard.score}</Text>
             }
             {
               !scoreCard.score &&
-              <Text style={styles.cardText}>&mdash;</Text>
+              <Text style={[styles.cardText, textStyle]}>&mdash;</Text>
             }
             {
               scoreCard.quantity !== null &&
-              <Text style={styles.quantityText}>
+              <Text style={[styles.quantityText, textStyle]}>
                 &times;{scoreCard.quantity}
               </Text>
             }
@@ -395,7 +404,7 @@ export default class AssignAbilityScores extends React.Component {
       const totalScore = abilityScore + additionalPoints;
 
       return (
-        <View style={styles.modalLayout}>
+        <View style={[styles.modalLayout, modalBackgroundStyle]}>
           {
             ability &&
             <Text style={styles.cardTitle}>
@@ -446,7 +455,7 @@ export default class AssignAbilityScores extends React.Component {
                   abilityScore &&
                   <Text style={styles.calculationTitle}>
                     Total:&nbsp;
-                    <Text style={styles.calculationText}>
+                    <Text style={[styles.calculationText, textStyle]}>
                       {abilityScore || '?'}
                       <Text style={{ color: COLOR.green500 }}>
                         {characterHasModifier && ` + ${characterHasModifier}`}
@@ -473,10 +482,7 @@ export default class AssignAbilityScores extends React.Component {
         </View>
       );
     };
-    const modifierList = Object
-      .keys(this.state.raceModifiers)
-      .filter(name => name !== 'extra');
-
+    const modifierList = Object.keys(this.state.raceModifiers).filter(name => name !== 'extra');
     const pointPlurality = this.state.extraPoints > 1 ? 'points' : 'point';
 
     return (
@@ -493,6 +499,7 @@ export default class AssignAbilityScores extends React.Component {
                 collapsible
                 isCollapsed={this.state.isInfoCollapsed}
                 toggleNoteHandler={this.toggleInfoNote}
+                uiTheme={this.context.uiTheme}
               >
                 <Text style={{ marginBottom: 10 }}>
                   The
@@ -525,6 +532,7 @@ export default class AssignAbilityScores extends React.Component {
                 collapsible
                 isCollapsed={this.state.isErrorCollapsed}
                 toggleNoteHandler={this.toggleErrorNote}
+                uiTheme={this.context.uiTheme}
               >
                 <Text>
                   The
@@ -551,7 +559,7 @@ export default class AssignAbilityScores extends React.Component {
             <View style={styles.horizontalLayout}>
               {abilities.slice(0, 3).map(ability => (
                 <View key={ability} style={styles.centered}>
-                  <Text style={styles.abilityText}>{ability}</Text>
+                  <Text style={[styles.abilityText, textStyle]}>{ability}</Text>
                   {buildAbilityCard(ability.toLowerCase())}
                 </View>
               ))}
@@ -559,7 +567,7 @@ export default class AssignAbilityScores extends React.Component {
             <View style={styles.horizontalLayout}>
               {abilities.slice(3, 6).map(ability => (
                 <View key={ability} style={styles.centered}>
-                  <Text style={styles.abilityText}>{ability}</Text>
+                  <Text style={[styles.abilityText, textStyle]}>{ability}</Text>
                   {buildAbilityCard(ability.toLowerCase())}
                 </View>
               ))}
@@ -596,7 +604,7 @@ export default class AssignAbilityScores extends React.Component {
 const styles = StyleSheet.create({
   abilityText: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   centered: {
@@ -609,7 +617,7 @@ const styles = StyleSheet.create({
     bottom: 5,
     right: 5,
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 16,
   },
   horizontalLayout: {
@@ -638,36 +646,36 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
     marginBottom: 10,
   },
   calculationTitle: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   calculationText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 24,
   },
   cardText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 28,
   },
-  score: {
+  scoreText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 28,
   },
-  modifier: {
+  modifierText: {
     position: 'absolute',
     bottom: 5,
     right: 5,
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
 });

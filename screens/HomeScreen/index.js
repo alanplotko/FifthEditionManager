@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, View, UIManager }
+import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View, UIManager }
   from 'react-native';
 import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
@@ -39,6 +39,10 @@ export default class HomeScreen extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +66,11 @@ export default class HomeScreen extends React.Component {
   componentDidMount() {
     this.getData();
   }
+
+  onLayout = () => {
+    const { width, height } = Dimensions.get('window');
+    this.setState({ isPortrait: height >= width });
+  };
 
   getData = () => {
     store
@@ -125,7 +134,7 @@ export default class HomeScreen extends React.Component {
                 thumbnail: IMAGES.RACE[character.profile.race.lookupKey],
                 icon: {
                   name: 'delete-forever',
-                  color: '#fff',
+                  color: COLOR.white,
                 },
               };
               this.removeCharacter(
@@ -147,9 +156,14 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+
+    // Theme setup
+    const { primaryColor, backdropIconColor, modalBackgroundColor } = this.context.uiTheme.palette;
+    const modalStyle = { backgroundColor: modalBackgroundColor };
+
     const errorView = (
-      <View style={styles.centered}>
-        <Icon name="error" size={156} color="#ccc" />
+      <View style={styles.centered} onLayout={() => this.onLayout()}>
+        <Icon name="error" size={this.state.isPortrait ? 156 : 64} color={backdropIconColor} />
         <Text style={styles.heading}>
           An error occurred!
         </Text>
@@ -170,7 +184,7 @@ export default class HomeScreen extends React.Component {
     if (this.state.isLoading) {
       return (
         <Container style={[ContainerStyle.parent, ContainerStyle.centered]}>
-          <ActivityIndicator color="#3F51B5" size="large" />
+          <ActivityIndicator color={primaryColor} size="large" />
         </Container>
       );
     }
@@ -187,16 +201,18 @@ export default class HomeScreen extends React.Component {
               !this.state.error && this.state.activity.length > 0 &&
               <FlatList
                 data={this.state.activity}
-                renderItem={({ item }) => <ActivityCard activity={item} />}
+                renderItem={
+                  ({ item }) => <ActivityCard activity={item} uiTheme={this.context.uiTheme} />
+                }
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
-                contentContainerStyle={{ paddingTop: 10, paddingBottom: 100 }}
+                contentContainerStyle={styles.flatlist}
               />
             }
             {
               !this.state.error && this.state.activity.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="timeline" size={156} color="#ccc" />
+                <Icon name="timeline" size={156} color={backdropIconColor} />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
@@ -223,13 +239,13 @@ export default class HomeScreen extends React.Component {
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
-                contentContainerStyle={{ paddingTop: 10, paddingBottom: 100 }}
+                contentContainerStyle={styles.flatlist}
               />
             }
             {
               !this.state.error && this.state.campaigns.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="book" size={156} color="#ccc" />
+                <Icon name="book" size={156} color={backdropIconColor} />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
@@ -258,17 +274,18 @@ export default class HomeScreen extends React.Component {
                     viewHandler={this.viewCharacter}
                     editHandler={this.editCharacter}
                     deleteHandler={this.askDeleteCharacter}
+                    uiTheme={this.context.uiTheme}
                   />
                 )}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}
-                contentContainerStyle={{ paddingTop: 10, paddingBottom: 100 }}
+                contentContainerStyle={styles.flatlist}
               />
             }
             {
               !this.state.error && this.state.characters.length === 0 &&
               <View style={styles.centered}>
-                <Icon name="person" size={156} color="#ccc" />
+                <Icon name="person" size={156} color={backdropIconColor} />
                 <Text style={styles.heading}>
                   First time here?
                 </Text>
@@ -316,9 +333,9 @@ export default class HomeScreen extends React.Component {
           onBackButtonPress={() => this.setState({ isModalVisible: false })}
           onBackdropPress={() => this.setState({ isModalVisible: false })}
           backdropOpacity={0.5}
-          style={{ margin: 0 }}
+          style={styles.modal}
         >
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, modalStyle]}>
             {this.state.modalContent}
           </View>
         </Modal>
@@ -328,29 +345,37 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: '#eee',
-  },
   centered: {
     marginTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  flatlist: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 100,
+  },
+  modal: {
+    margin: 0,
+  },
+  tab: {
+    backgroundColor: COLOR.grey200,
+  },
   heading: {
     fontFamily: 'RobotoLight',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 24,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   text: {
     fontFamily: 'RobotoLight',
-    color: '#666',
+    color: COLOR.grey700,
     fontSize: 18,
     paddingBottom: 5,
   },
   modalView: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     position: 'absolute',
     bottom: 0,
     width: '100%',

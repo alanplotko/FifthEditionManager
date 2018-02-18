@@ -25,10 +25,14 @@ export default class ReviewSavingThrows extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      isNoteCollapsed: false,
+      isNoteCollapsed: true,
       ...props.navigation.state.params,
     };
     this.state.baseClass = CLASSES
@@ -60,35 +64,38 @@ export default class ReviewSavingThrows extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const baseClassProficiencies = this.state.baseClass.proficiencies
       .savingThrows.slice(0);
     const ListItemRow = (ability) => {
       const isChecked = baseClassProficiencies.includes(ability);
-      const negative = this.state.character.profile.stats[ability].modifier < 0;
-      const modifier = Math
-        .abs(this.state.character.profile.stats[ability].modifier);
-      const total = (modifier * (negative ? -1 : 1)) +
-        this.state.character.profile.proficiency;
-      const textColor = total < 0 ? COLOR.red500 : COLOR.green500;
+      const { modifier } = this.state.character.profile.stats[ability];
+      const negative = modifier < 0;
+      const total = modifier + this.state.character.profile.proficiency;
+      const checkedTextColor = total < 0 ? COLOR.red500 : COLOR.green500;
+      const uncheckedTextColor = modifier < 0 ? COLOR.red500 : COLOR.green500;
       return (
         <ListItem
           key={ability}
           divider
           centerElement={
             <View style={styles.horizontalLayout}>
-              <Text style={[styles.smallHeading, { marginBottom: 10 }]}>
+              <Text style={[styles.smallHeading, textStyle, { marginBottom: 10 }]}>
                 {toTitleCase(ability)}
               </Text>
               <Text
                 style={[
                   styles.smallHeading,
                   CardStyle.makeBold,
-                  { color: isChecked ? COLOR.black : textColor },
+                  { color: isChecked ? textColor : uncheckedTextColor },
                 ]}
               >
                 {
                   !isChecked && negative &&
-                  <Text>&minus;{modifier}</Text>
+                  <Text>&minus;{Math.abs(modifier)}</Text>
                 }
                 {
                   !isChecked && !negative &&
@@ -105,12 +112,12 @@ export default class ReviewSavingThrows extends React.Component {
                       !negative &&
                       <Text>+</Text>
                     }
-                    {modifier}
+                    {Math.abs(modifier)}
                     &nbsp;+&nbsp;
                     {this.state.character.profile.proficiency} =&nbsp;
-                    <Text style={{ color: textColor }}>
+                    <Text style={{ color: checkedTextColor }}>
                       {total >= 0 ? <Text>+</Text> : <Text>&minus;</Text>}
-                      {total}
+                      {Math.abs(total)}
                     </Text>
                   </Text>
                 }
@@ -143,6 +150,7 @@ export default class ReviewSavingThrows extends React.Component {
               collapsible
               isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleNote}
+              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 As {classIndefiniteArticle}
@@ -192,57 +200,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
   smallHeading: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
-  },
-  additionalInfo: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 14,
-    padding: 10,
   },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
   },
 });

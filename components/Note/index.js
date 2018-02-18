@@ -1,37 +1,32 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { COLOR, Icon, IconToggle } from 'react-native-material-ui';
 
 const Note = (props) => {
-  const {
-    title,
-    children,
-    icon,
-    type,
-    collapsible,
-    isCollapsed,
-    toggleNoteHandler,
-  } = props;
-
   let color = COLOR.yellow500;
-  if (type === 'info') {
+  if (props.type === 'info') {
     color = COLOR.lightBlue500;
-  } else if (type === 'error') {
+  } else if (props.type === 'error') {
     color = COLOR.red500;
   }
 
+  // Theme setup
+  const { textColor } = props.uiTheme.palette;
+  const textStyle = { color: textColor };
+
   return (
-    <View style={styles[`${type}Note`]}>
+    <View style={props.type === 'info' ? styles.infoNote : styles.errorNote}>
       {
-        collapsible &&
+        props.collapsible &&
         <View style={{ position: 'absolute', top: 0, right: 0 }}>
           <IconToggle
-            name={isCollapsed ? 'arrow-drop-down' : 'arrow-drop-up'}
+            name={props.isCollapsed ? 'arrow-drop-down' : 'arrow-drop-up'}
             color={color}
             size={28}
             percent={50}
-            onPress={() => toggleNoteHandler()}
+            onPress={() => props.toggleNoteHandler()}
           />
         </View>
       }
@@ -39,27 +34,33 @@ const Note = (props) => {
         style={{
           flex: 1,
           flexDirection: 'row',
-          marginBottom: !isCollapsed ? 10 : 0,
+          marginBottom: !props.isCollapsed ? 10 : 0,
         }}
       >
         {
-          icon &&
+          props.icon &&
           <Icon
-            name={icon}
+            name={props.icon}
             color={color}
             style={{ marginRight: 10 }}
           />
         }
-        <Text style={styles[`${type}Heading`]}>
-          {title}
+        <Text style={[props.type === 'info' ? styles.infoHeading : styles.errorHeading, textStyle]}>
+          {props.title}
         </Text>
       </View>
       {
-        !isCollapsed &&
-        <View>
-          <Text style={styles[`${type}Text`]}>
-            {children}
+        (!props.collapsible || !props.isCollapsed) &&
+        <View style={{}}>
+          <Text style={[props.type === 'info' ? styles.infoText : styles.errorText, textStyle]}>
+            {props.children}
           </Text>
+          {
+            props.type === 'error' &&
+            <Text style={styles.errorTimestamp}>
+              Last attempted {moment().format('h:mm:ss A')}
+            </Text>
+          }
         </View>
       }
     </View>
@@ -77,12 +78,12 @@ const styles = StyleSheet.create({
   },
   infoHeading: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   infoText: {
     fontFamily: 'Roboto',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 14,
   },
   errorNote: {
@@ -95,13 +96,18 @@ const styles = StyleSheet.create({
   },
   errorHeading: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
   },
   errorText: {
     fontFamily: 'Roboto',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 14,
+  },
+  errorTimestamp: {
+    textAlign: 'right',
+    fontStyle: 'italic',
+    marginTop: 10,
   },
 });
 
@@ -113,6 +119,7 @@ Note.propTypes = {
   collapsible: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   toggleNoteHandler: PropTypes.func,
+  uiTheme: PropTypes.object,
 };
 
 Note.defaultProps = {
@@ -120,9 +127,10 @@ Note.defaultProps = {
   children: null,
   icon: null,
   type: '',
-  collapsible: true,
+  collapsible: false,
   isCollapsed: false,
   toggleNoteHandler: () => null,
+  uiTheme: undefined,
 };
 
 export default Note;

@@ -65,6 +65,10 @@ export default class ReviewHitPoints extends React.Component {
     navigation: PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    uiTheme: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +76,7 @@ export default class ReviewHitPoints extends React.Component {
       hitPoints: null,
       rolls: null,
       rollCount: 0,
-      isNoteCollapsed: false,
+      isNoteCollapsed: true,
       type: HitPoints,
       form: null,
       options,
@@ -143,16 +147,15 @@ export default class ReviewHitPoints extends React.Component {
       thumbnail: IMAGES.RACE[newCharacter.profile.race.lookupKey],
       icon: {
         name: 'add-circle',
-        color: '#fff',
+        color: COLOR.white,
       },
     };
 
     store
       .push(CHARACTER_KEY, newCharacter)
       .catch((error) => {
-        // TODO: set up error message in UI
         // Show error message on screen and allow resubmit
-        this.setState({ error: 'Please try again in a few minutes.' });
+        this.setState({ error });
         return error;
       })
       .then((error) => {
@@ -199,6 +202,10 @@ export default class ReviewHitPoints extends React.Component {
   }
 
   render() {
+    // Theme setup
+    const { textColor } = this.context.uiTheme.palette;
+    const textStyle = { color: textColor };
+
     const { hitDie } = this.state.baseClass;
     const { modifier } = this.state.character.profile.stats.constitution;
     const { level } = this.state.character.profile;
@@ -212,6 +219,19 @@ export default class ReviewHitPoints extends React.Component {
       <Container style={ContainerStyle.parent}>
         <Content>
           <View style={{ margin: 20 }}>
+            {
+              this.state.error &&
+              <Note
+                title="Error"
+                type="error"
+                icon="error"
+                uiTheme={this.context.uiTheme}
+              >
+                <Text>
+                  An error was encountered while saving your character. Try again in a moment.
+                </Text>
+              </Note>
+            }
             <Note
               title={`${this.state.character.profile.baseClass.name} Hit Points`}
               type="info"
@@ -219,6 +239,7 @@ export default class ReviewHitPoints extends React.Component {
               collapsible
               isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleNote}
+              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 The
@@ -299,7 +320,7 @@ export default class ReviewHitPoints extends React.Component {
             </View>
             <View style={styles.horizontalLayout}>
               <View style={{ alignItems: 'center' }}>
-                <Text style={styles.cardTitle}>
+                <Text style={[styles.cardTitle, textStyle]}>
                   Times Average Taken
                 </Text>
                 <Card
@@ -315,7 +336,7 @@ export default class ReviewHitPoints extends React.Component {
                     },
                   }}
                 >
-                  <Text style={styles.points}>
+                  <Text style={[styles.pointText, textStyle]}>
                     {
                       this.state.timesAverageTaken === null &&
                       <Text>&mdash;</Text>
@@ -328,7 +349,7 @@ export default class ReviewHitPoints extends React.Component {
                 </Card>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={styles.cardTitle}>
+                <Text style={[styles.cardTitle, textStyle]}>
                   Hit Points
                 </Text>
                 <Card
@@ -344,7 +365,7 @@ export default class ReviewHitPoints extends React.Component {
                     },
                   }}
                 >
-                  <Text style={styles.points}>
+                  <Text style={[styles.pointText, textStyle]}>
                     {
                       !this.state.hitPoints &&
                       <Text>{hitDie + modifier}</Text>
@@ -369,7 +390,7 @@ export default class ReviewHitPoints extends React.Component {
                   },
                 }}
               >
-                <Text style={[styles.cardTitle, { marginBottom: 0 }]}>
+                <Text style={[styles.cardTitle, textStyle, { marginBottom: 0 }]}>
                   <Text style={CardStyle.makeBold}>
                     First Level
                   </Text>
@@ -424,76 +445,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  scoreList: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  bigHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 24,
-  },
-  smallHeading: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 18,
-  },
-  additionalInfo: {
-    fontFamily: 'RobotoLight',
-    color: '#000',
-    fontSize: 14,
-    padding: 10,
-  },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  button: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  resetButton: {
-    backgroundColor: COLOR.red500,
-    borderColor: COLOR.red500,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 5,
-  },
-  acceptButton: {
-    backgroundColor: '#3F51B5',
-    borderColor: '#3F51B5',
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 10,
-  },
   cardTitle: {
     fontFamily: 'RobotoLight',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 18,
     marginBottom: 10,
   },
-  points: {
+  pointText: {
     fontFamily: 'RobotoBold',
-    color: '#000',
+    color: COLOR.black,
     fontSize: 28,
-  },
-  modifier: {
-    position: 'absolute',
-    bottom: 5,
-    right: 5,
-    fontFamily: 'RobotoBold',
-    color: '#000',
-    fontSize: 18,
   },
 });
