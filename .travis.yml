@@ -1,0 +1,15 @@
+sudo: false
+
+language: node_js
+
+notifications:
+  email: false
+
+node_js: '9'
+
+after_success:
+  - codeclimate-test-reporter < coverage/lcov.info
+
+addons:
+  code_climate:
+    repo_token: 229b7ac46677b47fb39e8caeeff4ac4e374b0f34663bc4344e3a10fc8ca87205
