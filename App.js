@@ -13,7 +13,7 @@ import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
 import { StyleSheet, Text, View } from 'react-native';
 
-const uiTheme = {
+export const uiTheme = {
   palette: {
     // Main colors
     primaryColor: COLOR.indigo500,

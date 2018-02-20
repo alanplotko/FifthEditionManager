@@ -57,14 +57,12 @@ export default class HomeScreen extends React.Component {
     };
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-  }
-
-  componentDidMount() {
-    this.getData();
+    const callback = () => this.setState({ isLoading: false });
+    await this.getData().then(callback);
   }
 
   onLayout = () => {
@@ -72,7 +70,7 @@ export default class HomeScreen extends React.Component {
     this.setState({ isPortrait: height >= width });
   };
 
-  getData = () => {
+  getData = () => new Promise((resolve) => {
     store
       .get([ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY])
       .then((data) => {
@@ -80,13 +78,10 @@ export default class HomeScreen extends React.Component {
           activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
           campaigns: data[1] ? data[1] : [],
           characters: data[2] ? data[2].sort(compareDates('lastUpdated')) : [],
-        });
+        }, () => resolve(data));
       })
-      .catch(error => error) // Propogate error
-      .then((error) => {
-        this.setState({ isLoading: false, isRefreshing: false, error });
-      });
-  };
+      .catch(error => this.setState({ error }, () => resolve(null)));
+  });
 
   openModal = (modalContent) => {
     this.setState({ isModalVisible: true, modalContent });
@@ -151,7 +146,8 @@ export default class HomeScreen extends React.Component {
   };
 
   handleRefresh = () => {
-    this.setState({ isRefreshing: true }, () => this.getData());
+    const callback = () => this.setState({ isRefreshing: false });
+    this.setState({ isRefreshing: true }, async () => this.getData().then(callback));
   };
 
   render() {

@@ -4,8 +4,10 @@
   "private": true,
   "devDependencies": {
     "babel-eslint": "^8.0.2",
+    "babel-jest": "^22.2.2",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.1",
     "eslint": "^4.12.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-import-resolver-reactnative": "^1.0.2",
@@ -13,12 +15,15 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-react-native": "^3.2.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^22.0.4",
     "jest-expo": "^25.1.0",
+    "jsdom": "^11.6.2",
     "react-dom": "^16.2.0",
     "react-native-mock-render": "0.0.19",
     "react-native-scripts": "1.11.1",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.2.0",
+    "sinon": "^4.3.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -27,13 +32,25 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "node node_modules/eslint/bin/eslint.js -c .eslintrc.json './**/*.js'",
-    "test": "node_modules/.bin/jest && npm run lint"
+    "test": "node_modules/.bin/jest && npm run lint",
+    "jest": "node_modules/.bin/jest",
+    "test:watch": "node_modules/.bin/jest --watch",
+    "test:coverage": "node_modules/.bin/jest --coverage"
   },
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!react-native|expo|@expo|react-navigation|native-base|native-base-shoutem-theme|@shoutem/theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)"
-    ]
+      "node_modules/(?!react-native|expo|@expo/vector-icons|react-navigation|native-base|native-base-shoutem-theme|@shoutem/theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)"
+    ],
+    "setupFiles": [
+      "./jest/setup.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|scss)$": "identity-obj-proxy"
+    }
   },
   "dependencies": {
     "@expo/vector-icons": "^6.2.0",

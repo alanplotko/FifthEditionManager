@@ -1,0 +1,342 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home screen displays activity indicator when loading data 1`] = `
+<Styled(Container)
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#eeeeee",
+        "flex": 1,
+      },
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <ActivityIndicator
+    animating={true}
+    color="#3f51b5"
+    hidesWhenStopped={true}
+    size="large"
+  />
+</Styled(Container)>
+`;
+
+exports[`Home screen displays default messages in tabs when no data exists 1`] = `
+<Styled(Container)
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#eeeeee",
+        "flex": 1,
+      },
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <ScrollableTabView
+    contentProps={Object {}}
+    initialPage={0}
+    locked={true}
+    onChangeTab={[Function]}
+    onScroll={[Function]}
+    page={-1}
+    prerenderingSiblingsNumber={0}
+    scrollWithoutAnimation={false}
+    tabBarPosition="top"
+  >
+    <Styled(Tab)
+      heading={
+        <Styled(TabHeadingNB)
+          virtual={undefined}
+        >
+          <Styled(Icon)
+            name="home"
+            virtual={undefined}
+          />
+        </Styled(TabHeadingNB)>
+      }
+      style={
+        Object {
+          "backgroundColor": "#eeeeee",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginTop": 50,
+          }
+        }
+      >
+        <Icon
+          color="#bdbdbd"
+          name="timeline"
+          size={156}
+        />
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 24,
+              "paddingBottom": 10,
+            }
+          }
+        >
+          First time here?
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Your activity feed will populate here over time.
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          To get started, create a character or campaign!
+        </Styled(Text)>
+      </View>
+    </Styled(Tab)>
+    <Styled(Tab)
+      heading={
+        <Styled(TabHeadingNB)
+          virtual={undefined}
+        >
+          <Styled(Text)
+            virtual={undefined}
+          >
+            Campaigns
+          </Styled(Text)>
+        </Styled(TabHeadingNB)>
+      }
+      style={
+        Object {
+          "backgroundColor": "#eeeeee",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginTop": 50,
+          }
+        }
+      >
+        <Icon
+          color="#bdbdbd"
+          name="book"
+          size={156}
+        />
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 24,
+              "paddingBottom": 10,
+            }
+          }
+        >
+          First time here?
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          No existing campaigns found.
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Let's get started!
+        </Styled(Text)>
+      </View>
+    </Styled(Tab)>
+    <Styled(Tab)
+      heading={
+        <Styled(TabHeadingNB)
+          virtual={undefined}
+        >
+          <Styled(Text)
+            virtual={undefined}
+          >
+            Characters
+          </Styled(Text)>
+        </Styled(TabHeadingNB)>
+      }
+      style={
+        Object {
+          "backgroundColor": "#eeeeee",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginTop": 50,
+          }
+        }
+      >
+        <Icon
+          color="#bdbdbd"
+          name="person"
+          size={156}
+        />
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 24,
+              "paddingBottom": 10,
+            }
+          }
+        >
+          First time here?
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          No existing characters found.
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "RobotoLight",
+              "fontSize": 18,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Let's get started!
+        </Styled(Text)>
+      </View>
+    </Styled(Tab)>
+  </ScrollableTabView>
+  <ActionButton
+    actions={
+      Array [
+        Object {
+          "icon": "book",
+          "label": "Campaign",
+          "name": null,
+        },
+        Object {
+          "icon": "person",
+          "label": "Character",
+          "name": "SetCharacterRace",
+        },
+      ]
+    }
+    hidden={false}
+    icon="add"
+    onLongPress={null}
+    onPress={[Function]}
+    rippleColor="#ef9a9a"
+    style={
+      Object {
+        "container": Object {
+          "elevation": 6,
+        },
+        "overlayContainer": Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.5)",
+        },
+        "speedDialActionLabel": Object {
+          "paddingBottom": 2,
+          "paddingLeft": 5,
+          "paddingRight": 5,
+          "paddingTop": 2,
+        },
+      }
+    }
+    transition="speedDial"
+  />
+  <ReactNativeModal
+    animationIn="slideInUp"
+    animationInTiming={300}
+    animationOut="slideOutDown"
+    animationOutTiming={300}
+    avoidKeyboard={false}
+    backdropColor="black"
+    backdropOpacity={0.5}
+    backdropTransitionInTiming={300}
+    backdropTransitionOutTiming={300}
+    isVisible={false}
+    onBackButtonPress={[Function]}
+    onBackdropPress={[Function]}
+    onModalHide={[Function]}
+    onModalShow={[Function]}
+    style={
+      Object {
+        "margin": 0,
+      }
+    }
+    swipeThreshold={100}
+    useNativeDriver={false}
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "backgroundColor": "#ffffff",
+            "bottom": 0,
+            "flex": 1,
+            "position": "absolute",
+            "width": "100%",
+          },
+          Object {
+            "backgroundColor": "#ffffff",
+          },
+        ]
+      }
+    />
+  </ReactNativeModal>
+</Styled(Container)>
+`;
