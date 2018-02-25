@@ -32,13 +32,17 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "node node_modules/eslint/bin/eslint.js './**/*.js'",
-    "test": "node_modules/.bin/jest && npm run lint",
-    "jest": "node_modules/.bin/jest",
+    "test": "npm run jest && npm run lint",
+    "jest": "node_modules/.bin/jest --coverage",
     "test:watch": "node_modules/.bin/jest --watch",
     "test:coverage": "node_modules/.bin/jest --coverage"
   },
   "jest": {
     "preset": "jest-expo",
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": ["/node_modules/", "/assets/", "/__tests__/", "/jest/"],
+    "coverageReporters": ["html", "lcov"],
+    "coverageDirectory": "./coverage",
     "transformIgnorePatterns": [
       "node_modules/(?!react-native|expo|@expo/vector-icons|react-navigation|native-base|native-base-shoutem-theme|@shoutem/theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)"
     ],
