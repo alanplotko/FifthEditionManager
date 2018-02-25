@@ -3,6 +3,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { COLOR, Icon, IconToggle } from 'react-native-material-ui';
+import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 const Note = (props) => {
   let color = COLOR.yellow500;
@@ -112,10 +113,10 @@ const styles = StyleSheet.create({
 });
 
 Note.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.node,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   icon: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
   collapsible: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   toggleNoteHandler: PropTypes.func,
@@ -123,14 +124,11 @@ Note.propTypes = {
 };
 
 Note.defaultProps = {
-  title: '',
-  children: null,
   icon: null,
-  type: '',
   collapsible: false,
   isCollapsed: false,
   toggleNoteHandler: () => null,
-  uiTheme: undefined,
+  uiTheme: DefaultTheme,
 };
 
 export default Note;

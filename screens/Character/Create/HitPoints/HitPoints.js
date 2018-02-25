@@ -67,7 +67,7 @@ export default class HitPoints extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

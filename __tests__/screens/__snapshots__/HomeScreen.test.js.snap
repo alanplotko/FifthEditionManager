@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Home screen displays activity indicator when loading data 1`] = `
+exports[`Home Screen displays activity indicator when loading data 1`] = `
 <Styled(Container)
   style={
     Array [
@@ -24,7 +24,7 @@ exports[`Home screen displays activity indicator when loading data 1`] = `
 </Styled(Container)>
 `;
 
-exports[`Home screen displays default messages in tabs when no data exists 1`] = `
+exports[`Home Screen displays default messages in tabs when no data exists 1`] = `
 <Styled(Container)
   style={
     Array [
@@ -308,6 +308,7 @@ exports[`Home screen displays default messages in tabs when no data exists 1`] =
     backdropOpacity={0.5}
     backdropTransitionInTiming={300}
     backdropTransitionOutTiming={300}
+    hideModalContentWhileAnimating={false}
     isVisible={false}
     onBackButtonPress={[Function]}
     onBackdropPress={[Function]}

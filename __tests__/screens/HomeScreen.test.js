@@ -1,18 +1,11 @@
 import React from 'react';
 import { HomeScreen } from 'FifthEditionManager/screens/HomeScreen';
-import { uiTheme } from 'FifthEditionManager/App';
-import MockStorage from 'FifthEditionManager/jest/MockStorage';
-import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
 import { Tab } from 'native-base';
-import { ActionButton, Icon } from 'react-native-material-ui';
+import { Icon } from 'react-native-material-ui';
 
-const storageCache = {};
-const AsyncStorage = new MockStorage(storageCache);
-jest.setMock('AsyncStorage', AsyncStorage);
-
-describe('Home screen', () => {
+describe('Home Screen', () => {
   const navigation = { navigate: jest.fn() };
-  const context = { uiTheme };
+  const context = { uiTheme: DefaultTheme };
 
   test('displays activity indicator when loading data', () => {
     const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
@@ -108,8 +101,8 @@ describe('Home screen', () => {
         name: 'SetCharacterRace',
       },
     ];
-    expect(wrapper.find(ActionButton).prop('actions')).toHaveLength(2);
-    wrapper.find(ActionButton).prop('actions')
+    expect(wrapper.find('ActionButton').prop('actions')).toHaveLength(2);
+    wrapper.find('ActionButton').prop('actions')
       .map((action, i) => expect(action).toMatchObject(actions[i]));
   });
 
@@ -122,14 +115,14 @@ describe('Home screen', () => {
     // Confirm that fab options can be navigated to
     expect(navigateSpy.notCalled).toBe(true);
 
-    wrapper.find(ActionButton).prop('actions').map((action, i) => {
-      wrapper.find(ActionButton).props().onPress(action.name);
+    wrapper.find('ActionButton').prop('actions').map((action, i) => {
+      wrapper.find('ActionButton').props().onPress(action.name);
       expect(navigateSpy.getCall(i).args).toHaveLength(1);
       return expect(navigateSpy.getCall(i).args[0]).toEqual(action.name);
     });
 
     // Navigate called once for each fab action
-    expect(navigateSpy.callCount).toEqual(wrapper.find(ActionButton).prop('actions').length);
+    expect(navigateSpy.callCount).toEqual(wrapper.find('ActionButton').prop('actions').length);
     navigateSpy.restore();
   });
 });

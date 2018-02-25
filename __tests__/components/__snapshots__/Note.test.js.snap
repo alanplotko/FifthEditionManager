@@ -1,0 +1,424 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Note can expand and collapse properly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#e1f5fe",
+      "borderColor": "#03a9f4",
+      "borderRadius": 3,
+      "borderWidth": 0.5,
+      "marginBottom": 15,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+      }
+    }
+  >
+    <IconToggle
+      color="#03a9f4"
+      name="arrow-drop-down"
+      onPress={[Function]}
+      percent={50}
+      size={28}
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+        "marginBottom": 0,
+      }
+    }
+  >
+    <Icon
+      color="#03a9f4"
+      name="info"
+      style={
+        Object {
+          "marginRight": 10,
+        }
+      }
+    />
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "RobotoBold",
+            "fontSize": 18,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      collapsed
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Note can expand and collapse properly 2`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#e1f5fe",
+      "borderColor": "#03a9f4",
+      "borderRadius": 3,
+      "borderWidth": 0.5,
+      "marginBottom": 15,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+      }
+    }
+  >
+    <IconToggle
+      color="#03a9f4"
+      name="arrow-drop-up"
+      onPress={[Function]}
+      percent={50}
+      size={28}
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+        "marginBottom": 10,
+      }
+    }
+  >
+    <Icon
+      color="#03a9f4"
+      name="info"
+      style={
+        Object {
+          "marginRight": 10,
+        }
+      }
+    />
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "RobotoBold",
+            "fontSize": 18,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      collapsed
+    </Text>
+  </View>
+  <View
+    style={Object {}}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        expanded
+      </Text>
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Note can expand and collapse properly 3`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#e1f5fe",
+      "borderColor": "#03a9f4",
+      "borderRadius": 3,
+      "borderWidth": 0.5,
+      "marginBottom": 15,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+      }
+    }
+  >
+    <IconToggle
+      color="#03a9f4"
+      name="arrow-drop-down"
+      onPress={[Function]}
+      percent={50}
+      size={28}
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+        "marginBottom": 0,
+      }
+    }
+  >
+    <Icon
+      color="#03a9f4"
+      name="info"
+      style={
+        Object {
+          "marginRight": 10,
+        }
+      }
+    />
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "RobotoBold",
+            "fontSize": 18,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      collapsed
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Note renders as error note with error type 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#ffebee",
+      "borderColor": "#f44336",
+      "borderRadius": 3,
+      "borderWidth": 0.5,
+      "marginBottom": 15,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+        "marginBottom": 10,
+      }
+    }
+  >
+    <Icon
+      color="#f44336"
+      name="error"
+      style={
+        Object {
+          "marginRight": 10,
+        }
+      }
+    />
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "RobotoBold",
+            "fontSize": 18,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      Error
+    </Text>
+  </View>
+  <View
+    style={Object {}}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        An error occurred!
+      </Text>
+    </Text>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "fontStyle": "italic",
+          "marginTop": 10,
+          "textAlign": "right",
+        }
+      }
+    >
+      Last attempted 
+      12:00:00 AM
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Note renders as info note with info type 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#e1f5fe",
+      "borderColor": "#03a9f4",
+      "borderRadius": 3,
+      "borderWidth": 0.5,
+      "marginBottom": 15,
+      "padding": 15,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+        "marginBottom": 10,
+      }
+    }
+  >
+    <Icon
+      color="#03a9f4"
+      name="info"
+      style={
+        Object {
+          "marginRight": 10,
+        }
+      }
+    />
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "RobotoBold",
+            "fontSize": 18,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      Info
+    </Text>
+  </View>
+  <View
+    style={Object {}}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
+          },
+          Object {
+            "color": "#000000",
+          },
+        ]
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        Information here.
+      </Text>
+    </Text>
+  </View>
+</View>
+`;

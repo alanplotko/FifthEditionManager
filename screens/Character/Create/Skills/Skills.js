@@ -35,7 +35,7 @@ export default class Skills extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -198,7 +198,7 @@ export default class HomeScreen extends React.Component {
               <FlatList
                 data={this.state.activity}
                 renderItem={
-                  ({ item }) => <ActivityCard activity={item} uiTheme={this.context.uiTheme} />
+                  ({ item }) => <ActivityCard activity={item} />
                 }
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.handleRefresh}

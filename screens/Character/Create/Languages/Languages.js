@@ -28,7 +28,7 @@ export default class Languages extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

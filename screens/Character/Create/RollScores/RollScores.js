@@ -30,7 +30,7 @@ export default class RollScores extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);
