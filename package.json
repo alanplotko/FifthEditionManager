@@ -32,7 +32,7 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "node node_modules/eslint/bin/eslint.js './**/*.js'",
-    "test": "npm run jest:coverage && npm run lint",
+    "test": "yarn run jest:coverage && yarn run lint",
     "jest": "node_modules/.bin/jest",
     "jest:watch": "node_modules/.bin/jest --watch",
     "jest:coverage": "node_modules/.bin/jest --coverage"
