@@ -242,7 +242,7 @@ exports[`Note can expand and collapse properly 3`] = `
 </View>
 `;
 
-exports[`Note renders as error note with error type 1`] = `
+exports[`Note renders properly as error note with error type 1`] = `
 <View
   style={
     Object {
@@ -340,7 +340,7 @@ exports[`Note renders as error note with error type 1`] = `
 </View>
 `;
 
-exports[`Note renders as info note with info type 1`] = `
+exports[`Note renders properly as info note with info type 1`] = `
 <View
   style={
     Object {

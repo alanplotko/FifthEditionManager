@@ -46,15 +46,7 @@ const cacheImages = images =>
 const messageIconStyle = { fontSize: 156, color: COLOR.grey400 };
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isReady: false,
-      error: null,
-    };
-  }
-
-  loadAssetsAsync = () => {
+  static loadAssetsAsync() {
     const imageAssets = cacheImages([
       ...Object.values(IMAGES.RACE),
       ...Object.values(IMAGES.BASE_CLASS.ICON),
@@ -64,6 +56,14 @@ export default class App extends React.Component {
       RobotoThin, RobotoLight, RobotoRegular, RobotoBold,
     });
     return Promise.all([imageAssets, fontAssets]);
+  }
+
+  constructor() {
+    super();
+    this.state = {
+      isReady: false,
+      error: null,
+    };
   }
 
   render() {
@@ -100,7 +100,7 @@ export default class App extends React.Component {
     if (!this.state.isReady) {
       return (
         <AppLoading
-          startAsync={this.loadAssetsAsync}
+          startAsync={App.loadAssetsAsync}
           onFinish={() => this.setState({ isReady: true })}
           onError={error => this.setState({ error })}
         />

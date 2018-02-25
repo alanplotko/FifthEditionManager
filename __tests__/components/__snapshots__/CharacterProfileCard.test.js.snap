@@ -558,7 +558,225 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
 </View>
 `;
 
-exports[`Character Profile Card renders properly 1`] = `
+exports[`Character Profile Card renders properly for characters at max level 1`] = `
+<Styled(Card)
+  style={
+    Object {
+      "marginLeft": 10,
+      "marginRight": 10,
+      "marginTop": 10,
+    }
+  }
+>
+  <Styled(CardItem)
+    cardBody={true}
+  >
+    <Image
+      style={
+        Object {
+          "flex": 1,
+          "height": 100,
+          "width": null,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+    >
+      <IconToggle
+        color="#ffffff"
+        name="more-vert"
+        onPress={[Function]}
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "bottom": 0,
+          "position": "absolute",
+          "right": 0,
+        }
+      }
+    >
+      <Styled(Text)
+        style={
+          Array [
+            Object {
+              "borderTopLeftRadius": 5,
+              "color": "#ffffff",
+              "fontFamily": "Roboto",
+              "fontSize": 12,
+              "fontStyle": "italic",
+              "paddingBottom": 3,
+              "paddingLeft": 5,
+              "paddingRight": 5,
+              "paddingTop": 3,
+            },
+            Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.7)",
+            },
+          ]
+        }
+      >
+        Last updated 
+        a few seconds ago
+      </Styled(Text)>
+    </View>
+  </Styled(CardItem)>
+  <Styled(CardItem)>
+    <Styled(Left)
+      style={
+        Object {
+          "flex": 2,
+        }
+      }
+    >
+      <Image
+        resizeMode="contain"
+        style={
+          Object {
+            "height": 64,
+            "width": 48,
+          }
+        }
+      />
+      <Styled(Body)>
+        <Styled(Text)
+          numberOfLines={1}
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "RobotoLight",
+                "fontSize": 18,
+                "width": 175,
+              },
+              Object {
+                "color": "#000000",
+              },
+            ]
+          }
+        >
+          First Last
+           
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Array [
+              Object {
+                "color": "#9e9e9e",
+                "fontFamily": "Roboto",
+                "fontSize": 14,
+              },
+              Object {
+                "color": "#9e9e9e",
+              },
+            ]
+          }
+        >
+          Race
+           
+          Class
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Array [
+              Object {
+                "color": "#9e9e9e",
+                "fontFamily": "Roboto",
+                "fontSize": 14,
+              },
+              Object {
+                "color": "#9e9e9e",
+              },
+            ]
+          }
+        >
+          Background
+        </Styled(Text)>
+      </Styled(Body)>
+    </Styled(Left)>
+    <Styled(Right)
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Styled(Text)
+          style={
+            Array [
+              Object {
+                "color": "#9e9e9e",
+                "fontFamily": "RobotoLight",
+                "fontSize": 16,
+              },
+              Object {
+                "color": "#9e9e9e",
+              },
+            ]
+          }
+        >
+          Level 
+          20
+        </Styled(Text)>
+        <ProgressBar
+          animated={false}
+          animationConfig={
+            Object {
+              "bounciness": 0,
+            }
+          }
+          animationType="spring"
+          borderColor="#3f51b5"
+          borderRadius={4}
+          borderWidth={1}
+          color="#3f51b5"
+          height={6}
+          indeterminate={false}
+          progress={1}
+          style={
+            Object {
+              "marginBottom": 3,
+              "marginTop": 3,
+            }
+          }
+          useNativeDriver={false}
+          width={100}
+        />
+        <Styled(Text)
+          style={
+            Object {
+              "color": "#9e9e9e",
+              "fontFamily": "RobotoLight",
+              "fontSize": 14,
+            }
+          }
+        >
+          355.0k
+        </Styled(Text)>
+      </View>
+    </Styled(Right)>
+  </Styled(CardItem)>
+</Styled(Card)>
+`;
+
+exports[`Character Profile Card renders properly for characters below max level 1`] = `
 <Styled(Card)
   style={
     Object {

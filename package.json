@@ -32,14 +32,13 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "node node_modules/eslint/bin/eslint.js './**/*.js'",
-    "test": "npm run jest && npm run lint",
-    "jest": "node_modules/.bin/jest --coverage",
-    "test:watch": "node_modules/.bin/jest --watch",
-    "test:coverage": "node_modules/.bin/jest --coverage"
+    "test": "npm run jest:coverage && npm run lint",
+    "jest": "node_modules/.bin/jest",
+    "jest:watch": "node_modules/.bin/jest --watch",
+    "jest:coverage": "node_modules/.bin/jest --coverage"
   },
   "jest": {
     "preset": "jest-expo",
-    "collectCoverage": true,
     "coveragePathIgnorePatterns": ["/node_modules/", "/assets/", "/__tests__/", "/jest/"],
     "coverageReporters": ["html", "lcov"],
     "coverageDirectory": "./coverage",

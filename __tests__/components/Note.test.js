@@ -2,6 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import Note from 'FifthEditionManager/components/Note';
 
+// Define wrapper component for testing interaction with child Note component
 class NoteWrapper extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +28,7 @@ describe('Note', () => {
   let timeStub;
 
   beforeEach(() => {
+    // Use consistent date for tests
     timeStub = sinon.stub(Date, 'now').returns(0);
   });
 
@@ -34,12 +36,46 @@ describe('Note', () => {
     timeStub.restore();
   });
 
-  test('renders as error note with error type', () => {
+  test('catches missing note handler when collapsible', () => {
+    // Spy setup for ensuring prop check occurs; stub console error warnings
+    const notePropSpy = sinon.spy(Note.propTypes, 'toggleNoteHandler');
+    const consoleStub = sinon.stub(console, 'error');
+
+    // Expect error message
+    const errorMessage = 'Prop `toggleNoteHandler` not supplied to `Note`. Required when note is collapsible. Validation failed.';
+    expect(notePropSpy.notCalled).toBe(true);
+    shallow(<Note title="Error" icon="error" type="error" collapsible isCollapsed><Text>An error occurred!</Text></Note>);
+    expect(notePropSpy.calledOnce).toBe(true);
+    expect(notePropSpy.alwaysReturned(sinon.match({ message: errorMessage }))).toBe(true);
+
+    // Clean up spy/stub
+    notePropSpy.restore();
+    consoleStub.restore();
+  });
+
+  test('catches invalid note handler when collapsible', () => {
+    // Spy setup for ensuring prop check occurs; stub console error warnings
+    const notePropSpy = sinon.spy(Note.propTypes, 'toggleNoteHandler');
+    const consoleStub = sinon.stub(console, 'error');
+
+    // Expect error message
+    const errorMessage = 'Invalid prop `toggleNoteHandler` supplied to `Note`. Type `function` expected. Validation failed.';
+    expect(notePropSpy.notCalled).toBe(true);
+    shallow(<Note title="Error" icon="error" type="error" collapsible isCollapsed toggleNoteHandler="Invalid Type"><Text>An error occurred!</Text></Note>);
+    expect(notePropSpy.calledOnce).toBe(true);
+    expect(notePropSpy.alwaysReturned(sinon.match({ message: errorMessage }))).toBe(true);
+
+    // Clean up spy/stub
+    notePropSpy.restore();
+    consoleStub.restore();
+  });
+
+  test('renders properly as error note with error type', () => {
     const wrapper = shallow(<Note title="Error" icon="error" type="error"><Text>An error occurred!</Text></Note>);
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('renders as info note with info type', () => {
+  test('renders properly as info note with info type', () => {
     const wrapper = shallow(<Note title="Info" icon="info" type="info"><Text>Information here.</Text></Note>);
     expect(wrapper).toMatchSnapshot();
   });
@@ -47,23 +83,23 @@ describe('Note', () => {
   test('can expand and collapse properly', () => {
     const wrapper = shallow(<NoteWrapper />);
 
-    // Collapsed by default
+    // Note should be collapsed by default
     expect(wrapper.dive()).toMatchSnapshot();
     expect(wrapper.dive().find('Text').last().dive().text()).toEqual('collapsed');
 
-    // Toggle to expand
+    // User must press the 'dropdown arrow' icon to expand the note
     wrapper.dive().find('IconToggle').props().onPress();
     wrapper.update();
 
-    // Expanded for the first time
+    // Note should be expanded for the first time
     expect(wrapper.dive()).toMatchSnapshot();
     expect(wrapper.dive().find('Text').last().dive().text()).toEqual('expanded');
 
-    // Toggle to collapse
+    // User must press the 'dropdown arrow' icon to collapse the note
     wrapper.dive().find('IconToggle').props().onPress();
     wrapper.update();
 
-    // Collapsed again
+    // Note should be collapsed again
     expect(wrapper.dive()).toMatchSnapshot();
     expect(wrapper.dive().find('Text').last().dive().text()).toEqual('collapsed');
   });

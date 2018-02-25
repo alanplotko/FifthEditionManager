@@ -10,8 +10,6 @@ import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 const activityIconStyle = { position: 'absolute', top: 12, left: 12 };
 
 const ActivityCard = (props) => {
-  if (!props.activity) return null;
-
   // Theme setup
   const headingColor = { color: props.uiTheme.palette.textColor };
   const noteColor = { color: props.uiTheme.palette.noteColor };

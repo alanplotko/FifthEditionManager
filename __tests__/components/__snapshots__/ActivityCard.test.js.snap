@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Activity Card renders properly 1`] = `
+exports[`Activity Card renders properly with icon 1`] = `
 <Styled(Card)
   style={
     Object {
@@ -35,6 +35,78 @@ exports[`Activity Card renders properly 1`] = `
               "left": 12,
               "position": "absolute",
               "top": 12,
+            }
+          }
+        />
+      </View>
+      <Styled(Body)
+        style={
+          Object {
+            "paddingLeft": 10,
+          }
+        }
+      >
+        <Styled(Text)
+          style={
+            Array [
+              Object {
+                "fontFamily": "RobotoLight",
+                "fontSize": 18,
+              },
+              Object {
+                "color": "#000000",
+              },
+            ]
+          }
+        >
+          Created a new character!
+        </Styled(Text)>
+        <Styled(Text)
+          style={
+            Array [
+              Object {
+                "fontFamily": "Roboto",
+                "fontSize": 14,
+              },
+              Object {
+                "color": "#9e9e9e",
+              },
+            ]
+          }
+        >
+          First Last
+           • 
+          a few seconds ago
+        </Styled(Text)>
+      </Styled(Body)>
+    </Styled(Left)>
+  </Styled(CardItem)>
+</Styled(Card)>
+`;
+
+exports[`Activity Card renders properly without icon 1`] = `
+<Styled(Card)
+  style={
+    Object {
+      "marginBottom": 10,
+    }
+  }
+>
+  <Styled(CardItem)
+    cardBody={true}
+  >
+    <Styled(Left)>
+      <View>
+        <Image
+          blurRadius={0}
+          resizeMode="cover"
+          source={1}
+          style={
+            Object {
+              "borderBottomLeftRadius": 2,
+              "borderTopLeftRadius": 2,
+              "height": 72,
+              "width": 72,
             }
           }
         />

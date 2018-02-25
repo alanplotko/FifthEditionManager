@@ -42,8 +42,6 @@ const navText = {
 };
 
 const CharacterProfileCard = (props) => {
-  if (!props.character) return null;
-
   // Theme setup
   const {
     primaryColor,
@@ -220,18 +218,14 @@ const styles = StyleSheet.create({
 
 CharacterProfileCard.propTypes = {
   character: PropTypes.object.isRequired,
-  modalHandler: PropTypes.func,
-  viewHandler: PropTypes.func,
-  editHandler: PropTypes.func,
-  deleteHandler: PropTypes.func,
+  modalHandler: PropTypes.func.isRequired,
+  viewHandler: PropTypes.func.isRequired,
+  editHandler: PropTypes.func.isRequired,
+  deleteHandler: PropTypes.func.isRequired,
   uiTheme: PropTypes.object,
 };
 
 CharacterProfileCard.defaultProps = {
-  modalHandler: () => null,
-  viewHandler: () => null,
-  editHandler: () => null,
-  deleteHandler: () => null,
   uiTheme: DefaultTheme,
 };
 

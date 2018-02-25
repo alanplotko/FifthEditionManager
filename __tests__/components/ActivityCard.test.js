@@ -1,5 +1,6 @@
 import React from 'react';
 import ActivityCard from 'FifthEditionManager/components/ActivityCard';
+import { cloneDeep } from 'lodash';
 
 describe('Activity Card', () => {
   const activity = {
@@ -13,13 +14,16 @@ describe('Activity Card', () => {
     },
   };
 
-  test('returns null without activity', () => {
-    const wrapper = shallow(<ActivityCard />);
-    expect(wrapper.type()).toEqual(null);
+  test('renders properly with icon', () => {
+    const wrapper = shallow(<ActivityCard activity={activity} uiTheme={DefaultTheme} />);
+    expect(wrapper).toMatchSnapshot();
   });
 
-  test('renders properly', () => {
-    const wrapper = shallow(<ActivityCard activity={activity} uiTheme={DefaultTheme} />);
+  test('renders properly without icon', () => {
+    // Override default activity to have no icon
+    const activityNoIcon = cloneDeep(activity);
+    activityNoIcon.icon = null;
+    const wrapper = shallow(<ActivityCard activity={activityNoIcon} uiTheme={DefaultTheme} />);
     expect(wrapper).toMatchSnapshot();
   });
 });
