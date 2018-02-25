@@ -10,19 +10,11 @@ Enzyme.configure({ adapter: new Adapter() });
 
 require('react-native-mock-render/mock');
 
-// Ignore React Web errors when using React Native
-console.error = message => message; // eslint-disable-line no-console
-
 // Mock components
 jest.mock('ScrollView', () => {
   // eslint-disable-next-line global-require
   const mockComponent = require('react-native/jest/mockComponent');
   return mockComponent('ScrollView');
-});
-jest.mock('Modal', () => {
-  // eslint-disable-next-line global-require
-  const mockComponent = require('react-native/jest/mockComponent');
-  return mockComponent('Modal');
 });
 jest.mock('react-native-material-ui/src/Icon', () => 'Icon');
 jest.mock('react-native-material-ui/src/IconToggle', () => 'IconToggle');

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfileCard';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
+import { EXPERIENCE } from 'FifthEditionManager/config/Info';
+import { cloneDeep } from 'lodash';
 
+// Define wrapper component for testing interaction with child CharacterProfileCard component
 class CharacterProfileCardWrapper extends React.Component {
   static propTypes = {
     character: PropTypes.object.isRequired,
@@ -54,71 +57,110 @@ describe('Character Profile Card', () => {
       experience: 0,
     },
   };
+  let modalStub;
+  let viewStub;
+  let editStub;
+  let deleteStub;
   let timeStub;
 
   beforeEach(() => {
+    // Use consistent date for tests
     timeStub = sinon.stub(Date, 'now').returns(0);
+
+    modalStub = sinon.stub();
+    viewStub = sinon.stub();
+    editStub = sinon.stub();
+    deleteStub = sinon.stub();
   });
 
   afterEach(() => {
     timeStub.restore();
+    modalStub.reset();
+    viewStub.reset();
+    editStub.reset();
+    deleteStub.reset();
   });
 
-  test('returns null without character', () => {
-    const wrapper = shallow(<CharacterProfileCard />);
-    expect(wrapper.type()).toEqual(null);
-  });
-
-  test('renders properly', () => {
-    const wrapper = shallow(<CharacterProfileCard character={character} uiTheme={DefaultTheme} />);
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  test('can toggle the modal', () => {
-    const modalStub = sinon.stub();
+  test('renders properly for characters below max level', () => {
     const wrapper = shallow(<CharacterProfileCard
       character={character}
       uiTheme={DefaultTheme}
       modalHandler={modalStub}
+      viewHandler={viewStub}
+      editHandler={editStub}
+      deleteHandler={deleteStub}
     />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  test('renders properly for characters at max level', () => {
+    // Override default character to have max level
+    const characterMaxLevel = cloneDeep(character);
+    characterMaxLevel.profile.level = EXPERIENCE.length;
+    characterMaxLevel.profile.experience = EXPERIENCE[EXPERIENCE.length - 1];
+
+    const wrapper = shallow(<CharacterProfileCard
+      character={characterMaxLevel}
+      uiTheme={DefaultTheme}
+      modalHandler={modalStub}
+      viewHandler={viewStub}
+      editHandler={editStub}
+      deleteHandler={deleteStub}
+    />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  test('can toggle the modal', () => {
+    const wrapper = shallow(<CharacterProfileCard
+      character={character}
+      uiTheme={DefaultTheme}
+      modalHandler={modalStub}
+      viewHandler={viewStub}
+      editHandler={editStub}
+      deleteHandler={deleteStub}
+    />);
+
+    // 'More options' icon not pressed
     expect(modalStub.notCalled).toBe(true);
+
+    // User must press the 'more options' icon to open the modal
     wrapper.find('IconToggle').props().onPress();
+
+    // Modal should be open
     expect(modalStub.calledOnce).toBe(true);
   });
 
   test('can select all options in the modal', () => {
-    const viewStub = sinon.stub();
-    const editStub = sinon.stub();
-    const deleteStub = sinon.stub();
     const wrapper = shallow(<CharacterProfileCardWrapper
       character={character}
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />);
+    />, { uiTheme: DefaultTheme });
 
     // No options selected
     expect(viewStub.notCalled).toBe(true);
     expect(editStub.notCalled).toBe(true);
     expect(deleteStub.notCalled).toBe(true);
 
-    // Modal closed
+    // Modal should be closed
     expect(wrapper).toMatchSnapshot();
 
-    // Open modal
+    // User must press the 'more options' icon to open the modal
     wrapper.find('CharacterProfileCard').dive().find('IconToggle').props().onPress();
     wrapper.update();
-    expect(wrapper.find('ReactNativeModal').children().find('ListItem')).toHaveLength(4);
 
-    // Modal opened
+    // Modal should be open
     expect(wrapper).toMatchSnapshot();
 
+    // Modal should have 4 rows (character name and the three options: view, edit, delete)
+    expect(wrapper.find('ReactNativeModal').children().find('ListItem')).toHaveLength(4);
+
+    // Option handlers should execute on press
     wrapper.find('ReactNativeModal').children().find('ListItem').at(1).props().onPress();
     expect(viewStub.calledOnce).toBe(true);
-
     wrapper.find('ReactNativeModal').children().find('ListItem').at(2).props().onPress();
     expect(editStub.calledOnce).toBe(true);
-
     wrapper.find('ReactNativeModal').children().find('ListItem').at(3).props().onPress();
     expect(deleteStub.calledOnce).toBe(true);
   });

@@ -6,10 +6,9 @@ import { COLOR, Icon, IconToggle } from 'react-native-material-ui';
 import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 const Note = (props) => {
-  let color = COLOR.yellow500;
-  if (props.type === 'info') {
-    color = COLOR.lightBlue500;
-  } else if (props.type === 'error') {
+  // Note color setup
+  let color = COLOR.lightBlue500; // Default for info note
+  if (props.type === 'error') {
     color = COLOR.red500;
   }
 
@@ -119,7 +118,18 @@ Note.propTypes = {
   type: PropTypes.string.isRequired,
   collapsible: PropTypes.bool,
   isCollapsed: PropTypes.bool,
-  toggleNoteHandler: PropTypes.func,
+  // Require function only when collapsible prop is true
+  toggleNoteHandler: (props, propName, componentName) => {
+    const value = props[propName];
+    if (props.collapsible) {
+      if (!value) {
+        return new Error(`Prop \`${propName}\` not supplied to \`${componentName}\`. Required when note is collapsible. Validation failed.`);
+      } else if (typeof value !== 'function') {
+        return new Error(`Invalid prop \`${propName}\` supplied to \`${componentName}\`. Type \`function\` expected. Validation failed.`);
+      }
+    }
+    return null;
+  },
   uiTheme: PropTypes.object,
 };
 
@@ -127,7 +137,7 @@ Note.defaultProps = {
   icon: null,
   collapsible: false,
   isCollapsed: false,
-  toggleNoteHandler: () => null,
+  toggleNoteHandler: undefined,
   uiTheme: DefaultTheme,
 };
 

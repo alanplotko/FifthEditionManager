@@ -1,4 +1,4 @@
-import React from 'react'; // Needed for any JSX in file
+import React from 'react'; // Needed for any JSX in a file
 import { Text } from 'react-native';
 import { COLOR } from 'react-native-material-ui';
 
