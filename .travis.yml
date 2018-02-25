@@ -9,6 +9,7 @@ node_js: '9'
 
 before_install:
   - npm i -g npm@4.6.1
+  - npm --version
 
 after_success:
   - codeclimate-test-reporter < coverage/lcov.info
