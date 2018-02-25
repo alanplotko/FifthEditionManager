@@ -4,6 +4,8 @@
 
 [![dependencies Status](https://david-dm.org/alanplotko/FifthEditionManager/status.svg)](https://david-dm.org/alanplotko/FifthEditionManager)
 [![devDependencies Status](https://david-dm.org/alanplotko/FifthEditionManager/dev-status.svg)](https://david-dm.org/alanplotko/FifthEditionManager?type=dev)
+[![Build Status](https://travis-ci.org/alanplotko/FifthEditionManager.svg?branch=master)](https://travis-ci.org/alanplotko/FifthEditionManager)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4730c23619301165baf7/test_coverage)](https://codeclimate.com/github/alanplotko/FifthEditionManager/test_coverage)
 
 Fifth Edition Manager is a mobile app for managing your campaigns and characters. It is aimed towards GMs and players regardless of experience.
 
