@@ -7,6 +7,7 @@ import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE, IMAGES } from 'FifthEditionManager/config/Info';
 import { getCharacterDisplayName } from 'FifthEditionManager/util';
+import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1
@@ -41,6 +42,8 @@ const navText = {
 };
 
 const CharacterProfileCard = (props) => {
+  if (!props.character) return null;
+
   // Theme setup
   const {
     primaryColor,
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
 });
 
 CharacterProfileCard.propTypes = {
-  character: PropTypes.object,
+  character: PropTypes.object.isRequired,
   modalHandler: PropTypes.func,
   viewHandler: PropTypes.func,
   editHandler: PropTypes.func,
@@ -225,12 +228,11 @@ CharacterProfileCard.propTypes = {
 };
 
 CharacterProfileCard.defaultProps = {
-  character: undefined,
   modalHandler: () => null,
   viewHandler: () => null,
   editHandler: () => null,
   deleteHandler: () => null,
-  uiTheme: undefined,
+  uiTheme: DefaultTheme,
 };
 
 export default CharacterProfileCard;

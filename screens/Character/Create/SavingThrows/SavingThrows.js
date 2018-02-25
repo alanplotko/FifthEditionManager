@@ -9,7 +9,7 @@ import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import { cloneDeep, zipObject } from 'lodash';
 
-export default class ReviewSavingThrows extends React.Component {
+export default class SavingThrows extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {
@@ -27,7 +27,7 @@ export default class ReviewSavingThrows extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

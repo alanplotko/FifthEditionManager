@@ -21,7 +21,7 @@ const chance = new Chance();
 const backgrounds = BACKGROUNDS.map(background => ({ key: background.key, name: background.name }));
 const BackgroundType = backgrounds.reduce((o, background) =>
   Object.assign(o, { [background.key]: background.name }), {});
-const CharacterBackground = t.struct({ background: t.enums(BackgroundType) });
+const BackgroundForm = t.struct({ background: t.enums(BackgroundType) });
 
 /**
  * Form stylesheet setup
@@ -38,7 +38,7 @@ stylesheet.select.error.flex = 1;
 stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
-export default class SetCharacterBackground extends React.Component {
+export default class CharacterBackground extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -142,7 +142,7 @@ export default class SetCharacterBackground extends React.Component {
           <View style={{ margin: 20, alignItems: 'center' }}>
             <t.form.Form
               ref={(c) => { this.form = c; }}
-              type={CharacterBackground}
+              type={BackgroundForm}
               value={this.state.form}
               options={this.formOptions}
               onChange={this.onChange}

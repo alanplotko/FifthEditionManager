@@ -10,7 +10,7 @@ import { RACES, BACKGROUNDS, LANGUAGES } from 'FifthEditionManager/config/Info';
 import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 
-export default class AssignLanguages extends React.Component {
+export default class Languages extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const props = {
@@ -28,7 +28,7 @@ export default class AssignLanguages extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

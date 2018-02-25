@@ -3,12 +3,15 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Card, CardItem, Text, Left, Body } from 'native-base';
 import { StyleSheet, Image, View } from 'react-native';
-import { COLOR, Icon } from 'react-native-material-ui';
+import { Icon } from 'react-native-material-ui';
+import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 // Styles
 const activityIconStyle = { position: 'absolute', top: 12, left: 12 };
 
 const ActivityCard = (props) => {
+  if (!props.activity) return null;
+
   // Theme setup
   const headingColor = { color: props.uiTheme.palette.textColor };
   const noteColor = { color: props.uiTheme.palette.noteColor };
@@ -18,12 +21,15 @@ const ActivityCard = (props) => {
       <CardItem cardBody>
         <Left>
           <View>
-            <Image
-              style={styles.thumbnail}
-              resizeMode="cover"
-              source={props.activity.thumbnail}
-              blurRadius={props.activity.icon ? 10 : 0}
-            />
+            {
+              props.activity.thumbnail &&
+              <Image
+                style={styles.thumbnail}
+                resizeMode="cover"
+                source={props.activity.thumbnail}
+                blurRadius={props.activity.icon ? 10 : 0}
+              />
+            }
             {
               props.activity.icon &&
               <Icon
@@ -59,12 +65,10 @@ const styles = StyleSheet.create({
   heading: {
     fontFamily: 'RobotoLight',
     fontSize: 18,
-    color: COLOR.black,
   },
   subheading: {
     fontFamily: 'Roboto',
     fontSize: 14,
-    color: COLOR.grey500,
   },
   thumbnail: {
     height: 72,
@@ -84,13 +88,12 @@ ActivityCard.propTypes = {
       name: PropTypes.string,
       color: PropTypes.string,
     }),
-  }),
+  }).isRequired,
   uiTheme: PropTypes.object,
 };
 
 ActivityCard.defaultProps = {
-  activity: undefined,
-  uiTheme: undefined,
+  uiTheme: DefaultTheme,
 };
 
 export default ActivityCard;

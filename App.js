@@ -1,47 +1,18 @@
 import { AppLoading, Asset, Font } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+
+// Assets
 import { IMAGES } from 'FifthEditionManager/config/Info';
 
 // Screens
-import HomeScreen from 'FifthEditionManager/screens/HomeScreen';
-import CreateCampaignScreen from 'FifthEditionManager/screens/CreateCampaignScreen';
-import * as Character from 'FifthEditionManager/screens/Character';
+import { HomeScreen } from 'FifthEditionManager/screens/HomeScreen';
+import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 
 // UI theme and styles
 import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
 import { StyleSheet, Text, View } from 'react-native';
-
-const uiTheme = {
-  palette: {
-    // Main colors
-    primaryColor: COLOR.indigo500,
-    accentColor: COLOR.red500,
-    backgroundColor: COLOR.grey200,
-    modalBackgroundColor: COLOR.white,
-    fadedBackgroundColor: 'rgba(0, 0, 0, 0.7)',
-    disabledColor: COLOR.grey300,
-    // Text colors
-    textColor: COLOR.black,
-    fadedTextColor: COLOR.grey700,
-    noteColor: COLOR.grey500,
-    // Icon colors
-    iconColor: COLOR.grey600,
-    backdropIconColor: COLOR.grey400,
-    standardDiceColor: COLOR.grey800,
-    highlightedDiceColor: COLOR.red500,
-  },
-  toolbar: {
-    container: {
-      shadowOpacity: 0,
-      shadowOffset: {
-        height: 0,
-      },
-      shadowRadius: 0,
-      elevation: 0,
-    },
-  },
-};
+import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 // Font assets
 const RobotoThin = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Thin.ttf');
@@ -53,19 +24,18 @@ const RobotoBold = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Bold.
 // Navigation config
 const RootNavigator = StackNavigator({
   Home: { screen: HomeScreen },
-  CreateCampaign: { screen: CreateCampaignScreen },
-  SetCharacterRace: { screen: Character.SetRace },
-  SetCharacterClass: { screen: Character.SetClass },
-  SetCharacterBackground: { screen: Character.SetBackground },
-  SetUpProfile: { screen: Character.SetUpProfile },
-  ChooseScoringMethod: { screen: Character.ChooseScoringMethod },
-  RollAbilityScores: { screen: Character.RollAbilityScores },
-  PointBuyScores: { screen: Character.PointBuyScores },
-  AssignAbilityScores: { screen: Character.AssignAbilityScores },
-  SetSkills: { screen: Character.SetSkills },
-  AssignLanguages: { screen: Character.AssignLanguages },
-  ReviewSavingThrows: { screen: Character.ReviewSavingThrows },
-  ReviewHitPoints: { screen: Character.ReviewHitPoints },
+  SetCharacterRace: { screen: CharacterBuild.CharacterRace },
+  SetCharacterClass: { screen: CharacterBuild.CharacterBaseClass },
+  SetCharacterBackground: { screen: CharacterBuild.CharacterBackground },
+  SetUpProfile: { screen: CharacterBuild.CharacterProfile },
+  ChooseScoringMethod: { screen: CharacterBuild.ScoringMethod },
+  RollAbilityScores: { screen: CharacterBuild.RollScores },
+  PointBuyScores: { screen: CharacterBuild.PointBuyScores },
+  AssignAbilityScores: { screen: CharacterBuild.AbilityScores },
+  SetSkills: { screen: CharacterBuild.Skills },
+  AssignLanguages: { screen: CharacterBuild.Languages },
+  ReviewSavingThrows: { screen: CharacterBuild.SavingThrows },
+  ReviewHitPoints: { screen: CharacterBuild.HitPoints },
 });
 
 const cacheFonts = fonts => Font.loadAsync(fonts);
@@ -98,13 +68,13 @@ export default class App extends React.Component {
 
   render() {
     // Theme setup
-    const { fadedTextColor, backdropIconColor } = uiTheme.palette;
+    const { fadedTextColor, backdropIconColor } = DefaultTheme.palette;
     const fadedTextStyle = { color: fadedTextColor };
     messageIconStyle.color = backdropIconColor;
 
     if (this.state.error) {
       return (
-        <ThemeProvider uiTheme={uiTheme}>
+        <ThemeProvider uiTheme={DefaultTheme}>
           <View style={styles.centered}>
             <Icon name="error" style={messageIconStyle} />
             <Text style={[styles.heading, fadedTextStyle]}>
@@ -136,7 +106,7 @@ export default class App extends React.Component {
         />
       );
     }
-    return <ThemeProvider uiTheme={uiTheme}><RootNavigator /></ThemeProvider>;
+    return <ThemeProvider uiTheme={DefaultTheme}><RootNavigator /></ThemeProvider>;
   }
 }
 

@@ -21,7 +21,7 @@ const abilities = [
   'Charisma',
 ];
 
-export default class AssignAbilityScores extends React.Component {
+export default class AbilityScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -42,7 +42,7 @@ export default class AssignAbilityScores extends React.Component {
 
   static contextTypes = {
     uiTheme: PropTypes.object.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);

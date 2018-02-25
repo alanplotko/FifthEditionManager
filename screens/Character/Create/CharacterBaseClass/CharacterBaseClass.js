@@ -21,7 +21,7 @@ const chance = new Chance();
 const baseClasses = CLASSES.map(baseClass => ({ key: baseClass.key, name: baseClass.name }));
 const BaseClassType = baseClasses.reduce((o, baseClass) =>
   Object.assign(o, { [baseClass.key]: baseClass.name }), {});
-const CharacterBaseClass = t.struct({ baseClass: t.enums(BaseClassType) });
+const BaseClassForm = t.struct({ baseClass: t.enums(BaseClassType) });
 
 /**
  * Form stylesheet setup
@@ -38,7 +38,7 @@ stylesheet.select.error.flex = 1;
 stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
-export default class SetCharacterClass extends React.Component {
+export default class CharacterBaseClass extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -141,7 +141,7 @@ export default class SetCharacterClass extends React.Component {
           <View style={{ margin: 20, alignItems: 'center' }}>
             <t.form.Form
               ref={(c) => { this.form = c; }}
-              type={CharacterBaseClass}
+              type={BaseClassForm}
               value={this.state.form}
               options={this.formOptions}
               onChange={this.onChange}

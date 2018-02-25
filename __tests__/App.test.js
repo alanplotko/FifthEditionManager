@@ -1,20 +1,5 @@
 import React from 'react';
 import App from 'FifthEditionManager/App';
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-/* eslint-disable global-require */
-require('react-native-mock-render/mock');
-/* eslint-enable global-require */
-
-configure({ adapter: new Adapter() });
-
-jest.mock('ScrollView', () => {
-  /* eslint-disable global-require */
-  const mockComponent = require('react-native/jest/mockComponent');
-  /* eslint-enable global-require */
-  return mockComponent('ScrollView');
-});
 
 describe('renders app properly', () => {
   test('before assets have loaded', () => {

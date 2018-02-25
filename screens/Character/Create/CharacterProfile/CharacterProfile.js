@@ -82,7 +82,7 @@ t.String.getValidationErrorMessage = defaultError;
 const AlignmentType = ALIGNMENTS.reduce((o, alignment) =>
   Object.assign(o, { [alignment]: alignment }), {});
 
-const Character = t.struct({
+const ProfileForm = t.struct({
   power: Power,
   firstName: t.String,
   lastName: t.String,
@@ -186,7 +186,7 @@ const options = {
   },
 };
 
-export default class SetUpProfile extends React.Component {
+export default class CharacterProfile extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -353,7 +353,7 @@ export default class SetUpProfile extends React.Component {
           <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="always">
             <t.form.Form
               ref={(c) => { this.form = c; }}
-              type={Character}
+              type={ProfileForm}
               value={this.state.form}
               options={this.state.options}
               onChange={this.onChange}

@@ -1,0 +1,1 @@
+export ScoringMethod from './ScoringMethod';
