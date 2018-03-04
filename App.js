@@ -34,7 +34,6 @@ const RootNavigator = StackNavigator({
   AssignAbilityScores: { screen: CharacterBuild.AbilityScores },
   SetSkills: { screen: CharacterBuild.Skills },
   AssignLanguages: { screen: CharacterBuild.Languages },
-  ReviewSavingThrows: { screen: CharacterBuild.SavingThrows },
   ReviewHitPoints: { screen: CharacterBuild.HitPoints },
 });
 

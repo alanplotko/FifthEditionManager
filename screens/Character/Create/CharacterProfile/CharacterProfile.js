@@ -6,7 +6,9 @@ import { Button, Toolbar } from 'react-native-material-ui';
 import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
 import { ALIGNMENTS, EXPERIENCE, RACES } from 'FifthEditionManager/config/Info';
 import FormStyle from 'FifthEditionManager/stylesheets/FormStyle';
+import Note from 'FifthEditionManager/components/Note';
 import { validateInteger, toProperList } from 'FifthEditionManager/util';
+import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -103,36 +105,30 @@ const ProfileForm = t.struct({
 
 const template = locals => (
   <View>
-    <Text style={FormStyle.heading}>Character Name</Text>
-    <View style={FormStyle.horizontalLayout}>
-      <View style={[styles.flex, styles.leftField]}>
-        {locals.inputs.firstName}
-      </View>
-      <View style={[styles.flex, styles.rightField]}>
-        {locals.inputs.lastName}
+    <View style={{ marginBottom: 20 }}>
+      <Text style={FormStyle.heading}>Character Name</Text>
+      <View style={FormStyle.horizontalLayout}>
+        <View style={[styles.flex, styles.leftField]}>{locals.inputs.firstName}</View>
+        <View style={[styles.flex, styles.rightField]}>{locals.inputs.lastName}</View>
       </View>
     </View>
 
-    <Text style={FormStyle.heading}>Power</Text>
-    {locals.inputs.power}
-
-    <Text style={FormStyle.heading}>About</Text>
-    <View style={styles.flex}>
-      {locals.inputs.gender}
-    </View>
-    <View style={styles.flex}>
-      {locals.inputs.alignment}
+    <View style={{ marginBottom: 20 }}>
+      <Text style={FormStyle.heading}>Power</Text>
+      <View style={styles.flex}>{locals.inputs.power}</View>
     </View>
 
-    <Text style={FormStyle.heading}>Measurements</Text>
-    <View style={styles.flex}>
-      {locals.inputs.age}
+    <View style={{ marginBottom: 20 }}>
+      <Text style={FormStyle.heading}>About</Text>
+      <View style={styles.flex}>{locals.inputs.gender}</View>
+      <View style={styles.flex}>{locals.inputs.alignment}</View>
+      <View style={styles.flex}>{locals.inputs.age}</View>
     </View>
-    <View style={styles.flex}>
-      {locals.inputs.height}
-    </View>
-    <View style={styles.flex}>
-      {locals.inputs.weight}
+
+    <View style={{ marginBottom: 10 }}>
+      <Text style={FormStyle.heading}>Measurements</Text>
+      <View style={styles.flex}>{locals.inputs.height}</View>
+      <View style={styles.flex}>{locals.inputs.weight}</View>
     </View>
   </View>
 );
@@ -192,7 +188,7 @@ export default class CharacterProfile extends React.Component {
       const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Character Profile',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.generateCharacter(),
@@ -207,7 +203,7 @@ export default class CharacterProfile extends React.Component {
 
   constructor(props) {
     super(props);
-    const { lookupKey } = props.navigation.state.params.character.profile.race;
+    const { lookupKey } = props.navigation.state.params.character.race;
     this.state = {
       options,
       form: null,
@@ -230,9 +226,9 @@ export default class CharacterProfile extends React.Component {
     const generalInfo = this.form.getValue();
     if (generalInfo) {
       const { navigate, state } = this.props.navigation;
-      const newCharacter = Object.assign({}, state.params.character);
-      newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, generalInfo);
+      const newCharacter = cloneDeep(state.params.character);
+      newCharacter.meta.lastUpdated = Date.now();
+      newCharacter.profile = cloneDeep(generalInfo);
 
       // Flatten nested power object
       newCharacter.profile.level = newCharacter.profile.power.level;
@@ -350,7 +346,19 @@ export default class CharacterProfile extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="always">
+          <ScrollView style={ContainerStyle.padded} keyboardShouldPersistTaps="always">
+            <Note
+              title="Constructing Your Character Profile"
+              type="tip"
+              icon="lightbulb-outline"
+              uiTheme={this.context.uiTheme}
+            >
+              <Text>
+                Are you a new adventurer or a returning veteran? What do others call you?
+                How would you describe your appearance? What alignment do you fall under?
+                The profile you construct will define some basic information for your character.
+              </Text>
+            </Note>
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={ProfileForm}
@@ -363,7 +371,7 @@ export default class CharacterProfile extends React.Component {
               raised
               onPress={this.onPress}
               text="Proceed"
-              style={{ container: { width: '100%', marginVertical: 20 } }}
+              style={{ container: { marginBottom: 20 } }}
             />
           </ScrollView>
         </Content>
@@ -375,9 +383,6 @@ export default class CharacterProfile extends React.Component {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
-  },
-  scrollView: {
-    margin: 20,
   },
   leftField: {
     marginRight: 5,

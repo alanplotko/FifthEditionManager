@@ -4,9 +4,10 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
-import { toTitleCase } from 'FifthEditionManager/util';
+import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
+import Note from 'FifthEditionManager/components/Note';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -44,7 +45,7 @@ export default class CharacterBackground extends React.Component {
       const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Character Background',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.randomizeBackground(),
@@ -66,6 +67,8 @@ export default class CharacterBackground extends React.Component {
     this.state = {
       background: null,
       form: null,
+      decisions: [],
+      selectedDecisions: [],
     };
   }
 
@@ -77,33 +80,112 @@ export default class CharacterBackground extends React.Component {
     const background = this.form.getValue();
     if (background) {
       const { navigate, state } = this.props.navigation;
-      const newCharacter = Object.assign({}, state.params.character);
-      newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, {
-        background: {
-          lookupKey: this.state.background.key,
-          name: this.state.background.name,
-        },
-      });
+      const newCharacter = cloneDeep(state.params.character);
+      newCharacter.meta.lastUpdated = Date.now();
+      newCharacter.background = {
+        lookupKey: this.state.background.key,
+        name: this.state.background.name,
+      };
+      const additionalItems = {};
+      if (this.state.selectedDecisions.length > 0) {
+        this.state.selectedDecisions.forEach((name, index) => {
+          // Ignore duplicate item if quantity is not tracked; otherwise, increase quantity by 1
+          if (additionalItems[name] && additionalItems[name].quantity) {
+            additionalItems[name].quantity += 1;
+          } else {
+            additionalItems[name] = this.state.background.starting.decisions[index]
+              .find(item => item.name === name);
+          }
+        });
+      }
+      newCharacter.equipment = this.state.background.starting.equipment.slice(0)
+        .concat(Object.values(additionalItems));
+      newCharacter.money = this.state.background.starting.money;
       navigate('SetUpProfile', { character: newCharacter });
     }
   }
 
-  onChange = (value) => {
+  onChangeBackground = (value) => {
+    const background = BACKGROUNDS.find(item => item.key === value.background);
+    const decisions = background ? background.starting.decisions : [];
     this.setState({
       form: value,
-      background: BACKGROUNDS.find(background => background.key === value.background),
+      background,
+      decisions,
+      selectedDecisions: Array(decisions.length)
+        .fill(null)
+        .map((decision, index) => ({ decision: null, index })),
     });
   }
 
-  formOptions = {
+  onChangeDecision = (value) => {
+    if (value) {
+      const selectedDecisions = this.state.selectedDecisions.slice(0);
+      selectedDecisions[value.index] = value.decision;
+      this.setState({ selectedDecisions });
+    }
+  }
+
+  getDecisionForm = (decision) => {
+    const DecisionType = decision
+      .map(item => item.name)
+      .reduce((o, name) => Object.assign(o, { [name]: name }), {});
+    return t.struct({
+      decision: t.enums(DecisionType),
+      index: t.Number,
+    });
+  }
+
+  getDecisionFormOptions = decisionNumber => ({
+    template: locals => (
+      <View
+        style={[
+          LayoutStyle.centered,
+          {
+            borderWidth: 2,
+            borderColor: COLOR.grey800,
+            paddingTop: 30,
+            marginBottom: 20,
+          },
+        ]}
+      >
+        <Text style={FormStyle.label}>Decision #{decisionNumber}</Text>
+        <View
+          style={{
+            flex: 1, margin: 0, padding: 0, height: 50,
+          }}
+        >
+          {locals.inputs.decision}
+        </View>
+      </View>
+    ),
+    stylesheet,
+    fields: {
+      decision: {
+        auto: 'none',
+        nullOption: {
+          value: {
+            decision: null,
+          },
+          text: 'Confirm Decision',
+        },
+      },
+    },
+  });
+
+  backgroundFormOptions = {
     template: (locals) => {
-      const { race } = this.props.navigation.state.params.character.profile;
+      const { race } = this.props.navigation.state.params.character;
       return (
         <View
           style={[
             LayoutStyle.centered,
-            { borderWidth: 2, borderColor: COLOR.grey800, paddingTop: 30 },
+            {
+              borderWidth: 2,
+              borderColor: COLOR.grey800,
+              paddingTop: 30,
+              marginBottom: 20,
+            },
           ]}
         >
           <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
@@ -127,38 +209,86 @@ export default class CharacterBackground extends React.Component {
   }
 
   randomizeBackground = () => {
-    const background = chance.pickone(BACKGROUNDS);
-    this.setState({ background, form: { background: background.key } });
+    // Do not reselect current option
+    const key = this.state.background ? this.state.background.key : null;
+    const options = BACKGROUNDS.filter(background => background.key !== key);
+    if (options.length >= 1) {
+      const background = chance.pickone(options);
+      const decisions = background ? background.starting.decisions : [];
+      const selectedDecisions = [];
+      decisions.forEach(decision => selectedDecisions.push(chance.pickone(decision).name));
+      this.setState({
+        background,
+        form: { background: background.key },
+        decisions,
+        selectedDecisions,
+      });
+    }
   }
 
   render() {
     // Theme setup
     const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
     const fadedTextStyle = { color: fadedTextColor };
+    const decisionPlurality = this.state.decisions.length -
+      this.state.selectedDecisions.filter(item => item.decision !== null).length > 1 ?
+      'Decisions' :
+      'Decision';
 
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20, alignItems: 'center' }}>
+          <View style={ContainerStyle.padded}>
+            <Note
+              title="Choosing a Background"
+              type="tip"
+              icon="lightbulb-outline"
+              uiTheme={this.context.uiTheme}
+            >
+              <Text>
+                The background you choose will become your character&apos;s back-story, explaining
+                how they became who they are today.
+              </Text>
+            </Note>
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={BackgroundForm}
               value={this.state.form}
-              options={this.formOptions}
-              onChange={this.onChange}
+              options={this.backgroundFormOptions}
+              onChange={this.onChangeBackground}
             />
+            {
+              this.state.decisions.length > 0 &&
+              this.state.decisions.map((decision, index) => (
+                <t.form.Form
+                  key={`decision-${index}`} // eslint-disable-line react/no-array-index-key
+                  type={this.getDecisionForm(decision)}
+                  options={this.getDecisionFormOptions(index + 1)}
+                  value={{ decision: this.state.selectedDecisions[index], index }}
+                  onChange={value => this.onChangeDecision(value, index)}
+                />
+              ))
+            }
             <Button
               primary
               raised
-              disabled={!this.state.background}
+              disabled={
+                !this.state.background ||
+                this.state.decisions.length !== this.state.selectedDecisions.length ||
+                this.state.selectedDecisions.some(item => item.decision === null)
+              }
               onPress={this.onPress}
-              text="Proceed"
-              style={{ container: { width: '100%', marginVertical: 20 } }}
+              text={
+                this.state.selectedDecisions.some(item => item.decision === null) ?
+                  `${this.state.selectedDecisions.filter(item => item.decision === null).length} ${decisionPlurality} Remaining` :
+                  'Proceed'
+              }
+              style={{ container: { marginBottom: 10 } }}
             />
             {
               this.state.background && [
                 <Card
-                  key={`${this.state.background.name}Background`}
+                  key={`${this.state.background.name}-background`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>{this.state.background.name}</Text>
@@ -175,17 +305,55 @@ export default class CharacterBackground extends React.Component {
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
-                  key={`${this.state.background.name}Equipment`}
+                  key={`${this.state.background.name}-equipment`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
                   <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
-                    {this.state.background.equipment}
+                    {this.state.background.starting.equipment.map(item => (
+                      <Text key={`${item.name}`}>
+                        <Text>
+                          &bull;&nbsp;<Text style={CardStyle.makeBold}>{item.name}</Text>
+                          {
+                            item.quantity &&
+                            <Text style={CardStyle.makeItalic}>
+                              &nbsp;({item.quantity}
+                              {
+                                item.unit &&
+                                <Text>
+                                  &nbsp;
+                                  {item.quantity > 1 ? item.unit.plural : item.unit.singular}
+                                </Text>
+                              }
+                              &nbsp;in inventory)
+                            </Text>
+                          }
+                        </Text>
+                        {
+                          item.description &&
+                          <Text>: {item.description}</Text>
+                        }
+                        {'\n\n'}
+                      </Text>
+                    ))}
+                    {this.state.background.starting.decisions.map((items, decisionIndex) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Text key={`${decisionIndex}`}>
+                        &bull;&nbsp;
+                        <Text style={CardStyle.makeBold}>
+                          Decision #{decisionIndex + 1}:&nbsp;
+                        </Text>
+                        1 of&nbsp;
+                        {
+                          toProperList(items.map(item => item.name), 'or', false)
+                        }
+                      </Text>
+                    ))}
                   </Text>
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
-                  key={`${this.state.background.name}Proficiencies`}
+                  key={`${this.state.background.name}-proficiencies`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Proficiencies</Text>
@@ -196,7 +364,6 @@ export default class CharacterBackground extends React.Component {
                       this.state.background.proficiencies.skills.length > 0 &&
                       toTitleCase(this.state.background.proficiencies.skills.join(', '))
                     }
-                    .
                   </Text>
                   <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
                     <Text style={CardStyle.makeBold}>Tools:&nbsp;</Text>
@@ -220,7 +387,6 @@ export default class CharacterBackground extends React.Component {
                         })
                         .join(', ')
                     }
-                    .
                   </Text>
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,

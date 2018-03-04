@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import Note from 'FifthEditionManager/components/Note';
 import { RACES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
-import { toTitleCase, calculateModifier } from 'FifthEditionManager/util';
+import { toTitleCase, calculateModifier, validateInteger } from 'FifthEditionManager/util';
+import { cloneDeep } from 'lodash';
 
+const t = require('tcomb-form-native');
 const Chance = require('chance');
 
 const chance = new Chance();
@@ -21,13 +23,54 @@ const abilities = [
   'Charisma',
 ];
 
+
+/**
+ * Form valdiation setup
+ */
+
+// Integer in range [1, 30]
+const AbilityScore = t.refinement(t.Number, n => n % 1 === 0 && n > 0 && n <= 30);
+AbilityScore.getValidationErrorMessage = value => validateInteger(
+  value,
+  'Integer in range [1, 30]',
+);
+
+/**
+ * Character ability score selection
+ */
+
+const AbilityScoreForm = t.struct({
+  score: AbilityScore,
+});
+
+/**
+ * Form stylesheet setup
+ */
+
+const stylesheet = cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.formGroup.normal.flexDirection = 'column';
+stylesheet.formGroup.error.flexDirection = 'column';
+stylesheet.formGroup.normal.alignItems = 'center';
+stylesheet.formGroup.error.alignItems = 'center';
+stylesheet.textbox.normal.borderWidth = 2;
+stylesheet.textbox.error.borderWidth = 2;
+stylesheet.textbox.normal.borderColor = COLOR.grey800;
+stylesheet.textbox.error.borderColor = COLOR.red800;
+stylesheet.textbox.normal.borderRadius = 0;
+stylesheet.textbox.error.borderRadius = 0;
+stylesheet.textbox.normal.width = 200;
+stylesheet.textbox.error.width = 200;
+stylesheet.textbox.normal.margin = 0;
+stylesheet.textbox.error.margin = 0;
+
 export default class AbilityScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Assign Ability Scores',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
@@ -71,11 +114,12 @@ export default class AbilityScores extends React.Component {
         wisdom: 0,
         charisma: 0,
       },
+      form: null,
       ...props.navigation.state.params,
     };
 
     this.state.raceModifiers = RACES
-      .find(race => race.key === this.state.character.profile.race.lookupKey)
+      .find(race => race.key === this.state.character.race.lookupKey)
       .modifiers;
 
     if (this.state.raceModifiers.extra) {
@@ -89,14 +133,16 @@ export default class AbilityScores extends React.Component {
           this.state.raceModifiers[key];
       });
 
-    this.state.scores.forEach((score) => {
-      const index = this.state.scoreBank.findIndex(s => s.score === score);
-      if (index !== -1) {
-        this.state.scoreBank[index].quantity += 1;
-      } else {
-        this.state.scoreBank.push({ score, quantity: 1 });
-      }
-    });
+    if (!this.state.manualEntry) {
+      this.state.scores.forEach((score) => {
+        const index = this.state.scoreBank.findIndex(s => s.score === score);
+        if (index !== -1) {
+          this.state.scoreBank[index].quantity += 1;
+        } else {
+          this.state.scoreBank.push({ score, quantity: 1 });
+        }
+      });
+    }
   }
 
   componentDidMount() {
@@ -105,23 +151,31 @@ export default class AbilityScores extends React.Component {
 
   onPress = () => {
     const { state, navigate } = this.props.navigation;
-    const newCharacter = Object.assign({}, state.params.character);
-    newCharacter.lastUpdated = Date.now();
-    const stats = {};
+    const newCharacter = cloneDeep(state.params.character);
+    newCharacter.meta.lastUpdated = Date.now();
+    newCharacter.stats = {};
     abilities.forEach((ability) => {
       const abilityName = ability.toLowerCase();
-      const score = this.state.baseStats[abilityName] +
-        this.state.additionalStats[abilityName];
+      const score = this.state.baseStats[abilityName] + this.state.additionalStats[abilityName];
       const modifier = calculateModifier(score);
       const total = score + modifier;
-      stats[abilityName] = { score, modifier, total };
+      newCharacter.stats[abilityName] = { score, modifier, total };
     });
-    newCharacter.profile = Object.assign({}, newCharacter.profile, { stats });
     navigate('SetSkills', { character: newCharacter });
   }
 
+  onChange = (value) => {
+    this.setState({ form: value });
+  }
+
   openModal = (ability) => {
-    this.setState({ isModalVisible: true, selectedAbility: ability });
+    this.setState({
+      isModalVisible: true,
+      selectedAbility: ability,
+      form: {
+        score: this.state.baseStats[ability],
+      },
+    });
   }
 
   cancelModal = () => {
@@ -150,6 +204,37 @@ export default class AbilityScores extends React.Component {
     baseStats[ability] = scoreBank[newIndex].score;
 
     this.setState({ scoreBank, baseStats });
+  }
+
+  formOptions = {
+    template: locals => (
+      <View>
+        <View style={styles.formTemplate}>
+          <Text style={FormStyle.label}>Editing {toTitleCase(this.state.selectedAbility)}</Text>
+        </View>
+        {locals.inputs.score}
+      </View>
+    ),
+    stylesheet,
+    fields: {
+      score: {
+        auto: 'none',
+        help: 'Range [1, 30]',
+      },
+    },
+  }
+
+  submitScore = () => {
+    Keyboard.dismiss();
+    const input = this.form.getValue();
+    if (input) {
+      const ability = this.state.selectedAbility;
+      const baseStats = Object.assign({}, this.state.baseStats);
+
+      // Set new score
+      baseStats[ability] = input.score;
+      this.setState({ baseStats });
+    }
   }
 
   resetStat = (ability) => {
@@ -221,14 +306,16 @@ export default class AbilityScores extends React.Component {
         return done();
       }
       const scoreBank = [];
-      this.state.scores.forEach((score) => {
-        const index = scoreBank.findIndex(s => s.score === score);
-        if (index !== -1) {
-          scoreBank[index].quantity += 1;
-        } else {
-          scoreBank.push({ score, quantity: 1 });
-        }
-      });
+      if (!this.state.manualEntry) {
+        this.state.scores.forEach((score) => {
+          const index = scoreBank.findIndex(s => s.score === score);
+          if (index !== -1) {
+            scoreBank[index].quantity += 1;
+          } else {
+            scoreBank.push({ score, quantity: 1 });
+          }
+        });
+      }
       return this.setState({
         baseStats: {
           strength: null,
@@ -247,10 +334,16 @@ export default class AbilityScores extends React.Component {
     this.resetScoreBank(() => {
       const scoreBank = this.state.scoreBank.slice(0);
       const baseStats = Object.assign({}, this.state.baseStats);
-      Object.keys(baseStats).forEach((stat) => {
-        baseStats[stat] = chance.pickone(scoreBank.filter(item => item.quantity > 0)).score;
-        scoreBank[scoreBank.findIndex(item => item.score === baseStats[stat])].quantity -= 1;
-      });
+      if (this.state.manualEntry) {
+        Object.keys(baseStats).forEach((stat) => {
+          baseStats[stat] = chance.natural({ min: 1, max: 30 });
+        });
+      } else {
+        Object.keys(baseStats).forEach((stat) => {
+          baseStats[stat] = chance.pickone(scoreBank.filter(item => item.quantity > 0)).score;
+          scoreBank[scoreBank.findIndex(item => item.score === baseStats[stat])].quantity -= 1;
+        });
+      }
       this.setState({ scoreBank, baseStats, loading: false });
     });
   }
@@ -406,28 +499,53 @@ export default class AbilityScores extends React.Component {
       return (
         <View style={[styles.modalLayout, modalBackgroundStyle]}>
           {
-            ability &&
+            !this.state.manualEntry && ability &&
             <Text style={styles.cardTitle}>
               Editing {toTitleCase(ability)}
             </Text>
           }
-          <View style={styles.modalHorizontalLayout}>
-            {
-              this.state.scoreBank
-                .slice(0, Math.ceil(this.state.scoreBank.length / 2))
-                .map(scoreCard => buildScoreCard(scoreCard))
-            }
-          </View>
-          <View style={styles.modalHorizontalLayout}>
-            {
-              this.state.scoreBank
-                .slice(
-                  Math.ceil(this.state.scoreBank.length / 2),
-                  this.state.scoreBank.length,
-                )
-                .map(scoreCard => buildScoreCard(scoreCard))
-            }
-          </View>
+          {
+            !this.state.manualEntry &&
+            <View>
+              <View style={styles.modalHorizontalLayout}>
+                {
+                  this.state.scoreBank
+                    .slice(0, Math.ceil(this.state.scoreBank.length / 2))
+                    .map(scoreCard => buildScoreCard(scoreCard))
+                }
+              </View>
+              <View style={styles.modalHorizontalLayout}>
+                {
+                  this.state.scoreBank
+                    .slice(
+                      Math.ceil(this.state.scoreBank.length / 2),
+                      this.state.scoreBank.length,
+                    )
+                    .map(scoreCard => buildScoreCard(scoreCard))
+                }
+              </View>
+            </View>
+          }
+          {
+            this.state.manualEntry &&
+            <View>
+              <t.form.Form
+                ref={(c) => { this.form = c; }}
+                type={AbilityScoreForm}
+                value={this.state.form}
+                options={this.formOptions}
+                onChange={this.onChange}
+              />
+              <Button
+                primary
+                raised
+                disabled={!this.state.form || (this.state.form && !this.state.form.score)}
+                onPress={this.submitScore}
+                text="Save"
+                style={{ container: { marginBottom: 10 } }}
+              />
+            </View>
+          }
           {
             this.state.raceModifiers.extra &&
             <Button
@@ -488,12 +606,12 @@ export default class AbilityScores extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={ContainerStyle.padded}>
             <Text style={FormStyle.heading}>Character Ability Scores</Text>
             {
               modifierList.length > 0 &&
               <Note
-                title={`${this.state.character.profile.race.name} Stats`}
+                title={`${this.state.character.race.name} Stats`}
                 type="info"
                 icon="info"
                 collapsible
@@ -504,7 +622,7 @@ export default class AbilityScores extends React.Component {
                 <Text style={{ marginBottom: 10 }}>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race.name}&nbsp;
+                    &nbsp;{this.state.character.race.name}&nbsp;
                   </Text>
                   race grants the following points and will be allocated
                   automatically:{'\n\n'}
@@ -537,7 +655,7 @@ export default class AbilityScores extends React.Component {
                 <Text>
                   The
                   <Text style={CardStyle.makeBold}>
-                    &nbsp;{this.state.character.profile.race.name}&nbsp;
+                    &nbsp;{this.state.character.race.name}&nbsp;
                   </Text>
                   race grants an additional
                   <Text style={CardStyle.makeBold}>
@@ -583,7 +701,7 @@ export default class AbilityScores extends React.Component {
               }
               onPress={this.onPress}
               text="Proceed"
-              style={{ container: { width: '100%', marginVertical: 20 } }}
+              style={{ container: { marginTop: 20, marginBottom: 10 } }}
             />
           </View>
           <Modal
@@ -677,5 +795,12 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoBold',
     color: COLOR.black,
     fontSize: 18,
+  },
+  formTemplate: {
+    borderWidth: 2,
+    borderColor: COLOR.grey800,
+    backgroundColor: COLOR.grey800,
+    width: 200,
+    height: 35,
   },
 });

@@ -46,13 +46,15 @@ class CharacterProfileCardWrapper extends React.Component {
 describe('Character Profile Card', () => {
   const character = {
     key: 'key',
-    lastUpdated: 0,
+    meta: {
+      lastUpdated: 0,
+    },
+    race: { lookupKey: 'Race', name: 'Race' },
+    baseClass: { lookupKey: 'Class', name: 'Class' },
+    background: { lookupKey: 'Background', name: 'Background' },
     profile: {
       firstName: 'First',
       lastName: 'Last',
-      race: { lookupKey: 'Race', name: 'Race' },
-      baseClass: { lookupKey: 'Class', name: 'Class' },
-      background: { name: 'Background' },
       level: 1,
       experience: 0,
     },

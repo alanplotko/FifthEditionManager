@@ -126,7 +126,7 @@ export default class HomeScreen extends React.Component {
                 timestamp: Date.now(),
                 action: 'Deleted Character',
                 extra: fullName,
-                thumbnail: IMAGES.RACE[character.profile.race.lookupKey],
+                thumbnail: IMAGES.RACE[character.race.lookupKey],
                 icon: {
                   name: 'delete-forever',
                   color: COLOR.white,

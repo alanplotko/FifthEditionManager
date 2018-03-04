@@ -7,6 +7,5 @@ export { HitPoints } from './HitPoints';
 export { Languages } from './Languages';
 export { PointBuyScores } from './PointBuyScores';
 export { RollScores } from './RollScores';
-export { SavingThrows } from './SavingThrows';
 export { ScoringMethod } from './ScoringMethod';
 export { Skills } from './Skills';

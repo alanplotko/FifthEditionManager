@@ -11,10 +11,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   padded: {
-    paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
   },
   baseText: {
     fontFamily: 'Roboto',

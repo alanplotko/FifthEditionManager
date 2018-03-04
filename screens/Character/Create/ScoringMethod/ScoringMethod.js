@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Card, COLOR, Toolbar } from 'react-native-material-ui';
-import { ContainerStyle } from 'FifthEditionManager/stylesheets';
+import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 
 /**
  * Define form options
@@ -13,9 +13,10 @@ import { ContainerStyle } from 'FifthEditionManager/stylesheets';
 export default class ScoringMethod extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Choose Scoring Method',
       };
       return <Toolbar {...props} />;
@@ -32,11 +33,18 @@ export default class ScoringMethod extends React.Component {
 
   selectMethod = (method) => {
     const { navigate, state } = this.props.navigation;
-    const params = { ...state.params };
-    if (method === 'AssignAbilityScores') {
-      params.scores = [15, 14, 13, 12, 10, 8];
+    if (method === 'UseStandardSet') {
+      return navigate('AssignAbilityScores', {
+        character: state.params.character,
+        scores: [15, 14, 13, 12, 10, 8],
+      });
+    } else if (method === 'ManualEntry') {
+      return navigate('AssignAbilityScores', {
+        character: state.params.character,
+        manualEntry: true,
+      });
     }
-    navigate(method, params);
+    return navigate(method, { character: state.params.character });
   }
 
   render() {
@@ -45,10 +53,10 @@ export default class ScoringMethod extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ marginHorizontal: 10, marginVertical: 20 }}>
+          <View style={ContainerStyle.padded}>
             <Card
               onPress={() => this.selectMethod('RollAbilityScores')}
-              style={{ container: { marginBottom: 20, padding: 20 } }}
+              style={{ container: CardStyle.container }}
             >
               <Text style={styles.cardHeading}>
                 Roll Scores
@@ -68,8 +76,8 @@ export default class ScoringMethod extends React.Component {
               </View>
             </Card>
             <Card
-              onPress={() => this.selectMethod('AssignAbilityScores')}
-              style={{ container: { marginBottom: 20, padding: 20 } }}
+              onPress={() => this.selectMethod('UseStandardSet')}
+              style={{ container: CardStyle.container }}
             >
               <Text style={styles.cardHeading}>
                 Use Standard Set
@@ -81,7 +89,7 @@ export default class ScoringMethod extends React.Component {
             </Card>
             <Card
               onPress={() => this.selectMethod('PointBuyScores')}
-              style={{ container: { marginBottom: 20, padding: 20 } }}
+              style={{ container: CardStyle.container }}
             >
               <Text style={styles.cardHeading}>
                 Point Buy
@@ -89,6 +97,17 @@ export default class ScoringMethod extends React.Component {
               <Text style={styles.cardText}>
                 You have 27 points to spend on ability scores, where each
                 score has a point cost.
+              </Text>
+            </Card>
+            <Card
+              onPress={() => this.selectMethod('ManualEntry')}
+              style={{ container: CardStyle.container }}
+            >
+              <Text style={styles.cardHeading}>
+                Manual Entry
+              </Text>
+              <Text style={styles.cardText}>
+                Manually enter your scores.
               </Text>
             </Card>
           </View>
