@@ -194,9 +194,6 @@ export default class HitPoints extends React.Component {
     }
     // Add first level max roll + all other levels' rolls
     const totalRollCount = (rolls.length === 0 ? 0 : rolls.reduce((sum, x) => sum + x)) + hitDie;
-    console.log(totalRollCount);
-    console.log(average * timesAverageTaken);
-    console.log(modifierTotal);
     this.setState({
       rolls: rolls.slice(0),
       hitPoints: totalRollCount + (average * timesAverageTaken) + modifierTotal,
@@ -214,7 +211,7 @@ export default class HitPoints extends React.Component {
     const { level } = this.state.character.profile;
     const average = (hitDie / 2) + 1;
     const negative = modifier < 0;
-    let modifierDisplay = Math.abs(modifier);
+    const modifierDisplay = Math.abs(modifier);
 
     return (
       <Container style={ContainerStyle.parent}>
