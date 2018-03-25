@@ -7,11 +7,7 @@ import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
 import Note from 'FifthEditionManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES, ABILITIES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
-import {
-  toTitleCase,
-  calculateProficiencyBonus,
-  reformatCamelCaseKey,
-} from 'FifthEditionManager/util';
+import { toTitleCase, calculateProficiencyBonus } from 'FifthEditionManager/util';
 import { cloneDeep, zipObject } from 'lodash';
 
 const Chance = require('chance');
@@ -58,23 +54,24 @@ export default class Skills extends React.Component {
     // Set character proficiency
     this.state.proficiency = calculateProficiencyBonus(this.state.character.profile.level);
 
+    const baseClass = CLASSES
+      .find(option => option.key === this.state.character.baseClass.lookupKey);
+    const background = BACKGROUNDS
+      .find(option => option.key === this.state.character.background.lookupKey);
+
     // Track given proficiencies
     this.state.proficiencies = {
-      background: BACKGROUNDS
-        .find(option => option.key === this.state.character.background.lookupKey)
-        .proficiencies.skills,
-      baseClass: CLASSES
-        .find(option => option.key === this.state.character.baseClass.lookupKey)
-        .proficiencies.skills,
+      background: background.proficiencies.skillKeys,
+      baseClass: baseClass.proficiencies.skills,
     };
 
     // Define proficiency options
     this.state.proficiencies.options =
-      [...this.state.proficiencies.baseClass.options]
+      [...this.state.proficiencies.baseClass.optionKeys]
         .filter(skill => !this.state.proficiencies.background.includes(skill));
     // Track number of proficiency replacements the user will need to select
     this.state.proficiencies.extras =
-      [...this.state.proficiencies.baseClass.options]
+      [...this.state.proficiencies.baseClass.optionKeys]
         .filter(skill => this.state.proficiencies.background.includes(skill))
         .length;
     // Keep original number of extras with original quantity in base class
@@ -149,8 +146,7 @@ export default class Skills extends React.Component {
     // Add or subtract proficiency and quantity appropriately after toggle
     skills[key].modifier += (this.state.proficiency * change);
     proficiencies.quantity -= change;
-    const skillName = reformatCamelCaseKey(key);
-    if (!proficiencies.options.includes(skillName)) {
+    if (!proficiencies.options.includes(key)) {
       proficiencies.extras -= change;
     }
 
@@ -181,7 +177,7 @@ export default class Skills extends React.Component {
       const proficiencies = cloneDeep(this.state.proficiencies);
       let standardOptions = proficiencies.options.slice(0);
       let extraOptions = Object.keys(BASE_SKILLS)
-        .filter(skill => !proficiencies.background.includes(reformatCamelCaseKey(skill)) &&
+        .filter(skill => !proficiencies.background.includes(skill) &&
           !standardOptions.includes(skill));
 
       // Update selections
@@ -198,8 +194,7 @@ export default class Skills extends React.Component {
         // Add proficiency and update quantity appropriately
         skills[key].modifier += this.state.proficiency;
         proficiencies.quantity -= 1;
-        const skillName = reformatCamelCaseKey(key);
-        if (!proficiencies.options.includes(skillName)) {
+        if (extraOptions.includes(key)) {
           proficiencies.extras -= 1;
           extraOptions = extraOptions.filter(skill => skill !== key);
         } else {
@@ -218,7 +213,6 @@ export default class Skills extends React.Component {
     const textStyle = { color: textColor };
 
     const ListItemRow = (key, skill) => {
-      const skillName = reformatCamelCaseKey(key);
       const negative = skill.modifier < 0;
       const checkedTextColor = negative ? COLOR.red500 : COLOR.green500;
       const modifier = Math.abs(skill.modifier);
@@ -260,7 +254,7 @@ export default class Skills extends React.Component {
             </View>
           }
           rightElement={
-            this.state.proficiencies.background.includes(skillName) ?
+            this.state.proficiencies.background.includes(key) ?
               <Icon
                 name="check-circle"
                 color={COLOR.green500}
@@ -276,7 +270,7 @@ export default class Skills extends React.Component {
                   (
                     this.state.proficiencies.quantity === 0 ||
                     (
-                      !this.state.proficiencies.options.includes(skillName) &&
+                      !this.state.proficiencies.options.includes(key) &&
                       this.state.proficiencies.extras === 0
                     )
                   )

@@ -183,7 +183,7 @@ export default class HitPoints extends React.Component {
     const { timesAverageTaken } = this.state;
     const { level } = this.state.character.profile;
     const { modifier } = this.state.character.stats.constitution;
-    const additionFromModifier = ((level - 1) * modifier) - (timesAverageTaken * modifier);
+    const modifierTotal = level * modifier;
     const { hitDie } = this.state.baseClass;
     const average = (hitDie / 2) + 1;
 
@@ -192,10 +192,14 @@ export default class HitPoints extends React.Component {
     for (let i = 0; i < rollCount; i += 1) {
       rolls.push(chance.natural({ min: 1, max: hitDie }));
     }
+    // Add first level max roll + all other levels' rolls
+    const totalRollCount = (rolls.length === 0 ? 0 : rolls.reduce((sum, x) => sum + x)) + hitDie;
+    console.log(totalRollCount);
+    console.log(average * timesAverageTaken);
+    console.log(modifierTotal);
     this.setState({
       rolls: rolls.slice(0),
-      hitPoints: (rolls.length === 0 ? 0 : rolls.reduce((sum, x) => sum + x)) +
-        (average * timesAverageTaken) + additionFromModifier,
+      hitPoints: totalRollCount + (average * timesAverageTaken) + modifierTotal,
       rollCount: this.state.rollCount + 1,
     });
   }
@@ -210,10 +214,7 @@ export default class HitPoints extends React.Component {
     const { level } = this.state.character.profile;
     const average = (hitDie / 2) + 1;
     const negative = modifier < 0;
-    let modifierDisplay = modifier;
-    if (negative) {
-      modifierDisplay *= -1;
-    }
+    let modifierDisplay = Math.abs(modifier);
 
     return (
       <Container style={ContainerStyle.parent}>
@@ -259,18 +260,16 @@ export default class HitPoints extends React.Component {
                 <Text style={CardStyle.makeBold}>
                   {hitDie} {negative ? '-' : '+'} {modifierDisplay} = {hitDie + modifier}
                 </Text>
-                . After every level, add a roll of
+                .{'\n\n'}After every level, add a roll of&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;1d{hitDie} {negative ? '-' : '+'} {modifierDisplay}&nbsp;
+                  1d{hitDie} {negative ? '-' : '+'} {modifierDisplay}&nbsp;
                 </Text>
-                or take
+                or take&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{(hitDie / 2) + 1}&nbsp;
+                  {(hitDie / 2) + 1} {negative ? '-' : '+'}&nbsp;
+                  {modifierDisplay} = {(hitDie / 2) + 1 + modifier}&nbsp;
                 </Text>
-                automatically.{'\n\n'}
-                <Text>
-                  Total Hit Points = First Level + Later Levels + Modifier Total
-                </Text>
+                automatically.
               </Text>
             </Note>
             {
@@ -374,8 +373,7 @@ export default class HitPoints extends React.Component {
                       <Text>{hitDie + modifier}</Text>
                     }
                     {
-                      this.state.hitPoints &&
-                      this.state.hitPoints + hitDie + modifier
+                      this.state.hitPoints && this.state.hitPoints
                     }
                   </Text>
                 </Card>
@@ -384,28 +382,18 @@ export default class HitPoints extends React.Component {
             {
               this.state.hitPoints &&
               [
-                <Card key="firstLevel" style={{ container: CardStyle.container }}>
-                  <Text style={CardStyle.cardHeading}>First Level</Text>
-                  <Text>
-                    The
-                    <Text style={CardStyle.makeBold}>
-                      &nbsp;{this.state.character.baseClass.name}&nbsp;
+                <Card key="firstLevel" style={{ container: CardStyle.containerNarrow }}>
+                  <View style={styles.diceLayout}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      Level {formatSingleDigit(1)}:
                     </Text>
-                    class grants a hit die of
-                    <Text style={CardStyle.makeBold}>
-                      &nbsp;1d{hitDie}&nbsp;
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {hitDie} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
                     </Text>
-                    plus your constitution modifier&nbsp;
-                    <Text style={CardStyle.makeBold}>
-                      ({negative ? <Text>&minus;</Text> : '+'}{modifierDisplay})
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                      {formatSingleDigit(hitDie + modifier)}
                     </Text>
-                    &nbsp;per level after the first level.{'\n\n'}
-                    For the first level, take&nbsp;
-                    <Text style={CardStyle.makeBold}>
-                      {hitDie} {negative ? '-' : '+'} {modifierDisplay} = {hitDie + modifier}
-                    </Text>
-                    .
-                  </Text>
+                  </View>
                 </Card>,
               ].concat(Array(this.state.timesAverageTaken).fill(null).map((val, rollNumber) => (
                 <Card
@@ -414,10 +402,13 @@ export default class HitPoints extends React.Component {
                 >
                   <View style={styles.diceLayout}>
                     <Text style={[styles.scoreLabel, textStyle]}>
-                        Level {formatSingleDigit(rollNumber + 2)}:
+                      Level {formatSingleDigit(rollNumber + 2)}:
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {average} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
                     </Text>
                     <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
-                        Average = {formatSingleDigit(average)}
+                      {formatSingleDigit(average + modifier)}
                     </Text>
                   </View>
                 </Card>
@@ -429,7 +420,9 @@ export default class HitPoints extends React.Component {
                   <View style={styles.diceLayout}>
                     <Text style={[styles.scoreLabel, textStyle]}>
                       Level {formatSingleDigit(rollNumber + 2 + this.state.timesAverageTaken)}:
-                      {score} + {modifier} =
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {score} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
                     </Text>
                     <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
                       {formatSingleDigit(score + modifier)}
@@ -443,7 +436,7 @@ export default class HitPoints extends React.Component {
                     Total Hit Points:
                     </Text>
                     <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
-                      {formatSingleDigit(this.state.hitPoints + (hitDie + modifier))}
+                      {formatSingleDigit(this.state.hitPoints)}
                     </Text>
                   </View>
                 </Card>,
