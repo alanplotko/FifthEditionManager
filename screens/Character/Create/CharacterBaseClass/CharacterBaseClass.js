@@ -7,6 +7,7 @@ import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { toProperList, toTitleCase } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
+import Note from 'FifthEditionManager/components/Note';
 import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
@@ -44,7 +45,7 @@ export default class CharacterBaseClass extends React.Component {
       const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Character Class',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.randomizeClass(),
@@ -76,14 +77,12 @@ export default class CharacterBaseClass extends React.Component {
   onPress = () => {
     if (this.state.baseClass) {
       const { navigate, state } = this.props.navigation;
-      const newCharacter = Object.assign({}, state.params.character);
-      newCharacter.lastUpdated = Date.now();
-      newCharacter.profile = Object.assign({}, newCharacter.profile, {
-        baseClass: {
-          lookupKey: this.state.baseClass.key,
-          name: this.state.baseClass.name,
-        },
-      });
+      const newCharacter = cloneDeep(state.params.character);
+      newCharacter.meta.lastUpdated = Date.now();
+      newCharacter.baseClass = {
+        lookupKey: this.state.baseClass.key,
+        name: this.state.baseClass.name,
+      };
       navigate('SetCharacterBackground', { character: newCharacter });
     }
   }
@@ -97,12 +96,17 @@ export default class CharacterBaseClass extends React.Component {
 
   formOptions = {
     template: (locals) => {
-      const { race } = this.props.navigation.state.params.character.profile;
+      const { race } = this.props.navigation.state.params.character;
       return (
         <View
           style={[
             LayoutStyle.centered,
-            { borderWidth: 2, borderColor: COLOR.grey800, paddingTop: 30 },
+            {
+              borderWidth: 2,
+              borderColor: COLOR.grey800,
+              paddingTop: 30,
+              marginBottom: 20,
+            },
           ]}
         >
           <Text style={FormStyle.label}>Your {race.name}&apos;s Class</Text>
@@ -126,7 +130,9 @@ export default class CharacterBaseClass extends React.Component {
   }
 
   randomizeClass = () => {
-    const baseClass = chance.pickone(CLASSES);
+    // Do not reselect current option
+    const key = this.state.baseClass ? this.state.baseClass.key : null;
+    const baseClass = chance.pickone(CLASSES.filter(item => item.key !== key));
     this.setState({ baseClass, form: { baseClass: baseClass.key } });
   }
 
@@ -138,7 +144,17 @@ export default class CharacterBaseClass extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20, alignItems: 'center' }}>
+          <View style={ContainerStyle.padded}>
+            <Note
+              title="Choosing a Class"
+              type="tip"
+              icon="lightbulb-outline"
+              uiTheme={this.context.uiTheme}
+            >
+              <Text>
+                The class you choose will define your character&apos;s profession and lifestyle.
+              </Text>
+            </Note>
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={BaseClassForm}
@@ -152,12 +168,12 @@ export default class CharacterBaseClass extends React.Component {
               disabled={!this.state.baseClass}
               onPress={this.onPress}
               text="Proceed"
-              style={{ container: { width: '100%', marginVertical: 20 } }}
+              style={{ container: { marginBottom: 10 } }}
             />
             {
               this.state.baseClass && [
                 <Card
-                  key={`${this.state.baseClass.name}Class`}
+                  key={`${this.state.baseClass.name}-class`}
                   style={{ container: CardStyle.container }}
                 >
                   <View>
@@ -195,7 +211,7 @@ export default class CharacterBaseClass extends React.Component {
                   </View>
                 </Card>,
                 <Card
-                  key={`${this.state.baseClass.name}HitDie`}
+                  key={`${this.state.baseClass.name}-hit-die`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Hit Die</Text>
@@ -223,7 +239,7 @@ export default class CharacterBaseClass extends React.Component {
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
-                  key={`${this.state.baseClass.name}Proficiencies`}
+                  key={`${this.state.baseClass.name}-proficiencies`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Proficiencies</Text>
@@ -302,7 +318,7 @@ export default class CharacterBaseClass extends React.Component {
             }
             {
               !this.state.baseClass &&
-              <Card style={{ container: { padding: 20 } }}>
+              <Card style={{ container: CardStyle.container }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Icon
                     name="info"

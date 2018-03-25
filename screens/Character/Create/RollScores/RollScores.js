@@ -15,9 +15,10 @@ const chance = new Chance();
 export default class RollScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Roll Ability Scores',
       };
       return <Toolbar {...props} />;
@@ -85,8 +86,8 @@ export default class RollScores extends React.Component {
   acceptRolls = () => {
     const { navigate, state } = this.props.navigation;
     navigate('AssignAbilityScores', {
+      character: state.params.character,
       scores: this.state.sortedScores,
-      ...state.params,
     });
   }
 
@@ -121,72 +122,67 @@ export default class RollScores extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          {
-            this.state.scoreReports &&
-            <View style={{ marginHorizontal: 10, marginVertical: 20 }}>
-              <Card
-                style={{ container: { marginBottom: 10, padding: 10 } }}
-              >
-                <Text style={[styles.scoreLabel, textStyle]}>
-                  Rolls:&nbsp;
-                  <Text style={CardStyle.makeBold}>
-                    {this.state.sortedScores.join(', ')}
-                  </Text>
+          <View style={ContainerStyle.padded}>
+            <Card
+              style={{ container: CardStyle.containerNarrow }}
+            >
+              <Text style={[styles.scoreLabel, textStyle]}>
+                Rolls:&nbsp;
+                <Text style={CardStyle.makeBold}>
+                  {this.state.sortedScores.join(', ')}
                 </Text>
-              </Card>
-              <View style={styles.buttonLayout}>
-                <Button
-                  accent
-                  raised
-                  disabled={this.state.isLoading}
-                  onPress={() => this.prepareRolls()}
-                  text="Reroll Scores"
-                  style={{
-                    container: {
-                      flex: 2,
-                      marginLeft: 10,
-                      marginRight: 5,
-                      marginVertical: 20,
-                    },
-                  }}
-                />
-                <Button
-                  primary
-                  raised
-                  disabled={this.state.isLoading}
-                  onPress={() => this.acceptRolls()}
-                  text="Proceed"
-                  style={{
-                    container: {
-                      flex: 1,
-                      marginLeft: 5,
-                      marginRight: 10,
-                      marginVertical: 20,
-                    },
-                  }}
-                />
-              </View>
-              {this.state.scoreReports.map(report => (
-                <Card
-                  key={`${report.rollNumber}-${report.score}-${report.rolls.join('-')}`}
-                  style={{ container: { marginBottom: 5, padding: 10 } }}
-                >
-                  <View style={styles.diceLayout}>
-                    <Text style={[styles.scoreLabel, textStyle]}>
-                      Roll {report.rollNumber}:
-                    </Text>
-                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
-                      {formatSingleDigit(report.score)}
-                    </Text>
-                    {dice(report.rolls[0])}
-                    {dice(report.rolls[1])}
-                    {dice(report.rolls[2])}
-                    {dice(report.rolls[3])}
-                  </View>
-                </Card>
-              ))}
+              </Text>
+            </Card>
+            <View style={styles.buttonLayout}>
+              <Button
+                accent
+                raised
+                disabled={this.state.isLoading}
+                onPress={() => this.prepareRolls()}
+                text="Reroll Scores"
+                style={{
+                  container: {
+                    flex: 2,
+                    marginRight: 5,
+                    marginVertical: 20,
+                  },
+                }}
+              />
+              <Button
+                primary
+                raised
+                disabled={this.state.isLoading}
+                onPress={() => this.acceptRolls()}
+                text="Proceed"
+                style={{
+                  container: {
+                    flex: 1,
+                    marginLeft: 5,
+                    marginVertical: 20,
+                  },
+                }}
+              />
             </View>
-          }
+            {this.state.scoreReports.map(report => (
+              <Card
+                key={`${report.rollNumber}-${report.score}-${report.rolls.join('-')}`}
+                style={{ container: CardStyle.containerNarrow }}
+              >
+                <View style={styles.diceLayout}>
+                  <Text style={[styles.scoreLabel, textStyle]}>
+                    Roll {report.rollNumber}:
+                  </Text>
+                  <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                    {formatSingleDigit(report.score)}
+                  </Text>
+                  {dice(report.rolls[0])}
+                  {dice(report.rolls[1])}
+                  {dice(report.rolls[2])}
+                  {dice(report.rolls[3])}
+                </View>
+              </Card>
+            ))}
+          </View>
         </Content>
         <Modal
           isVisible={this.state.isLoading}

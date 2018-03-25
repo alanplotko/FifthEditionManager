@@ -7,10 +7,10 @@ import store from 'react-native-simple-store';
 import { NavigationActions } from 'react-navigation';
 import Note from 'FifthEditionManager/components/Note';
 import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
-import { validateInteger } from 'FifthEditionManager/util';
-import { cloneDeep } from 'lodash';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
 import { ACTIVITY_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
+import { formatSingleDigit, validateInteger } from 'FifthEditionManager/util';
+import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
 const uuidv4 = require('uuid/v4');
@@ -52,9 +52,10 @@ const options = {
 export default class HitPoints extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Review Hit Points',
       };
       return <Toolbar {...props} />;
@@ -83,7 +84,7 @@ export default class HitPoints extends React.Component {
       ...props.navigation.state.params,
     };
     this.state.baseClass = CLASSES
-      .find(option => option.key === this.state.character.profile.baseClass.lookupKey);
+      .find(option => option.key === this.state.character.baseClass.lookupKey);
   }
 
   componentWillMount() {
@@ -131,20 +132,18 @@ export default class HitPoints extends React.Component {
   setHitPoints = () => {
     const { state, dispatch } = this.props.navigation;
     const { hitDie } = this.state.baseClass;
-    const { modifier } = this.state.character.profile.stats.constitution;
-    const newCharacter = Object.assign({}, state.params.character);
-    newCharacter.lastUpdated = Date.now();
-    newCharacter.profile.savingThrows = cloneDeep(this.state.savingThrows);
-    newCharacter.profile.hitPoints = (this.state.hitPoints ? this.state.hitPoints : 0)
-      + hitDie + modifier;
+    const { modifier } = this.state.character.stats.constitution;
+    const newCharacter = cloneDeep(state.params.character);
+    newCharacter.meta.lastUpdated = Date.now();
+    newCharacter.hitPoints = (this.state.hitPoints ? this.state.hitPoints : 0) + hitDie + modifier;
 
     const newActivity = {
       key: uuidv4(),
-      timestamp: newCharacter.lastUpdated,
+      timestamp: newCharacter.meta.lastUpdated,
       action: 'Created New Character',
       // Format character's full name for extra text
       extra: `${newCharacter.profile.firstName.charAt(0).toUpperCase()}${newCharacter.profile.firstName.slice(1)} ${newCharacter.profile.lastName.charAt(0).toUpperCase()}${newCharacter.profile.lastName.slice(1)}`,
-      thumbnail: IMAGES.RACE[newCharacter.profile.race.lookupKey],
+      thumbnail: IMAGES.RACE[newCharacter.race.lookupKey],
       icon: {
         name: 'add-circle',
         color: COLOR.white,
@@ -183,8 +182,8 @@ export default class HitPoints extends React.Component {
   reroll = () => {
     const { timesAverageTaken } = this.state;
     const { level } = this.state.character.profile;
-    const { modifier } = this.state.character.profile.stats.constitution;
-    const additionFromModifier = ((level - 1) * modifier) - (timesAverageTaken * modifier);
+    const { modifier } = this.state.character.stats.constitution;
+    const modifierTotal = level * modifier;
     const { hitDie } = this.state.baseClass;
     const average = (hitDie / 2) + 1;
 
@@ -193,10 +192,11 @@ export default class HitPoints extends React.Component {
     for (let i = 0; i < rollCount; i += 1) {
       rolls.push(chance.natural({ min: 1, max: hitDie }));
     }
+    // Add first level max roll + all other levels' rolls
+    const totalRollCount = (rolls.length === 0 ? 0 : rolls.reduce((sum, x) => sum + x)) + hitDie;
     this.setState({
       rolls: rolls.slice(0),
-      hitPoints: (rolls.length === 0 ? 0 : rolls.reduce((sum, x) => sum + x)) +
-        (average * timesAverageTaken) + additionFromModifier,
+      hitPoints: totalRollCount + (average * timesAverageTaken) + modifierTotal,
       rollCount: this.state.rollCount + 1,
     });
   }
@@ -207,18 +207,16 @@ export default class HitPoints extends React.Component {
     const textStyle = { color: textColor };
 
     const { hitDie } = this.state.baseClass;
-    const { modifier } = this.state.character.profile.stats.constitution;
+    const { modifier } = this.state.character.stats.constitution;
     const { level } = this.state.character.profile;
     const average = (hitDie / 2) + 1;
     const negative = modifier < 0;
-    let modifierDisplay = modifier;
-    if (negative) {
-      modifierDisplay *= -1;
-    }
+    const modifierDisplay = Math.abs(modifier);
+
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={ContainerStyle.padded}>
             {
               this.state.error &&
               <Note
@@ -233,7 +231,7 @@ export default class HitPoints extends React.Component {
               </Note>
             }
             <Note
-              title={`${this.state.character.profile.baseClass.name} Hit Points`}
+              title={`${this.state.character.baseClass.name} Hit Points`}
               type="info"
               icon="info"
               collapsible
@@ -244,7 +242,7 @@ export default class HitPoints extends React.Component {
               <Text style={{ marginBottom: 10 }}>
                 The
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{this.state.character.profile.baseClass.name}&nbsp;
+                  &nbsp;{this.state.character.baseClass.name}&nbsp;
                 </Text>
                 class grants a hit die of
                 <Text style={CardStyle.makeBold}>
@@ -259,18 +257,16 @@ export default class HitPoints extends React.Component {
                 <Text style={CardStyle.makeBold}>
                   {hitDie} {negative ? '-' : '+'} {modifierDisplay} = {hitDie + modifier}
                 </Text>
-                . After every level, add a roll of
+                .{'\n\n'}After every level, add a roll of&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;1d{hitDie} {negative ? '-' : '+'} {modifierDisplay}&nbsp;
+                  1d{hitDie} {negative ? '-' : '+'} {modifierDisplay}&nbsp;
                 </Text>
-                or take
+                or take&nbsp;
                 <Text style={CardStyle.makeBold}>
-                  &nbsp;{(hitDie / 2) + 1}&nbsp;
+                  {(hitDie / 2) + 1} {negative ? '-' : '+'}&nbsp;
+                  {modifierDisplay} = {(hitDie / 2) + 1 + modifier}&nbsp;
                 </Text>
-                automatically.{'\n\n'}
-                <Text>
-                  Total Hit Points = First Level + Later Levels + Modifier Total
-                </Text>
+                automatically.
               </Text>
             </Note>
             {
@@ -289,7 +285,7 @@ export default class HitPoints extends React.Component {
                   <Button
                     primary
                     raised
-                    text="Update"
+                    text="Roll"
                     onPress={this.onPress}
                   />
                 </View>
@@ -305,7 +301,10 @@ export default class HitPoints extends React.Component {
                   raised
                   text="Reroll"
                   onPress={() => this.reroll()}
-                  disabled={this.state.timesAverageTaken === null}
+                  disabled={
+                    this.state.timesAverageTaken === null ||
+                    this.state.timesAverageTaken === level - 1
+                  }
                   style={{ container: { flex: 1, marginRight: 10 } }}
                 />
               }
@@ -371,8 +370,7 @@ export default class HitPoints extends React.Component {
                       <Text>{hitDie + modifier}</Text>
                     }
                     {
-                      this.state.hitPoints &&
-                      this.state.hitPoints + hitDie + modifier
+                      this.state.hitPoints && this.state.hitPoints
                     }
                   </Text>
                 </Card>
@@ -380,56 +378,66 @@ export default class HitPoints extends React.Component {
             </View>
             {
               this.state.hitPoints &&
-              <Card
-                style={{
-                  container: {
-                    marginTop: 20,
-                    padding: 10,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  },
-                }}
-              >
-                <Text style={[styles.cardTitle, textStyle, { marginBottom: 0 }]}>
-                  <Text style={CardStyle.makeBold}>
-                    First Level
-                  </Text>
-                  &nbsp;= {hitDie} + {modifier} = {hitDie + modifier}{'\n'}
-                  <Text style={CardStyle.makeBold}>
-                    Rolls
-                  </Text>
-                  &nbsp;=&nbsp;
-                  {
-                    this.state.hitPoints &&
-                    this.state.rolls
-                      .map(roll => `(${roll} + ${modifier})`)
-                      .join(' + ')
-                  }
-                  &nbsp;=&nbsp;
-                  {
-                    this.state.hitPoints &&
-                    this.state.rolls
-                      .map(roll => roll + modifier)
-                      .reduce((sum, x) => sum + x)
-                  }
-                  {'\n'}
-                  <Text style={CardStyle.makeBold}>
-                    Average Taken
-                  </Text>
-                  &nbsp;=&nbsp;
-                  {
-                    Array(this.state.timesAverageTaken).fill(average).join(' + ')
-                  }
-                  &nbsp;= {this.state.timesAverageTaken * average}{'\n'}
-                  <Text style={CardStyle.makeBold}>
-                    Total Hit Points
-                  </Text>
-                  &nbsp;=&nbsp;
-                  <Text style={CardStyle.makeBold}>
-                    {this.state.hitPoints + hitDie + modifier}
-                  </Text>
-                </Text>
-              </Card>
+              [
+                <Card key="firstLevel" style={{ container: CardStyle.containerNarrow }}>
+                  <View style={styles.diceLayout}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      Level {formatSingleDigit(1)}:
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {hitDie} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                      {formatSingleDigit(hitDie + modifier)}
+                    </Text>
+                  </View>
+                </Card>,
+              ].concat(Array(this.state.timesAverageTaken).fill(null).map((val, rollNumber) => (
+                <Card
+                  key={`average-taken-${rollNumber}`} // eslint-disable-line react/no-array-index-key
+                  style={{ container: CardStyle.containerNarrow }}
+                >
+                  <View style={styles.diceLayout}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      Level {formatSingleDigit(rollNumber + 2)}:
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {average} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                      {formatSingleDigit(average + modifier)}
+                    </Text>
+                  </View>
+                </Card>
+              ))).concat(this.state.rolls.map((score, rollNumber) => (
+                <Card
+                  key={`roll-${rollNumber}-${score}`} // eslint-disable-line react/no-array-index-key
+                  style={{ container: CardStyle.containerNarrow }}
+                >
+                  <View style={styles.diceLayout}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      Level {formatSingleDigit(rollNumber + 2 + this.state.timesAverageTaken)}:
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                      {score} {negative ? <Text>&minus;</Text> : '+'} {modifierDisplay} =
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                      {formatSingleDigit(score + modifier)}
+                    </Text>
+                  </View>
+                </Card>
+              ))).concat([
+                <Card key="hit-points-total" style={{ container: CardStyle.containerNarrow }}>
+                  <View style={styles.diceLayout}>
+                    <Text style={[styles.scoreLabel, textStyle]}>
+                    Total Hit Points:
+                    </Text>
+                    <Text style={[styles.scoreLabel, textStyle, CardStyle.makeBold]}>
+                      {formatSingleDigit(this.state.hitPoints)}
+                    </Text>
+                  </View>
+                </Card>,
+              ])
             }
           </View>
         </Content>
@@ -444,11 +452,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginBottom: 10,
   },
   buttonLayout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  diceLayout: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 30,
+  },
+  scoreLabel: {
+    fontFamily: 'RobotoLight',
+    color: COLOR.black,
+    fontSize: 24,
   },
   cardTitle: {
     fontFamily: 'RobotoLight',

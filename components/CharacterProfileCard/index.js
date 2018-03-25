@@ -59,7 +59,7 @@ const CharacterProfileCard = (props) => {
       <ListItem
         leftElement={
           <Image
-            source={IMAGES.RACE[props.character.profile.race.lookupKey]}
+            source={IMAGES.RACE[props.character.race.lookupKey]}
             style={{ height: 36, width: 36 }}
             resizeMode="contain"
           />
@@ -102,7 +102,7 @@ const CharacterProfileCard = (props) => {
     <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
       <CardItem cardBody>
         <Image
-          source={IMAGES.RACE[props.character.profile.race.lookupKey]}
+          source={IMAGES.RACE[props.character.race.lookupKey]}
           style={{ height: 100, width: null, flex: 1 }}
         />
         <View style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -114,14 +114,14 @@ const CharacterProfileCard = (props) => {
         </View>
         <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
           <Text style={[styles.lastUpdatedBanner, fadedBackgroundStyle]}>
-            Last updated {moment(props.character.lastUpdated).fromNow()}
+            Last updated {moment(props.character.meta.lastUpdated).fromNow()}
           </Text>
         </View>
       </CardItem>
       <CardItem>
         <Left style={{ flex: 2 }}>
           <Image
-            source={IMAGES.BASE_CLASS.ICON[props.character.profile.baseClass.lookupKey]}
+            source={IMAGES.BASE_CLASS.ICON[props.character.baseClass.lookupKey]}
             style={{ width: 48, height: 64 }}
             resizeMode="contain"
           />
@@ -130,11 +130,11 @@ const CharacterProfileCard = (props) => {
               {getCharacterDisplayName(props.character)}&nbsp;
             </Text>
             <Text style={[styles.subheading, noteStyle]}>
-              {props.character.profile.race.name}&nbsp;
-              {props.character.profile.baseClass.name}
+              {props.character.race.name}&nbsp;
+              {props.character.baseClass.name}
             </Text>
             <Text style={[styles.subheading, noteStyle]}>
-              {props.character.profile.background.name}
+              {props.character.background.name}
             </Text>
           </Body>
         </Left>

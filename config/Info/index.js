@@ -333,6 +333,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['animal handling', 'athletics', 'intimidation', 'nature', 'perception', 'survival'],
+        optionKeys: ['animalHandling', 'athletics', 'intimidation', 'nature', 'perception', 'survival'],
         quantity: 2,
       },
     },
@@ -367,6 +368,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['history', 'insight', 'medicine', 'persuasion', 'religion'],
+        optionKeys: ['history', 'insight', 'medicine', 'persuasion', 'religion'],
         quantity: 2,
       },
     },
@@ -384,6 +386,7 @@ export const CLASSES = [
       tools: [{ name: 'herbalism kit' }],
       skills: {
         options: ['arcana', 'animal handling', 'insight', 'medicine', 'nature', 'perception', 'religion', 'survival'],
+        optionKeys: ['arcana', 'animalHandling', 'insight', 'medicine', 'nature', 'perception', 'religion', 'survival'],
         quantity: 2,
       },
     },
@@ -401,6 +404,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['acrobatics', 'animal handling', 'athletics', 'history', 'insight', 'intimidation', 'perception', 'survival'],
+        optionKeys: ['acrobatics', 'animalHandling', 'athletics', 'history', 'insight', 'intimidation', 'perception', 'survival'],
         quantity: 2,
       },
     },
@@ -423,6 +427,7 @@ export const CLASSES = [
       }],
       skills: {
         options: ['acrobatics', 'athletics', 'history', 'insight', 'religion', 'stealth'],
+        optionKeys: ['acrobatics', 'athletics', 'history', 'insight', 'religion', 'stealth'],
         quantity: 2,
       },
     },
@@ -440,6 +445,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['athletics', 'insight', 'intimidation', 'medicine', 'persuasion', 'religion'],
+        optionKeys: ['athletics', 'insight', 'intimidation', 'medicine', 'persuasion', 'religion'],
         quantity: 2,
       },
     },
@@ -457,6 +463,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['animal handling', 'athletics', 'insight', 'investigation', 'nature', 'perception', 'stealth', 'survival'],
+        optionKeys: ['animalHandling', 'athletics', 'insight', 'investigation', 'nature', 'perception', 'stealth', 'survival'],
         quantity: 3,
       },
     },
@@ -474,6 +481,7 @@ export const CLASSES = [
       tools: [{ name: 'thieves\' tools' }],
       skills: {
         options: ['acrobatics', 'athletics', 'deception', 'insight', 'intimidation', 'investigation', 'perception', 'performance', 'persuasion', 'sleight of hand', 'stealth'],
+        optionKeys: ['acrobatics', 'athletics', 'deception', 'insight', 'intimidation', 'investigation', 'perception', 'performance', 'persuasion', 'sleightOfHand', 'stealth'],
         quantity: 4,
       },
     },
@@ -491,6 +499,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['arcana', 'deception', 'insight', 'intimidation', 'persuasion', 'religion'],
+        optionKeys: ['arcana', 'deception', 'insight', 'intimidation', 'persuasion', 'religion'],
         quantity: 2,
       },
     },
@@ -508,6 +517,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['arcana', 'deception', 'history', 'intimidation', 'investigation', 'nature', 'religion'],
+        optionKeys: ['arcana', 'deception', 'history', 'intimidation', 'investigation', 'nature', 'religion'],
         quantity: 2,
       },
     },
@@ -525,6 +535,7 @@ export const CLASSES = [
       tools: [],
       skills: {
         options: ['arcana', 'history', 'insight', 'investigation', 'medicine', 'religion'],
+        optionKeys: ['arcana', 'history', 'insight', 'investigation', 'medicine', 'religion'],
         quantity: 2,
       },
     },
@@ -537,10 +548,57 @@ export const BACKGROUNDS = [
     key: 'acolyte',
     name: 'Acolyte',
     description: 'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, perform ing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.',
-    equipment: 'A holy symbol (a gift to you when you entered the priesthood), a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a pouch containing 15gp.',
+    starting: {
+      decisions: [
+        [
+          {
+            name: 'Prayer book',
+            description: null,
+            quantity: 1,
+            unit: null,
+          },
+          {
+            name: 'Prayer wheel',
+            description: null,
+            quantity: 1,
+            unit: null,
+          },
+        ],
+      ],
+      equipment: [
+        {
+          name: 'Holy symbol',
+          description: 'A gift to you when you entered the priesthood.',
+          quantity: 1,
+          unit: null,
+        },
+        {
+          name: 'Stick of incense',
+          description: null,
+          quantity: 5,
+          unit: { singular: 'stick', plural: 'sticks' },
+        },
+        {
+          name: 'Vestments',
+          description: null,
+          quantity: null,
+          unit: null,
+        },
+        {
+          name: 'Common clothes',
+          description: null,
+          quantity: 1,
+          unit: { singular: 'set', plural: 'sets' },
+        },
+      ],
+      money: {
+        gp: 15,
+      },
+    },
     additionalLanguages: 2,
     proficiencies: {
       skills: ['insight', 'religion'],
+      skillKeys: ['insight', 'religion'],
       tools: [],
     },
   },

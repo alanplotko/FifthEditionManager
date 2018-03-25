@@ -10,13 +10,20 @@ import { RACES, BACKGROUNDS, LANGUAGES } from 'FifthEditionManager/config/Info';
 import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { cloneDeep } from 'lodash';
 
+const Chance = require('chance');
+
+const chance = new Chance();
+
 export default class Languages extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Assign Languages',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeLanguages(),
       };
       return <Toolbar {...props} />;
     },
@@ -40,9 +47,9 @@ export default class Languages extends React.Component {
     };
 
     this.state.race = RACES
-      .find(option => option.key === this.state.character.profile.race.lookupKey);
+      .find(option => option.key === this.state.character.race.lookupKey);
     this.state.background = BACKGROUNDS
-      .find(option => option.key === this.state.character.profile.background.lookupKey);
+      .find(option => option.key === this.state.character.background.lookupKey);
 
     // Set existing languages and remaining languages to select
     this.state.knownLanguages = this.state.race.languages;
@@ -51,19 +58,24 @@ export default class Languages extends React.Component {
     this.state.remainingLanguages = this.state.additionalLanguages;
   }
 
-  setLanguages = () => {
-    const { navigate, state } = this.props.navigation;
-    state.params.character.lastUpdated = Date.now();
-    state.params.character.profile.languages = this.state.knownLanguages
-      .slice(0).concat(this.state.selectedLanguages.slice(0));
-    navigate('ReviewSavingThrows', { ...state.params });
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeLanguages: this.randomizeLanguages });
   }
 
-  resetLanguages = () => {
+  setLanguages = () => {
+    const { navigate, state } = this.props.navigation;
+    const newCharacter = cloneDeep(state.params.character);
+    newCharacter.meta.lastUpdated = Date.now();
+    newCharacter.languages = this.state.knownLanguages
+      .slice(0).concat(this.state.selectedLanguages.slice(0));
+    navigate('ReviewHitPoints', { character: newCharacter });
+  }
+
+  resetLanguages = (callback) => {
     this.setState({
       selectedLanguages: [],
       remainingLanguages: this.state.additionalLanguages,
-    });
+    }, callback);
   }
 
   toggleLanguage = (key) => {
@@ -84,6 +96,33 @@ export default class Languages extends React.Component {
     this.setState({
       isNoteCollapsed: !this.state.isNoteCollapsed,
     });
+  }
+
+  randomizeLanguages = () => {
+    const callback = () => {
+      let options = LANGUAGES.standard
+        .concat(LANGUAGES.exotic)
+        .map(option => option.language)
+        .filter(option => !this.state.knownLanguages.includes(option));
+      const { remainingLanguages } = this.state;
+      // Get count of standard languages in left partition of the options
+      const standardCount = options.indexOf(LANGUAGES.exotic[0].language);
+      const weights = Array(standardCount).fill(2)
+        .concat(Array(options.length - standardCount).fill(1));
+      const selectedLanguages = [];
+      for (let i = 0; i < remainingLanguages; i += 1) {
+        const choice = chance.weighted(options, weights);
+        selectedLanguages.push(choice);
+        if (options.indexOf(choice) >= standardCount) {
+          weights.pop();
+        } else {
+          weights.splice(0, 1);
+        }
+        options = options.filter(language => language !== choice);
+      }
+      this.setState({ selectedLanguages, remainingLanguages: 0 });
+    };
+    this.resetLanguages(callback);
   }
 
   render() {
@@ -165,7 +204,7 @@ export default class Languages extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
+          <View style={ContainerStyle.padded}>
             <Note
               title="Additional Languages"
               type="info"

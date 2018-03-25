@@ -4,18 +4,14 @@ import { Dimensions, StyleSheet, View, Text, Image } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
 import { RACES } from 'FifthEditionManager/config/Info';
-import { CardStyle, ContainerStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
+import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
+import Note from 'FifthEditionManager/components/Note';
 
 const uuidv4 = require('uuid/v4');
 const Chance = require('chance');
 
 const chance = new Chance();
-
-// 15 margin = (5 margin * 2 sides) + 5 spacing per avatar
-const AVATAR_MARGIN = 15;
-// 35 = race name text height (25) + bottom padding (10) (estimation)
-const TEXT_HEIGHT = 35;
 
 export default class CharacterRace extends React.Component {
   static navigationOptions = {
@@ -23,7 +19,7 @@ export default class CharacterRace extends React.Component {
       const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Character Race',
         rightElement: 'autorenew',
         onRightElementPress: () => routes[index].params.randomizeRace(),
@@ -65,19 +61,18 @@ export default class CharacterRace extends React.Component {
     if (this.state.race) {
       const { navigate } = this.props.navigation;
       const timestamp = Date.now();
-      const profile = Object.assign({}, {
-        race: {
-          lookupKey: this.state.race.key,
-          name: this.state.race.name,
-        },
-      });
 
       // Set up new character object
       const newCharacter = {
         key: uuidv4(),
-        profile,
-        created: timestamp,
-        lastUpdated: timestamp,
+        meta: {
+          created: timestamp,
+          lastUpdated: timestamp,
+        },
+        race: {
+          lookupKey: this.state.race.key,
+          name: this.state.race.name,
+        },
       };
 
       navigate('SetCharacterClass', { character: newCharacter });
@@ -95,74 +90,88 @@ export default class CharacterRace extends React.Component {
     this.setState({ width: dims.window.width, height: dims.window.height });
 
   randomizeRace = () => {
-    this.setState({ race: chance.pickone(RACES) });
+    // Do not reselect current option
+    const key = this.state.race ? this.state.race.key : null;
+    this.setState({ race: chance.pickone(RACES.filter(race => race.key !== key)) });
   }
 
   render() {
     // Theme setup
-    const {
-      backdropIconColor,
-      fadedTextColor,
-      fadedBackgroundColor,
-    } = this.context.uiTheme.palette;
-    const fadedTextStyle = { color: fadedTextColor };
-    const fadedBackgroundStyle = { backgroundColor: fadedBackgroundColor };
+    const { palette } = this.context.uiTheme;
+    const fadedTextStyle = { color: palette.fadedTextColor };
+    const fadedBackgroundStyle = { backgroundColor: palette.fadedBackgroundColor };
 
-    const avatarCount = this.state.width > this.state.height ? 5 : 3;
-    const maxSize = (this.state.width / avatarCount) - AVATAR_MARGIN;
-    const iconSize = maxSize / 2;
+    // Portrait configuration
+    const maxRowItems = this.state.width > this.state.height ? 5 : 3;
+    const maxImageSize = (this.state.width / maxRowItems) - 20; // 20 = 10 margin/side * 2 sides
+    const sizeStyle = { width: maxImageSize, height: maxImageSize - 10 };
+
+    // Check icon configuration
+    const iconSize = maxImageSize / 2;
     const iconBorderRadius = iconSize / 2;
+
+    // Portrait text label configuration
     const spacing = {
-      top: (maxSize - iconSize - TEXT_HEIGHT) / 2,
-      left: (maxSize - iconSize) / 2,
+      // Label height = 35 = race name text height (25) + bottom padding (10) (estimation)
+      top: (maxImageSize - iconSize - 35) / 2,
+      left: (maxImageSize - iconSize) / 2,
     };
+
+    const portraitCard = race => (
+      <Card
+        key={race.key}
+        style={{ container: sizeStyle }}
+        onPress={() => this.setRace(race.key)}
+      >
+        <Image
+          style={sizeStyle}
+          source={race.image}
+          blurRadius={this.state.race && this.state.race.key === race.key ? 3 : 0}
+        />
+        <Text style={[styles.label, fadedBackgroundStyle]}>{race.name}</Text>
+        {
+          this.state.race && this.state.race.key === race.key &&
+          <Icon
+            name="check-circle"
+            color={COLOR.green500}
+            size={iconSize}
+            style={{
+              position: 'absolute',
+              top: spacing.top,
+              left: spacing.left,
+              backgroundColor: COLOR.white,
+              borderRadius: iconBorderRadius,
+            }}
+          />
+        }
+      </Card>
+    );
 
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={[LayoutStyle.centered, LayoutStyle.wrap, { marginTop: 20 }]}>
-            {RACES.map(race => (
-              <Card
-                key={race.key}
-                style={{
-                  container: {
-                    width: maxSize, height: maxSize - 10, marginHorizontal: 5, marginVertical: 5,
-                  },
-                }}
-                onPress={() => this.setRace(race.key)}
-              >
-                <Image
-                  style={{ width: maxSize, height: maxSize - 10 }}
-                  source={race.image}
-                  blurRadius={this.state.race && this.state.race.key === race.key ? 10 : 0}
-                />
-                <Text style={[styles.label, fadedBackgroundStyle]}>{race.name}</Text>
-                {
-                  this.state.race && this.state.race.key === race.key &&
-                  <Icon
-                    name="check-circle"
-                    color={COLOR.green500}
-                    size={iconSize}
-                    style={{
-                      position: 'absolute',
-                      top: spacing.top,
-                      left: spacing.left,
-                      backgroundColor: COLOR.white,
-                      borderRadius: iconBorderRadius,
-                    }}
-                  />
-                }
-              </Card>
-            ))}
+          <View style={[ContainerStyle.padded, { paddingBottom: 0 }]}>
+            <Note
+              title="Choosing a Race"
+              type="tip"
+              icon="lightbulb-outline"
+              uiTheme={this.context.uiTheme}
+            >
+              <Text>
+                The race you choose will determine what basic advantages and traits your character
+                will possess.
+              </Text>
+            </Note>
           </View>
-          <View style={{ margin: 20, alignItems: 'center' }}>
+          <View style={styles.grid}>{RACES.map(race => portraitCard(race))}</View>
+          <View style={ContainerStyle.padded}>
             <Button
               primary
               raised
               disabled={!this.state.race}
               onPress={this.onPress}
               text="Proceed"
-              style={{ container: { width: '100%', marginBottom: 20 } }}
+              style={{ container: { marginBottom: 10 } }}
             />
             {
               this.state.race &&
@@ -181,7 +190,7 @@ export default class CharacterRace extends React.Component {
                   <Icon
                     name="info"
                     style={{
-                      color: backdropIconColor,
+                      color: palette.backdropIconColor,
                       fontSize: 48,
                       width: 48,
                       height: 48,
@@ -215,5 +224,10 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: COLOR.grey700,
     fontSize: 18,
+  },
+  grid: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });

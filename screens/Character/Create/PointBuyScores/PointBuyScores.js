@@ -24,9 +24,10 @@ const initialState = {
 export default class PointBuyScores extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
       const props = {
         leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(),
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Point Buy Ability Scores',
       };
       return <Toolbar {...props} />;
@@ -49,8 +50,8 @@ export default class PointBuyScores extends React.Component {
   acceptRolls = () => {
     const { navigate, state } = this.props.navigation;
     navigate('AssignAbilityScores', {
+      character: state.params.character,
       scores: this.state.scores,
-      ...state.params,
     });
   }
 
@@ -138,10 +139,8 @@ export default class PointBuyScores extends React.Component {
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
-          <View style={{ margin: 20 }}>
-            <Card
-              style={{ container: { marginBottom: 10, padding: 10 } }}
-            >
+          <View style={ContainerStyle.padded}>
+            <Card style={{ container: CardStyle.containerNarrow }}>
               <Text style={[styles.bigHeading, textStyle]}>
                 <Text style={CardStyle.makeBold}>
                   {this.state.points}
@@ -171,8 +170,8 @@ export default class PointBuyScores extends React.Component {
                 style={{
                   container: {
                     flex: 1,
+                    marginRight: 5,
                     height: 40,
-                    marginHorizontal: 10,
                   },
                 }}
               />
@@ -189,8 +188,8 @@ export default class PointBuyScores extends React.Component {
                 style={{
                   container: {
                     flex: 2,
+                    marginLeft: 5,
                     height: 40,
-                    marginHorizontal: 10,
                   },
                 }}
               />

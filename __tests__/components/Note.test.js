@@ -80,6 +80,11 @@ describe('Note', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  test('renders properly as info note with tip type', () => {
+    const wrapper = shallow(<Note title="Tip" icon="lightbulb-outline" type="tip"><Text>Tip here.</Text></Note>);
+    expect(wrapper).toMatchSnapshot();
+  });
+
   test('can expand and collapse properly', () => {
     const wrapper = shallow(<NoteWrapper />);
 

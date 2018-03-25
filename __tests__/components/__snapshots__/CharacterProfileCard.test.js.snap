@@ -5,24 +5,27 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
   <CharacterProfileCard
     character={
       Object {
+        "background": Object {
+          "lookupKey": "Background",
+          "name": "Background",
+        },
+        "baseClass": Object {
+          "lookupKey": "Class",
+          "name": "Class",
+        },
         "key": "key",
-        "lastUpdated": 0,
+        "meta": Object {
+          "lastUpdated": 0,
+        },
         "profile": Object {
-          "background": Object {
-            "name": "Background",
-          },
-          "baseClass": Object {
-            "lookupKey": "Class",
-            "name": "Class",
-          },
           "experience": 0,
           "firstName": "First",
           "lastName": "Last",
           "level": 1,
-          "race": Object {
-            "lookupKey": "Race",
-            "name": "Race",
-          },
+        },
+        "race": Object {
+          "lookupKey": "Race",
+          "name": "Race",
         },
       }
     }
@@ -91,24 +94,27 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
   <CharacterProfileCard
     character={
       Object {
+        "background": Object {
+          "lookupKey": "Background",
+          "name": "Background",
+        },
+        "baseClass": Object {
+          "lookupKey": "Class",
+          "name": "Class",
+        },
         "key": "key",
-        "lastUpdated": 0,
+        "meta": Object {
+          "lastUpdated": 0,
+        },
         "profile": Object {
-          "background": Object {
-            "name": "Background",
-          },
-          "baseClass": Object {
-            "lookupKey": "Class",
-            "name": "Class",
-          },
           "experience": 0,
           "firstName": "First",
           "lastName": "Last",
           "level": 1,
-          "race": Object {
-            "lookupKey": "Race",
-            "name": "Race",
-          },
+        },
+        "race": Object {
+          "lookupKey": "Race",
+          "name": "Race",
         },
       }
     }

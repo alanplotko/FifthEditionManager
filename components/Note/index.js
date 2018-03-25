@@ -6,10 +6,18 @@ import { COLOR, Icon, IconToggle } from 'react-native-material-ui';
 import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 const Note = (props) => {
-  // Note color setup
-  let color = COLOR.lightBlue500; // Default for info note
+  // Note style and icon setup
+  let iconColor = COLOR.black; // Default
+  let noteTypeStyle = null;
   if (props.type === 'error') {
-    color = COLOR.red500;
+    iconColor = COLOR.red500;
+    noteTypeStyle = styles.error;
+  } else if (props.type === 'tip') {
+    iconColor = COLOR.blueGrey500;
+    noteTypeStyle = styles.tip;
+  } else if (props.type === 'info') {
+    iconColor = COLOR.lightBlue500;
+    noteTypeStyle = styles.info;
   }
 
   // Theme setup
@@ -17,13 +25,13 @@ const Note = (props) => {
   const textStyle = { color: textColor };
 
   return (
-    <View style={props.type === 'info' ? styles.infoNote : styles.errorNote}>
+    <View style={[styles.note, noteTypeStyle]}>
       {
         props.collapsible &&
         <View style={{ position: 'absolute', top: 0, right: 0 }}>
           <IconToggle
             name={props.isCollapsed ? 'arrow-drop-down' : 'arrow-drop-up'}
-            color={color}
+            color={iconColor}
             size={28}
             percent={50}
             onPress={() => props.toggleNoteHandler()}
@@ -34,25 +42,25 @@ const Note = (props) => {
         style={{
           flex: 1,
           flexDirection: 'row',
-          marginBottom: !props.isCollapsed ? 10 : 0,
+          marginBottom: !props.isCollapsed || !props.collapsible ? 10 : 0,
         }}
       >
         {
           props.icon &&
           <Icon
             name={props.icon}
-            color={color}
+            color={iconColor}
             style={{ marginRight: 10 }}
           />
         }
-        <Text style={[props.type === 'info' ? styles.infoHeading : styles.errorHeading, textStyle]}>
+        <Text style={[styles.noteHeading, textStyle]}>
           {props.title}
         </Text>
       </View>
       {
         (!props.collapsible || !props.isCollapsed) &&
-        <View style={{}}>
-          <Text style={[props.type === 'info' ? styles.infoText : styles.errorText, textStyle]}>
+        <View>
+          <Text style={[styles.noteText, textStyle]}>
             {props.children}
           </Text>
           {
@@ -68,38 +76,18 @@ const Note = (props) => {
 };
 
 const styles = StyleSheet.create({
-  infoNote: {
-    backgroundColor: COLOR.lightBlue50,
+  note: {
     borderWidth: 0.5,
-    borderColor: COLOR.lightBlue500,
     borderRadius: 3,
     marginBottom: 15,
     padding: 15,
   },
-  infoHeading: {
+  noteHeading: {
     fontFamily: 'RobotoBold',
     color: COLOR.black,
     fontSize: 18,
   },
-  infoText: {
-    fontFamily: 'Roboto',
-    color: COLOR.black,
-    fontSize: 14,
-  },
-  errorNote: {
-    backgroundColor: COLOR.red50,
-    borderWidth: 0.5,
-    borderColor: COLOR.red500,
-    borderRadius: 3,
-    marginBottom: 15,
-    padding: 15,
-  },
-  errorHeading: {
-    fontFamily: 'RobotoBold',
-    color: COLOR.black,
-    fontSize: 18,
-  },
-  errorText: {
+  noteText: {
     fontFamily: 'Roboto',
     color: COLOR.black,
     fontSize: 14,
@@ -108,6 +96,18 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontStyle: 'italic',
     marginTop: 10,
+  },
+  tip: {
+    backgroundColor: COLOR.blueGrey50,
+    borderColor: COLOR.blueGrey500,
+  },
+  error: {
+    backgroundColor: COLOR.red50,
+    borderColor: COLOR.red500,
+  },
+  info: {
+    backgroundColor: COLOR.lightBlue50,
+    borderColor: COLOR.lightBlue500,
   },
 });
 
