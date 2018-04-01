@@ -1,6 +1,6 @@
 import React from 'react';
 import { CharacterRace } from 'FifthEditionManager/screens/Character/Create/CharacterRace';
-import { Dimensions, Text } from 'react-native';
+import { Dimensions } from 'react-native';
 import { Button, Card } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { RACES } from 'FifthEditionManager/config/Info';

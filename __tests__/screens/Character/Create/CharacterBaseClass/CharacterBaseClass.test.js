@@ -1,8 +1,7 @@
 import React from 'react';
 import { CharacterBaseClass }
   from 'FifthEditionManager/screens/Character/Create/CharacterBaseClass';
-import { Text } from 'react-native';
-import { Button, Card } from 'react-native-material-ui';
+import { Button } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { CLASSES } from 'FifthEditionManager/config/Info';
 
