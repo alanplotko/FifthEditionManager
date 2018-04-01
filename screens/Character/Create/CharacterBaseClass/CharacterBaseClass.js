@@ -288,7 +288,7 @@ export default class CharacterBaseClass extends React.Component {
                           } else if (tool.tag) {
                             return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
                           }
-                          return '';
+                          return '[Unknown Name]';
                         })
                         .join(', ')
                     }

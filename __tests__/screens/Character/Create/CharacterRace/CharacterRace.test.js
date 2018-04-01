@@ -98,8 +98,6 @@ describe('Character Race Screen', () => {
       wrapper.update();
       expect(wrapper.state()).toHaveProperty('race.key', raceCards.at(i).key());
       expect(wrapper.find(OGLButton)).toHaveLength(1);
-      expect(wrapper.find(Text).last().dive().text())
-        .toEqual(RACES.find(race => race.key === raceCards.at(i).key()).description);
       expect(wrapper).toMatchSnapshot();
 
       // Deselect race; confirm deselection in state
@@ -107,37 +105,24 @@ describe('Character Race Screen', () => {
       wrapper.update();
       expect(wrapper.state()).toHaveProperty('race', null);
       expect(wrapper.find(OGLButton)).toHaveLength(0);
-      expect(wrapper.find(Text).last().dive().text())
-        .toEqual('Selection details will display here');
       expect(wrapper).toMatchSnapshot();
     }
   });
 
-  test('can submit race selection', () => {
+  test('allows submission only after race selection', () => {
     const navigateSpy = sinon.spy(navigation, 'navigate');
     const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
     const raceCards = wrapper.findWhere(n => n.type() === Card && raceList.includes(n.key()));
     expect(navigateSpy.notCalled).toBe(true);
 
-    // Select race and submit race selection
+    // Submission blocked before race selection
+    wrapper.find(Button).props().onPress();
+    expect(navigateSpy.notCalled).toBe(true);
+
+    // Submission allowed after race selection
     raceCards.at(0).props().onPress();
     wrapper.find(Button).props().onPress();
-    wrapper.update();
     expect(navigateSpy.calledOnce).toBe(true);
-
-    // Spy cleanup
-    navigateSpy.restore();
-  });
-
-  test('skips submission when no race selected', () => {
-    const navigateSpy = sinon.spy(navigation, 'navigate');
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
-    expect(navigateSpy.notCalled).toBe(true);
-
-    // Hit button to submit without selection
-    wrapper.instance().onPress();
-    wrapper.update();
-    expect(navigateSpy.notCalled).toBe(true);
 
     // Spy cleanup
     navigateSpy.restore();
