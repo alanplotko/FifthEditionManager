@@ -1,6 +1,6 @@
 import { AppLoading, Asset, Font } from 'expo';
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 // Assets
 import { IMAGES } from 'FifthEditionManager/config/Info';
@@ -22,7 +22,7 @@ const RobotoRegular =
 const RobotoBold = require('FifthEditionManager/assets/fonts/Roboto/Roboto-Bold.ttf');
 
 // Navigation config
-const RootNavigator = StackNavigator({
+const RootNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
   SetCharacterRace: { screen: CharacterBuild.CharacterRace },
   SetCharacterClass: { screen: CharacterBuild.CharacterBaseClass },

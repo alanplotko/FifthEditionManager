@@ -16,6 +16,7 @@ jest.mock('ScrollView', () => {
   const mockComponent = require('react-native/jest/mockComponent');
   return mockComponent('ScrollView');
 });
+jest.mock('View', () => 'View');
 jest.mock('react-native-material-ui/src/Icon', () => 'Icon');
 jest.mock('react-native-material-ui/src/IconToggle', () => 'IconToggle');
 jest.mock('react-native-material-ui/src/Checkbox', () => 'Checkbox');

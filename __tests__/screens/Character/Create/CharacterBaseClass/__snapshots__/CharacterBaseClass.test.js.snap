@@ -540,6 +540,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -1464,6 +1465,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -2011,6 +2013,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -2935,6 +2938,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -3482,6 +3486,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -4406,6 +4411,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -4953,6 +4959,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -5877,6 +5884,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -6424,6 +6432,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -7348,6 +7357,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -7895,6 +7905,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -8819,6 +8830,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -9366,6 +9378,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -10290,6 +10303,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -10837,6 +10851,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -11761,6 +11776,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -12308,6 +12324,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -13232,6 +13249,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -13779,6 +13797,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -14703,6 +14722,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -15250,6 +15270,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -16174,6 +16195,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -16721,6 +16743,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -17645,6 +17668,7 @@ exports[`Character Base Class Screen can select any class, view class details an
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />
@@ -18192,6 +18216,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
             },
           }
         }
+        testID={null}
         text="Proceed"
         upperCase={true}
       />

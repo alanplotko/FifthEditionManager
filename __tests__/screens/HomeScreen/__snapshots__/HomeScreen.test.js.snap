@@ -52,12 +52,9 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
   >
     <Styled(Tab)
       heading={
-        <Styled(TabHeadingNB)
-          virtual={undefined}
-        >
+        <Styled(TabHeadingNB)>
           <Styled(Icon)
             name="home"
-            virtual={undefined}
           />
         </Styled(TabHeadingNB)>
       }
@@ -121,12 +118,8 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
     </Styled(Tab)>
     <Styled(Tab)
       heading={
-        <Styled(TabHeadingNB)
-          virtual={undefined}
-        >
-          <Styled(Text)
-            virtual={undefined}
-          >
+        <Styled(TabHeadingNB)>
+          <Styled(Text)>
             Campaigns
           </Styled(Text)>
         </Styled(TabHeadingNB)>
@@ -191,12 +184,8 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
     </Styled(Tab)>
     <Styled(Tab)
       heading={
-        <Styled(TabHeadingNB)
-          virtual={undefined}
-        >
-          <Styled(Text)
-            virtual={undefined}
-          >
+        <Styled(TabHeadingNB)>
+          <Styled(Text)>
             Characters
           </Styled(Text)>
         </Styled(TabHeadingNB)>
@@ -314,6 +303,9 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
     onBackdropPress={[Function]}
     onModalHide={[Function]}
     onModalShow={[Function]}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
     style={
       Object {
         "margin": 0,

@@ -32,6 +32,7 @@ exports[`OGL Button renders properly 1`] = `
         ],
       }
     }
+    testID={null}
     text="Test Source"
     upperCase={false}
   />
@@ -51,6 +52,9 @@ exports[`OGL Button renders properly 1`] = `
     onBackdropPress={[Function]}
     onModalHide={[Function]}
     onModalShow={[Function]}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
     style={
       Object {
         "margin": 0,

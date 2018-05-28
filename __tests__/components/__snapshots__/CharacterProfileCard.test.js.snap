@@ -81,6 +81,9 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
     onBackdropPress={[Function]}
     onModalHide={[Function]}
     onModalShow={[Function]}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
     swipeThreshold={100}
     useNativeDriver={false}
   >
@@ -144,7 +147,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   },
                 ]
               }
-              virtual={undefined}
             >
               First Last
             </Styled(Text)>
@@ -154,7 +156,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
           leftElement={
             <Image
               resizeMode="contain"
-              source={undefined}
               style={
                 Object {
                   "height": 36,
@@ -186,6 +187,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -197,7 +199,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               View Character
             </Styled(Text)>
@@ -228,6 +229,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -239,7 +241,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               Edit Character
             </Styled(Text)>
@@ -270,6 +271,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -281,7 +283,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               Delete Character
             </Styled(Text)>
@@ -312,6 +313,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
       </View>
     }
@@ -363,6 +365,9 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
     onBackdropPress={[Function]}
     onModalHide={[Function]}
     onModalShow={[Function]}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
     swipeThreshold={100}
     useNativeDriver={false}
   >
@@ -389,7 +394,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   },
                 ]
               }
-              virtual={undefined}
             >
               First Last
             </Styled(Text)>
@@ -399,7 +403,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
           leftElement={
             <Image
               resizeMode="contain"
-              source={undefined}
               style={
                 Object {
                   "height": 36,
@@ -431,6 +434,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -442,7 +446,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               View Character
             </Styled(Text)>
@@ -473,6 +476,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -484,7 +488,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               Edit Character
             </Styled(Text)>
@@ -515,6 +518,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
         <ListItem
           centerElement={
@@ -526,7 +530,6 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
                   "fontSize": 14,
                 }
               }
-              virtual={undefined}
             >
               Delete Character
             </Styled(Text)>
@@ -557,6 +560,7 @@ exports[`Character Profile Card can select all options in the modal 2`] = `
               },
             }
           }
+          testID={null}
         />
       </View>
     </View>
