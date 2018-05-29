@@ -12,14 +12,15 @@ import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfil
 import { getCharacterDisplayName } from 'FifthEditionManager/util';
 import { IMAGES } from 'FifthEditionManager/config/Info';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
+import { get } from 'lodash';
 
 const uuidv4 = require('uuid/v4');
 
 // Return compare function with the corresponding timestamp key
 const compareDates = key => (a, b) => {
-  if (a[key] > b[key]) {
+  if (get(a, key) > get(b, key)) {
     return -1;
-  } else if (a[key] < b[key]) {
+  } else if (get(a, key) < get(b, key)) {
     return 1;
   }
   return 0;
@@ -77,7 +78,7 @@ export default class HomeScreen extends React.Component {
         this.setState({
           activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
           campaigns: data[1] ? data[1] : [],
-          characters: data[2] ? data[2].sort(compareDates('lastUpdated')) : [],
+          characters: data[2] ? data[2].sort(compareDates('meta.lastUpdated')) : [],
         }, () => resolve(data));
       })
       .catch(error => this.setState({ error }, () => resolve(null)));
