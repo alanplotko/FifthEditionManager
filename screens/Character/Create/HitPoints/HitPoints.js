@@ -4,7 +4,7 @@ import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import Note from 'FifthEditionManager/components/Note';
 import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
@@ -162,7 +162,7 @@ export default class HitPoints extends React.Component {
         store
           .push(ACTIVITY_KEY, newActivity)
           .then(() => {
-            const resetAction = NavigationActions.reset({
+            const resetAction = StackActions.reset({
               index: 0,
               actions: [NavigationActions.navigate({
                 routeName: 'Home',
