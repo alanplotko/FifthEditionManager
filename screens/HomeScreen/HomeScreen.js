@@ -30,7 +30,7 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: () => {
       const props = {
-        centerElement: 'D&D Manager',
+        centerElement: 'Fifth Edition Manager',
       };
       return <Toolbar {...props} />;
     },
