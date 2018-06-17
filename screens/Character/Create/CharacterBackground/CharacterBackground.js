@@ -77,8 +77,7 @@ export default class CharacterBackground extends React.Component {
   }
 
   onPress = () => {
-    const background = this.form.getValue();
-    if (background) {
+    if (this.state.background) {
       const { navigate, state } = this.props.navigation;
       const newCharacter = cloneDeep(state.params.character);
       newCharacter.meta.lastUpdated = Date.now();
@@ -100,7 +99,12 @@ export default class CharacterBackground extends React.Component {
       }
       newCharacter.equipment = this.state.background.starting.equipment.slice(0)
         .concat(Object.values(additionalItems));
-      newCharacter.money = this.state.background.starting.money;
+      newCharacter.money = Object.assign(
+        {
+          cp: 0, sp: 0, ep: 0, gp: 0, pp: 0,
+        },
+        this.state.background.starting.money,
+      );
       navigate('SetUpProfile', { character: newCharacter });
     }
   }
@@ -309,46 +313,81 @@ export default class CharacterBackground extends React.Component {
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
+                  {
+                    this.state.background.starting.decisions &&
+                    this.state.background.starting.decisions.length === 0 &&
+                    this.state.background.starting.equipment &&
+                    this.state.background.starting.equipment.length === 0 &&
+                    !this.state.background.starting.money &&
+                    <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
+                      No starting equipment.
+                    </Text>
+                  }
                   <Text style={[CardStyle.cardText, CardStyle.extraPadding]}>
-                    {this.state.background.starting.equipment.map(item => (
-                      <Text key={`${item.name}`}>
-                        <Text>
-                          &bull;&nbsp;<Text style={CardStyle.makeBold}>{item.name}</Text>
+                    {
+                      this.state.background.starting.equipment.length > 0 &&
+                      this.state.background.starting.equipment.map(item => (
+                        <Text key={`${item.name}`}>
+                          <Text>
+                            &bull;&nbsp;<Text style={CardStyle.makeBold}>{item.name}</Text>
+                            {
+                              item.quantity &&
+                              <Text style={CardStyle.makeItalic}>
+                                &nbsp;({item.quantity}
+                                {
+                                  item.unit &&
+                                  <Text>
+                                    &nbsp;
+                                    {item.quantity > 1 ? item.unit.plural : item.unit.singular}
+                                  </Text>
+                                }
+                                &nbsp;in inventory)
+                              </Text>
+                            }
+                          </Text>
                           {
-                            item.quantity &&
-                            <Text style={CardStyle.makeItalic}>
-                              &nbsp;({item.quantity}
-                              {
-                                item.unit &&
-                                <Text>
-                                  &nbsp;
-                                  {item.quantity > 1 ? item.unit.plural : item.unit.singular}
-                                </Text>
-                              }
-                              &nbsp;in inventory)
-                            </Text>
+                            item.description &&
+                            <Text>: {item.description}</Text>
                           }
+                          {'\n\n'}
                         </Text>
-                        {
-                          item.description &&
-                          <Text>: {item.description}</Text>
-                        }
+                      ))
+                    }
+                    {
+                      this.state.background.starting.money &&
+                      <Text style={CardStyle.extraPadding}>
+                        &bull;&nbsp;
+                        <Text style={CardStyle.makeBold}>Starting money&nbsp;</Text>
+                        <Text style={CardStyle.makeItalic}>
+                          ({
+                            toProperList(
+                              Object.keys(this.state.background.starting.money)
+                                .map(ccy => `${this.state.background.starting.money[ccy]} ${ccy}`),
+                              'and',
+                              false,
+                            )
+                          }&nbsp;on hand)
+                        </Text>
                         {'\n\n'}
                       </Text>
-                    ))}
-                    {this.state.background.starting.decisions.map((items, decisionIndex) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <Text key={`${decisionIndex}`}>
-                        &bull;&nbsp;
-                        <Text style={CardStyle.makeBold}>
-                          Decision #{decisionIndex + 1}:&nbsp;
+                    }
+                    {
+                      this.state.background.starting.decisions &&
+                      this.state.background.starting.decisions.length > 0 &&
+                      this.state.background.starting.decisions.map((items, decisionIndex) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Text key={`${decisionIndex}`}>
+                          &bull;&nbsp;
+                          <Text style={CardStyle.makeBold}>
+                            Decision #{decisionIndex + 1}:&nbsp;
+                          </Text>
+                          1 of&nbsp;
+                          {
+                            toProperList(items.map(item => item.name), 'or', false)
+                          }
                         </Text>
-                        1 of&nbsp;
-                        {
-                          toProperList(items.map(item => item.name), 'or', false)
-                        }
-                      </Text>
-                    ))}
+                      ))
+                    }
                   </Text>
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
