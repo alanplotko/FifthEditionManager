@@ -85,20 +85,24 @@ export default class CharacterBackground extends React.Component {
         lookupKey: this.state.background.key,
         name: this.state.background.name,
       };
-      const additionalItems = {};
+
+      // Set up starting inventory
+      const inventory = {};
+      this.state.background.starting.equipment.forEach((item) => {
+        inventory[item.name] = item;
+      });
+
       if (this.state.selectedDecisions.length > 0) {
-        this.state.selectedDecisions.forEach((name, index) => {
+        this.state.selectedDecisions.forEach((item) => {
           // Ignore duplicate item if quantity is not tracked; otherwise, increase quantity by 1
-          if (additionalItems[name] && additionalItems[name].quantity) {
-            additionalItems[name].quantity += 1;
+          if (inventory[item.name] && inventory[item.name].quantity) {
+            inventory[item.name].quantity += 1;
           } else {
-            additionalItems[name] = this.state.background.starting.decisions[index]
-              .find(item => item.name === name);
+            inventory[item.name] = item;
           }
         });
       }
-      newCharacter.equipment = this.state.background.starting.equipment.slice(0)
-        .concat(Object.values(additionalItems));
+      newCharacter.equipment = Object.values(inventory);
       newCharacter.money = Object.assign(
         {
           cp: 0, sp: 0, ep: 0, gp: 0, pp: 0,
@@ -218,13 +222,14 @@ export default class CharacterBackground extends React.Component {
     const options = BACKGROUNDS.filter(background => background.key !== key);
     if (options.length >= 1) {
       const background = chance.pickone(options);
-      const decisions = background ? background.starting.decisions : [];
       const selectedDecisions = [];
-      decisions.forEach(decision => selectedDecisions.push(chance.pickone(decision).name));
+      background.starting.decisions.forEach((decision) => {
+        selectedDecisions.push(chance.pickone(decision).name);
+      });
       this.setState({
         background,
         form: { background: background.key },
-        decisions,
+        decisions: background.starting.decisions,
         selectedDecisions,
       });
     }
@@ -259,7 +264,7 @@ export default class CharacterBackground extends React.Component {
               type={BackgroundForm}
               value={this.state.form}
               options={this.backgroundFormOptions}
-              onChange={this.onChangeBackground}
+              onChange={value => this.onChangeBackground(value)}
             />
             {
               this.state.decisions.length > 0 &&
@@ -292,7 +297,7 @@ export default class CharacterBackground extends React.Component {
             {
               this.state.background && [
                 <Card
-                  key={`${this.state.background.name}-background`}
+                  key={`${this.state.background.key}-background`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>{this.state.background.name}</Text>
@@ -309,7 +314,7 @@ export default class CharacterBackground extends React.Component {
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
-                  key={`${this.state.background.name}-equipment`}
+                  key={`${this.state.background.key}-equipment`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Starting Equipment</Text>
@@ -392,7 +397,7 @@ export default class CharacterBackground extends React.Component {
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
                 <Card
-                  key={`${this.state.background.name}-proficiencies`}
+                  key={`${this.state.background.key}-proficiencies`}
                   style={{ container: CardStyle.container }}
                 >
                   <Text style={CardStyle.cardHeading}>Proficiencies</Text>
@@ -422,7 +427,7 @@ export default class CharacterBackground extends React.Component {
                           } else if (tool.tag) {
                             return `${tool.quantity} of ${toTitleCase(tool.tag)}`;
                           }
-                          return '';
+                          return '[Unknown Name]';
                         })
                         .join(', ')
                     }

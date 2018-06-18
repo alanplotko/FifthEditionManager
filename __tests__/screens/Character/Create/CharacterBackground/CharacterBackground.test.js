@@ -4,9 +4,11 @@ import { CharacterBackground }
 import { Button } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
-import { cloneDeep } from 'lodash';
 
 const t = require('tcomb-form-native');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 describe('Character Background Screen', () => {
   const state = {
@@ -23,7 +25,7 @@ describe('Character Background Screen', () => {
   };
   const navigation = { navigate: jest.fn(), setParams: jest.fn(), state };
   const context = { uiTheme: DefaultTheme };
-  const backgroundList = BACKGROUNDS.map(background => background.key).concat('sample');
+  const backgroundList = BACKGROUNDS.map(background => background.key);
 
   test('can build navigation options', () => {
     const goBackSpy = sinon.spy();
@@ -64,16 +66,7 @@ describe('Character Background Screen', () => {
     const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
     const backgroundForm = wrapper.find(t.form.Form);
 
-    // Set up multiple backgrounds
-    const backgroundCopy = BACKGROUNDS.slice(0);
-    backgroundCopy.push(cloneDeep(BACKGROUNDS[0]));
-    backgroundCopy[1].key = 'sample';
-    backgroundCopy[1].name = 'Sample';
-    const backgroundFindStub = sinon.stub(BACKGROUNDS, 'find');
-    backgroundFindStub.onCall(0).returns(backgroundCopy[0]);
-    backgroundFindStub.onCall(2).returns(backgroundCopy[1]);
-
-    // Test form options
+    // Test background form options
     expect(backgroundForm.at(0).props().options.template(locals)).toMatchSnapshot();
 
     backgroundList.forEach((background) => {
@@ -93,41 +86,56 @@ describe('Character Background Screen', () => {
       expect(wrapper.find(OGLButton)).toHaveLength(0);
       expect(wrapper).toMatchSnapshot();
     });
-
-    // Stub cleanup
-    backgroundFindStub.restore();
   });
 
   test('allows submission only after background and decision selections', () => {
-    const navigateSpy = sinon.spy(navigation, 'navigate');
     const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
-    let forms = wrapper.find(t.form.Form);
-    expect(forms).toHaveLength(1);
+
+    // Set up a spy to confirm successful submisisons
+    const navigateSpy = sinon.spy(navigation, 'navigate');
     expect(navigateSpy.notCalled).toBe(true);
 
-    // Submission blocked before background selection
-    wrapper.find(Button).props().onPress();
-    expect(navigateSpy.notCalled).toBe(true);
+    BACKGROUNDS.forEach((background) => {
+      // There should initially be 1 background form
+      let forms = wrapper.find(t.form.Form);
+      expect(forms).toHaveLength(1);
 
-    // Select background (acolyte)
-    wrapper.instance().onChangeBackground({ background: BACKGROUNDS[0].key });
-    wrapper.update();
+      // Submission blocked before background selection
+      wrapper.find(Button).props().onPress();
+      expect(navigateSpy.notCalled).toBe(true);
 
-    // Decision form should be visible, so 2 forms in total
-    forms = wrapper.find(t.form.Form);
-    expect(forms).toHaveLength(2);
+      // Select background
+      forms.at(0).props().onChange({ background: background.key });
+      wrapper.update();
 
-    // Select decision
-    wrapper.instance().onChangeDecision({
-      index: 0,
-      decision: BACKGROUNDS[0].starting.decisions[0][0],
+      // Number of forms should now be 1 background form + (1 form * # decisions)
+      forms = wrapper.find(t.form.Form);
+      expect(forms).toHaveLength(1 + background.starting.decisions.length);
+
+      // Randomize decisions
+      background.starting.decisions.forEach((options, index) => {
+        const decision = chance.pickone(options);
+        // Simulate existing the decision dialog
+        forms.at(index + 1).props().onChange(null);
+        // Simulate selecting a decision
+        forms.at(index + 1).props().onChange({ index, decision });
+        expect(wrapper.state().selectedDecisions).toContain(decision);
+
+        // Test decision form options
+        expect(forms.at(index + 1).props().options.template(locals)).toMatchSnapshot();
+      });
+
+      // Submission allowed after background selection
+      wrapper.find(Button).props().onPress();
+      wrapper.update();
+      expect(navigateSpy.calledOnce).toBe(true);
+
+      // Return to clean state before selecting next background
+      forms.at(0).props().onChange({ background: '' });
+      wrapper.update();
+      navigateSpy.resetHistory();
+      expect(navigateSpy.notCalled).toBe(true);
     });
-    expect(wrapper.state().selectedDecisions).toContain(BACKGROUNDS[0].starting.decisions[0][0]);
-
-    // Submission allowed after background selection
-    wrapper.find(Button).props().onPress();
-    wrapper.update();
-    expect(navigateSpy.calledOnce).toBe(true);
 
     // Spy cleanup
     navigateSpy.restore();
@@ -135,16 +143,6 @@ describe('Character Background Screen', () => {
 
   test('can randomize background selection', () => {
     const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
-
-    // Set up multiple backgrounds
-    const backgroundCopy = BACKGROUNDS.slice(0);
-    backgroundCopy.push(cloneDeep(BACKGROUNDS[0]));
-    backgroundCopy[1].key = 'sample';
-    backgroundCopy[1].name = 'Sample';
-
-    // Call filter on backgroundCopy instead of BACKGROUNDS
-    const backgroundFilterStub = sinon.stub(BACKGROUNDS, 'filter')
-      .callsFake(filter => backgroundCopy.filter(filter));
 
     // Randomize when no background is selected
     expect(wrapper.state()).toHaveProperty('background', null);
@@ -160,6 +158,30 @@ describe('Character Background Screen', () => {
     expect(wrapper.state()).toHaveProperty('background.key');
     expect(backgroundList.includes(wrapper.state().background.key)).toBe(true);
     expect(wrapper.state().background.key).not.toEqual(firstSelectionKey);
+  });
+
+  test('can randomize background selection given only the default background list', () => {
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
+
+    // Randomize when no background is selected
+    expect(wrapper.state()).toHaveProperty('background', null);
+    wrapper.instance().randomizeBackground();
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('background.key');
+    const firstSelectionKey = wrapper.state().background.key;
+    expect(backgroundList.includes(firstSelectionKey)).toBe(true);
+
+    // Simulate there being no other backgrounds available aside from the currently selected one
+    const backgroundFilterStub = sinon.stub(BACKGROUNDS, 'filter').returns([]);
+
+    // Randomize when a background is selected
+    wrapper.instance().randomizeBackground();
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('background.key');
+    expect(backgroundList.includes(wrapper.state().background.key)).toBe(true);
+
+    // No change on the next randomizeBackground call, since there's only one default background
+    expect(wrapper.state().background.key).toEqual(firstSelectionKey);
 
     // Stub cleanup
     backgroundFilterStub.restore();
@@ -169,32 +191,9 @@ describe('Character Background Screen', () => {
     const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
     const backgroundForm = wrapper.find(t.form.Form);
 
-    // Create sample background
-    const sampleBackground = {
-      key: 'sample',
-      name: 'Sample',
-      description: 'Description text.',
-      starting: {
-        decisions: [],
-        equipment: [],
-        money: null,
-      },
-      additionalLanguages: 0,
-      proficiencies: {
-        skills: [],
-        skillKeys: [],
-        tools: [],
-      },
-    };
-    const backgroundFindStub = sinon.stub(BACKGROUNDS, 'find');
-    backgroundFindStub.returns(sampleBackground);
-
     // Select sample background
-    backgroundForm.at(0).props().onChange({ background: sampleBackground.key });
+    backgroundForm.at(0).props().onChange({ background: 'emptyBackgroundTest' });
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
-
-    // Stub cleanup
-    backgroundFindStub.restore();
   });
 });

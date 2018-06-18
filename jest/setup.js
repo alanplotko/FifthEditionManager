@@ -21,6 +21,10 @@ jest.mock('react-native-material-ui/src/Icon', () => 'Icon');
 jest.mock('react-native-material-ui/src/IconToggle', () => 'IconToggle');
 jest.mock('react-native-material-ui/src/Checkbox', () => 'Checkbox');
 jest.mock('react-native-material-ui/src/Toolbar', () => 'Toolbar');
+
+// Mock character background options to add more test cases than the default background covers
+jest.mock('FifthEditionManager/config/Info/Backgrounds');
+
 const AsyncStorage = new MockStorage({});
 jest.setMock('AsyncStorage', AsyncStorage);
 jest.mock('moment', () => {
