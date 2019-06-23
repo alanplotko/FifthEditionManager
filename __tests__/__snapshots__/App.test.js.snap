@@ -122,7 +122,6 @@ exports[`App displays error when assets fail to load 1`] = `
           },
         }
       }
-      testID={null}
       text="Reload"
       upperCase={true}
     />
@@ -260,7 +259,6 @@ exports[`App loads assets on retry after error 2`] = `
           },
         }
       }
-      testID={null}
       text="Reload"
       upperCase={true}
     />

@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, ScrollView, Text, StyleSheet, Dimensions } from 'react-native';
-import { Button, COLOR } from 'react-native-material-ui';
+import { Button, COLOR, withTheme } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 
-export default class OGLButton extends React.Component {
+class OGLButton extends React.Component {
   static propTypes = {
     sourceText: PropTypes.string.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -25,7 +22,7 @@ export default class OGLButton extends React.Component {
     const modalHeight = { height: height / 1.5 };
 
     // Theme setup
-    const { textColor, noteColor, modalBackgroundColor } = this.context.uiTheme.palette;
+    const { textColor, noteColor, modalBackgroundColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
     const noteStyle = { color: noteColor };
     const modalBackgroundStyle = { backgroundColor: modalBackgroundColor };
@@ -262,3 +259,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+export default withTheme(OGLButton);

@@ -29,9 +29,8 @@ describe('App', () => {
       isReady: true,
       error: null,
     });
-    expect(wrapper.name()).toBe('ThemeProvider');
-    expect(wrapper.dive().name()).toBe('NavigationContainer');
-    expect(wrapper.props()).toHaveProperty('uiTheme');
+    expect(wrapper.children()).toHaveLength(1);
+    expect(wrapper.children().at(0).name()).toBe('NavigationContainer');
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -52,6 +51,8 @@ describe('App', () => {
       isReady: false,
       error,
     });
+
+    console.log(wrapper.debug());
 
     // Error should display
     expect(wrapper).toMatchSnapshot();
@@ -86,7 +87,7 @@ describe('App', () => {
     wrapper.update();
 
     // AppLoading should display again
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.children()).toMatchSnapshot();
 
     // Assets should load properly
     promise = wrapper.find('AppLoading').props().startAsync();
@@ -99,6 +100,6 @@ describe('App', () => {
       isReady: true,
       error: null,
     });
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.children()).toMatchSnapshot();
   });
 });

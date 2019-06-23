@@ -7,7 +7,6 @@ import { RACES } from 'FifthEditionManager/config/Info';
 
 describe('Character Race Screen', () => {
   const navigation = { navigate: jest.fn(), setParams: jest.fn() };
-  const context = { uiTheme: DefaultTheme };
   const raceList = RACES.map(race => race.key);
 
   test('can build navigation options', () => {
@@ -46,7 +45,7 @@ describe('Character Race Screen', () => {
     expect(removeListenerSpy.notCalled).toBe(true);
 
     // Listener added
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
     expect(addListenerSpy.calledOnce).toBe(true);
     expect(removeListenerSpy.notCalled).toBe(true);
 
@@ -61,7 +60,7 @@ describe('Character Race Screen', () => {
   });
 
   test('records new dimensions on orientation change', () => {
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
     expect(wrapper.state()).toHaveProperty('width');
     expect(wrapper.state()).toHaveProperty('height');
     const dims = { width: wrapper.state().width, height: wrapper.state().height };
@@ -81,14 +80,14 @@ describe('Character Race Screen', () => {
   });
 
   test('displays all race options properly', () => {
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
     const raceCards = wrapper.findWhere(n => n.type() === Card && raceList.includes(n.key()));
     expect(raceCards.length).toEqual(RACES.length);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('can select any race, view race details and OGL, and deselect race', () => {
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
     const raceCards = wrapper.findWhere(n => n.type() === Card && raceList.includes(n.key()));
     expect(raceCards).toHaveLength(RACES.length);
     expect(wrapper.state()).toHaveProperty('race', null);
@@ -111,7 +110,7 @@ describe('Character Race Screen', () => {
 
   test('allows submission only after race selection', () => {
     const navigateSpy = sinon.spy(navigation, 'navigate');
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
     const raceCards = wrapper.findWhere(n => n.type() === Card && raceList.includes(n.key()));
     expect(navigateSpy.notCalled).toBe(true);
 
@@ -129,7 +128,7 @@ describe('Character Race Screen', () => {
   });
 
   test('can randomize race selection', () => {
-    const wrapper = shallow(<CharacterRace navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterRace navigation={navigation} />);
 
     // Randomize when no race is selected
     expect(wrapper.state()).toHaveProperty('race', null);

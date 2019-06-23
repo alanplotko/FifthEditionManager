@@ -21,7 +21,6 @@ describe('Character Base Class Screen', () => {
     stylesheet: null,
   };
   const navigation = { navigate: jest.fn(), setParams: jest.fn(), state };
-  const context = { uiTheme: DefaultTheme };
   const classList = CLASSES.map(baseClass => baseClass.key);
 
   test('can build navigation options', () => {
@@ -54,13 +53,13 @@ describe('Character Base Class Screen', () => {
   });
 
   test('can set form reference properly', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />);
     wrapper.find(t.form.Form).get(0).ref('test');
     expect(wrapper.instance()).toHaveProperty('form', 'test');
   });
 
   test('can select any class, view class details and OGL, and deselect class', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />);
     const classForm = wrapper.find(t.form.Form);
 
     // Test form options
@@ -87,7 +86,7 @@ describe('Character Base Class Screen', () => {
 
   test('allows submission only after class selection', () => {
     const navigateSpy = sinon.spy(navigation, 'navigate');
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />);
     const classForm = wrapper.find(t.form.Form);
     expect(navigateSpy.notCalled).toBe(true);
 
@@ -106,7 +105,7 @@ describe('Character Base Class Screen', () => {
   });
 
   test('can randomize class selection', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />);
 
     // Randomize when no class is selected
     expect(wrapper.state()).toHaveProperty('baseClass', null);
@@ -125,7 +124,7 @@ describe('Character Base Class Screen', () => {
   });
 
   test('displays class that lacks data properly', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />);
     const classForm = wrapper.find(t.form.Form);
     const sampleClass = {
       key: 'sample',

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Icon, Toolbar, withTheme } from 'react-native-material-ui';
 import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { toProperList, toTitleCase } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
@@ -39,7 +39,7 @@ stylesheet.select.error.flex = 1;
 stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
-export default class CharacterBaseClass extends React.Component {
+class CharacterBaseClass extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -56,10 +56,7 @@ export default class CharacterBaseClass extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -138,7 +135,7 @@ export default class CharacterBaseClass extends React.Component {
 
   render() {
     // Theme setup
-    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const { backdropIconColor, fadedTextColor } = this.props.theme.palette;
     const fadedTextStyle = { color: fadedTextColor };
 
     return (
@@ -149,7 +146,6 @@ export default class CharacterBaseClass extends React.Component {
               title="Choosing a Class"
               type="tip"
               icon="lightbulb-outline"
-              uiTheme={this.context.uiTheme}
             >
               <Text>
                 The class you choose will define your character&apos;s profession and lifestyle.
@@ -350,3 +346,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+export default withTheme(CharacterBaseClass);

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar, withTheme }
   from 'react-native-material-ui';
 import Note from 'FifthEditionManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES, ABILITIES } from 'FifthEditionManager/config/Info';
@@ -17,7 +17,7 @@ const chance = new Chance();
 // Styles
 const checkIconStyle = { opacity: 0.5, paddingHorizontal: 12 };
 
-export default class Skills extends React.Component {
+class Skills extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -34,10 +34,7 @@ export default class Skills extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -209,7 +206,7 @@ export default class Skills extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor } = this.context.uiTheme.palette;
+    const { textColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
 
     const ListItemRow = (key, skill) => {
@@ -295,7 +292,6 @@ export default class Skills extends React.Component {
               collapsible
               isCollapsed={this.state.isProficiencyNoteCollapsed}
               toggleNoteHandler={this.toggleProficiencyNote}
-              uiTheme={this.context.uiTheme}
             >
               <Text style={styles.textMargin}>
                 The proficiency bonus is derived from your level. At
@@ -323,7 +319,6 @@ export default class Skills extends React.Component {
               collapsible
               isCollapsed={this.state.isBackgroundNoteCollapsed}
               toggleNoteHandler={this.toggleBackgroundNote}
-              uiTheme={this.context.uiTheme}
             >
               <Text style={styles.textMargin}>
                 The
@@ -346,7 +341,6 @@ export default class Skills extends React.Component {
               collapsible
               isCollapsed={this.state.isClassNoteCollapsed}
               toggleNoteHandler={this.toggleClassNote}
-              uiTheme={this.context.uiTheme}
             >
               <Text style={styles.textMargin}>
                 The
@@ -489,3 +483,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default withTheme(Skills);

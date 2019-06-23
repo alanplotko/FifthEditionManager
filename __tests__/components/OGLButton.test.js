@@ -2,15 +2,13 @@ import React from 'react';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 
 describe('OGL Button', () => {
-  const context = { uiTheme: DefaultTheme };
-
   test('renders properly', () => {
-    const wrapper = shallow(<OGLButton sourceText="Test Source" />, { context });
+    const wrapper = shallow(<OGLButton sourceText="Test Source" />);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('can toggle modal properly', () => {
-    const wrapper = shallow(<OGLButton sourceText="Test Source" />, { context });
+    const wrapper = shallow(<OGLButton sourceText="Test Source" />);
 
     // License is currently not visible
     expect(wrapper.state()).toMatchObject({ isLicenseVisible: false });

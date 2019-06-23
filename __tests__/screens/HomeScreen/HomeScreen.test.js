@@ -5,17 +5,16 @@ import { Icon } from 'react-native-material-ui';
 
 describe('Home Screen', () => {
   const navigation = { navigate: jest.fn() };
-  const context = { uiTheme: DefaultTheme };
 
   test('displays activity indicator when loading data', () => {
-    const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
+    const wrapper = shallow(<HomeScreen navigation={navigation} />);
     expect(wrapper.children().find('ActivityIndicator')).toHaveLength(1);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('gets data prior to mounting', async () => {
     const storageGetSpy = sinon.spy(AsyncStorage, 'multiGet');
-    const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
+    const wrapper = shallow(<HomeScreen navigation={navigation} />);
     expect(wrapper.state()).toMatchObject({
       isLoading: true,
       isRefreshing: false,
@@ -34,7 +33,7 @@ describe('Home Screen', () => {
   });
 
   test('displays default messages in tabs when no data exists', async () => {
-    const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
+    const wrapper = shallow(<HomeScreen navigation={navigation} />);
     expect(wrapper.state()).toHaveProperty('isLoading', true);
     await wrapper.instance().getData();
     wrapper.update();
@@ -84,7 +83,7 @@ describe('Home Screen', () => {
   });
 
   test('has correct fab actions', async () => {
-    const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
+    const wrapper = shallow(<HomeScreen navigation={navigation} />);
     await wrapper.instance().getData();
     wrapper.update();
 
@@ -108,7 +107,7 @@ describe('Home Screen', () => {
 
   test('can navigate using fab', async () => {
     const navigateSpy = sinon.spy(navigation, 'navigate');
-    const wrapper = shallow(<HomeScreen navigation={navigation} />, { context });
+    const wrapper = shallow(<HomeScreen navigation={navigation} />);
     await wrapper.instance().getData();
     wrapper.update();
 

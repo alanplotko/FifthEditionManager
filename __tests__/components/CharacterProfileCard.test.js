@@ -86,7 +86,6 @@ describe('Character Profile Card', () => {
   test('renders properly for characters below max level', () => {
     const wrapper = shallow(<CharacterProfileCard
       character={character}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
@@ -103,7 +102,6 @@ describe('Character Profile Card', () => {
 
     const wrapper = shallow(<CharacterProfileCard
       character={characterMaxLevel}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
@@ -115,7 +113,6 @@ describe('Character Profile Card', () => {
   test('can toggle the modal', () => {
     const wrapper = shallow(<CharacterProfileCard
       character={character}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
@@ -138,7 +135,7 @@ describe('Character Profile Card', () => {
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />, { uiTheme: DefaultTheme });
+    />);
 
     // No options selected
     expect(viewStub.notCalled).toBe(true);

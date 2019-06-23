@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View, UIMan
   from 'react-native';
 import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
-import { ActionButton, Button, Icon, COLOR, Toolbar } from 'react-native-material-ui';
+import { ActionButton, Button, Icon, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
 import ActivityCard from 'FifthEditionManager/components/ActivityCard';
@@ -26,7 +26,7 @@ const compareDates = key => (a, b) => {
   return 0;
 };
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: () => {
       const props = {
@@ -38,10 +38,7 @@ export default class HomeScreen extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -155,7 +152,7 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
 
     // Theme setup
-    const { primaryColor, backdropIconColor, modalBackgroundColor } = this.context.uiTheme.palette;
+    const { primaryColor, backdropIconColor, modalBackgroundColor } = this.props.theme.palette;
     const modalStyle = { backgroundColor: modalBackgroundColor };
 
     const errorView = (
@@ -271,7 +268,6 @@ export default class HomeScreen extends React.Component {
                     viewHandler={this.viewCharacter}
                     editHandler={this.editCharacter}
                     deleteHandler={this.askDeleteCharacter}
-                    uiTheme={this.context.uiTheme}
                   />
                 )}
                 refreshing={this.state.isRefreshing}
@@ -378,3 +374,5 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
+export default withTheme(HomeScreen);

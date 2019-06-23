@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Icon, Toolbar, withTheme } from 'react-native-material-ui';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
 import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
@@ -39,7 +39,7 @@ stylesheet.select.error.flex = 1;
 stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
-export default class CharacterBackground extends React.Component {
+class CharacterBackground extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -56,10 +56,7 @@ export default class CharacterBackground extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -237,7 +234,7 @@ export default class CharacterBackground extends React.Component {
 
   render() {
     // Theme setup
-    const { backdropIconColor, fadedTextColor } = this.context.uiTheme.palette;
+    const { backdropIconColor, fadedTextColor } = this.props.theme.palette;
     const fadedTextStyle = { color: fadedTextColor };
     const decisionPlurality = this.state.decisions.length -
       this.state.selectedDecisions.filter(item => item.decision !== null).length > 1 ?
@@ -252,7 +249,6 @@ export default class CharacterBackground extends React.Component {
               title="Choosing a Background"
               type="tip"
               icon="lightbulb-outline"
-              uiTheme={this.context.uiTheme}
             >
               <Text>
                 The background you choose will become your character&apos;s back-story, explaining
@@ -469,3 +465,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+export default withTheme(CharacterBackground);

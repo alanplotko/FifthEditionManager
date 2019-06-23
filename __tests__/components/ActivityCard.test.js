@@ -15,7 +15,7 @@ describe('Activity Card', () => {
   };
 
   test('renders properly with icon', () => {
-    const wrapper = shallow(<ActivityCard activity={activity} uiTheme={DefaultTheme} />);
+    const wrapper = shallow(<ActivityCard activity={activity} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -23,7 +23,7 @@ describe('Activity Card', () => {
     // Override default activity to have no icon
     const activityNoIcon = cloneDeep(activity);
     activityNoIcon.icon = null;
-    const wrapper = shallow(<ActivityCard activity={activityNoIcon} uiTheme={DefaultTheme} />);
+    const wrapper = shallow(<ActivityCard activity={activityNoIcon} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

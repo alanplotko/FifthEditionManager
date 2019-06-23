@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar }
+import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar, withTheme }
   from 'react-native-material-ui';
 import { ContainerStyle, CardStyle } from 'FifthEditionManager/stylesheets';
 import Note from 'FifthEditionManager/components/Note';
@@ -14,7 +14,7 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-export default class Languages extends React.Component {
+class Languages extends React.Component {
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -31,10 +31,7 @@ export default class Languages extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -127,7 +124,7 @@ export default class Languages extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor } = this.context.uiTheme.palette;
+    const { textColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
 
     const ListItemRow = (languageData) => {
@@ -212,7 +209,6 @@ export default class Languages extends React.Component {
               collapsible
               isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleLanguageNote}
-              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 As {raceIndefiniteArticle}
@@ -424,3 +420,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default withTheme(Languages);

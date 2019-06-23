@@ -351,7 +351,6 @@ export default class CharacterProfile extends React.Component {
               title="Constructing Your Character Profile"
               type="tip"
               icon="lightbulb-outline"
-              uiTheme={this.context.uiTheme}
             >
               <Text>
                 Are you a new adventurer or a returning veteran? What do others call you?
