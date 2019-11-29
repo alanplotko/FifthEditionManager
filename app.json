@@ -4,7 +4,7 @@
     "icon": "./logo.png",
     "version": "0.1.0",
     "slug": "fifth-edition-manager",
-    "sdkVersion": "28.0.0",
+    "sdkVersion": "35.0.0",
     "splash": {
       "backgroundColor": "#3F51B5",
       "resize": "contain",
@@ -22,5 +22,9 @@
       "assets/images/**",
       "assets/fonts/**"
     ],
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

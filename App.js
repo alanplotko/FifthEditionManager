@@ -1,4 +1,7 @@
-import { AppLoading, Asset, Font } from 'expo';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
