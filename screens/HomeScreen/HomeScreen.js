@@ -27,15 +27,6 @@ const compareDates = key => (a, b) => {
 };
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: () => {
-      const props = {
-        centerElement: 'Fifth Edition Manager',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -80,6 +71,15 @@ class HomeScreen extends React.Component {
       })
       .catch(error => this.setState({ error }, () => resolve(null)));
   });
+
+  static navigationOptions = {
+    header: () => {
+      const props = {
+        centerElement: 'Fifth Edition Manager',
+      };
+      return <Toolbar {...props} />;
+    },
+  }
 
   openModal = (modalContent) => {
     this.setState({ isModalVisible: true, modalContent });

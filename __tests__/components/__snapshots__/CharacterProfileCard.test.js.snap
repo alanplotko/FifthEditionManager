@@ -55,6 +55,12 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
     scrollOffset={0}
     scrollOffsetMax={0}
     scrollTo={null}
+    supportedOrientations={
+      Array [
+        "portrait",
+        "landscape",
+      ]
+    }
     swipeThreshold={100}
     useNativeDriver={false}
   >
@@ -408,6 +414,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
           color="#2196f3"
           height={6}
           indeterminate={false}
+          indeterminateAnimationDuration={1000}
           progress={1}
           style={
             Object {
@@ -626,6 +633,7 @@ exports[`Character Profile Card renders properly for characters below max level 
           color="#2196f3"
           height={6}
           indeterminate={false}
+          indeterminateAnimationDuration={1000}
           progress={0}
           style={
             Object {

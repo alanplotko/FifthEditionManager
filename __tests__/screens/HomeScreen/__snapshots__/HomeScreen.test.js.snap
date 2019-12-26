@@ -306,6 +306,12 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
         "margin": 0,
       }
     }
+    supportedOrientations={
+      Array [
+        "portrait",
+        "landscape",
+      ]
+    }
     swipeThreshold={100}
     useNativeDriver={false}
   >

@@ -183,20 +183,6 @@ const options = {
 };
 
 export default class CharacterProfile extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Profile',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.generateCharacter(),
-      };
-      return <Toolbar {...props} />;
-    },
-  };
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
   }
@@ -267,6 +253,20 @@ export default class CharacterProfile extends React.Component {
     });
     this.setState({ options: updatedOptions, form: value });
   }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Profile',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.generateCharacter(),
+      };
+      return <Toolbar {...props} />;
+    },
+  };
 
   generateCharacter = () => {
     Keyboard.dismiss();

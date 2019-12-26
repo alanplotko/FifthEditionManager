@@ -14,20 +14,6 @@ const Chance = require('chance');
 const chance = new Chance();
 
 class CharacterRace extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Race',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeRace(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -81,6 +67,20 @@ class CharacterRace extends React.Component {
       race: this.state.race && this.state.race.key === key ? null :
         RACES.find(race => race.key === key),
     });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Race',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeRace(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   orientationHandler = dims =>

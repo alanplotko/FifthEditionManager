@@ -18,20 +18,6 @@ const chance = new Chance();
 const checkIconStyle = { opacity: 0.5, paddingHorizontal: 12 };
 
 class Skills extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Set Skills',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeSkills(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -120,6 +106,20 @@ class Skills extends React.Component {
       }
     });
     return skills;
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Set Skills',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeSkills(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   resetSkills = (callback = null) => {

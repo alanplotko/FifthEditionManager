@@ -53,6 +53,12 @@ exports[`OGL Button renders properly 1`] = `
         "margin": 0,
       }
     }
+    supportedOrientations={
+      Array [
+        "portrait",
+        "landscape",
+      ]
+    }
     swipeThreshold={100}
     useNativeDriver={false}
   >

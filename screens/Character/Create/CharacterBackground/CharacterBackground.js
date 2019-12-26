@@ -40,20 +40,6 @@ stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
 class CharacterBackground extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Background',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeBackground(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -177,6 +163,20 @@ class CharacterBackground extends React.Component {
       },
     },
   });
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Background',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeBackground(),
+      };
+      return <Toolbar {...props} />;
+    },
+  }
 
   backgroundFormOptions = {
     template: (locals) => {

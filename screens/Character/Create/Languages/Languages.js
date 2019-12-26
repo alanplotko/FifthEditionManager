@@ -15,20 +15,6 @@ const Chance = require('chance');
 const chance = new Chance();
 
 class Languages extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Assign Languages',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeLanguages(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -66,6 +52,20 @@ class Languages extends React.Component {
     newCharacter.languages = this.state.knownLanguages
       .slice(0).concat(this.state.selectedLanguages.slice(0));
     navigate('ReviewHitPoints', { character: newCharacter });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Assign Languages',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeLanguages(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   resetLanguages = (callback) => {

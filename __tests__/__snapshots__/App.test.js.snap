@@ -563,6 +563,7 @@ exports[`App loads assets on retry after error 4`] = `
         },
       },
       "fontFamily": "Roboto",
+      "iconSet": "MaterialIcons",
       "iconToggle": Object {
         "container": Object {
           "alignItems": "center",
@@ -1199,6 +1200,7 @@ exports[`App renders properly after assets have loaded 1`] = `
         },
       },
       "fontFamily": "Roboto",
+      "iconSet": "MaterialIcons",
       "iconToggle": Object {
         "container": Object {
           "alignItems": "center",

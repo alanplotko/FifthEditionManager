@@ -23,6 +23,16 @@ const initialState = {
 };
 
 class PointBuyScores extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -33,16 +43,6 @@ class PointBuyScores extends React.Component {
       };
       return <Toolbar {...props} />;
     },
-  }
-
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = initialState;
   }
 
   acceptRolls = () => {

@@ -11,6 +11,11 @@ import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
  */
 
 class ScoringMethod extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -21,11 +26,6 @@ class ScoringMethod extends React.Component {
       };
       return <Toolbar {...props} />;
     },
-  }
-
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
   }
 
   selectMethod = (method) => {

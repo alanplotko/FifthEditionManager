@@ -65,20 +65,6 @@ stylesheet.textbox.normal.margin = 0;
 stylesheet.textbox.error.margin = 0;
 
 class AbilityScores extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Assign Ability Scores',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -146,6 +132,10 @@ class AbilityScores extends React.Component {
     this.props.navigation.setParams({ randomizeScoreAssignments: this.randomizeScoreAssignments });
   }
 
+  onChange = (value) => {
+    this.setState({ form: value });
+  }
+
   onPress = () => {
     const { state, navigate } = this.props.navigation;
     const newCharacter = cloneDeep(state.params.character);
@@ -161,8 +151,18 @@ class AbilityScores extends React.Component {
     navigate('SetSkills', { character: newCharacter });
   }
 
-  onChange = (value) => {
-    this.setState({ form: value });
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Assign Ability Scores',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   openModal = (ability) => {
