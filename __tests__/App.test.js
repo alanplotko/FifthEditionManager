@@ -10,7 +10,6 @@ describe('App', () => {
 
   test('renders properly after assets have loaded', async () => {
     const wrapper = shallow(<App />);
-    wrapper.dive();
 
     // Assets should not have loaded yet
     const promise = wrapper.find('AppLoading').props().startAsync();
@@ -52,10 +51,8 @@ describe('App', () => {
       error,
     });
 
-    console.log(wrapper.debug());
-
     // Error should display
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.shallow()).toMatchSnapshot();
 
     // Clean up stub
     loadAssetsStub.restore();
@@ -74,32 +71,29 @@ describe('App', () => {
     let promise = wrapper.find('AppLoading').props().startAsync();
     await expect(promise).rejects.toEqual(error);
     wrapper.find('AppLoading').props().onError(error);
-    wrapper.update();
 
     // Error message should display
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.shallow()).toMatchSnapshot();
 
     // Simulate cause of error being resolved using stub
     loadAssetsStub.restore();
 
     // Retry loading assets
-    wrapper.find('Button').props().onPress();
-    wrapper.update();
+    wrapper.shallow().find('ThemedComponent[icon="refresh"]').props().onPress();
 
     // AppLoading should display again
-    expect(wrapper.children()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
 
     // Assets should load properly
     promise = wrapper.find('AppLoading').props().startAsync();
     await expect(promise).resolves.toEqual(expect.anything());
-    promise = wrapper.find('AppLoading').props().onFinish();
-    wrapper.update();
+    wrapper.find('AppLoading').props().onFinish(error);
 
     // Assets should be loaded
     expect(wrapper.state()).toMatchObject({
       isReady: true,
       error: null,
     });
-    expect(wrapper.children()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

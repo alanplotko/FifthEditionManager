@@ -26,7 +26,7 @@ exports[`Activity Card renders properly with icon 1`] = `
             }
           }
         />
-        <Icon
+        <ThemedComponent
           color="#fff"
           name="add"
           size={48}

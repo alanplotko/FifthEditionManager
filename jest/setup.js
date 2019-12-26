@@ -1,4 +1,5 @@
 import Enzyme, { shallow } from 'enzyme';
+import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 import sinon from 'sinon';
 import Adapter from 'enzyme-adapter-react-16';
 import MockStorage from 'FifthEditionManager/jest/MockStorage';
@@ -33,6 +34,7 @@ jest.setMock('AsyncStorage', AsyncStorage);
 
 // Make available in all test files without importing
 global.shallow = shallow;
+global.DefaultTheme = DefaultTheme;
 global.sinon = sinon;
 global.AsyncStorage = AsyncStorage;
 global.ACTIVITY_KEY = ACTIVITY_KEY;

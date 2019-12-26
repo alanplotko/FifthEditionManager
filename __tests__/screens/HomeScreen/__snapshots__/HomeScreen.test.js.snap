@@ -17,7 +17,7 @@ exports[`Home Screen displays activity indicator when loading data 1`] = `
 >
   <ActivityIndicator
     animating={true}
-    color="#3f51b5"
+    color="#2196f3"
     hidesWhenStopped={true}
     size="large"
   />
@@ -73,8 +73,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
           }
         }
       >
-        <Icon
-          color="#bdbdbd"
+        <ThemedComponent
           name="timeline"
           size={156}
         />
@@ -139,8 +138,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
           }
         }
       >
-        <Icon
-          color="#bdbdbd"
+        <ThemedComponent
           name="book"
           size={156}
         />
@@ -205,8 +203,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
           }
         }
       >
-        <Icon
-          color="#bdbdbd"
+        <ThemedComponent
           name="person"
           size={156}
         />
@@ -249,7 +246,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
       </View>
     </Styled(Tab)>
   </ScrollableTabView>
-  <ActionButton
+  <ThemedComponent
     actions={
       Array [
         Object {
@@ -264,9 +261,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
         },
       ]
     }
-    hidden={false}
     icon="add"
-    onLongPress={null}
     onPress={[Function]}
     rippleColor="#ef9a9a"
     style={
@@ -325,7 +320,7 @@ exports[`Home Screen displays default messages in tabs when no data exists 1`] =
             "width": "100%",
           },
           Object {
-            "backgroundColor": "#ffffff",
+            "backgroundColor": undefined,
           },
         ]
       }

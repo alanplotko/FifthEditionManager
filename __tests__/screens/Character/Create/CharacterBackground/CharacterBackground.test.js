@@ -42,7 +42,7 @@ describe('Character Background Screen', () => {
         },
         goBack: goBackSpy,
       },
-    }));
+    })).shallow();
     expect(goBackSpy.notCalled).toBe(true);
     expect(randomizeBackgroundSpy.notCalled).toBe(true);
 
@@ -56,13 +56,13 @@ describe('Character Background Screen', () => {
   });
 
   test('can set form reference properly', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     wrapper.find(t.form.Form).get(0).ref('test');
     expect(wrapper.instance()).toHaveProperty('form', 'test');
   });
 
   test('can select any background, view background details and OGL, and deselect background', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     const backgroundForm = wrapper.find(t.form.Form);
 
     // Test background form options
@@ -88,8 +88,7 @@ describe('Character Background Screen', () => {
   });
 
   test('allows submission only after background and decision selections', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
-
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     // Set up a spy to confirm successful submisisons
     const navigateSpy = sinon.spy(navigation, 'navigate');
     expect(navigateSpy.notCalled).toBe(true);
@@ -141,7 +140,7 @@ describe('Character Background Screen', () => {
   });
 
   test('can randomize background selection', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
 
     // Randomize when no background is selected
     expect(wrapper.state()).toHaveProperty('background', null);
@@ -160,7 +159,7 @@ describe('Character Background Screen', () => {
   });
 
   test('can randomize background selection given only the default background list', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
 
     // Randomize when no background is selected
     expect(wrapper.state()).toHaveProperty('background', null);
@@ -187,7 +186,7 @@ describe('Character Background Screen', () => {
   });
 
   test('displays background that lacks data properly', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />);
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     const backgroundForm = wrapper.find(t.form.Form);
 
     // Select sample background

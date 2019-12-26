@@ -30,6 +30,7 @@ class CharacterRace extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
