@@ -218,24 +218,24 @@ class CharacterBackground extends React.Component {
   }
 
   randomizeBackground = () => {
-    // Do not reselect current option
-    const key = this.state.background ? this.state.background.key : null;
-    const options = BACKGROUNDS.filter(background => background.key !== key);
-    if (options.length > 0) {
-      const background = chance.pickone(options);
-      const decisions = background ? background.starting.decisions : [];
-      const selectedDecisions = [];
-      if (decisions.length > 0) {
-        decisions.forEach((decision) => {
-          selectedDecisions.push(chance.pickone(decision).name);
-        });
-      }
-      this.setState({
-        background,
-        decisions,
-        selectedDecisions,
+    /*
+      Allow reselecting the same background, given that the default selection
+      consists of only 1 background and randomization can be done at the
+      decision level too.
+    */
+    const background = chance.pickone(BACKGROUNDS);
+    const decisions = background ? background.starting.decisions : [];
+    const selectedDecisions = [];
+    if (decisions.length > 0) {
+      decisions.forEach((decision) => {
+        selectedDecisions.push(chance.pickone(decision).name);
       });
     }
+    this.setState({
+      background,
+      decisions,
+      selectedDecisions,
+    });
   }
 
   render() {
