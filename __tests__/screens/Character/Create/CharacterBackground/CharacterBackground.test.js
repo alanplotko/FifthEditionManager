@@ -155,33 +155,6 @@ describe('Character Background Screen', () => {
     expect(wrapper.state().background.key).not.toEqual(firstSelectionKey);
   });
 
-  test('can randomize background selection given only the default background list', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
-
-    // Randomize when no background is selected
-    expect(wrapper.state()).toHaveProperty('background', null);
-    wrapper.instance().randomizeBackground();
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('background.key');
-    const firstSelectionKey = wrapper.state().background.key;
-    expect(backgroundList.includes(firstSelectionKey)).toBe(true);
-
-    // Simulate there being no other backgrounds available aside from the currently selected one
-    const backgroundFilterStub = sinon.stub(BACKGROUNDS, 'filter').returns([]);
-
-    // Randomize when a background is selected
-    wrapper.instance().randomizeBackground();
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('background.key');
-    expect(backgroundList.includes(wrapper.state().background.key)).toBe(true);
-
-    // No change on the next randomizeBackground call, since there's only one default background
-    expect(wrapper.state().background.key).toEqual(firstSelectionKey);
-
-    // Stub cleanup
-    backgroundFilterStub.restore();
-  });
-
   test('displays background that lacks data properly', () => {
     const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     const backgroundForm = wrapper.find(t.form.Form);
