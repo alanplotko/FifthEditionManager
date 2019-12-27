@@ -15,7 +15,7 @@ import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 
 // UI theme and styles
 import { Button, COLOR, Icon, ThemeContext, getTheme } from 'react-native-material-ui';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, YellowBox } from 'react-native';
 import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 // Font assets
@@ -45,6 +45,15 @@ const AppContainer = createAppContainer(RootNavigator);
 const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
   images.map(image => Asset.fromModule(image).downloadAsync());
+
+/*
+  Suppress warnings until react-native-material-ui is updated to support latest
+  changes where some lifecycle methods are now deprecated.
+*/
+YellowBox.ignoreWarnings([
+  'Warning: componentWillReceiveProps has been renamed',
+  'Warning: componentWillUpdate has been renamed',
+]);
 
 export default class App extends React.Component {
   static loadAssetsAsync() {

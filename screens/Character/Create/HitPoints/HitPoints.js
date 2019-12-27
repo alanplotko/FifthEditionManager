@@ -69,9 +69,6 @@ class HitPoints extends React.Component {
       ...props.navigation.state.params,
     };
     this.state.baseClass = CLASSES[this.state.character.baseClass.lookupKey];
-  }
-
-  componentWillMount() {
     const { level } = this.state.character.profile;
     const { hitDie } = this.state.baseClass;
 
@@ -95,7 +92,8 @@ class HitPoints extends React.Component {
       `Must be in range [0, ${level - 1}]`,
     );
     const HitPointsEdited = t.struct({ timesAverageTaken: TimesAverageTaken });
-    this.setState({ options: updatedOptions, type: HitPointsEdited });
+    this.state.options = updatedOptions;
+    this.state.type = HitPointsEdited;
   }
 
   onChange = (value) => {
@@ -325,7 +323,7 @@ class HitPoints extends React.Component {
                       alignItems: 'center',
                       justifyContent: 'center',
                       flex: 1,
-                      flexWrap: 'wrap',
+                      flexWrap: 'nowrap',
                     },
                   }}
                 >
@@ -354,7 +352,7 @@ class HitPoints extends React.Component {
                       alignItems: 'center',
                       justifyContent: 'center',
                       flex: 1,
-                      flexWrap: 'wrap',
+                      flexWrap: 'nowrap',
                     },
                   }}
                 >

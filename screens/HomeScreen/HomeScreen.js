@@ -46,7 +46,7 @@ class HomeScreen extends React.Component {
     };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
