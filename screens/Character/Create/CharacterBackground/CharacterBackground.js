@@ -77,7 +77,7 @@ class CharacterBackground extends React.Component {
       if (this.state.selectedDecisions.length > 0) {
         this.state.selectedDecisions.forEach((decision, index) => {
           const item = this.state.background.starting.decisions[index]
-            .find(itm => itm.name === decision.name);
+            .find(itm => itm.name === decision);
           // Ignore duplicate item if quantity is not tracked; otherwise, increase quantity by 1
           if (inventory[item.name] && inventory[item.name].quantity) {
             inventory[item.name].quantity += 1;

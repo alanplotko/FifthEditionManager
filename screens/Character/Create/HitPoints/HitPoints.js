@@ -68,8 +68,7 @@ class HitPoints extends React.Component {
       options,
       ...props.navigation.state.params,
     };
-    this.state.baseClass = CLASSES
-      .find(option => option.key === this.state.character.baseClass.lookupKey);
+    this.state.baseClass = CLASSES[this.state.character.baseClass.lookupKey];
   }
 
   componentWillMount() {
