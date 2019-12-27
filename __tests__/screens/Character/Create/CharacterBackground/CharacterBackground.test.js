@@ -139,20 +139,13 @@ describe('Character Background Screen', () => {
   test('can randomize background selection', () => {
     const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
 
-    // Randomize when no background is selected
+    // Randomize successfully when no background is selected
     expect(wrapper.state()).toHaveProperty('background', null);
     wrapper.instance().randomizeBackground();
     wrapper.update();
     expect(wrapper.state()).toHaveProperty('background.key');
     const firstSelectionKey = wrapper.state().background.key;
     expect(backgroundList.includes(firstSelectionKey)).toBe(true);
-
-    // Randomize when a background is selected
-    wrapper.instance().randomizeBackground();
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('background.key');
-    expect(backgroundList.includes(wrapper.state().background.key)).toBe(true);
-    expect(wrapper.state().background.key).not.toEqual(firstSelectionKey);
   });
 
   test('displays background that lacks data properly', () => {
