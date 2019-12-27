@@ -805,7 +805,9 @@ exports[`App loads assets on retry after error 4`] = `
     }
   }
 >
-  <NavigationContainer />
+  <NavigationContainer
+    theme="light"
+  />
 </ContextProvider>
 `;
 
@@ -1442,7 +1444,9 @@ exports[`App renders properly after assets have loaded 1`] = `
     }
   }
 >
-  <NavigationContainer />
+  <NavigationContainer
+    theme="light"
+  />
 </ContextProvider>
 `;
 

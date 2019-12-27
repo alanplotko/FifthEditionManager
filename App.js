@@ -3,7 +3,8 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 // Assets
 import { IMAGES } from 'FifthEditionManager/config/Info';
@@ -39,6 +40,7 @@ const RootNavigator = createStackNavigator({
   AssignLanguages: { screen: CharacterBuild.Languages },
   ReviewHitPoints: { screen: CharacterBuild.HitPoints },
 });
+const AppContainer = createAppContainer(RootNavigator);
 
 const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
@@ -106,7 +108,7 @@ export default class App extends React.Component {
     }
     return (
       <ThemeContext.Provider value={getTheme(DefaultTheme)}>
-        <RootNavigator />
+        <AppContainer />
       </ThemeContext.Provider>
     );
   }
