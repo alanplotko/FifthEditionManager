@@ -7,7 +7,7 @@ import { Button, COLOR, Icon, IconToggle, ListItem, Toolbar, withTheme }
 import Note from 'FifthEditionManager/components/Note';
 import { BASE_SKILLS, BACKGROUNDS, CLASSES, ABILITIES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
-import { toTitleCase, calculateProficiencyBonus } from 'FifthEditionManager/util';
+import { toTitleCase, reformatCamelCaseKey, calculateProficiencyBonus } from 'FifthEditionManager/util';
 import { cloneDeep, zipObject } from 'lodash';
 
 const Chance = require('chance');
@@ -37,8 +37,7 @@ class Skills extends React.Component {
     // Set character proficiency
     this.state.proficiency = calculateProficiencyBonus(this.state.character.profile.level);
 
-    const baseClass = CLASSES
-      .find(option => option.key === this.state.character.baseClass.lookupKey);
+    const baseClass = CLASSES[this.state.character.baseClass.lookupKey];
     const background = BACKGROUNDS
       .find(option => option.key === this.state.character.background.lookupKey);
 
@@ -48,17 +47,23 @@ class Skills extends React.Component {
       baseClass: baseClass.proficiencies.skills,
     };
 
-    // Define proficiency options
-    this.state.proficiencies.options =
-      [...this.state.proficiencies.baseClass.optionKeys]
-        .filter(skill => !this.state.proficiencies.background.includes(skill));
+    /*
+      Define proficiency options from eligible choices or from the full list
+      for cases like the bard who can use any 3 skills.
+    */
+    const options = this.state.proficiencies.baseClass.optionKeys ||
+      Object.keys(this.state.skills);
+    this.state.proficiencies.options = options
+      .filter(skill => !this.state.proficiencies.background.includes(skill));
+
     // Track number of proficiency replacements the user will need to select
-    this.state.proficiencies.extras =
-      [...this.state.proficiencies.baseClass.optionKeys]
-        .filter(skill => this.state.proficiencies.background.includes(skill))
-        .length;
+    this.state.proficiencies.extras = options
+      .filter(skill => this.state.proficiencies.background.includes(skill))
+      .length;
+
     // Keep original number of extras with original quantity in base class
     this.state.proficiencies.baseClass.extras = this.state.proficiencies.extras;
+
     // Track number of proficiencies that the user must select from the options
     this.state.proficiencies.quantity = this.state.proficiencies.baseClass.quantity;
 
@@ -80,7 +85,7 @@ class Skills extends React.Component {
     newCharacter.proficiency = this.state.proficiency;
 
     // Calculate saving throws
-    const baseClass = CLASSES.find(option => option.key === newCharacter.baseClass.lookupKey);
+    const baseClass = CLASSES[newCharacter.baseClass.lookupKey];
     newCharacter.savingThrows = zipObject(
       ABILITIES,
       ABILITIES.map((ability) => {
@@ -400,7 +405,7 @@ class Skills extends React.Component {
               </Text>
               {this.state.proficiencies.options.map(key => (
                 <Text key={`${key}-option-list`}>
-                  &emsp;&bull;&nbsp;{toTitleCase(key)}{'\n'}
+                  &emsp;&bull;&nbsp;{toTitleCase(reformatCamelCaseKey(key))}{'\n'}
                 </Text>
               ))}
             </Note>

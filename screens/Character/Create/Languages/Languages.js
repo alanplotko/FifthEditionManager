@@ -137,7 +137,7 @@ class Languages extends React.Component {
           divider
           style={{
             container: {
-              height: 70,
+              height: 90,
             },
           }}
           centerElement={
@@ -412,7 +412,6 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     color: COLOR.black,
     fontSize: 14,
-    padding: 10,
   },
   buttonLayout: {
     flex: 1,

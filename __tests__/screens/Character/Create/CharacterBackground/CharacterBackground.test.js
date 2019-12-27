@@ -109,7 +109,7 @@ describe('Character Background Screen', () => {
 
       // Randomize decisions
       background.starting.decisions.forEach((options, index) => {
-        const decision = chance.pickone(options);
+        const decision = chance.pickone(options).name;
         // Simulate existing the decision dialog
         forms.at(index + 1).props().onChange(null);
         // Simulate selecting a decision

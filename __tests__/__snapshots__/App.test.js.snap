@@ -665,19 +665,11 @@ exports[`App loads assets on retry after error 4`] = `
           "alignItems": "center",
           "backgroundColor": "#323232",
           "borderRadius": 4,
-          "bottom": 0,
           "flex": 1,
           "flexDirection": "row",
           "margin": 8,
           "paddingHorizontal": 16,
           "position": "absolute",
-          "shadowColor": "#000000",
-          "shadowOffset": Object {
-            "height": 1,
-            "width": 0,
-          },
-          "shadowOpacity": 0.3,
-          "shadowRadius": 2,
           "zIndex": 4,
         },
         "content": Object {
@@ -805,7 +797,9 @@ exports[`App loads assets on retry after error 4`] = `
     }
   }
 >
-  <NavigationContainer />
+  <NavigationContainer
+    theme="light"
+  />
 </ContextProvider>
 `;
 
@@ -1302,19 +1296,11 @@ exports[`App renders properly after assets have loaded 1`] = `
           "alignItems": "center",
           "backgroundColor": "#323232",
           "borderRadius": 4,
-          "bottom": 0,
           "flex": 1,
           "flexDirection": "row",
           "margin": 8,
           "paddingHorizontal": 16,
           "position": "absolute",
-          "shadowColor": "#000000",
-          "shadowOffset": Object {
-            "height": 1,
-            "width": 0,
-          },
-          "shadowOpacity": 0.3,
-          "shadowRadius": 2,
           "zIndex": 4,
         },
         "content": Object {
@@ -1442,7 +1428,9 @@ exports[`App renders properly after assets have loaded 1`] = `
     }
   }
 >
-  <NavigationContainer />
+  <NavigationContainer
+    theme="light"
+  />
 </ContextProvider>
 `;
 

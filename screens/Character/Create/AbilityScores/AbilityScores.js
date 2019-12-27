@@ -377,8 +377,6 @@ class AbilityScores extends React.Component {
                 padding: 10,
                 alignItems: 'center',
                 justifyContent: 'center',
-                flex: 1,
-                flexWrap: 'wrap',
               },
             }}
             onPress={() => this.openModal(ability)}
@@ -443,19 +441,16 @@ class AbilityScores extends React.Component {
       return (
         <View
           key={`${scoreCard.score}-${scoreCard.quantity}`}
-          style={{ width: 80, height: 80 }}
+          style={{ width: 90, height: 90 }}
         >
           <Card
             style={{
               container: {
-                width: 70,
-                height: 70,
+                width: 80,
+                height: 80,
                 padding: 10,
                 alignItems: 'center',
                 justifyContent: 'center',
-                flex: 1,
-                flexWrap: 'wrap',
-                marginHorizontal: 10,
                 backgroundColor: scoreBackgroundColor,
                 opacity: isSelectable(scoreCard) ? 1 : 0.3,
               },
@@ -494,7 +489,7 @@ class AbilityScores extends React.Component {
       const totalScore = abilityScore + additionalPoints;
 
       return (
-        <View style={[styles.modalLayout, modalBackgroundStyle]}>
+        <View style={[styles.modalContainerLayout, modalBackgroundStyle]}>
           {
             !this.state.manualEntry && ability &&
             <Text style={styles.cardTitle}>
@@ -503,24 +498,8 @@ class AbilityScores extends React.Component {
           }
           {
             !this.state.manualEntry &&
-            <View>
-              <View style={styles.modalHorizontalLayout}>
-                {
-                  this.state.scoreBank
-                    .slice(0, Math.ceil(this.state.scoreBank.length / 2))
-                    .map(scoreCard => buildScoreCard(scoreCard))
-                }
-              </View>
-              <View style={styles.modalHorizontalLayout}>
-                {
-                  this.state.scoreBank
-                    .slice(
-                      Math.ceil(this.state.scoreBank.length / 2),
-                      this.state.scoreBank.length,
-                    )
-                    .map(scoreCard => buildScoreCard(scoreCard))
-                }
-              </View>
+            <View style={styles.modalScoreCardLayout}>
+              {this.state.scoreBank.map(card => buildScoreCard(card))}
             </View>
           }
           {
@@ -740,10 +719,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  modalLayout: {
+  modalContainerLayout: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLOR.grey200,
     position: 'absolute',
@@ -751,9 +729,10 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 20,
   },
-  modalHorizontalLayout: {
+  modalScoreCardLayout: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10,
   },

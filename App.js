@@ -3,7 +3,8 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 // Assets
 import { IMAGES } from 'FifthEditionManager/config/Info';
@@ -14,7 +15,7 @@ import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 
 // UI theme and styles
 import { Button, COLOR, Icon, ThemeContext, getTheme } from 'react-native-material-ui';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, YellowBox } from 'react-native';
 import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 // Font assets
@@ -39,10 +40,20 @@ const RootNavigator = createStackNavigator({
   AssignLanguages: { screen: CharacterBuild.Languages },
   ReviewHitPoints: { screen: CharacterBuild.HitPoints },
 });
+const AppContainer = createAppContainer(RootNavigator);
 
 const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
   images.map(image => Asset.fromModule(image).downloadAsync());
+
+/*
+  Suppress warnings until react-native-material-ui is updated to support latest
+  changes where some lifecycle methods are now deprecated.
+*/
+YellowBox.ignoreWarnings([
+  'Warning: componentWillReceiveProps has been renamed',
+  'Warning: componentWillUpdate has been renamed',
+]);
 
 export default class App extends React.Component {
   static loadAssetsAsync() {
@@ -106,7 +117,7 @@ export default class App extends React.Component {
     }
     return (
       <ThemeContext.Provider value={getTheme(DefaultTheme)}>
-        <RootNavigator />
+        <AppContainer />
       </ThemeContext.Provider>
     );
   }

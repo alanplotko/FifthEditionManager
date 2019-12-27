@@ -28,11 +28,8 @@ class CharacterRace extends React.Component {
     };
   }
 
-  componentWillMount() {
-    Dimensions.addEventListener('change', this.orientationHandler);
-  }
-
   componentDidMount() {
+    Dimensions.addEventListener('change', this.orientationHandler);
     this.props.navigation.setParams({ randomizeRace: this.randomizeRace });
   }
 
