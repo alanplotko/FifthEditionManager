@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import Note from 'FifthEditionManager/components/Note';
 import { RACES } from 'FifthEditionManager/config/Info';
@@ -64,27 +64,10 @@ stylesheet.textbox.error.width = 200;
 stylesheet.textbox.normal.margin = 0;
 stylesheet.textbox.error.margin = 0;
 
-export default class AbilityScores extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Assign Ability Scores',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
+class AbilityScores extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -149,6 +132,10 @@ export default class AbilityScores extends React.Component {
     this.props.navigation.setParams({ randomizeScoreAssignments: this.randomizeScoreAssignments });
   }
 
+  onChange = (value) => {
+    this.setState({ form: value });
+  }
+
   onPress = () => {
     const { state, navigate } = this.props.navigation;
     const newCharacter = cloneDeep(state.params.character);
@@ -164,8 +151,18 @@ export default class AbilityScores extends React.Component {
     navigate('SetSkills', { character: newCharacter });
   }
 
-  onChange = (value) => {
-    this.setState({ form: value });
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Assign Ability Scores',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   openModal = (ability) => {
@@ -350,7 +347,7 @@ export default class AbilityScores extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor, backgroundColor } = this.context.uiTheme.palette;
+    const { textColor, backgroundColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
     const modalBackgroundStyle = { backgroundColor };
 
@@ -617,7 +614,6 @@ export default class AbilityScores extends React.Component {
                 collapsible
                 isCollapsed={this.state.isInfoCollapsed}
                 toggleNoteHandler={this.toggleInfoNote}
-                uiTheme={this.context.uiTheme}
               >
                 <Text style={{ marginBottom: 10 }}>
                   The
@@ -650,7 +646,6 @@ export default class AbilityScores extends React.Component {
                 collapsible
                 isCollapsed={this.state.isErrorCollapsed}
                 toggleNoteHandler={this.toggleErrorNote}
-                uiTheme={this.context.uiTheme}
               >
                 <Text>
                   The
@@ -804,3 +799,5 @@ const styles = StyleSheet.create({
     height: 35,
   },
 });
+
+export default withTheme(AbilityScores);

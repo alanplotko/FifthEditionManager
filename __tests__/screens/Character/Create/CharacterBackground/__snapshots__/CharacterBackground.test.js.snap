@@ -20,9 +20,6 @@ exports[`Character Background Screen allows submission only after background and
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -73,9 +70,6 @@ exports[`Character Background Screen allows submission only after background and
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -126,9 +120,6 @@ exports[`Character Background Screen allows submission only after background and
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -179,9 +170,6 @@ exports[`Character Background Screen allows submission only after background and
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -232,9 +220,6 @@ exports[`Character Background Screen allows submission only after background and
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -285,9 +270,6 @@ exports[`Character Background Screen can select any background, view background 
   }
 >
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "#424242",
@@ -343,41 +325,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -445,6 +394,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -525,6 +477,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -636,6 +594,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -712,6 +673,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -810,9 +777,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -857,6 +822,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -937,6 +905,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -1048,6 +1022,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -1127,6 +1104,12 @@ exports[`Character Background Screen can select any background, view background 
                 "flexDirection": "row",
                 "height": 44,
               },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
             },
             "pickerValue": Object {
               "error": Object {
@@ -1198,19 +1181,13 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -1221,13 +1198,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="1 Decision Remaining"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="acolyte-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -1239,9 +1213,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -1254,9 +1225,6 @@ exports[`Character Background Screen can select any background, view background 
           Acolyte
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -1271,9 +1239,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -1290,9 +1255,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -1309,10 +1271,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="acolyte-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -1324,9 +1285,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -1339,9 +1297,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -1357,21 +1312,11 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Holy symbol"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -1381,9 +1326,6 @@ exports[`Character Background Screen can select any background, view background 
                 Holy symbol
               </Text>
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontStyle": "italic",
@@ -1395,11 +1337,7 @@ exports[`Character Background Screen can select any background, view background 
                  in inventory)
               </Text>
             </Text>
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               : 
               A gift to you when you entered the priesthood.
             </Text>
@@ -1408,21 +1346,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Stick of incense"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -1432,9 +1360,6 @@ exports[`Character Background Screen can select any background, view background 
                 Stick of incense
               </Text>
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontStyle": "italic",
@@ -1443,11 +1368,7 @@ exports[`Character Background Screen can select any background, view background 
               >
                  (
                 5
-                <Text
-                  accessible={true}
-                  allowFontScaling={true}
-                  ellipsizeMode="tail"
-                >
+                <Text>
                    
                   sticks
                 </Text>
@@ -1459,21 +1380,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Vestments"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -1488,21 +1399,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Common clothes"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -1512,9 +1413,6 @@ exports[`Character Background Screen can select any background, view background 
                 Common clothes
               </Text>
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontStyle": "italic",
@@ -1523,11 +1421,7 @@ exports[`Character Background Screen can select any background, view background 
               >
                  (
                 1
-                <Text
-                  accessible={true}
-                  allowFontScaling={true}
-                  ellipsizeMode="tail"
-                >
+                <Text>
                    
                   set
                 </Text>
@@ -1539,9 +1433,6 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "paddingBottom": 30,
@@ -1550,9 +1441,6 @@ exports[`Character Background Screen can select any background, view background 
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -1562,9 +1450,6 @@ exports[`Character Background Screen can select any background, view background 
               Starting money 
             </Text>
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontStyle": "italic",
@@ -1580,16 +1465,10 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="0"
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -1607,10 +1486,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="acolyte-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -1622,9 +1500,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -1637,9 +1512,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -1650,9 +1522,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -1664,9 +1533,6 @@ exports[`Character Background Screen can select any background, view background 
           Insight, Religion
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -1682,9 +1548,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -1698,7 +1561,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -1728,41 +1591,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -1830,6 +1660,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -1910,6 +1743,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -2021,6 +1860,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -2097,6 +1939,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -2171,15 +2019,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -2190,12 +2035,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -2212,11 +2054,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -2225,9 +2067,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -2236,7 +2075,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -2244,7 +2083,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -2274,41 +2113,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -2376,6 +2182,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -2456,6 +2265,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -2567,6 +2382,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -2643,6 +2461,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -2721,11 +2545,8 @@ exports[`Character Background Screen can select any background, view background 
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={false}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -2736,13 +2557,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="emptyBackgroundTest-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -2754,9 +2572,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -2769,9 +2584,6 @@ exports[`Character Background Screen can select any background, view background 
           Empty Background Test
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -2786,9 +2598,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -2805,9 +2614,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -2824,10 +2630,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="emptyBackgroundTest-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -2839,9 +2644,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -2854,9 +2656,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -2874,9 +2673,6 @@ exports[`Character Background Screen can select any background, view background 
           No starting equipment.
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -2894,10 +2690,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="emptyBackgroundTest-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -2909,9 +2704,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -2924,9 +2716,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -2937,9 +2726,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -2951,9 +2737,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -2969,9 +2752,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -2985,7 +2765,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -3015,41 +2795,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -3117,6 +2864,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -3197,6 +2947,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -3308,6 +3064,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -3384,6 +3143,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -3458,15 +3223,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -3477,12 +3239,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -3499,11 +3258,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -3512,9 +3271,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -3523,7 +3279,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -3531,7 +3287,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -3561,41 +3317,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -3663,6 +3386,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -3743,6 +3469,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -3854,6 +3586,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -3930,6 +3665,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -4028,9 +3769,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -4075,6 +3814,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -4155,6 +3897,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -4266,6 +4014,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -4345,6 +4096,12 @@ exports[`Character Background Screen can select any background, view background 
                 "flexDirection": "row",
                 "height": 44,
               },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
             },
             "pickerValue": Object {
               "error": Object {
@@ -4416,19 +4173,13 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -4439,13 +4190,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="1 Decision Remaining"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="testConsolidateItems-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -4457,9 +4205,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -4472,9 +4217,6 @@ exports[`Character Background Screen can select any background, view background 
           Test Consolidate Items
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -4489,9 +4231,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -4508,9 +4247,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -4527,10 +4263,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testConsolidateItems-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -4542,9 +4277,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -4557,9 +4289,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -4575,21 +4304,11 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Prayer book"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -4599,9 +4318,6 @@ exports[`Character Background Screen can select any background, view background 
                 Prayer book
               </Text>
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontStyle": "italic",
@@ -4618,21 +4334,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Prayer wheel"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -4642,9 +4348,6 @@ exports[`Character Background Screen can select any background, view background 
                 Prayer wheel
               </Text>
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontStyle": "italic",
@@ -4661,16 +4364,10 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="0"
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -4688,10 +4385,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testConsolidateItems-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -4703,9 +4399,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -4718,9 +4411,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -4731,9 +4421,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -4745,9 +4432,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -4763,9 +4447,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -4779,7 +4460,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -4809,41 +4490,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -4911,6 +4559,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -4991,6 +4642,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -5102,6 +4759,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -5178,6 +4838,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -5252,15 +4918,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -5271,12 +4934,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -5293,11 +4953,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -5306,9 +4966,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -5317,7 +4974,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -5325,7 +4982,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -5355,41 +5012,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -5457,6 +5081,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -5537,6 +5164,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -5648,6 +5281,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -5724,6 +5360,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -5822,9 +5464,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -5869,6 +5509,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -5949,6 +5592,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -6060,6 +5709,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -6139,6 +5791,12 @@ exports[`Character Background Screen can select any background, view background 
                 "flexDirection": "row",
                 "height": 44,
               },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
             },
             "pickerValue": Object {
               "error": Object {
@@ -6210,19 +5868,13 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -6233,13 +5885,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="1 Decision Remaining"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="testIgnoreDuplicateItems-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -6251,9 +5900,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -6266,9 +5912,6 @@ exports[`Character Background Screen can select any background, view background 
           Test Ignore Duplicate Items
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -6283,9 +5926,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -6302,9 +5942,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -6321,10 +5958,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testIgnoreDuplicateItems-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -6336,9 +5972,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -6351,9 +5984,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -6369,21 +5999,11 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Vestments A"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -6398,21 +6018,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Vestments B"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -6427,16 +6037,10 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="0"
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -6454,10 +6058,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testIgnoreDuplicateItems-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -6469,9 +6072,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -6484,9 +6084,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -6497,9 +6094,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -6511,9 +6105,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -6529,9 +6120,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -6545,7 +6133,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -6575,41 +6163,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -6677,6 +6232,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -6757,6 +6315,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -6868,6 +6432,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -6944,6 +6511,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -7018,15 +6591,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -7037,12 +6607,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -7059,11 +6626,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -7072,9 +6639,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -7083,7 +6647,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -7091,7 +6655,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -7121,41 +6685,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -7223,6 +6754,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -7303,6 +6837,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -7414,6 +6954,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -7490,6 +7033,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -7588,9 +7137,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -7635,6 +7182,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -7715,6 +7265,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -7826,6 +7382,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -7905,6 +7464,12 @@ exports[`Character Background Screen can select any background, view background 
                 "flexDirection": "row",
                 "height": 44,
               },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
             },
             "pickerValue": Object {
               "error": Object {
@@ -7976,10 +7541,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
@@ -8004,9 +7566,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -8051,6 +7611,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -8131,6 +7694,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -8242,6 +7811,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -8321,6 +7893,12 @@ exports[`Character Background Screen can select any background, view background 
                 "flexDirection": "row",
                 "height": 44,
               },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
             },
             "pickerValue": Object {
               "error": Object {
@@ -8392,19 +7970,13 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 1,
-            },
+            "decision": null,
             "index": 1,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -8415,13 +7987,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="2 Decisions Remaining"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="testMultipleDecisions-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -8433,9 +8002,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -8448,9 +8014,6 @@ exports[`Character Background Screen can select any background, view background 
           Test Multiple Decisions
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -8465,9 +8028,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -8484,9 +8044,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -8503,10 +8060,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testMultipleDecisions-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -8518,9 +8074,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -8533,9 +8086,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -8551,21 +8101,11 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Vestments A"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -8580,21 +8120,11 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="Vestments B"
           >
-            <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
-            >
+            <Text>
               • 
               <Text
-                accessible={true}
-                allowFontScaling={true}
-                ellipsizeMode="tail"
                 style={
                   Object {
                     "fontFamily": "RobotoBold",
@@ -8609,16 +8139,10 @@ exports[`Character Background Screen can select any background, view background 
 
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="0"
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -8633,16 +8157,10 @@ exports[`Character Background Screen can select any background, view background 
             Vestments A or Vestments B
           </Text>
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             key="1"
           >
             • 
             <Text
-              accessible={true}
-              allowFontScaling={true}
-              ellipsizeMode="tail"
               style={
                 Object {
                   "fontFamily": "RobotoBold",
@@ -8660,10 +8178,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="testMultipleDecisions-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -8675,9 +8192,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -8690,9 +8204,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -8703,9 +8214,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -8717,9 +8225,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -8735,9 +8240,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -8751,7 +8253,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -8781,41 +8283,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -8883,6 +8352,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -8963,6 +8435,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -9074,6 +8552,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -9150,6 +8631,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -9224,15 +8711,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -9243,12 +8727,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -9265,11 +8746,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -9278,9 +8759,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -9289,7 +8767,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -9297,7 +8775,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -9327,41 +8805,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -9429,6 +8874,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -9509,6 +8957,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -9620,6 +9074,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -9696,6 +9153,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -9774,11 +9237,8 @@ exports[`Character Background Screen can select any background, view background 
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={false}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -9789,13 +9249,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="oneAdditionalLanguageTest-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -9807,9 +9264,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -9822,9 +9276,6 @@ exports[`Character Background Screen can select any background, view background 
           One Additional Language Test
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -9839,9 +9290,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -9858,9 +9306,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -9877,10 +9322,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="oneAdditionalLanguageTest-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -9892,9 +9336,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -9907,9 +9348,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -9927,9 +9365,6 @@ exports[`Character Background Screen can select any background, view background 
           No starting equipment.
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -9947,10 +9382,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="oneAdditionalLanguageTest-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -9962,9 +9396,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -9977,9 +9408,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -9990,9 +9418,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -10004,9 +9429,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -10022,9 +9444,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -10038,7 +9457,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -10068,41 +9487,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -10170,6 +9556,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -10250,6 +9639,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -10361,6 +9756,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -10437,6 +9835,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -10511,15 +9915,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -10530,12 +9931,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -10552,11 +9950,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -10565,9 +9963,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -10576,7 +9971,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -10584,7 +9979,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -10614,41 +10009,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -10716,6 +10078,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -10796,6 +10161,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -10907,6 +10278,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -10983,6 +10357,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -11061,11 +10441,8 @@ exports[`Character Background Screen can select any background, view background 
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={false}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -11076,13 +10453,10 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="toolProficienciesTest-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -11094,9 +10468,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -11109,9 +10480,6 @@ exports[`Character Background Screen can select any background, view background 
           Tool Proficiencies Test
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -11126,9 +10494,6 @@ exports[`Character Background Screen can select any background, view background 
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -11145,9 +10510,6 @@ exports[`Character Background Screen can select any background, view background 
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -11164,10 +10526,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="toolProficienciesTest-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -11179,9 +10540,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -11194,9 +10552,6 @@ exports[`Character Background Screen can select any background, view background 
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -11214,9 +10569,6 @@ exports[`Character Background Screen can select any background, view background 
           No starting equipment.
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -11234,10 +10586,9 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="toolProficienciesTest-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -11249,9 +10600,6 @@ exports[`Character Background Screen can select any background, view background 
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -11264,9 +10612,6 @@ exports[`Character Background Screen can select any background, view background 
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -11277,9 +10622,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -11291,9 +10633,6 @@ exports[`Character Background Screen can select any background, view background 
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -11309,9 +10648,6 @@ exports[`Character Background Screen can select any background, view background 
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -11325,7 +10661,7 @@ exports[`Character Background Screen can select any background, view background 
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -11355,41 +10691,8 @@ exports[`Character Background Screen can select any background, view background 
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -11457,6 +10760,9 @@ exports[`Character Background Screen can select any background, view background 
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -11537,6 +10843,12 @@ exports[`Character Background Screen can select any background, view background 
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -11648,6 +10960,9 @@ exports[`Character Background Screen can select any background, view background 
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -11724,6 +11039,12 @@ exports[`Character Background Screen can select any background, view background 
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -11798,15 +11119,12 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={true}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -11817,12 +11135,9 @@ exports[`Character Background Screen can select any background, view background 
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
-        onPress={null}
+      <ThemedComponent
         style={
           Object {
             "container": Object {
@@ -11839,11 +11154,11 @@ exports[`Character Background Screen can select any background, view background 
             }
           }
         >
-          <Icon
+          <ThemedComponent
             name="info"
             style={
               Object {
-                "color": "#bdbdbd",
+                "color": undefined,
                 "fontSize": 48,
                 "height": 48,
                 "marginRight": 10,
@@ -11852,9 +11167,6 @@ exports[`Character Background Screen can select any background, view background 
             }
           />
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Array [
                 Object {
@@ -11863,7 +11175,7 @@ exports[`Character Background Screen can select any background, view background 
                   "fontSize": 18,
                 },
                 Object {
-                  "color": "#616161",
+                  "color": undefined,
                 },
               ]
             }
@@ -11871,7 +11183,7 @@ exports[`Character Background Screen can select any background, view background 
             Selection details will display here
           </Text>
         </View>
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>
@@ -11901,41 +11213,8 @@ exports[`Character Background Screen displays background that lacks data properl
         isCollapsed={false}
         title="Choosing a Background"
         type="tip"
-        uiTheme={
-          Object {
-            "palette": Object {
-              "accentColor": "#f44336",
-              "backdropIconColor": "#bdbdbd",
-              "backgroundColor": "#eeeeee",
-              "disabledColor": "#e0e0e0",
-              "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-              "fadedTextColor": "#616161",
-              "highlightedDiceColor": "#f44336",
-              "iconColor": "#757575",
-              "modalBackgroundColor": "#ffffff",
-              "noteColor": "#9e9e9e",
-              "primaryColor": "#3f51b5",
-              "standardDiceColor": "#424242",
-              "textColor": "#000000",
-            },
-            "toolbar": Object {
-              "container": Object {
-                "elevation": 0,
-                "shadowOffset": Object {
-                  "height": 0,
-                },
-                "shadowOpacity": 0,
-                "shadowRadius": 0,
-              },
-            },
-          }
-        }
       >
-        <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
-        >
+        <Text>
           The background you choose will become your character's back-story, explaining how they became who they are today.
         </Text>
       </Note>
@@ -12003,6 +11282,9 @@ exports[`Character Background Screen displays background that lacks data properl
               "dateTouchable": Object {
                 "error": Object {},
                 "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
               },
               "dateValue": Object {
                 "error": Object {
@@ -12083,6 +11365,12 @@ exports[`Character Background Screen displays background that lacks data properl
                 },
                 "normal": Object {
                   "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
                   "flexDirection": "row",
                   "height": 44,
                 },
@@ -12194,6 +11482,9 @@ exports[`Character Background Screen displays background that lacks data properl
             "dateTouchable": Object {
               "error": Object {},
               "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
             },
             "dateValue": Object {
               "error": Object {
@@ -12270,6 +11561,12 @@ exports[`Character Background Screen displays background that lacks data properl
               },
               "normal": Object {
                 "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
                 "flexDirection": "row",
                 "height": 44,
               },
@@ -12348,11 +11645,8 @@ exports[`Character Background Screen displays background that lacks data properl
           }
         }
       />
-      <Button
-        accent={false}
+      <ThemedComponent
         disabled={false}
-        icon={null}
-        onLongPress={null}
         onPress={[Function]}
         primary={true}
         raised={true}
@@ -12363,13 +11657,10 @@ exports[`Character Background Screen displays background that lacks data properl
             },
           }
         }
-        testID={null}
         text="Proceed"
-        upperCase={true}
       />
-      <Card
+      <ThemedComponent
         key="emptyBackgroundTest-background"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -12381,9 +11672,6 @@ exports[`Character Background Screen displays background that lacks data properl
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -12396,9 +11684,6 @@ exports[`Character Background Screen displays background that lacks data properl
           Empty Background Test
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -12413,9 +11698,6 @@ exports[`Character Background Screen displays background that lacks data properl
 
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -12432,9 +11714,6 @@ exports[`Character Background Screen displays background that lacks data properl
         >
           You can learn 
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -12451,10 +11730,9 @@ exports[`Character Background Screen displays background that lacks data properl
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="emptyBackgroundTest-equipment"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -12466,9 +11744,6 @@ exports[`Character Background Screen displays background that lacks data properl
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -12481,9 +11756,6 @@ exports[`Character Background Screen displays background that lacks data properl
           Starting Equipment
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -12501,9 +11773,6 @@ exports[`Character Background Screen displays background that lacks data properl
           No starting equipment.
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -12521,10 +11790,9 @@ exports[`Character Background Screen displays background that lacks data properl
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
-      <Card
+      </ThemedComponent>
+      <ThemedComponent
         key="emptyBackgroundTest-proficiencies"
-        onPress={null}
         style={
           Object {
             "container": Object {
@@ -12536,9 +11804,6 @@ exports[`Character Background Screen displays background that lacks data properl
         }
       >
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#000000",
@@ -12551,9 +11816,6 @@ exports[`Character Background Screen displays background that lacks data properl
           Proficiencies
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Object {
               "color": "#616161",
@@ -12564,9 +11826,6 @@ exports[`Character Background Screen displays background that lacks data properl
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -12578,9 +11837,6 @@ exports[`Character Background Screen displays background that lacks data properl
           None
         </Text>
         <Text
-          accessible={true}
-          allowFontScaling={true}
-          ellipsizeMode="tail"
           style={
             Array [
               Object {
@@ -12596,9 +11852,6 @@ exports[`Character Background Screen displays background that lacks data properl
           }
         >
           <Text
-            accessible={true}
-            allowFontScaling={true}
-            ellipsizeMode="tail"
             style={
               Object {
                 "fontFamily": "RobotoBold",
@@ -12612,7 +11865,7 @@ exports[`Character Background Screen displays background that lacks data properl
         <OGLButton
           sourceText="Source: 5th Edition SRD"
         />
-      </Card>
+      </ThemedComponent>
     </View>
   </Styled(Content)>
 </Styled(Container)>

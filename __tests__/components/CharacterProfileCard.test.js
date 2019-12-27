@@ -86,12 +86,11 @@ describe('Character Profile Card', () => {
   test('renders properly for characters below max level', () => {
     const wrapper = shallow(<CharacterProfileCard
       character={character}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />);
+    />).shallow();
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -103,30 +102,28 @@ describe('Character Profile Card', () => {
 
     const wrapper = shallow(<CharacterProfileCard
       character={characterMaxLevel}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />);
+    />).shallow();
     expect(wrapper).toMatchSnapshot();
   });
 
   test('can toggle the modal', () => {
     const wrapper = shallow(<CharacterProfileCard
       character={character}
-      uiTheme={DefaultTheme}
       modalHandler={modalStub}
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />);
+    />).shallow();
 
     // 'More options' icon not pressed
     expect(modalStub.notCalled).toBe(true);
 
     // User must press the 'more options' icon to open the modal
-    wrapper.find('IconToggle').props().onPress();
+    wrapper.find('ThemedComponent[name="more-vert"]').props().onPress();
 
     // Modal should be open
     expect(modalStub.calledOnce).toBe(true);
@@ -138,7 +135,7 @@ describe('Character Profile Card', () => {
       viewHandler={viewStub}
       editHandler={editStub}
       deleteHandler={deleteStub}
-    />, { uiTheme: DefaultTheme });
+    />);
 
     // No options selected
     expect(viewStub.notCalled).toBe(true);
@@ -146,24 +143,25 @@ describe('Character Profile Card', () => {
     expect(deleteStub.notCalled).toBe(true);
 
     // Modal should be closed
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.shallow()).toMatchSnapshot();
 
     // User must press the 'more options' icon to open the modal
-    wrapper.find('CharacterProfileCard').dive().find('IconToggle').props().onPress();
-    wrapper.update();
+    wrapper.find('CharacterProfileCard').shallow().shallow().find('ThemedComponent[name="more-vert"]').props().onPress();
+    wrapper.find('CharacterProfileCard').shallow().shallow().update();
 
     // Modal should be open
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('ContextConsumer').shallow()).toMatchSnapshot();
 
     // Modal should have 4 rows (character name and the three options: view, edit, delete)
-    expect(wrapper.find('ReactNativeModal').children().find('ListItem')).toHaveLength(4);
+    const listItems = wrapper.find('ContextConsumer').shallow().children().find('ThemedComponent');
+    expect(listItems).toHaveLength(4);
 
     // Option handlers should execute on press
-    wrapper.find('ReactNativeModal').children().find('ListItem').at(1).props().onPress();
+    listItems.at(1).props().onPress();
     expect(viewStub.calledOnce).toBe(true);
-    wrapper.find('ReactNativeModal').children().find('ListItem').at(2).props().onPress();
+    listItems.at(2).props().onPress();
     expect(editStub.calledOnce).toBe(true);
-    wrapper.find('ReactNativeModal').children().find('ListItem').at(3).props().onPress();
+    listItems.at(3).props().onPress();
     expect(deleteStub.calledOnce).toBe(true);
   });
 });

@@ -3,7 +3,6 @@
     "shallow": true,
     "sinon": true,
     "AsyncStorage": true,
-    "DefaultTheme": true,
     "ACTIVITY_KEY": true,
     "CAMPAIGN_KEY": true,
     "CHARACTER_KEY": true

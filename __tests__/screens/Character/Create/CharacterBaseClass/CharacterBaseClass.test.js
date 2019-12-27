@@ -1,7 +1,6 @@
 import React from 'react';
 import { CharacterBaseClass }
   from 'FifthEditionManager/screens/Character/Create/CharacterBaseClass';
-import { Button } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { CLASSES } from 'FifthEditionManager/config/Info';
 
@@ -21,8 +20,7 @@ describe('Character Base Class Screen', () => {
     stylesheet: null,
   };
   const navigation = { navigate: jest.fn(), setParams: jest.fn(), state };
-  const context = { uiTheme: DefaultTheme };
-  const classList = CLASSES.map(baseClass => baseClass.key);
+  const classList = Object.keys(CLASSES);
 
   test('can build navigation options', () => {
     const goBackSpy = sinon.spy();
@@ -40,7 +38,7 @@ describe('Character Base Class Screen', () => {
         },
         goBack: goBackSpy,
       },
-    }));
+    })).shallow();
     expect(goBackSpy.notCalled).toBe(true);
     expect(randomizeClassSpy.notCalled).toBe(true);
 
@@ -54,13 +52,13 @@ describe('Character Base Class Screen', () => {
   });
 
   test('can set form reference properly', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />).shallow().shallow();
     wrapper.find(t.form.Form).get(0).ref('test');
     expect(wrapper.instance()).toHaveProperty('form', 'test');
   });
 
   test('can select any class, view class details and OGL, and deselect class', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />).shallow().shallow();
     const classForm = wrapper.find(t.form.Form);
 
     // Test form options
@@ -70,16 +68,14 @@ describe('Character Base Class Screen', () => {
       // Select class; confirm selection in state and OGL button
       classForm.at(0).props().onChange({ baseClass });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.baseClass', baseClass);
-      expect(wrapper.state()).toHaveProperty('baseClass.key', baseClass);
+      expect(wrapper.state()).toHaveProperty('baseClass', baseClass);
       expect(wrapper.find(OGLButton)).toHaveLength(2);
       expect(wrapper).toMatchSnapshot();
 
       // Deselect race; confirm deselection in state
-      classForm.at(0).props().onChange({ baseClass: '' });
+      classForm.at(0).props().onChange({ baseClass: null });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.baseClass', '');
-      expect(wrapper.state()).toHaveProperty('baseClass', undefined);
+      expect(wrapper.state()).toHaveProperty('baseClass', null);
       expect(wrapper.find(OGLButton)).toHaveLength(0);
       expect(wrapper).toMatchSnapshot();
     });
@@ -87,17 +83,17 @@ describe('Character Base Class Screen', () => {
 
   test('allows submission only after class selection', () => {
     const navigateSpy = sinon.spy(navigation, 'navigate');
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />).shallow().shallow();
     const classForm = wrapper.find(t.form.Form);
     expect(navigateSpy.notCalled).toBe(true);
 
     // Submission blocked before class selection
-    wrapper.find(Button).props().onPress();
+    wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
     expect(navigateSpy.notCalled).toBe(true);
 
     // Submission allowed after class selection
-    classForm.at(0).props().onChange({ baseClass: CLASSES[0].key });
-    wrapper.find(Button).props().onPress();
+    classForm.at(0).props().onChange({ baseClass: Object.keys(CLASSES)[0] });
+    wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
     wrapper.update();
     expect(navigateSpy.calledOnce).toBe(true);
 
@@ -106,54 +102,31 @@ describe('Character Base Class Screen', () => {
   });
 
   test('can randomize class selection', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />).shallow().shallow();
 
     // Randomize when no class is selected
     expect(wrapper.state()).toHaveProperty('baseClass', null);
     wrapper.instance().randomizeClass();
     wrapper.update();
-    expect(wrapper.state()).toHaveProperty('baseClass.key');
-    const firstSelectionKey = wrapper.state().baseClass.key;
+    expect(wrapper.state()).toHaveProperty('baseClass');
+    const firstSelectionKey = wrapper.state().baseClass;
     expect(classList.includes(firstSelectionKey)).toBe(true);
 
     // Randomize when a class is selected
     wrapper.instance().randomizeClass();
     wrapper.update();
-    expect(wrapper.state()).toHaveProperty('baseClass.key');
-    expect(classList.includes(wrapper.state().baseClass.key)).toBe(true);
-    expect(wrapper.state().baseClass.key).not.toEqual(firstSelectionKey);
+    expect(wrapper.state()).toHaveProperty('baseClass');
+    expect(classList.includes(wrapper.state().baseClass)).toBe(true);
+    expect(wrapper.state().baseClass).not.toEqual(firstSelectionKey);
   });
 
   test('displays class that lacks data properly', () => {
-    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBaseClass navigation={navigation} />).shallow().shallow();
     const classForm = wrapper.find(t.form.Form);
-    const sampleClass = {
-      key: 'sample',
-      name: 'Sample',
-      description: 'Description text.',
-      hitDie: 8,
-      proficiencies: {
-        savingThrows: [],
-        armor: [],
-        weapons: [],
-        tools: [{}, {}, {}], // Empty tool objects
-        skills: {
-          options: [],
-          optionKeys: [],
-          quantity: 2,
-        },
-      },
-      image: null,
-    };
-    const classStub = sinon.stub(CLASSES, 'find');
-    classStub.returns(sampleClass);
 
     // Select sample class
-    classForm.at(0).props().onChange({ baseClass: sampleClass.key });
+    classForm.at(0).props().onChange({ baseClass: 'testLackOfDetails' });
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
-
-    // Stub cleanup
-    classStub.restore();
   });
 });

@@ -2,12 +2,11 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Card, CardItem, Text, Body, Left, Right } from 'native-base';
-import { COLOR, Icon, IconToggle, ListItem } from 'react-native-material-ui';
+import { COLOR, Icon, IconToggle, ListItem, ThemeContext } from 'react-native-material-ui';
 import { StyleSheet, Image, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { EXPERIENCE, IMAGES } from 'FifthEditionManager/config/Info';
 import { getCharacterDisplayName } from 'FifthEditionManager/util';
-import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
 const calculateLevelProgress = (level, experience) => (
   level < 20 ? experience / EXPERIENCE[level] : 1
@@ -42,137 +41,144 @@ const navText = {
 };
 
 const CharacterProfileCard = (props) => {
-  // Theme setup
-  const {
-    primaryColor,
-    iconColor,
-    textColor,
-    noteColor,
-    fadedBackgroundColor,
-  } = props.uiTheme.palette;
-  const textStyle = { color: textColor };
-  const noteStyle = { color: noteColor };
-  const fadedBackgroundStyle = { backgroundColor: fadedBackgroundColor };
-
   const modalContent = (
-    <View style={{ margin: 0 }}>
-      <ListItem
-        leftElement={
-          <Image
-            source={IMAGES.RACE[props.character.race.lookupKey]}
-            style={{ height: 36, width: 36 }}
-            resizeMode="contain"
+    <ThemeContext.Consumer>
+      {theme => (
+        <View style={{ margin: 0 }}>
+          <ListItem
+            leftElement={
+              <Image
+                source={IMAGES.RACE[props.character.race.lookupKey]}
+                style={{ height: 36, width: 36 }}
+                resizeMode="contain"
+              />
+            }
+            centerElement={
+              <Text style={[styles.characterName, { color: theme.palette.textColor }]}>
+                {getCharacterDisplayName(props.character)}
+              </Text>
+            }
+            style={navHeader}
           />
-        }
-        centerElement={
-          <Text style={[styles.characterName, textStyle]}>
-            {getCharacterDisplayName(props.character)}
-          </Text>
-        }
-        style={navHeader}
-      />
-      <ListItem
-        leftElement={<Icon name="open-in-new" color={iconColor} />}
-        centerElement={
-          <Text style={navText}>View Character</Text>
-        }
-        onPress={() => props.viewHandler(props.character.key)}
-        style={navItem}
-      />
-      <ListItem
-        leftElement={<Icon name="mode-edit" color={iconColor} />}
-        centerElement={
-          <Text style={navText}>Edit Character</Text>
-        }
-        onPress={() => props.editHandler(props.character.key)}
-        style={navItem}
-      />
-      <ListItem
-        leftElement={<Icon name="delete" color={iconColor} />}
-        centerElement={
-          <Text style={navText}>Delete Character</Text>
-        }
-        onPress={() => props.deleteHandler(props.character)}
-        style={navItem}
-      />
-    </View>
+          <ListItem
+            leftElement={<Icon name="open-in-new" color={theme.palette.iconColor} />}
+            centerElement={
+              <Text style={navText}>View Character</Text>
+            }
+            onPress={() => props.viewHandler(props.character.key)}
+            style={navItem}
+          />
+          <ListItem
+            leftElement={<Icon name="mode-edit" color={theme.palette.iconColor} />}
+            centerElement={
+              <Text style={navText}>Edit Character</Text>
+            }
+            onPress={() => props.editHandler(props.character.key)}
+            style={navItem}
+          />
+          <ListItem
+            leftElement={<Icon name="delete" color={theme.palette.iconColor} />}
+            centerElement={
+              <Text style={navText}>Delete Character</Text>
+            }
+            onPress={() => props.deleteHandler(props.character)}
+            style={navItem}
+          />
+        </View>
+      )}
+    </ThemeContext.Consumer>
   );
 
   return (
-    <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-      <CardItem cardBody>
-        <Image
-          source={IMAGES.RACE[props.character.race.lookupKey]}
-          style={{ height: 100, width: null, flex: 1 }}
-        />
-        <View style={{ position: 'absolute', top: 0, right: 0 }}>
-          <IconToggle
-            name="more-vert"
-            color={COLOR.white}
-            onPress={() => props.modalHandler(modalContent)}
-          />
-        </View>
-        <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-          <Text style={[styles.lastUpdatedBanner, fadedBackgroundStyle]}>
-            Last updated {moment(props.character.meta.lastUpdated).fromNow()}
-          </Text>
-        </View>
-      </CardItem>
-      <CardItem>
-        <Left style={{ flex: 2 }}>
-          <Image
-            source={IMAGES.BASE_CLASS.ICON[props.character.baseClass.lookupKey]}
-            style={{ width: 48, height: 64 }}
-            resizeMode="contain"
-          />
-          <Body>
-            <Text style={[styles.heading, textStyle]} numberOfLines={1}>
-              {getCharacterDisplayName(props.character)}&nbsp;
-            </Text>
-            <Text style={[styles.subheading, noteStyle]}>
-              {props.character.race.name}&nbsp;
-              {props.character.baseClass.name}
-            </Text>
-            <Text style={[styles.subheading, noteStyle]}>
-              {props.character.background.name}
-            </Text>
-          </Body>
-        </Left>
-        <Right style={{ flex: 1 }}>
-          <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Text style={[styles.levelText, noteStyle]}>
-              Level {props.character.profile.level}
-            </Text>
-            <Progress.Bar
-              progress={calculateLevelProgress(
-                props.character.profile.level,
-                props.character.profile.experience,
-              )}
-              animated={false}
-              color={primaryColor}
-              borderColor={primaryColor}
-              width={100}
-              style={{ marginTop: 3, marginBottom: 3 }}
+    <ThemeContext.Consumer>
+      {theme => (
+        <Card style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+          <CardItem cardBody>
+            <Image
+              source={IMAGES.RACE[props.character.race.lookupKey]}
+              style={{ height: 100, width: null, flex: 1 }}
             />
-            {
-              props.character.profile.level < 20 &&
-              <Text style={styles.experienceText}>
-                {formatNumber(props.character.profile.experience)} /&nbsp;
-                {formatNumber(EXPERIENCE[props.character.profile.level])}
+            <View style={{ position: 'absolute', top: 0, right: 0 }}>
+              <IconToggle
+                name="more-vert"
+                color={COLOR.white}
+                onPress={() => props.modalHandler(modalContent)}
+              />
+            </View>
+            <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+              <Text
+                style={[
+                  styles.lastUpdatedBanner,
+                  { backgroundColor: theme.palette.fadedBackgroundColor },
+                ]}
+              >
+                Last updated {moment(props.character.meta.lastUpdated).fromNow()}
               </Text>
-            }
-            {
-              props.character.profile.level === 20 &&
-              <Text style={styles.experienceText}>
-                {formatNumber(props.character.profile.experience)}
-              </Text>
-            }
-          </View>
-        </Right>
-      </CardItem>
-    </Card>
+            </View>
+          </CardItem>
+          <CardItem>
+            <Left style={{ flex: 2 }}>
+              <Image
+                source={IMAGES.BASE_CLASS.ICON[props.character.baseClass.lookupKey]}
+                style={{ width: 48, height: 64 }}
+                resizeMode="contain"
+              />
+              <Body>
+                <Text
+                  style={[
+                    styles.heading,
+                    { color: theme.palette.textColor },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {getCharacterDisplayName(props.character)}&nbsp;
+                </Text>
+                <Text style={[styles.subheading, { color: theme.palette.noteColor }]}>
+                  {props.character.race.name}&nbsp;
+                  {props.character.baseClass.name}
+                </Text>
+                <Text style={[styles.subheading, { color: theme.palette.noteColor }]}>
+                  {props.character.background.name}
+                </Text>
+              </Body>
+            </Left>
+            <Right style={{ flex: 1 }}>
+              <View
+                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Text style={[styles.levelText, { color: theme.palette.noteColor }]}>
+                  Level {props.character.profile.level}
+                </Text>
+                <Progress.Bar
+                  progress={calculateLevelProgress(
+                    props.character.profile.level,
+                    props.character.profile.experience,
+                  )}
+                  animated={false}
+                  color={theme.palette.primaryColor}
+                  borderColor={theme.palette.primaryColor}
+                  width={100}
+                  style={{ marginTop: 3, marginBottom: 3 }}
+                />
+                {
+                  props.character.profile.level < 20 &&
+                  <Text style={styles.experienceText}>
+                    {formatNumber(props.character.profile.experience)} /&nbsp;
+                    {formatNumber(EXPERIENCE[props.character.profile.level])}
+                  </Text>
+                }
+                {
+                  props.character.profile.level === 20 &&
+                  <Text style={styles.experienceText}>
+                    {formatNumber(props.character.profile.experience)}
+                  </Text>
+                }
+              </View>
+            </Right>
+          </CardItem>
+        </Card>
+      )}
+    </ThemeContext.Consumer>
   );
 };
 
@@ -222,11 +228,6 @@ CharacterProfileCard.propTypes = {
   viewHandler: PropTypes.func.isRequired,
   editHandler: PropTypes.func.isRequired,
   deleteHandler: PropTypes.func.isRequired,
-  uiTheme: PropTypes.object,
-};
-
-CharacterProfileCard.defaultProps = {
-  uiTheme: DefaultTheme,
 };
 
 export default CharacterProfileCard;

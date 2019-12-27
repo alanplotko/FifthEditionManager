@@ -1,4 +1,7 @@
-import { AppLoading, Asset, Font } from 'expo';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
@@ -10,7 +13,7 @@ import { HomeScreen } from 'FifthEditionManager/screens/HomeScreen';
 import * as CharacterBuild from 'FifthEditionManager/screens/Character/Create';
 
 // UI theme and styles
-import { Button, COLOR, Icon, ThemeProvider } from 'react-native-material-ui';
+import { Button, COLOR, Icon, ThemeContext, getTheme } from 'react-native-material-ui';
 import { StyleSheet, Text, View } from 'react-native';
 import DefaultTheme from 'FifthEditionManager/themes/DefaultTheme';
 
@@ -41,9 +44,6 @@ const cacheFonts = fonts => Font.loadAsync(fonts);
 const cacheImages = images =>
   images.map(image => Asset.fromModule(image).downloadAsync());
 
-// Styles
-const messageIconStyle = { fontSize: 156, color: COLOR.grey400 };
-
 export default class App extends React.Component {
   static loadAssetsAsync() {
     const imageAssets = cacheImages([
@@ -66,34 +66,33 @@ export default class App extends React.Component {
   }
 
   render() {
-    // Theme setup
-    const { fadedTextColor, backdropIconColor } = DefaultTheme.palette;
-    const fadedTextStyle = { color: fadedTextColor };
-    messageIconStyle.color = backdropIconColor;
-
     if (this.state.error) {
       return (
-        <ThemeProvider uiTheme={DefaultTheme}>
-          <View style={styles.centered}>
-            <Icon name="error" style={messageIconStyle} />
-            <Text style={[styles.heading, fadedTextStyle]}>
-              We&apos;re having some trouble!
-            </Text>
-            <Text style={[styles.text, fadedTextStyle]}>
-              We couldn&apos;t load some assets.
-            </Text>
-            <Text style={[styles.text, fadedTextStyle]}>
-              Try again in a moment.
-            </Text>
-            <Button
-              primary
-              icon="refresh"
-              onPress={() => this.setState({ error: null })}
-              text="Reload"
-              style={{ container: { width: '75%', margin: 20 } }}
-            />
-          </View>
-        </ThemeProvider>
+        <ThemeContext.Consumer>
+          {theme => (
+            <View style={styles.centered}>
+              <Icon name="error" size={156} color={theme.palette.backdropIconColor} />
+              <Text
+                style={[styles.heading, { color: theme.palette.fadedTextColor }]}
+              >
+                We&apos;re having some trouble!
+              </Text>
+              <Text style={[styles.text, { color: theme.palette.fadedTextColor }]}>
+                We couldn&apos;t load some assets.
+              </Text>
+              <Text style={[styles.text, { color: theme.palette.fadedTextColor }]}>
+                Try again in a moment.
+              </Text>
+              <Button
+                primary
+                icon="refresh"
+                onPress={() => this.setState({ error: null })}
+                text="Reload"
+                style={{ container: { width: '75%', margin: 20 } }}
+              />
+            </View>
+          )}
+        </ThemeContext.Consumer>
       );
     }
     if (!this.state.isReady) {
@@ -105,7 +104,11 @@ export default class App extends React.Component {
         />
       );
     }
-    return <ThemeProvider uiTheme={DefaultTheme}><RootNavigator /></ThemeProvider>;
+    return (
+      <ThemeContext.Provider value={getTheme(DefaultTheme)}>
+        <RootNavigator />
+      </ThemeContext.Provider>
+    );
   }
 }
 

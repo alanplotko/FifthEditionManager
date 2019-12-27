@@ -1,7 +1,6 @@
 import React from 'react';
 import { CharacterBackground }
   from 'FifthEditionManager/screens/Character/Create/CharacterBackground';
-import { Button } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
 
@@ -24,7 +23,6 @@ describe('Character Background Screen', () => {
     stylesheet: null,
   };
   const navigation = { navigate: jest.fn(), setParams: jest.fn(), state };
-  const context = { uiTheme: DefaultTheme };
   const backgroundList = BACKGROUNDS.map(background => background.key);
 
   test('can build navigation options', () => {
@@ -43,7 +41,7 @@ describe('Character Background Screen', () => {
         },
         goBack: goBackSpy,
       },
-    }));
+    })).shallow();
     expect(goBackSpy.notCalled).toBe(true);
     expect(randomizeBackgroundSpy.notCalled).toBe(true);
 
@@ -57,13 +55,13 @@ describe('Character Background Screen', () => {
   });
 
   test('can set form reference properly', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     wrapper.find(t.form.Form).get(0).ref('test');
     expect(wrapper.instance()).toHaveProperty('form', 'test');
   });
 
   test('can select any background, view background details and OGL, and deselect background', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     const backgroundForm = wrapper.find(t.form.Form);
 
     // Test background form options
@@ -73,24 +71,21 @@ describe('Character Background Screen', () => {
       // Select background; confirm selection in state and OGL button
       backgroundForm.at(0).props().onChange({ background });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.background', background);
       expect(wrapper.state()).toHaveProperty('background.key', background);
       expect(wrapper.find(OGLButton)).toHaveLength(3);
       expect(wrapper).toMatchSnapshot();
 
       // Deselect race; confirm deselection in state
-      backgroundForm.at(0).props().onChange({ background: '' });
+      backgroundForm.at(0).props().onChange({ background: null });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.background', '');
-      expect(wrapper.state()).toHaveProperty('background', undefined);
+      expect(wrapper.state()).toHaveProperty('background', null);
       expect(wrapper.find(OGLButton)).toHaveLength(0);
       expect(wrapper).toMatchSnapshot();
     });
   });
 
   test('allows submission only after background and decision selections', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
-
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     // Set up a spy to confirm successful submisisons
     const navigateSpy = sinon.spy(navigation, 'navigate');
     expect(navigateSpy.notCalled).toBe(true);
@@ -101,7 +96,7 @@ describe('Character Background Screen', () => {
       expect(forms).toHaveLength(1);
 
       // Submission blocked before background selection
-      wrapper.find(Button).props().onPress();
+      wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
       expect(navigateSpy.notCalled).toBe(true);
 
       // Select background
@@ -126,12 +121,12 @@ describe('Character Background Screen', () => {
       });
 
       // Submission allowed after background selection
-      wrapper.find(Button).props().onPress();
+      wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
       wrapper.update();
       expect(navigateSpy.calledOnce).toBe(true);
 
       // Return to clean state before selecting next background
-      forms.at(0).props().onChange({ background: '' });
+      forms.at(0).props().onChange({ background: null });
       wrapper.update();
       navigateSpy.resetHistory();
       expect(navigateSpy.notCalled).toBe(true);
@@ -142,7 +137,7 @@ describe('Character Background Screen', () => {
   });
 
   test('can randomize background selection', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
 
     // Randomize when no background is selected
     expect(wrapper.state()).toHaveProperty('background', null);
@@ -160,35 +155,8 @@ describe('Character Background Screen', () => {
     expect(wrapper.state().background.key).not.toEqual(firstSelectionKey);
   });
 
-  test('can randomize background selection given only the default background list', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
-
-    // Randomize when no background is selected
-    expect(wrapper.state()).toHaveProperty('background', null);
-    wrapper.instance().randomizeBackground();
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('background.key');
-    const firstSelectionKey = wrapper.state().background.key;
-    expect(backgroundList.includes(firstSelectionKey)).toBe(true);
-
-    // Simulate there being no other backgrounds available aside from the currently selected one
-    const backgroundFilterStub = sinon.stub(BACKGROUNDS, 'filter').returns([]);
-
-    // Randomize when a background is selected
-    wrapper.instance().randomizeBackground();
-    wrapper.update();
-    expect(wrapper.state()).toHaveProperty('background.key');
-    expect(backgroundList.includes(wrapper.state().background.key)).toBe(true);
-
-    // No change on the next randomizeBackground call, since there's only one default background
-    expect(wrapper.state().background.key).toEqual(firstSelectionKey);
-
-    // Stub cleanup
-    backgroundFilterStub.restore();
-  });
-
   test('displays background that lacks data properly', () => {
-    const wrapper = shallow(<CharacterBackground navigation={navigation} />, { context });
+    const wrapper = shallow(<CharacterBackground navigation={navigation} />).shallow().shallow();
     const backgroundForm = wrapper.find(t.form.Form);
 
     // Select sample background

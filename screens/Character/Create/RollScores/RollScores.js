@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, ActivityIndicator, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import Modal from 'react-native-modal';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
@@ -12,25 +12,10 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-export default class RollScores extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Roll Ability Scores',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
+class RollScores extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -51,6 +36,18 @@ export default class RollScores extends React.Component {
 
   componentWillUnmount() {
     clearTimeout(this.showLoadingOverlay);
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Roll Ability Scores',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   rollAbilityScores = (done) => {
@@ -109,7 +106,7 @@ export default class RollScores extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor } = this.context.uiTheme.palette;
+    const { textColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
 
     const dice = roll => (
@@ -236,3 +233,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.transparent,
   },
 });
+
+export default withTheme(RollScores);
