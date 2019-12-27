@@ -51,7 +51,7 @@ class Skills extends React.Component {
       Define proficiency options from eligible choices or from the full list
       for cases like the bard who can use any 3 skills.
     */
-    let options = this.state.proficiencies.baseClass.optionKeys ||
+    const options = this.state.proficiencies.baseClass.optionKeys ||
       Object.keys(this.state.skills);
     this.state.proficiencies.options = options
       .filter(skill => !this.state.proficiencies.background.includes(skill));
