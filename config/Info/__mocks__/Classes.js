@@ -221,4 +221,22 @@ export default {
     },
     image: IMAGES.BASE_CLASS.ICON.wizard,
   },
+  testLackOfDetails: {
+    key: 'testLackOfDetails',
+    name: 'Test Lack Of Details',
+    description: 'Description text.',
+    hitDie: 8,
+    proficiencies: {
+      savingThrows: [],
+      armor: [],
+      weapons: [],
+      tools: [{}, {}, {}], // Empty tool objects
+      skills: {
+        options: [],
+        optionKeys: [],
+        quantity: 2,
+      },
+    },
+    image: null,
+  },
 };

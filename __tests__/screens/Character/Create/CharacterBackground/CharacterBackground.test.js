@@ -1,7 +1,6 @@
 import React from 'react';
 import { CharacterBackground }
   from 'FifthEditionManager/screens/Character/Create/CharacterBackground';
-import { Button } from 'react-native-material-ui';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import { BACKGROUNDS } from 'FifthEditionManager/config/Info';
 
@@ -72,16 +71,14 @@ describe('Character Background Screen', () => {
       // Select background; confirm selection in state and OGL button
       backgroundForm.at(0).props().onChange({ background });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.background', background);
       expect(wrapper.state()).toHaveProperty('background.key', background);
       expect(wrapper.find(OGLButton)).toHaveLength(3);
       expect(wrapper).toMatchSnapshot();
 
       // Deselect race; confirm deselection in state
-      backgroundForm.at(0).props().onChange({ background: '' });
+      backgroundForm.at(0).props().onChange({ background: null });
       wrapper.update();
-      expect(wrapper.state()).toHaveProperty('form.background', '');
-      expect(wrapper.state()).toHaveProperty('background', undefined);
+      expect(wrapper.state()).toHaveProperty('background', null);
       expect(wrapper.find(OGLButton)).toHaveLength(0);
       expect(wrapper).toMatchSnapshot();
     });
@@ -99,7 +96,7 @@ describe('Character Background Screen', () => {
       expect(forms).toHaveLength(1);
 
       // Submission blocked before background selection
-      wrapper.find(Button).props().onPress();
+      wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
       expect(navigateSpy.notCalled).toBe(true);
 
       // Select background
@@ -124,12 +121,12 @@ describe('Character Background Screen', () => {
       });
 
       // Submission allowed after background selection
-      wrapper.find(Button).props().onPress();
+      wrapper.find('ThemedComponent[text="Proceed"]').props().onPress();
       wrapper.update();
       expect(navigateSpy.calledOnce).toBe(true);
 
       // Return to clean state before selecting next background
-      forms.at(0).props().onChange({ background: '' });
+      forms.at(0).props().onChange({ background: null });
       wrapper.update();
       navigateSpy.resetHistory();
       expect(navigateSpy.notCalled).toBe(true);

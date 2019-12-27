@@ -99,7 +99,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -522,7 +522,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Barbarian-class"
+        key="barbarian-class"
         style={
           Object {
             "container": Object {
@@ -624,7 +624,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Barbarian-hit-die"
+        key="barbarian-hit-die"
         style={
           Object {
             "container": Object {
@@ -743,7 +743,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Barbarian-proficiencies"
+        key="barbarian-proficiencies"
         style={
           Object {
             "container": Object {
@@ -938,7 +938,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -1342,7 +1342,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -1462,7 +1462,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -1885,7 +1885,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Bard-class"
+        key="bard-class"
         style={
           Object {
             "container": Object {
@@ -1987,7 +1987,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Bard-hit-die"
+        key="bard-hit-die"
         style={
           Object {
             "container": Object {
@@ -2106,7 +2106,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Bard-proficiencies"
+        key="bard-proficiencies"
         style={
           Object {
             "container": Object {
@@ -2301,7 +2301,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -2705,7 +2705,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -2825,7 +2825,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -3248,7 +3248,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Cleric-class"
+        key="cleric-class"
         style={
           Object {
             "container": Object {
@@ -3350,7 +3350,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Cleric-hit-die"
+        key="cleric-hit-die"
         style={
           Object {
             "container": Object {
@@ -3469,7 +3469,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Cleric-proficiencies"
+        key="cleric-proficiencies"
         style={
           Object {
             "container": Object {
@@ -3664,7 +3664,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -4068,7 +4068,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -4188,7 +4188,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -4611,7 +4611,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Druid-class"
+        key="druid-class"
         style={
           Object {
             "container": Object {
@@ -4713,7 +4713,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Druid-hit-die"
+        key="druid-hit-die"
         style={
           Object {
             "container": Object {
@@ -4832,7 +4832,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Druid-proficiencies"
+        key="druid-proficiencies"
         style={
           Object {
             "container": Object {
@@ -5027,7 +5027,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -5431,7 +5431,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -5551,7 +5551,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -5974,7 +5974,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Fighter-class"
+        key="fighter-class"
         style={
           Object {
             "container": Object {
@@ -6076,7 +6076,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Fighter-hit-die"
+        key="fighter-hit-die"
         style={
           Object {
             "container": Object {
@@ -6195,7 +6195,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Fighter-proficiencies"
+        key="fighter-proficiencies"
         style={
           Object {
             "container": Object {
@@ -6390,7 +6390,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -6794,7 +6794,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -6914,7 +6914,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -7337,7 +7337,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Monk-class"
+        key="monk-class"
         style={
           Object {
             "container": Object {
@@ -7439,7 +7439,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Monk-hit-die"
+        key="monk-hit-die"
         style={
           Object {
             "container": Object {
@@ -7558,7 +7558,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Monk-proficiencies"
+        key="monk-proficiencies"
         style={
           Object {
             "container": Object {
@@ -7753,7 +7753,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -8157,7 +8157,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -8277,7 +8277,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -8700,7 +8700,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Paladin-class"
+        key="paladin-class"
         style={
           Object {
             "container": Object {
@@ -8802,7 +8802,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Paladin-hit-die"
+        key="paladin-hit-die"
         style={
           Object {
             "container": Object {
@@ -8921,7 +8921,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Paladin-proficiencies"
+        key="paladin-proficiencies"
         style={
           Object {
             "container": Object {
@@ -9116,7 +9116,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -9520,7 +9520,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -9640,7 +9640,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -10063,7 +10063,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Ranger-class"
+        key="ranger-class"
         style={
           Object {
             "container": Object {
@@ -10165,7 +10165,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Ranger-hit-die"
+        key="ranger-hit-die"
         style={
           Object {
             "container": Object {
@@ -10284,7 +10284,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Ranger-proficiencies"
+        key="ranger-proficiencies"
         style={
           Object {
             "container": Object {
@@ -10479,7 +10479,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -10883,7 +10883,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -11003,7 +11003,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -11426,7 +11426,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Rogue-class"
+        key="rogue-class"
         style={
           Object {
             "container": Object {
@@ -11528,7 +11528,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Rogue-hit-die"
+        key="rogue-hit-die"
         style={
           Object {
             "container": Object {
@@ -11647,7 +11647,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Rogue-proficiencies"
+        key="rogue-proficiencies"
         style={
           Object {
             "container": Object {
@@ -11842,7 +11842,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -12246,7 +12246,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -12366,7 +12366,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -12789,7 +12789,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Sorcerer-class"
+        key="sorcerer-class"
         style={
           Object {
             "container": Object {
@@ -12891,7 +12891,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Sorcerer-hit-die"
+        key="sorcerer-hit-die"
         style={
           Object {
             "container": Object {
@@ -13010,7 +13010,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Sorcerer-proficiencies"
+        key="sorcerer-proficiencies"
         style={
           Object {
             "container": Object {
@@ -13205,7 +13205,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -13609,7 +13609,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -13729,7 +13729,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -14152,7 +14152,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Warlock-class"
+        key="warlock-class"
         style={
           Object {
             "container": Object {
@@ -14254,7 +14254,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Warlock-hit-die"
+        key="warlock-hit-die"
         style={
           Object {
             "container": Object {
@@ -14373,7 +14373,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Warlock-proficiencies"
+        key="warlock-proficiencies"
         style={
           Object {
             "container": Object {
@@ -14568,7 +14568,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -14972,7 +14972,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
           }
         }
       />
@@ -15092,7 +15092,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -15515,7 +15515,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         text="Proceed"
       />
       <ThemedComponent
-        key="Wizard-class"
+        key="wizard-class"
         style={
           Object {
             "container": Object {
@@ -15617,7 +15617,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Wizard-hit-die"
+        key="wizard-hit-die"
         style={
           Object {
             "container": Object {
@@ -15736,7 +15736,7 @@ exports[`Character Base Class Screen can select any class, view class details an
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Wizard-proficiencies"
+        key="wizard-proficiencies"
         style={
           Object {
             "container": Object {
@@ -15931,7 +15931,7 @@ exports[`Character Base Class Screen can select any class, view class details an
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -16335,7 +16335,1368 @@ exports[`Character Base Class Screen can select any class, view class details an
         type={[Function]}
         value={
           Object {
-            "baseClass": "",
+            "baseClass": null,
+          }
+        }
+      />
+      <ThemedComponent
+        disabled={true}
+        onPress={[Function]}
+        primary={true}
+        raised={true}
+        style={
+          Object {
+            "container": Object {
+              "marginBottom": 10,
+            },
+          }
+        }
+        text="Proceed"
+      />
+      <ThemedComponent
+        style={
+          Object {
+            "container": Object {
+              "marginHorizontal": 0,
+              "marginVertical": 10,
+              "padding": 20,
+            },
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+            }
+          }
+        >
+          <ThemedComponent
+            name="info"
+            style={
+              Object {
+                "color": undefined,
+                "fontSize": 48,
+                "height": 48,
+                "marginRight": 10,
+                "width": 48,
+              }
+            }
+          />
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#616161",
+                  "fontFamily": "RobotoLight",
+                  "fontSize": 18,
+                },
+                Object {
+                  "color": undefined,
+                },
+              ]
+            }
+          >
+            Selection details will display here
+          </Text>
+        </View>
+      </ThemedComponent>
+    </View>
+  </Styled(Content)>
+</Styled(Container)>
+`;
+
+exports[`Character Base Class Screen can select any class, view class details and OGL, and deselect class 26`] = `
+<Styled(Container)
+  style={
+    Object {
+      "backgroundColor": "#eeeeee",
+      "flex": 1,
+    }
+  }
+>
+  <Styled(Content)>
+    <View
+      style={
+        Object {
+          "paddingHorizontal": 15,
+          "paddingVertical": 20,
+        }
+      }
+    >
+      <Note
+        collapsible={false}
+        icon="lightbulb-outline"
+        isCollapsed={false}
+        title="Choosing a Class"
+        type="tip"
+      >
+        <Text>
+          The class you choose will define your character's profession and lifestyle.
+        </Text>
+      </Note>
+      <Form
+        i18n={
+          Object {
+            "add": "Add",
+            "down": "↓",
+            "optional": " (optional)",
+            "remove": "✘",
+            "required": "",
+            "up": "↑",
+          }
+        }
+        onChange={[Function]}
+        options={
+          Object {
+            "fields": Object {
+              "baseClass": Object {
+                "auto": "none",
+                "nullOption": Object {
+                  "text": "Select Class",
+                  "value": null,
+                },
+              },
+            },
+            "stylesheet": Object {
+              "button": Object {
+                "alignSelf": "stretch",
+                "backgroundColor": "#48BBEC",
+                "borderColor": "#48BBEC",
+                "borderRadius": 8,
+                "borderWidth": 1,
+                "height": 36,
+                "justifyContent": "center",
+                "marginBottom": 10,
+              },
+              "buttonText": Object {
+                "alignSelf": "center",
+                "color": "white",
+                "fontSize": 18,
+              },
+              "checkbox": Object {
+                "error": Object {
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "marginBottom": 4,
+                },
+              },
+              "controlLabel": Object {
+                "error": Object {
+                  "color": "#a94442",
+                  "fontSize": 17,
+                  "fontWeight": "500",
+                  "marginBottom": 7,
+                },
+                "normal": Object {
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "fontWeight": "500",
+                  "marginBottom": 7,
+                },
+              },
+              "dateTouchable": Object {
+                "error": Object {},
+                "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
+              },
+              "dateValue": Object {
+                "error": Object {
+                  "color": "#a94442",
+                  "fontSize": 17,
+                  "marginBottom": 5,
+                  "padding": 7,
+                },
+                "normal": Object {
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "marginBottom": 5,
+                  "padding": 7,
+                },
+              },
+              "datepicker": Object {
+                "error": Object {
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "marginBottom": 4,
+                },
+              },
+              "errorBlock": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+              "fieldset": Object {},
+              "formGroup": Object {
+                "error": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "marginBottom": 10,
+                },
+                "normal": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "marginBottom": 10,
+                },
+              },
+              "helpBlock": Object {
+                "error": Object {
+                  "color": "#999999",
+                  "fontSize": 17,
+                  "marginBottom": 2,
+                },
+                "normal": Object {
+                  "color": "#999999",
+                  "fontSize": 17,
+                  "marginBottom": 2,
+                },
+              },
+              "pickerContainer": Object {
+                "error": Object {
+                  "borderColor": "#a94442",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "marginBottom": 4,
+                },
+                "open": Object {},
+              },
+              "pickerTouchable": Object {
+                "active": Object {
+                  "borderBottomWidth": 1,
+                  "borderColor": "#cccccc",
+                },
+                "error": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "normal": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+              },
+              "pickerValue": Object {
+                "error": Object {
+                  "fontSize": 17,
+                  "paddingLeft": 7,
+                },
+                "normal": Object {
+                  "fontSize": 17,
+                  "paddingLeft": 7,
+                },
+              },
+              "select": Object {
+                "error": Object {
+                  "flex": 1,
+                  "marginLeft": 10,
+                },
+                "normal": Object {
+                  "flex": 1,
+                  "marginLeft": 10,
+                },
+              },
+              "textbox": Object {
+                "error": Object {
+                  "borderColor": "#a94442",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+                "normal": Object {
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#777777",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+              },
+              "textboxView": Object {
+                "error": Object {},
+                "normal": Object {},
+                "notEditable": Object {},
+              },
+            },
+            "template": [Function],
+          }
+        }
+        stylesheet={
+          Object {
+            "button": Object {
+              "alignSelf": "stretch",
+              "backgroundColor": "#48BBEC",
+              "borderColor": "#48BBEC",
+              "borderRadius": 8,
+              "borderWidth": 1,
+              "height": 36,
+              "justifyContent": "center",
+              "marginBottom": 10,
+            },
+            "buttonText": Object {
+              "alignSelf": "center",
+              "color": "white",
+              "fontSize": 18,
+            },
+            "checkbox": Object {
+              "error": Object {
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "marginBottom": 4,
+              },
+            },
+            "controlLabel": Object {
+              "error": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "fontWeight": "500",
+                "marginBottom": 7,
+              },
+              "normal": Object {
+                "color": "#000000",
+                "fontSize": 17,
+                "fontWeight": "500",
+                "marginBottom": 7,
+              },
+            },
+            "dateTouchable": Object {
+              "error": Object {},
+              "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
+            },
+            "dateValue": Object {
+              "error": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "marginBottom": 5,
+                "padding": 7,
+              },
+              "normal": Object {
+                "color": "#000000",
+                "fontSize": 17,
+                "marginBottom": 5,
+                "padding": 7,
+              },
+            },
+            "datepicker": Object {
+              "error": Object {
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "marginBottom": 4,
+              },
+            },
+            "errorBlock": Object {
+              "color": "#a94442",
+              "fontSize": 17,
+              "marginBottom": 2,
+            },
+            "fieldset": Object {},
+            "formGroup": Object {
+              "error": Object {
+                "marginBottom": 10,
+              },
+              "normal": Object {
+                "marginBottom": 10,
+              },
+            },
+            "helpBlock": Object {
+              "error": Object {
+                "color": "#999999",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+              "normal": Object {
+                "color": "#999999",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+            },
+            "pickerContainer": Object {
+              "error": Object {
+                "borderColor": "#a94442",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "marginBottom": 4,
+              },
+              "open": Object {},
+            },
+            "pickerTouchable": Object {
+              "active": Object {
+                "borderBottomWidth": 1,
+                "borderColor": "#cccccc",
+              },
+              "error": Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "normal": Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
+            },
+            "pickerValue": Object {
+              "error": Object {
+                "fontSize": 17,
+                "paddingLeft": 7,
+              },
+              "normal": Object {
+                "fontSize": 17,
+                "paddingLeft": 7,
+              },
+            },
+            "select": Object {
+              "error": Object {},
+              "normal": Object {},
+            },
+            "textbox": Object {
+              "error": Object {
+                "borderColor": "#a94442",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#000000",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+              "normal": Object {
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#000000",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#777777",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+            },
+            "textboxView": Object {
+              "error": Object {},
+              "normal": Object {},
+              "notEditable": Object {},
+            },
+          }
+        }
+        templates={
+          Object {
+            "checkbox": [Function],
+            "datepicker": [Function],
+            "list": [Function],
+            "select": [Function],
+            "struct": [Function],
+            "textbox": [Function],
+          }
+        }
+        type={[Function]}
+        value={
+          Object {
+            "baseClass": "testLackOfDetails",
+          }
+        }
+      />
+      <ThemedComponent
+        disabled={false}
+        onPress={[Function]}
+        primary={true}
+        raised={true}
+        style={
+          Object {
+            "container": Object {
+              "marginBottom": 10,
+            },
+          }
+        }
+        text="Proceed"
+      />
+      <ThemedComponent
+        key="testLackOfDetails-class"
+        style={
+          Object {
+            "container": Object {
+              "marginHorizontal": 0,
+              "marginVertical": 10,
+              "padding": 20,
+            },
+          }
+        }
+      >
+        <View>
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+                "height": 36,
+                "marginBottom": 15,
+              }
+            }
+          >
+            <Image
+              style={
+                Object {
+                  "height": 36,
+                  "marginRight": 10,
+                  "width": 36,
+                }
+              }
+            />
+            <Text
+              style={
+                Array [
+                  Object {
+                    "color": "#000000",
+                    "fontFamily": "RobotoLight",
+                    "fontSize": 24,
+                    "paddingBottom": 10,
+                  },
+                  Object {
+                    "paddingTop": 6,
+                  },
+                ]
+              }
+            >
+              Test Lack Of Details
+            </Text>
+          </View>
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "flexDirection": "row",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "flex": 2,
+                }
+              }
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#616161",
+                    "fontFamily": "Roboto",
+                    "fontSize": 16,
+                    "paddingBottom": 5,
+                  }
+                }
+              >
+                Description text.
+              </Text>
+            </View>
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Image
+                resizeMode="contain"
+                style={
+                  Object {
+                    "height": 128,
+                    "width": null,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </ThemedComponent>
+      <ThemedComponent
+        key="testLackOfDetails-hit-die"
+        style={
+          Object {
+            "container": Object {
+              "marginHorizontal": 0,
+              "marginVertical": 10,
+              "padding": 20,
+            },
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#000000",
+              "fontFamily": "RobotoLight",
+              "fontSize": 24,
+              "paddingBottom": 10,
+            }
+          }
+        >
+          Hit Die
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Test Lack Of Details
+            s 
+          </Text>
+          gain 
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            1d
+            8
+             
+          </Text>
+          per level.
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          At the 1st level, you start with:
+          
+
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            8
+             + your Constitution modifier
+          </Text>
+          .
+        </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#616161",
+                "fontFamily": "Roboto",
+                "fontSize": 16,
+                "paddingBottom": 5,
+              },
+              Object {
+                "paddingBottom": 30,
+              },
+            ]
+          }
+        >
+          At higher levels (after level 1), you gain:
+          
+
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            8
+             (or 
+            5
+            ) + your Constitution modifier
+          </Text>
+          .
+        </Text>
+        <OGLButton
+          sourceText="Source: 5th Edition SRD"
+        />
+      </ThemedComponent>
+      <ThemedComponent
+        key="testLackOfDetails-proficiencies"
+        style={
+          Object {
+            "container": Object {
+              "marginHorizontal": 0,
+              "marginVertical": 10,
+              "padding": 20,
+            },
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#000000",
+              "fontFamily": "RobotoLight",
+              "fontSize": 24,
+              "paddingBottom": 10,
+            }
+          }
+        >
+          Proficiencies
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Saving Throws: 
+          </Text>
+          None
+          .
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Armor: 
+          </Text>
+          None
+          .
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Weapons: 
+          </Text>
+          None
+          .
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#616161",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "paddingBottom": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Tools: 
+          </Text>
+          [Unknown Name], [Unknown Name], [Unknown Name]
+          .
+        </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#616161",
+                "fontFamily": "Roboto",
+                "fontSize": 16,
+                "paddingBottom": 5,
+              },
+              Object {
+                "paddingBottom": 30,
+              },
+            ]
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontFamily": "RobotoBold",
+              }
+            }
+          >
+            Skills: 
+          </Text>
+          None
+          .
+        </Text>
+        <OGLButton
+          sourceText="Source: 5th Edition SRD"
+        />
+      </ThemedComponent>
+    </View>
+  </Styled(Content)>
+</Styled(Container)>
+`;
+
+exports[`Character Base Class Screen can select any class, view class details and OGL, and deselect class 27`] = `
+<Styled(Container)
+  style={
+    Object {
+      "backgroundColor": "#eeeeee",
+      "flex": 1,
+    }
+  }
+>
+  <Styled(Content)>
+    <View
+      style={
+        Object {
+          "paddingHorizontal": 15,
+          "paddingVertical": 20,
+        }
+      }
+    >
+      <Note
+        collapsible={false}
+        icon="lightbulb-outline"
+        isCollapsed={false}
+        title="Choosing a Class"
+        type="tip"
+      >
+        <Text>
+          The class you choose will define your character's profession and lifestyle.
+        </Text>
+      </Note>
+      <Form
+        i18n={
+          Object {
+            "add": "Add",
+            "down": "↓",
+            "optional": " (optional)",
+            "remove": "✘",
+            "required": "",
+            "up": "↑",
+          }
+        }
+        onChange={[Function]}
+        options={
+          Object {
+            "fields": Object {
+              "baseClass": Object {
+                "auto": "none",
+                "nullOption": Object {
+                  "text": "Select Class",
+                  "value": null,
+                },
+              },
+            },
+            "stylesheet": Object {
+              "button": Object {
+                "alignSelf": "stretch",
+                "backgroundColor": "#48BBEC",
+                "borderColor": "#48BBEC",
+                "borderRadius": 8,
+                "borderWidth": 1,
+                "height": 36,
+                "justifyContent": "center",
+                "marginBottom": 10,
+              },
+              "buttonText": Object {
+                "alignSelf": "center",
+                "color": "white",
+                "fontSize": 18,
+              },
+              "checkbox": Object {
+                "error": Object {
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "marginBottom": 4,
+                },
+              },
+              "controlLabel": Object {
+                "error": Object {
+                  "color": "#a94442",
+                  "fontSize": 17,
+                  "fontWeight": "500",
+                  "marginBottom": 7,
+                },
+                "normal": Object {
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "fontWeight": "500",
+                  "marginBottom": 7,
+                },
+              },
+              "dateTouchable": Object {
+                "error": Object {},
+                "normal": Object {},
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                },
+              },
+              "dateValue": Object {
+                "error": Object {
+                  "color": "#a94442",
+                  "fontSize": 17,
+                  "marginBottom": 5,
+                  "padding": 7,
+                },
+                "normal": Object {
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "marginBottom": 5,
+                  "padding": 7,
+                },
+              },
+              "datepicker": Object {
+                "error": Object {
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "marginBottom": 4,
+                },
+              },
+              "errorBlock": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+              "fieldset": Object {},
+              "formGroup": Object {
+                "error": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "marginBottom": 10,
+                },
+                "normal": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "marginBottom": 10,
+                },
+              },
+              "helpBlock": Object {
+                "error": Object {
+                  "color": "#999999",
+                  "fontSize": 17,
+                  "marginBottom": 2,
+                },
+                "normal": Object {
+                  "color": "#999999",
+                  "fontSize": 17,
+                  "marginBottom": 2,
+                },
+              },
+              "pickerContainer": Object {
+                "error": Object {
+                  "borderColor": "#a94442",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "marginBottom": 4,
+                },
+                "normal": Object {
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "marginBottom": 4,
+                },
+                "open": Object {},
+              },
+              "pickerTouchable": Object {
+                "active": Object {
+                  "borderBottomWidth": 1,
+                  "borderColor": "#cccccc",
+                },
+                "error": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "normal": Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+                "notEditable": Object {
+                  "alignItems": "center",
+                  "backgroundColor": "#eeeeee",
+                  "flexDirection": "row",
+                  "height": 44,
+                },
+              },
+              "pickerValue": Object {
+                "error": Object {
+                  "fontSize": 17,
+                  "paddingLeft": 7,
+                },
+                "normal": Object {
+                  "fontSize": 17,
+                  "paddingLeft": 7,
+                },
+              },
+              "select": Object {
+                "error": Object {
+                  "flex": 1,
+                  "marginLeft": 10,
+                },
+                "normal": Object {
+                  "flex": 1,
+                  "marginLeft": 10,
+                },
+              },
+              "textbox": Object {
+                "error": Object {
+                  "borderColor": "#a94442",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+                "normal": Object {
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#000000",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+                "notEditable": Object {
+                  "backgroundColor": "#eeeeee",
+                  "borderColor": "#cccccc",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
+                  "color": "#777777",
+                  "fontSize": 17,
+                  "height": 36,
+                  "marginBottom": 5,
+                  "paddingHorizontal": 7,
+                  "paddingVertical": 7,
+                },
+              },
+              "textboxView": Object {
+                "error": Object {},
+                "normal": Object {},
+                "notEditable": Object {},
+              },
+            },
+            "template": [Function],
+          }
+        }
+        stylesheet={
+          Object {
+            "button": Object {
+              "alignSelf": "stretch",
+              "backgroundColor": "#48BBEC",
+              "borderColor": "#48BBEC",
+              "borderRadius": 8,
+              "borderWidth": 1,
+              "height": 36,
+              "justifyContent": "center",
+              "marginBottom": 10,
+            },
+            "buttonText": Object {
+              "alignSelf": "center",
+              "color": "white",
+              "fontSize": 18,
+            },
+            "checkbox": Object {
+              "error": Object {
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "marginBottom": 4,
+              },
+            },
+            "controlLabel": Object {
+              "error": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "fontWeight": "500",
+                "marginBottom": 7,
+              },
+              "normal": Object {
+                "color": "#000000",
+                "fontSize": 17,
+                "fontWeight": "500",
+                "marginBottom": 7,
+              },
+            },
+            "dateTouchable": Object {
+              "error": Object {},
+              "normal": Object {},
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+              },
+            },
+            "dateValue": Object {
+              "error": Object {
+                "color": "#a94442",
+                "fontSize": 17,
+                "marginBottom": 5,
+                "padding": 7,
+              },
+              "normal": Object {
+                "color": "#000000",
+                "fontSize": 17,
+                "marginBottom": 5,
+                "padding": 7,
+              },
+            },
+            "datepicker": Object {
+              "error": Object {
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "marginBottom": 4,
+              },
+            },
+            "errorBlock": Object {
+              "color": "#a94442",
+              "fontSize": 17,
+              "marginBottom": 2,
+            },
+            "fieldset": Object {},
+            "formGroup": Object {
+              "error": Object {
+                "marginBottom": 10,
+              },
+              "normal": Object {
+                "marginBottom": 10,
+              },
+            },
+            "helpBlock": Object {
+              "error": Object {
+                "color": "#999999",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+              "normal": Object {
+                "color": "#999999",
+                "fontSize": 17,
+                "marginBottom": 2,
+              },
+            },
+            "pickerContainer": Object {
+              "error": Object {
+                "borderColor": "#a94442",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "marginBottom": 4,
+              },
+              "normal": Object {
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "marginBottom": 4,
+              },
+              "open": Object {},
+            },
+            "pickerTouchable": Object {
+              "active": Object {
+                "borderBottomWidth": 1,
+                "borderColor": "#cccccc",
+              },
+              "error": Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "normal": Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 44,
+              },
+              "notEditable": Object {
+                "alignItems": "center",
+                "backgroundColor": "#eeeeee",
+                "flexDirection": "row",
+                "height": 44,
+              },
+            },
+            "pickerValue": Object {
+              "error": Object {
+                "fontSize": 17,
+                "paddingLeft": 7,
+              },
+              "normal": Object {
+                "fontSize": 17,
+                "paddingLeft": 7,
+              },
+            },
+            "select": Object {
+              "error": Object {},
+              "normal": Object {},
+            },
+            "textbox": Object {
+              "error": Object {
+                "borderColor": "#a94442",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#000000",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+              "normal": Object {
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#000000",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+              "notEditable": Object {
+                "backgroundColor": "#eeeeee",
+                "borderColor": "#cccccc",
+                "borderRadius": 4,
+                "borderWidth": 1,
+                "color": "#777777",
+                "fontSize": 17,
+                "height": 36,
+                "marginBottom": 5,
+                "paddingHorizontal": 7,
+                "paddingVertical": 7,
+              },
+            },
+            "textboxView": Object {
+              "error": Object {},
+              "normal": Object {},
+              "notEditable": Object {},
+            },
+          }
+        }
+        templates={
+          Object {
+            "checkbox": [Function],
+            "datepicker": [Function],
+            "list": [Function],
+            "select": [Function],
+            "struct": [Function],
+            "textbox": [Function],
+          }
+        }
+        type={[Function]}
+        value={
+          Object {
+            "baseClass": null,
           }
         }
       />
@@ -16455,7 +17816,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Select Class",
-                  "value": "",
+                  "value": null,
                 },
               },
             },
@@ -16859,7 +18220,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
         type={[Function]}
         value={
           Object {
-            "baseClass": "sample",
+            "baseClass": "testLackOfDetails",
           }
         }
       />
@@ -16878,7 +18239,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
         text="Proceed"
       />
       <ThemedComponent
-        key="Sample-class"
+        key="testLackOfDetails-class"
         style={
           Object {
             "container": Object {
@@ -16925,7 +18286,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
                 ]
               }
             >
-              Sample
+              Test Lack Of Details
             </Text>
           </View>
           <View
@@ -16978,7 +18339,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
         </View>
       </ThemedComponent>
       <ThemedComponent
-        key="Sample-hit-die"
+        key="testLackOfDetails-hit-die"
         style={
           Object {
             "container": Object {
@@ -17018,7 +18379,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
               }
             }
           >
-            Sample
+            Test Lack Of Details
             s 
           </Text>
           gain 
@@ -17097,7 +18458,7 @@ exports[`Character Base Class Screen displays class that lacks data properly 1`]
         />
       </ThemedComponent>
       <ThemedComponent
-        key="Sample-proficiencies"
+        key="testLackOfDetails-proficiencies"
         style={
           Object {
             "container": Object {

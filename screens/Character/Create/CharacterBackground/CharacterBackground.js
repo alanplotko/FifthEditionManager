@@ -8,7 +8,7 @@ import { toTitleCase, toProperList } from 'FifthEditionManager/util';
 import { CardStyle, ContainerStyle, FormStyle, LayoutStyle } from 'FifthEditionManager/stylesheets';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
 import Note from 'FifthEditionManager/components/Note';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, throttle } from 'lodash';
 
 const t = require('tcomb-form-native');
 const Chance = require('chance');
@@ -49,7 +49,6 @@ class CharacterBackground extends React.Component {
     super(props);
     this.state = {
       background: null,
-      form: null,
       decisions: [],
       selectedDecisions: [],
     };
@@ -76,7 +75,9 @@ class CharacterBackground extends React.Component {
       });
 
       if (this.state.selectedDecisions.length > 0) {
-        this.state.selectedDecisions.forEach((item) => {
+        this.state.selectedDecisions.forEach((decision, index) => {
+          const item = this.state.background.starting.decisions[index]
+            .find(itm => itm.name === decision.name);
           // Ignore duplicate item if quantity is not tracked; otherwise, increase quantity by 1
           if (inventory[item.name] && inventory[item.name].quantity) {
             inventory[item.name].quantity += 1;
@@ -97,21 +98,26 @@ class CharacterBackground extends React.Component {
   }
 
   onChangeBackground = (value) => {
-    const background = BACKGROUNDS.find(item => item.key === value.background);
-    const decisions = background ? background.starting.decisions : [];
-    this.setState({
-      form: value,
-      background,
-      decisions,
-      selectedDecisions: Array(decisions.length)
-        .fill(null)
-        .map((decision, index) => ({ decision: null, index })),
-    });
+    if (value) {
+      if (this.state.background && value.background === this.state.background.key) {
+        return;
+      }
+      const background = BACKGROUNDS.find(item => item.key === value.background) || null;
+      const decisions = background ? background.starting.decisions : [];
+      this.setState({
+        background,
+        decisions,
+        selectedDecisions: Array(decisions.length).fill(null),
+      });
+    }
   }
 
   onChangeDecision = (value) => {
     if (value) {
       const selectedDecisions = this.state.selectedDecisions.slice(0);
+      if (selectedDecisions[value.index] === value.decision) {
+        return;
+      }
       selectedDecisions[value.index] = value.decision;
       this.setState({ selectedDecisions });
     }
@@ -155,9 +161,7 @@ class CharacterBackground extends React.Component {
       decision: {
         auto: 'none',
         nullOption: {
-          value: {
-            decision: null,
-          },
+          value: null,
           text: 'Confirm Decision',
         },
       },
@@ -172,7 +176,7 @@ class CharacterBackground extends React.Component {
         onLeftElementPress: () => navigation.goBack(routes[index].key),
         centerElement: 'Character Background',
         rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeBackground(),
+        onRightElementPress: throttle(() => routes[index].params.randomizeBackground(), 500),
       };
       return <Toolbar {...props} />;
     },
@@ -217,16 +221,18 @@ class CharacterBackground extends React.Component {
     // Do not reselect current option
     const key = this.state.background ? this.state.background.key : null;
     const options = BACKGROUNDS.filter(background => background.key !== key);
-    if (options.length >= 1) {
+    if (options.length > 0) {
       const background = chance.pickone(options);
+      const decisions = background ? background.starting.decisions : [];
       const selectedDecisions = [];
-      background.starting.decisions.forEach((decision) => {
-        selectedDecisions.push(chance.pickone(decision).name);
-      });
+      if (decisions.length > 0) {
+        decisions.forEach((decision) => {
+          selectedDecisions.push(chance.pickone(decision).name);
+        });
+      }
       this.setState({
         background,
-        form: { background: background.key },
-        decisions: background.starting.decisions,
+        decisions,
         selectedDecisions,
       });
     }
@@ -237,7 +243,7 @@ class CharacterBackground extends React.Component {
     const { backdropIconColor, fadedTextColor } = this.props.theme.palette;
     const fadedTextStyle = { color: fadedTextColor };
     const decisionPlurality = this.state.decisions.length -
-      this.state.selectedDecisions.filter(item => item.decision !== null).length > 1 ?
+      this.state.selectedDecisions.filter(item => item !== null).length > 1 ?
       'Decisions' :
       'Decision';
 
@@ -258,7 +264,7 @@ class CharacterBackground extends React.Component {
             <t.form.Form
               ref={(c) => { this.form = c; }}
               type={BackgroundForm}
-              value={this.state.form}
+              value={{ background: this.state.background?.key }}
               options={this.backgroundFormOptions}
               onChange={value => this.onChangeBackground(value)}
             />
@@ -270,7 +276,7 @@ class CharacterBackground extends React.Component {
                   type={this.getDecisionForm(decision)}
                   options={this.getDecisionFormOptions(index + 1)}
                   value={{ decision: this.state.selectedDecisions[index], index }}
-                  onChange={value => this.onChangeDecision(value, index)}
+                  onChange={value => this.onChangeDecision(value)}
                 />
               ))
             }
@@ -280,12 +286,12 @@ class CharacterBackground extends React.Component {
               disabled={
                 !this.state.background ||
                 this.state.decisions.length !== this.state.selectedDecisions.length ||
-                this.state.selectedDecisions.some(item => item.decision === null)
+                this.state.selectedDecisions.some(item => item === null)
               }
               onPress={this.onPress}
               text={
-                this.state.selectedDecisions.some(item => item.decision === null) ?
-                  `${this.state.selectedDecisions.filter(item => item.decision === null).length} ${decisionPlurality} Remaining` :
+                this.state.selectedDecisions.some(item => item === null) ?
+                  `${this.state.selectedDecisions.filter(item => item === null).length} ${decisionPlurality} Remaining` :
                   'Proceed'
               }
               style={{ container: { marginBottom: 10 } }}

@@ -777,9 +777,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -1183,10 +1181,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
@@ -2024,7 +2019,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -3228,7 +3223,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -3774,9 +3769,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -4180,10 +4173,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
@@ -4928,7 +4918,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -5474,9 +5464,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -5880,10 +5868,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
@@ -6606,7 +6591,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -7152,9 +7137,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -7558,10 +7541,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 0,
-            },
+            "decision": null,
             "index": 0,
           }
         }
@@ -7586,9 +7566,7 @@ exports[`Character Background Screen can select any background, view background 
                 "auto": "none",
                 "nullOption": Object {
                   "text": "Confirm Decision",
-                  "value": Object {
-                    "decision": null,
-                  },
+                  "value": null,
                 },
               },
             },
@@ -7992,10 +7970,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "decision": Object {
-              "decision": null,
-              "index": 1,
-            },
+            "decision": null,
             "index": 1,
           }
         }
@@ -8736,7 +8711,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -9940,7 +9915,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />
@@ -11144,7 +11119,7 @@ exports[`Character Background Screen can select any background, view background 
         type={[Function]}
         value={
           Object {
-            "background": "",
+            "background": undefined,
           }
         }
       />

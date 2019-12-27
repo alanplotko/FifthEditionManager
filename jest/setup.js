@@ -28,6 +28,7 @@ jest.mock('moment', () => {
 
 // Mock character background options to add more test cases than the default background covers
 jest.mock('FifthEditionManager/config/Info/Backgrounds');
+jest.mock('FifthEditionManager/config/Info/Classes');
 
 const AsyncStorage = new MockStorage({});
 jest.setMock('AsyncStorage', AsyncStorage);
