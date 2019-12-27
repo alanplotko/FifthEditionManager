@@ -34,35 +34,6 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
     isModalVisible={false}
     modalContent={null}
     modalHandler={[Function]}
-    uiTheme={
-      Object {
-        "palette": Object {
-          "accentColor": "#f44336",
-          "backdropIconColor": "#bdbdbd",
-          "backgroundColor": "#eeeeee",
-          "disabledColor": "#e0e0e0",
-          "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-          "fadedTextColor": "#616161",
-          "highlightedDiceColor": "#f44336",
-          "iconColor": "#757575",
-          "modalBackgroundColor": "#ffffff",
-          "noteColor": "#9e9e9e",
-          "primaryColor": "#3f51b5",
-          "standardDiceColor": "#424242",
-          "textColor": "#000000",
-        },
-        "toolbar": Object {
-          "container": Object {
-            "elevation": 0,
-            "shadowOffset": Object {
-              "height": 0,
-            },
-            "shadowOpacity": 0,
-            "shadowRadius": 0,
-          },
-        },
-      }
-    }
     viewHandler={[Function]}
   />
   <ReactNativeModal
@@ -81,6 +52,15 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
     onBackdropPress={[Function]}
     onModalHide={[Function]}
     onModalShow={[Function]}
+    scrollOffset={0}
+    scrollOffsetMax={0}
+    scrollTo={null}
+    supportedOrientations={
+      Array [
+        "portrait",
+        "landscape",
+      ]
+    }
     swipeThreshold={100}
     useNativeDriver={false}
   >
@@ -90,477 +70,156 @@ exports[`Character Profile Card can select all options in the modal 1`] = `
 `;
 
 exports[`Character Profile Card can select all options in the modal 2`] = `
-<View>
-  <CharacterProfileCard
-    character={
-      Object {
-        "background": Object {
-          "lookupKey": "Background",
-          "name": "Background",
-        },
-        "baseClass": Object {
-          "lookupKey": "Class",
-          "name": "Class",
-        },
-        "key": "key",
-        "meta": Object {
-          "lastUpdated": 0,
-        },
-        "profile": Object {
-          "experience": 0,
-          "firstName": "First",
-          "lastName": "Last",
-          "level": 1,
-        },
-        "race": Object {
-          "lookupKey": "Race",
-          "name": "Race",
-        },
-      }
+<View
+  style={
+    Object {
+      "margin": 0,
     }
-    deleteHandler={[Function]}
-    editHandler={[Function]}
-    isModalVisible={true}
-    modalContent={
-      <View
+  }
+>
+  <ThemedComponent
+    centerElement={
+      <Styled(Text)
         style={
-          Object {
-            "margin": 0,
-          }
-        }
-      >
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Array [
-                  Object {
-                    "color": "#000000",
-                    "fontFamily": "Roboto",
-                    "fontSize": 14,
-                  },
-                  Object {
-                    "color": "#000000",
-                  },
-                ]
-              }
-              virtual={undefined}
-            >
-              First Last
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Image
-              resizeMode="contain"
-              source={undefined}
-              style={
-                Object {
-                  "height": 36,
-                  "width": 36,
-                }
-              }
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={null}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
+          Array [
             Object {
-              "container": Object {
-                "borderBottomColor": "#e0e0e0",
-                "borderBottomWidth": 1,
-                "height": 55,
-                "margin": 0,
-              },
-              "contentViewContainer": Object {
-                "backgroundColor": "#fafafa",
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              View Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="open-in-new"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              Edit Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="mode-edit"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              Delete Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="delete"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-      </View>
-    }
-    modalHandler={[Function]}
-    uiTheme={
-      Object {
-        "palette": Object {
-          "accentColor": "#f44336",
-          "backdropIconColor": "#bdbdbd",
-          "backgroundColor": "#eeeeee",
-          "disabledColor": "#e0e0e0",
-          "fadedBackgroundColor": "rgba(0, 0, 0, 0.7)",
-          "fadedTextColor": "#616161",
-          "highlightedDiceColor": "#f44336",
-          "iconColor": "#757575",
-          "modalBackgroundColor": "#ffffff",
-          "noteColor": "#9e9e9e",
-          "primaryColor": "#3f51b5",
-          "standardDiceColor": "#424242",
-          "textColor": "#000000",
-        },
-        "toolbar": Object {
-          "container": Object {
-            "elevation": 0,
-            "shadowOffset": Object {
-              "height": 0,
+              "color": "#000000",
+              "fontFamily": "Roboto",
+              "fontSize": 14,
             },
-            "shadowOpacity": 0,
-            "shadowRadius": 0,
-          },
+            Object {
+              "color": undefined,
+            },
+          ]
+        }
+      >
+        First Last
+      </Styled(Text)>
+    }
+    leftElement={
+      <Image
+        resizeMode="contain"
+        style={
+          Object {
+            "height": 36,
+            "width": 36,
+          }
+        }
+      />
+    }
+    style={
+      Object {
+        "container": Object {
+          "borderBottomColor": "#e0e0e0",
+          "borderBottomWidth": 1,
+          "height": 55,
+          "margin": 0,
+        },
+        "contentViewContainer": Object {
+          "backgroundColor": "#fafafa",
+        },
+        "leftElementContainer": Object {
+          "marginRight": -10,
         },
       }
     }
-    viewHandler={[Function]}
   />
-  <ReactNativeModal
-    animationIn="slideInUp"
-    animationInTiming={300}
-    animationOut="slideOutDown"
-    animationOutTiming={300}
-    avoidKeyboard={false}
-    backdropColor="black"
-    backdropOpacity={0.7}
-    backdropTransitionInTiming={300}
-    backdropTransitionOutTiming={300}
-    hideModalContentWhileAnimating={false}
-    isVisible={true}
-    onBackButtonPress={[Function]}
-    onBackdropPress={[Function]}
-    onModalHide={[Function]}
-    onModalShow={[Function]}
-    swipeThreshold={100}
-    useNativeDriver={false}
-  >
-    <View>
-      <View
+  <ThemedComponent
+    centerElement={
+      <Styled(Text)
         style={
           Object {
-            "margin": 0,
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
           }
         }
       >
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Array [
-                  Object {
-                    "color": "#000000",
-                    "fontFamily": "Roboto",
-                    "fontSize": 14,
-                  },
-                  Object {
-                    "color": "#000000",
-                  },
-                ]
-              }
-              virtual={undefined}
-            >
-              First Last
-            </Styled(Text)>
+        View Character
+      </Styled(Text)>
+    }
+    leftElement={
+      <ThemedComponent
+        name="open-in-new"
+      />
+    }
+    onPress={[Function]}
+    style={
+      Object {
+        "container": Object {
+          "height": 50,
+          "margin": 0,
+        },
+        "leftElementContainer": Object {
+          "marginRight": -10,
+        },
+      }
+    }
+  />
+  <ThemedComponent
+    centerElement={
+      <Styled(Text)
+        style={
+          Object {
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
           }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Image
-              resizeMode="contain"
-              source={undefined}
-              style={
-                Object {
-                  "height": 36,
-                  "width": 36,
-                }
-              }
-            />
+        }
+      >
+        Edit Character
+      </Styled(Text)>
+    }
+    leftElement={
+      <ThemedComponent
+        name="mode-edit"
+      />
+    }
+    onPress={[Function]}
+    style={
+      Object {
+        "container": Object {
+          "height": 50,
+          "margin": 0,
+        },
+        "leftElementContainer": Object {
+          "marginRight": -10,
+        },
+      }
+    }
+  />
+  <ThemedComponent
+    centerElement={
+      <Styled(Text)
+        style={
+          Object {
+            "color": "#000000",
+            "fontFamily": "Roboto",
+            "fontSize": 14,
           }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={null}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "borderBottomColor": "#e0e0e0",
-                "borderBottomWidth": 1,
-                "height": 55,
-                "margin": 0,
-              },
-              "contentViewContainer": Object {
-                "backgroundColor": "#fafafa",
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              View Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="open-in-new"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              Edit Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="mode-edit"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-        <ListItem
-          centerElement={
-            <Styled(Text)
-              style={
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "Roboto",
-                  "fontSize": 14,
-                }
-              }
-              virtual={undefined}
-            >
-              Delete Character
-            </Styled(Text)>
-          }
-          dense={false}
-          divider={false}
-          leftElement={
-            <Icon
-              color="#757575"
-              name="delete"
-            />
-          }
-          numberOfLines={1}
-          onLeftElementPress={null}
-          onLongPress={null}
-          onPress={[Function]}
-          onPressValue={null}
-          onRightElementPress={null}
-          rightElement={null}
-          style={
-            Object {
-              "container": Object {
-                "height": 50,
-                "margin": 0,
-              },
-              "leftElementContainer": Object {
-                "marginRight": -10,
-              },
-            }
-          }
-        />
-      </View>
-    </View>
-  </ReactNativeModal>
+        }
+      >
+        Delete Character
+      </Styled(Text)>
+    }
+    leftElement={
+      <ThemedComponent
+        name="delete"
+      />
+    }
+    onPress={[Function]}
+    style={
+      Object {
+        "container": Object {
+          "height": 50,
+          "margin": 0,
+        },
+        "leftElementContainer": Object {
+          "marginRight": -10,
+        },
+      }
+    }
+  />
 </View>
 `;
 
@@ -595,7 +254,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
         }
       }
     >
-      <IconToggle
+      <ThemedComponent
         color="#ffffff"
         name="more-vert"
         onPress={[Function]}
@@ -625,7 +284,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
               "paddingTop": 3,
             },
             Object {
-              "backgroundColor": "rgba(0, 0, 0, 0.7)",
+              "backgroundColor": undefined,
             },
           ]
         }
@@ -664,7 +323,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
                 "width": 175,
               },
               Object {
-                "color": "#000000",
+                "color": undefined,
               },
             ]
           }
@@ -681,7 +340,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
                 "fontSize": 14,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -699,7 +358,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
                 "fontSize": 14,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -733,7 +392,7 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
                 "fontSize": 16,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -749,12 +408,13 @@ exports[`Character Profile Card renders properly for characters at max level 1`]
             }
           }
           animationType="spring"
-          borderColor="#3f51b5"
+          borderColor="#2196f3"
           borderRadius={4}
           borderWidth={1}
-          color="#3f51b5"
+          color="#2196f3"
           height={6}
           indeterminate={false}
+          indeterminateAnimationDuration={1000}
           progress={1}
           style={
             Object {
@@ -813,7 +473,7 @@ exports[`Character Profile Card renders properly for characters below max level 
         }
       }
     >
-      <IconToggle
+      <ThemedComponent
         color="#ffffff"
         name="more-vert"
         onPress={[Function]}
@@ -843,7 +503,7 @@ exports[`Character Profile Card renders properly for characters below max level 
               "paddingTop": 3,
             },
             Object {
-              "backgroundColor": "rgba(0, 0, 0, 0.7)",
+              "backgroundColor": undefined,
             },
           ]
         }
@@ -882,7 +542,7 @@ exports[`Character Profile Card renders properly for characters below max level 
                 "width": 175,
               },
               Object {
-                "color": "#000000",
+                "color": undefined,
               },
             ]
           }
@@ -899,7 +559,7 @@ exports[`Character Profile Card renders properly for characters below max level 
                 "fontSize": 14,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -917,7 +577,7 @@ exports[`Character Profile Card renders properly for characters below max level 
                 "fontSize": 14,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -951,7 +611,7 @@ exports[`Character Profile Card renders properly for characters below max level 
                 "fontSize": 16,
               },
               Object {
-                "color": "#9e9e9e",
+                "color": undefined,
               },
             ]
           }
@@ -967,12 +627,13 @@ exports[`Character Profile Card renders properly for characters below max level 
             }
           }
           animationType="spring"
-          borderColor="#3f51b5"
+          borderColor="#2196f3"
           borderRadius={4}
           borderWidth={1}
-          color="#3f51b5"
+          color="#2196f3"
           height={6}
           indeterminate={false}
+          indeterminateAnimationDuration={1000}
           progress={0}
           style={
             Object {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dimensions, StyleSheet, View, Text, Image } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Icon, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Icon, Toolbar, withTheme } from 'react-native-material-ui';
 import { RACES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import OGLButton from 'FifthEditionManager/components/OGLButton';
@@ -13,27 +13,10 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-export default class CharacterRace extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Race',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeRace(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
+class CharacterRace extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -86,6 +69,20 @@ export default class CharacterRace extends React.Component {
     });
   }
 
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Race',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeRace(),
+      };
+      return <Toolbar {...props} />;
+    },
+  }
+
   orientationHandler = dims =>
     this.setState({ width: dims.window.width, height: dims.window.height });
 
@@ -97,7 +94,7 @@ export default class CharacterRace extends React.Component {
 
   render() {
     // Theme setup
-    const { palette } = this.context.uiTheme;
+    const { palette } = this.props.theme;
     const fadedTextStyle = { color: palette.fadedTextColor };
     const fadedBackgroundStyle = { backgroundColor: palette.fadedBackgroundColor };
 
@@ -155,7 +152,6 @@ export default class CharacterRace extends React.Component {
               title="Choosing a Race"
               type="tip"
               icon="lightbulb-outline"
-              uiTheme={this.context.uiTheme}
             >
               <Text>
                 The race you choose will determine what basic advantages and traits your character
@@ -231,3 +227,5 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 });
+
+export default withTheme(CharacterRace);

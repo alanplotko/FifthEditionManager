@@ -71,17 +71,17 @@ describe('Note', () => {
   });
 
   test('renders properly as error note with error type', () => {
-    const wrapper = shallow(<Note title="Error" icon="error" type="error"><Text>An error occurred!</Text></Note>);
+    const wrapper = shallow(<Note title="Error" icon="error" type="error"><Text>An error occurred!</Text></Note>).shallow();
     expect(wrapper).toMatchSnapshot();
   });
 
   test('renders properly as info note with info type', () => {
-    const wrapper = shallow(<Note title="Info" icon="info" type="info"><Text>Information here.</Text></Note>);
+    const wrapper = shallow(<Note title="Info" icon="info" type="info"><Text>Information here.</Text></Note>).shallow();
     expect(wrapper).toMatchSnapshot();
   });
 
   test('renders properly as info note with tip type', () => {
-    const wrapper = shallow(<Note title="Tip" icon="lightbulb-outline" type="tip"><Text>Tip here.</Text></Note>);
+    const wrapper = shallow(<Note title="Tip" icon="lightbulb-outline" type="tip"><Text>Tip here.</Text></Note>).shallow();
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -89,23 +89,23 @@ describe('Note', () => {
     const wrapper = shallow(<NoteWrapper />);
 
     // Note should be collapsed by default
-    expect(wrapper.dive()).toMatchSnapshot();
-    expect(wrapper.dive().find('Text').last().dive().text()).toEqual('collapsed');
+    expect(wrapper.shallow().shallow()).toMatchSnapshot();
+    expect(wrapper.shallow().shallow().find('Text').last().dive().text()).toEqual('collapsed');
 
     // User must press the 'dropdown arrow' icon to expand the note
-    wrapper.dive().find('IconToggle').props().onPress();
+    wrapper.shallow().shallow().find('ThemedComponent[name="arrow-drop-down"]').props().onPress();
     wrapper.update();
 
     // Note should be expanded for the first time
-    expect(wrapper.dive()).toMatchSnapshot();
-    expect(wrapper.dive().find('Text').last().dive().text()).toEqual('expanded');
+    expect(wrapper.shallow().shallow()).toMatchSnapshot();
+    expect(wrapper.shallow().shallow().find('Text').last().shallow().text()).toEqual('expanded');
 
     // User must press the 'dropdown arrow' icon to collapse the note
-    wrapper.dive().find('IconToggle').props().onPress();
+    wrapper.shallow().shallow().find('ThemedComponent[name="arrow-drop-up"]').props().onPress();
     wrapper.update();
 
     // Note should be collapsed again
-    expect(wrapper.dive()).toMatchSnapshot();
-    expect(wrapper.dive().find('Text').last().dive().text()).toEqual('collapsed');
+    expect(wrapper.shallow().shallow()).toMatchSnapshot();
+    expect(wrapper.shallow().shallow().find('Text').last().shallow().text()).toEqual('collapsed');
   });
 });

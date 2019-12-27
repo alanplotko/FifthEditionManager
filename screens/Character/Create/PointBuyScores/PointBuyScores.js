@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, IconToggle, ListItem, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, IconToggle, ListItem, Toolbar, withTheme }
+  from 'react-native-material-ui';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 import { formatSingleDigit, reverseSort } from 'FifthEditionManager/util';
 
@@ -21,7 +22,17 @@ const initialState = {
   },
 };
 
-export default class PointBuyScores extends React.Component {
+class PointBuyScores extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -32,19 +43,6 @@ export default class PointBuyScores extends React.Component {
       };
       return <Toolbar {...props} />;
     },
-  }
-
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = initialState;
   }
 
   acceptRolls = () => {
@@ -59,7 +57,7 @@ export default class PointBuyScores extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor } = this.context.uiTheme.palette;
+    const { textColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
 
     const cannotBuy = cost => this.state.points < cost || this.state.scores.length === 6;
@@ -245,3 +243,5 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
+
+export default withTheme(PointBuyScores);

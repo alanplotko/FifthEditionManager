@@ -1,13 +1,30 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0",
+    "name": "Fifth Edition Manager",
+    "icon": "./logo.png",
+    "version": "0.1.0",
+    "slug": "fifth-edition-manager",
+    "sdkVersion": "35.0.0",
+    "splash": {
+      "backgroundColor": "#3F51B5",
+      "resize": "contain",
+      "image": "./splash.png"
+    },
+    "privacy": "unlisted",
+    "android": {
+      "package": "com.fifth_edition_manager.fifth_edition_manager"
+    },
     "androidStatusBar": {
       "barStyle": "light-content",
-      "backgroundColor": "#1A237E"
+      "backgroundColor": "#3F51B5"
     },
     "assetBundlePatterns": [
       "assets/images/**",
       "assets/fonts/**"
     ],
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

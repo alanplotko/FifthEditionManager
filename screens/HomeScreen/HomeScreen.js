@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View, UIMan
   from 'react-native';
 import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
-import { ActionButton, Button, Icon, COLOR, Toolbar } from 'react-native-material-ui';
+import { ActionButton, Button, Icon, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
 import ContainerStyle from 'FifthEditionManager/stylesheets/ContainerStyle';
 import ActivityCard from 'FifthEditionManager/components/ActivityCard';
@@ -12,35 +12,24 @@ import CharacterProfileCard from 'FifthEditionManager/components/CharacterProfil
 import { getCharacterDisplayName } from 'FifthEditionManager/util';
 import { IMAGES } from 'FifthEditionManager/config/Info';
 import { ACTIVITY_KEY, CAMPAIGN_KEY, CHARACTER_KEY } from 'FifthEditionManager/config/StoreKeys';
+import { get } from 'lodash';
 
 const uuidv4 = require('uuid/v4');
 
 // Return compare function with the corresponding timestamp key
 const compareDates = key => (a, b) => {
-  if (a[key] > b[key]) {
+  if (get(a, key) > get(b, key)) {
     return -1;
-  } else if (a[key] < b[key]) {
+  } else if (get(a, key) < get(b, key)) {
     return 1;
   }
   return 0;
 };
 
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: () => {
-      const props = {
-        centerElement: 'D&D Manager',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
+class HomeScreen extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -77,11 +66,20 @@ export default class HomeScreen extends React.Component {
         this.setState({
           activity: data[0] ? data[0].sort(compareDates('timestamp')) : [],
           campaigns: data[1] ? data[1] : [],
-          characters: data[2] ? data[2].sort(compareDates('lastUpdated')) : [],
+          characters: data[2] ? data[2].sort(compareDates('meta.lastUpdated')) : [],
         }, () => resolve(data));
       })
       .catch(error => this.setState({ error }, () => resolve(null)));
   });
+
+  static navigationOptions = {
+    header: () => {
+      const props = {
+        centerElement: 'Fifth Edition Manager',
+      };
+      return <Toolbar {...props} />;
+    },
+  }
 
   openModal = (modalContent) => {
     this.setState({ isModalVisible: true, modalContent });
@@ -154,7 +152,7 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
 
     // Theme setup
-    const { primaryColor, backdropIconColor, modalBackgroundColor } = this.context.uiTheme.palette;
+    const { primaryColor, backdropIconColor, modalBackgroundColor } = this.props.theme.palette;
     const modalStyle = { backgroundColor: modalBackgroundColor };
 
     const errorView = (
@@ -270,7 +268,6 @@ export default class HomeScreen extends React.Component {
                     viewHandler={this.viewCharacter}
                     editHandler={this.editCharacter}
                     deleteHandler={this.askDeleteCharacter}
-                    uiTheme={this.context.uiTheme}
                   />
                 )}
                 refreshing={this.state.isRefreshing}
@@ -377,3 +374,5 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
+export default withTheme(HomeScreen);

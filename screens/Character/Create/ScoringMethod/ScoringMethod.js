@@ -3,14 +3,19 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { Card, COLOR, Toolbar } from 'react-native-material-ui';
+import { Card, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import { CardStyle, ContainerStyle } from 'FifthEditionManager/stylesheets';
 
 /**
  * Define form options
  */
 
-export default class ScoringMethod extends React.Component {
+class ScoringMethod extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -21,14 +26,6 @@ export default class ScoringMethod extends React.Component {
       };
       return <Toolbar {...props} />;
     },
-  }
-
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
   }
 
   selectMethod = (method) => {
@@ -49,7 +46,7 @@ export default class ScoringMethod extends React.Component {
 
   render() {
     // Theme setup
-    const { standardDiceColor, highlightedDiceColor } = this.context.uiTheme.palette;
+    const { standardDiceColor, highlightedDiceColor } = this.props.theme.palette;
     return (
       <Container style={ContainerStyle.parent}>
         <Content>
@@ -149,3 +146,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
+
+export default withTheme(ScoringMethod);

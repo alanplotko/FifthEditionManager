@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { Container, Content } from 'native-base';
-import { Button, Card, COLOR, Toolbar } from 'react-native-material-ui';
+import { Button, Card, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
 import store from 'react-native-simple-store';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import Note from 'FifthEditionManager/components/Note';
 import { CLASSES, IMAGES } from 'FifthEditionManager/config/Info';
 import { CardStyle, ContainerStyle, FormStyle } from 'FifthEditionManager/stylesheets';
@@ -49,25 +49,10 @@ const options = {
   },
 };
 
-export default class HitPoints extends React.Component {
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Review Hit Points',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
+class HitPoints extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-  }
-
-  static contextTypes = {
-    uiTheme: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -162,7 +147,7 @@ export default class HitPoints extends React.Component {
         store
           .push(ACTIVITY_KEY, newActivity)
           .then(() => {
-            const resetAction = NavigationActions.reset({
+            const resetAction = StackActions.reset({
               index: 0,
               actions: [NavigationActions.navigate({
                 routeName: 'Home',
@@ -171,6 +156,18 @@ export default class HitPoints extends React.Component {
             dispatch(resetAction);
           });
       });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Review Hit Points',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   toggleNote = () => {
@@ -203,7 +200,7 @@ export default class HitPoints extends React.Component {
 
   render() {
     // Theme setup
-    const { textColor } = this.context.uiTheme.palette;
+    const { textColor } = this.props.theme.palette;
     const textStyle = { color: textColor };
 
     const { hitDie } = this.state.baseClass;
@@ -223,7 +220,6 @@ export default class HitPoints extends React.Component {
                 title="Error"
                 type="error"
                 icon="error"
-                uiTheme={this.context.uiTheme}
               >
                 <Text>
                   An error was encountered while saving your character. Try again in a moment.
@@ -237,7 +233,6 @@ export default class HitPoints extends React.Component {
               collapsible
               isCollapsed={this.state.isNoteCollapsed}
               toggleNoteHandler={this.toggleNote}
-              uiTheme={this.context.uiTheme}
             >
               <Text style={{ marginBottom: 10 }}>
                 The
@@ -483,3 +478,5 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
 });
+
+export default withTheme(HitPoints);
