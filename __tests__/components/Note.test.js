@@ -38,6 +38,7 @@ describe('Note', () => {
 
   test('catches missing note handler when collapsible', () => {
     // Spy setup for ensuring prop check occurs; stub console error warnings
+    // eslint-disable-next-line react/forbid-foreign-prop-types
     const notePropSpy = sinon.spy(Note.propTypes, 'toggleNoteHandler');
     const consoleStub = sinon.stub(console, 'error');
 
@@ -55,6 +56,7 @@ describe('Note', () => {
 
   test('catches invalid note handler when collapsible', () => {
     // Spy setup for ensuring prop check occurs; stub console error warnings
+    // eslint-disable-next-line react/forbid-foreign-prop-types
     const notePropSpy = sinon.spy(Note.propTypes, 'toggleNoteHandler');
     const consoleStub = sinon.stub(console, 'error');
 

@@ -66,6 +66,15 @@ class CharacterRace extends React.Component {
     });
   }
 
+  orientationHandler = dims =>
+    this.setState({ width: dims.window.width, height: dims.window.height });
+
+  randomizeRace = () => {
+    // Do not reselect current option
+    const key = this.state.race ? this.state.race.key : null;
+    this.setState({ race: chance.pickone(RACES.filter(race => race.key !== key)) });
+  }
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -78,15 +87,6 @@ class CharacterRace extends React.Component {
       };
       return <Toolbar {...props} />;
     },
-  }
-
-  orientationHandler = dims =>
-    this.setState({ width: dims.window.width, height: dims.window.height });
-
-  randomizeRace = () => {
-    // Do not reselect current option
-    const key = this.state.race ? this.state.race.key : null;
-    this.setState({ race: chance.pickone(RACES.filter(race => race.key !== key)) });
   }
 
   render() {

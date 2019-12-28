@@ -41,55 +41,6 @@ stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
 class CharacterBaseClass extends React.Component {
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      baseClass: null,
-    };
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ randomizeClass: this.randomizeClass });
-  }
-
-  onPress = () => {
-    if (this.state.baseClass) {
-      const { navigate, state } = this.props.navigation;
-      const newCharacter = cloneDeep(state.params.character);
-      newCharacter.meta.lastUpdated = Date.now();
-      newCharacter.baseClass = {
-        lookupKey: this.state.baseClass,
-        name: CLASSES[this.state.baseClass].name,
-      };
-      navigate('SetCharacterBackground', { character: newCharacter });
-    }
-  }
-
-  onChange = (value) => {
-    if (value && value.baseClass !== this.state.baseClass) {
-      this.setState({ baseClass: value.baseClass });
-    }
-  }
-
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Class',
-        rightElement: 'autorenew',
-        onRightElementPress: throttle(() => routes[index].params.randomizeClass(), 500),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   formOptions = {
     template: (locals) => {
       const { race } = this.props.navigation.state.params.character;
@@ -125,11 +76,60 @@ class CharacterBaseClass extends React.Component {
     },
   }
 
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      baseClass: null,
+    };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ randomizeClass: this.randomizeClass });
+  }
+
+  onPress = () => {
+    if (this.state.baseClass) {
+      const { navigate, state } = this.props.navigation;
+      const newCharacter = cloneDeep(state.params.character);
+      newCharacter.meta.lastUpdated = Date.now();
+      newCharacter.baseClass = {
+        lookupKey: this.state.baseClass,
+        name: CLASSES[this.state.baseClass].name,
+      };
+      navigate('SetCharacterBackground', { character: newCharacter });
+    }
+  }
+
+  onChange = (value) => {
+    if (value && value.baseClass !== this.state.baseClass) {
+      this.setState({ baseClass: value.baseClass });
+    }
+  }
+
   randomizeClass = () => {
     // Do not reselect current option
     const baseClass = chance.pickone(Object.keys(CLASSES)
       .filter(cls => cls !== this.state.baseClass));
     this.setState({ baseClass });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Class',
+        rightElement: 'autorenew',
+        onRightElementPress: throttle(() => routes[index].params.randomizeClass(), 500),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {

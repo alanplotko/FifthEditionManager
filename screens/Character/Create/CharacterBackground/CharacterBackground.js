@@ -40,6 +40,41 @@ stylesheet.select.normal.marginLeft = 10;
 stylesheet.select.error.marginLeft = 10;
 
 class CharacterBackground extends React.Component {
+  backgroundFormOptions = {
+    template: (locals) => {
+      const { race } = this.props.navigation.state.params.character;
+      return (
+        <View
+          style={[
+            LayoutStyle.centered,
+            {
+              borderWidth: 2,
+              borderColor: COLOR.grey800,
+              paddingTop: 30,
+              marginBottom: 20,
+            },
+          ]}
+        >
+          <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
+          <View
+            style={{
+              flex: 1, margin: 0, padding: 0, height: 50,
+            }}
+          >
+            {locals.inputs.background}
+          </View>
+        </View>
+      );
+    },
+    stylesheet,
+    fields: {
+      background: {
+        auto: 'none',
+        nullOption: { value: '', text: 'Select Background' },
+      },
+    },
+  }
+
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -168,55 +203,6 @@ class CharacterBackground extends React.Component {
     },
   });
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Character Background',
-        rightElement: 'autorenew',
-        onRightElementPress: throttle(() => routes[index].params.randomizeBackground(), 500),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
-  backgroundFormOptions = {
-    template: (locals) => {
-      const { race } = this.props.navigation.state.params.character;
-      return (
-        <View
-          style={[
-            LayoutStyle.centered,
-            {
-              borderWidth: 2,
-              borderColor: COLOR.grey800,
-              paddingTop: 30,
-              marginBottom: 20,
-            },
-          ]}
-        >
-          <Text style={FormStyle.label}>Your {race.name}&apos;s Background</Text>
-          <View
-            style={{
-              flex: 1, margin: 0, padding: 0, height: 50,
-            }}
-          >
-            {locals.inputs.background}
-          </View>
-        </View>
-      );
-    },
-    stylesheet,
-    fields: {
-      background: {
-        auto: 'none',
-        nullOption: { value: '', text: 'Select Background' },
-      },
-    },
-  }
-
   randomizeBackground = () => {
     /*
       Allow reselecting the same background, given that the default selection
@@ -236,6 +222,20 @@ class CharacterBackground extends React.Component {
       decisions,
       selectedDecisions,
     });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Character Background',
+        rightElement: 'autorenew',
+        onRightElementPress: throttle(() => routes[index].params.randomizeBackground(), 500),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {
@@ -436,7 +436,8 @@ class CharacterBackground extends React.Component {
                   </Text>
                   <OGLButton sourceText="Source: 5th Edition SRD" />
                 </Card>,
-              ]}
+              ]
+            }
             {
               !this.state.background &&
               <Card style={{ container: { padding: 20 } }}>

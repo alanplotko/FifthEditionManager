@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View, UIManager }
-  from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View, UIManager } from 'react-native';
 import { Container, Icon as NBIcon, Tab, Tabs, TabHeading, Text } from 'native-base';
 import Modal from 'react-native-modal';
 import { ActionButton, Button, Icon, COLOR, Toolbar, withTheme } from 'react-native-material-ui';
@@ -72,15 +71,6 @@ class HomeScreen extends React.Component {
       .catch(error => this.setState({ error }, () => resolve(null)));
   });
 
-  static navigationOptions = {
-    header: () => {
-      const props = {
-        centerElement: 'Fifth Edition Manager',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   openModal = (modalContent) => {
     this.setState({ isModalVisible: true, modalContent });
   };
@@ -147,6 +137,15 @@ class HomeScreen extends React.Component {
     const callback = () => this.setState({ isRefreshing: false });
     this.setState({ isRefreshing: true }, async () => this.getData().then(callback));
   };
+
+  static navigationOptions = {
+    header: () => {
+      const props = {
+        centerElement: 'Fifth Edition Manager',
+      };
+      return <Toolbar {...props} />;
+    },
+  }
 
   render() {
     const { navigate } = this.props.navigation;

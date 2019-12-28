@@ -38,18 +38,6 @@ class RollScores extends React.Component {
     clearTimeout(this.showLoadingOverlay);
   }
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Roll Ability Scores',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   rollAbilityScores = (done) => {
     const scoreReports = [];
     const sortedScores = [];
@@ -64,8 +52,7 @@ class RollScores extends React.Component {
       const report = { rolls: [] };
       // Record roll number (roll #x of 6 ability scores) and final dice values
       report.rollNumber = i + 1;
-      rolls.forEach(roll =>
-        report.rolls.push({ result: roll, isLowest: false }));
+      rolls.forEach(roll => report.rolls.push({ result: roll, isLowest: false }));
       // Drop and record lowest roll
       const lowestRollIndex = rolls.indexOf(Math.min.apply(null, rolls));
       report.rolls[lowestRollIndex].isLowest = true;
@@ -102,6 +89,18 @@ class RollScores extends React.Component {
         this.rollAbilityScores(callback);
       }, 1000);
     });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Roll Ability Scores',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {

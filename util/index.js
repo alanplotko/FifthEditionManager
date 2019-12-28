@@ -2,11 +2,9 @@ import React from 'react'; // Needed for any JSX in a file
 import { Text } from 'react-native';
 import { COLOR } from 'react-native-material-ui';
 
-export const toTitleCase = str =>
-  str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+export const toTitleCase = str => str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 
-export const reformatCamelCaseKey = key =>
-  key.split(/(?=[A-Z])/).join(' ').toLowerCase();
+export const reformatCamelCaseKey = key => key.split(/(?=[A-Z])/).join(' ').toLowerCase();
 
 export const toProperList = (list, lastWord, capitalize) => {
   if (list.length === 0) return '';
@@ -18,13 +16,12 @@ export const toProperList = (list, lastWord, capitalize) => {
   }
   const newList = [...list];
   const lastItem = newList.pop();
-  return capitalize ?
-    `${toTitleCase(newList.join(', '))}, ${lastWord} ${toTitleCase(lastItem)}` :
-    `${newList.join(', ')}, ${lastWord} ${lastItem}`;
+  return capitalize
+    ? `${toTitleCase(newList.join(', '))}, ${lastWord} ${toTitleCase(lastItem)}`
+    : `${newList.join(', ')}, ${lastWord} ${lastItem}`;
 };
 
-export const getCharacterDisplayName = character =>
-  `${toTitleCase(character.profile.firstName)} ${toTitleCase(character.profile.lastName)}`;
+export const getCharacterDisplayName = character => `${toTitleCase(character.profile.firstName)} ${toTitleCase(character.profile.lastName)}`;
 
 export const validateInteger = (value, altErrorMessage) => {
   if (value === null || value === undefined) return 'Required';
