@@ -113,20 +113,6 @@ class Skills extends React.Component {
     return skills;
   }
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Set Skills',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeSkills(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   resetSkills = (callback = null) => {
     let skills = cloneDeep(BASE_SKILLS);
     const proficiencies = cloneDeep(this.state.proficiencies);
@@ -207,6 +193,20 @@ class Skills extends React.Component {
       this.setState({ skills, proficiencies });
     };
     this.resetSkills(callback);
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Set Skills',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeSkills(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {

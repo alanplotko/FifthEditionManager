@@ -155,18 +155,6 @@ class HitPoints extends React.Component {
       });
   }
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Review Hit Points',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   toggleNote = () => {
     this.setState({
       isNoteCollapsed: !this.state.isNoteCollapsed,
@@ -193,6 +181,18 @@ class HitPoints extends React.Component {
       hitPoints: totalRollCount + (average * timesAverageTaken) + modifierTotal,
       rollCount: this.state.rollCount + 1,
     });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Review Hit Points',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {

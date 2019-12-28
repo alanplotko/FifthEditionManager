@@ -54,20 +54,6 @@ class Languages extends React.Component {
     navigate('ReviewHitPoints', { character: newCharacter });
   }
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Assign Languages',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeLanguages(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   resetLanguages = (callback) => {
     this.setState({
       selectedLanguages: [],
@@ -120,6 +106,20 @@ class Languages extends React.Component {
       this.setState({ selectedLanguages, remainingLanguages: 0 });
     };
     this.resetLanguages(callback);
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Assign Languages',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeLanguages(),
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {

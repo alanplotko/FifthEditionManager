@@ -65,6 +65,24 @@ stylesheet.textbox.normal.margin = 0;
 stylesheet.textbox.error.margin = 0;
 
 class AbilityScores extends React.Component {
+  formOptions = {
+    template: locals => (
+      <View>
+        <View style={styles.formTemplate}>
+          <Text style={FormStyle.label}>Editing {toTitleCase(this.state.selectedAbility)}</Text>
+        </View>
+        {locals.inputs.score}
+      </View>
+    ),
+    stylesheet,
+    fields: {
+      score: {
+        auto: 'none',
+        help: 'Range [1, 30]',
+      },
+    },
+  }
+
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
@@ -132,39 +150,6 @@ class AbilityScores extends React.Component {
     this.props.navigation.setParams({ randomizeScoreAssignments: this.randomizeScoreAssignments });
   }
 
-  onChange = (value) => {
-    this.setState({ form: value });
-  }
-
-  onPress = () => {
-    const { state, navigate } = this.props.navigation;
-    const newCharacter = cloneDeep(state.params.character);
-    newCharacter.meta.lastUpdated = Date.now();
-    newCharacter.stats = {};
-    abilities.forEach((ability) => {
-      const abilityName = ability.toLowerCase();
-      const score = this.state.baseStats[abilityName] + this.state.additionalStats[abilityName];
-      const modifier = calculateModifier(score);
-      const total = score + modifier;
-      newCharacter.stats[abilityName] = { score, modifier, total };
-    });
-    navigate('SetSkills', { character: newCharacter });
-  }
-
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Assign Ability Scores',
-        rightElement: 'autorenew',
-        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   openModal = (ability) => {
     this.setState({
       isModalVisible: true,
@@ -203,22 +188,23 @@ class AbilityScores extends React.Component {
     this.setState({ scoreBank, baseStats });
   }
 
-  formOptions = {
-    template: locals => (
-      <View>
-        <View style={styles.formTemplate}>
-          <Text style={FormStyle.label}>Editing {toTitleCase(this.state.selectedAbility)}</Text>
-        </View>
-        {locals.inputs.score}
-      </View>
-    ),
-    stylesheet,
-    fields: {
-      score: {
-        auto: 'none',
-        help: 'Range [1, 30]',
-      },
-    },
+  onPress = () => {
+    const { state, navigate } = this.props.navigation;
+    const newCharacter = cloneDeep(state.params.character);
+    newCharacter.meta.lastUpdated = Date.now();
+    newCharacter.stats = {};
+    abilities.forEach((ability) => {
+      const abilityName = ability.toLowerCase();
+      const score = this.state.baseStats[abilityName] + this.state.additionalStats[abilityName];
+      const modifier = calculateModifier(score);
+      const total = score + modifier;
+      newCharacter.stats[abilityName] = { score, modifier, total };
+    });
+    navigate('SetSkills', { character: newCharacter });
+  }
+
+  onChange = (value) => {
+    this.setState({ form: value });
   }
 
   submitScore = () => {
@@ -345,6 +331,20 @@ class AbilityScores extends React.Component {
     });
   }
 
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Assign Ability Scores',
+        rightElement: 'autorenew',
+        onRightElementPress: () => routes[index].params.randomizeScoreAssignments(),
+      };
+      return <Toolbar {...props} />;
+    },
+  }
+
   render() {
     // Theme setup
     const { textColor, backgroundColor } = this.props.theme.palette;
@@ -458,8 +458,8 @@ class AbilityScores extends React.Component {
             onPress={
               this.state.baseStats[this.state.selectedAbility] !==
                 scoreCard.score && scoreCard.quantity > 0 ?
-                  () => this.selectScore(scoreCard) :
-                  null
+                () => this.selectScore(scoreCard) :
+                null
             }
           >
             {
@@ -605,11 +605,7 @@ class AbilityScores extends React.Component {
                 {modifierList.map(key => (
                   <Text key={key}>
                     &emsp;&bull;&nbsp;{toTitleCase(key)}&nbsp;(
-                    {
-                      this.state.raceModifiers[key] > 0 ?
-                      '+' :
-                      ''
-                    }
+                    {this.state.raceModifiers[key] > 0 ? '+' : ''}
                     {this.state.raceModifiers[key]})
                     {'\n'}
                   </Text>

@@ -33,6 +33,16 @@ class PointBuyScores extends React.Component {
     this.state = initialState;
   }
 
+  acceptRolls = () => {
+    const { navigate, state } = this.props.navigation;
+    navigate('AssignAbilityScores', {
+      character: state.params.character,
+      scores: this.state.scores,
+    });
+  }
+
+  resetScores = () => this.setState(initialState);
+
   static navigationOptions = {
     header: ({ navigation }) => {
       const { routes, index } = navigation.state;
@@ -44,16 +54,6 @@ class PointBuyScores extends React.Component {
       return <Toolbar {...props} />;
     },
   }
-
-  acceptRolls = () => {
-    const { navigate, state } = this.props.navigation;
-    navigate('AssignAbilityScores', {
-      character: state.params.character,
-      scores: this.state.scores,
-    });
-  }
-
-  resetScores = () => this.setState(initialState);
 
   render() {
     // Theme setup

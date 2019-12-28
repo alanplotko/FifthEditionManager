@@ -16,18 +16,6 @@ class ScoringMethod extends React.Component {
     theme: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = {
-    header: ({ navigation }) => {
-      const { routes, index } = navigation.state;
-      const props = {
-        leftElement: 'arrow-back',
-        onLeftElementPress: () => navigation.goBack(routes[index].key),
-        centerElement: 'Choose Scoring Method',
-      };
-      return <Toolbar {...props} />;
-    },
-  }
-
   selectMethod = (method) => {
     const { navigate, state } = this.props.navigation;
     if (method === 'UseStandardSet') {
@@ -42,6 +30,18 @@ class ScoringMethod extends React.Component {
       });
     }
     return navigate(method, { character: state.params.character });
+  }
+
+  static navigationOptions = {
+    header: ({ navigation }) => {
+      const { routes, index } = navigation.state;
+      const props = {
+        leftElement: 'arrow-back',
+        onLeftElementPress: () => navigation.goBack(routes[index].key),
+        centerElement: 'Choose Scoring Method',
+      };
+      return <Toolbar {...props} />;
+    },
   }
 
   render() {
